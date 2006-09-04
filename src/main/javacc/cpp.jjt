@@ -1,0 +1,1441 @@
+/**
+ *
+ * Copyright (C) 1996, 1997 Sun Microsystems Inc.
+ *
+ * Use of this file and the system it is part of is constrained by the
+ * file COPYRIGHT in the root directory of this system.  You may, however,
+ * make any modifications you wish to this file.
+ *
+ * Author: Sreenivasa Viswanadha
+ * Date: 3/20/97
+ *
+ * This file contains a Java grammar and actions that implement a front-end.
+ *
+ *
+ * Derived in part from the following work:
+ *
+ * PUBLIC DOMAIN PCCTS-BASED C++ GRAMMAR (cplusplus.g, stat.g, expr.g)
+ *
+ * Authors: Sumana Srinivasan, NeXT Inc.;            sumana_srinivasan@next.com
+ *          Terence Parr, Parr Research Corporation; parrt@parr-research.com
+ *          Russell Quong, Purdue University;        quong@ecn.purdue.edu
+ *
+ * VERSION 1.1
+ *
+ */
+
+PARSER_BEGIN(Parser)
+
+package cppncss.cppast;
+
+public final class Parser
+{
+  private SymbolTable symbols = new SymbolTable();
+
+  Scope getCurrentScope()
+  {
+     return symbols.getCurrentScope();
+  }
+
+  private void openScope( final String name )
+  {
+     symbols.openScope( name );
+  }
+
+  private void closeScope()
+  {
+     symbols.closeScope();
+  }
+
+  private void closeScopes()
+  {
+     symbols.closeScopes();
+  }
+
+  private void putTypeName( final String name )
+  {
+     symbols.putTypeName( name );
+  }
+
+  private void extendScope( final String name )
+  {
+      symbols.extend( name );
+  }
+}
+
+PARSER_END(Parser)
+
+SKIP :
+{
+  " "
+|
+  "\t"
+|
+  "\r"
+|
+  "\n"
+|
+  "/*" : COMMENT
+}
+
+<COMMENT> SKIP:
+{
+   "*/" : DEFAULT
+}
+
+<COMMENT> MORE:
+{
+  < ~[] >
+}
+
+SPECIAL_TOKEN :
+{
+  < SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")? >
+ |
+  < PREPROCESSOR: "#" (~["\n","\r"] | "\\"("\n"|"\r"|"\r\n"))* ("\n"|"\r"|"\r\n")? >
+}
+
+TOKEN :
+{
+  < LCURLYBRACE: "{" >
+| < RCURLYBRACE: "}" >
+| < LSQUAREBRACKET: "[" >
+| < RSQUAREBRACKET: "]" >
+| < LPARENTHESIS: "(" >
+| < RPARENTHESIS: ")" >
+| < SCOPE: "::" >
+| < COLON: ":" >
+| < SEMICOLON: ";" >
+| < COMMA: "," >
+| < QUESTIONMARK: "?" >
+| < ELLIPSIS: "..." >
+| < ASSIGNEQUAL: "=" >
+| < TIMESEQUAL: "*=" >
+| < DIVIDEEQUAL: "/=" >
+| < MODEQUAL: "%=" >
+| < PLUSEQUAL: "+=" >
+| < MINUSEQUAL: "-=" >
+| < SHIFTLEFTEQUAL: "<<=" >
+| < SHIFTRIGHTEQUAL: ">>=" >
+| < BITWISEANDEQUAL: "&=" >
+| < BITWISEXOREQUAL: "^=" >
+| < BITWISEOREQUAL: "|=" >
+| < OR: "||" >
+| < AND: "&&" >
+| < BITWISEOR: "|" >
+| < BITWISEXOR: "^" >
+| < AMPERSAND: "&" >
+| < EQUAL: "==" >
+| < NOTEQUAL: "!=" >
+| < LESSTHAN: "<" >
+| < GREATERTHAN: ">" >
+| < LESSTHANOREQUALTO: "<=" >
+| < GREATERTHANOREQUALTO: ">=" >
+| < SHIFTLEFT: "<<" >
+| < SHIFTRIGHT: ">>" >
+| < PLUS: "+" >
+| < MINUS: "-" >
+| < STAR: "*" >
+| < DIVIDE: "/" >
+| < MOD: "%" >
+| < PLUSPLUS: "++" >
+| < MINUSMINUS: "--" >
+| < TILDE: "~" >
+| < NOT: "!" >
+| < DOT: "." >
+| < POINTERTO: "->" >
+| < DOTSTAR: ".*" >
+| < ARROWSTAR: "->*" >
+| < AUTO: "auto" >
+| < BOOL: "bool" >
+| < BREAK: "break" >
+| < CASE: "case" >
+| < CATCH: "catch" >
+| < CHAR: "char" >
+| < CONST: "const" >
+| < CONTINUE: "continue" >
+| < _DEFAULT: "default" >
+| < DELETE: "delete" >
+| < DO: "do" >
+| < DOUBLE: "double" >
+| < ELSE: "else" >
+| < ENUM: "enum" >
+| < EXPLICIT: "explicit" >
+| < EXTERN: "extern" >
+| < FLOAT: "float" >
+| < FOR: "for" >
+| < FRIEND: "friend" >
+| < GOTO: "goto" >
+| < IF: "if" >
+| < INLINE: "inline" >
+| < INT: "int" >
+| < LONG: "long" >
+| < MUTABLE: "mutable" >
+| < NAMESPACE: "namespace" >
+| < NEW: "new" >
+| < PRIVATE: "private" >
+| < PROTECTED: "protected" >
+| < PUBLIC: "public" >
+| < REDECLARED: "redeclared" >
+| < REGISTER: "register" >
+| < RETURN: "return" >
+| < SHORT: "short" >
+| < SIGNED: "signed" >
+| < SIZEOF: "sizeof" >
+| < STATIC: "static" >
+| < STRUCT: "struct" >
+| < CLASS : "class" >
+| < SWITCH: "switch" >
+| < TEMPLATE: "template" >
+| < THIS: "this" >
+| < TRY: "try" >
+| < TYPEDEF: "typedef" >
+| < TYPEID: "typeid" >
+| < TYPENAME: "typename" >
+| < UNION: "union" >
+| < UNSIGNED: "unsigned" >
+| < USING: "using" >
+| < VIRTUAL: "virtual" >
+| < VOID: "void" >
+| < VOLATILE: "volatile" >
+| < WCHAR_T: "wchar_t" >
+| < WHILE: "while" >
+| < OPERATOR: "operator" >
+| < TRUETOK: "true" >
+| < FALSETOK: "false" >
+| < THROW: "throw" >
+}
+
+TOKEN [IGNORE_CASE] :
+{
+  <  OCTALINT : (["0"-"7"])+ >
+| <  OCTALLONG : <OCTALINT> "l" >
+| <  UNSIGNED_OCTALINT : <OCTALINT> "u" >
+| <  UNSIGNED_OCTALLONG : <OCTALINT> ("ul" | "lu") >
+
+| <  DECIMALINT : ["1"-"9"] (["0"-"9"])* >
+| <  DECIMALLONG : <DECIMALINT> ["u","l"] >
+| <  UNSIGNED_DECIMALINT : <DECIMALINT> "u" >
+| <  UNSIGNED_DECIMALLONG : <DECIMALINT> ("ul" | "lu") >
+
+
+| <  HEXADECIMALINT : "0x" (["0"-"9","a"-"f"])+ >
+| <  HEXADECIMALLONG : <HEXADECIMALINT> (["u","l"])? >
+| <  UNSIGNED_HEXADECIMALINT : <HEXADECIMALINT> "u" >
+| <  UNSIGNED_HEXADECIMALLONG : <HEXADECIMALINT> ("ul" | "lu") >
+
+
+| <  FLOATONE : ((["0"-"9"])+ "." (["0"-"9"])* | (["0"-"9"])* "." (["0"-"9"])+)
+              ("e" (["-","+"])? (["0"-"9"])+)? (["f","l"])? >
+
+| <  FLOATTWO : (["0"-"9"])+ "e" (["-","+"])?  (["0"-"9"])+ (["f","l"])? >
+}
+
+TOKEN :
+{
+
+  <  CHARACTER : ("L")? "'"
+   (   (~["'","\\","\n","\r"])
+   | ("\\" (
+             ["n","t","v","b","r","f","a","\\","?","'","\""]
+            |
+             "0" (["0"-"7"])*
+            |
+             ["1"-"9"] (["0"-"9"])*
+            |
+             ("0x" | "0X") (["0"-"9","a"-"f","A"-"F"])+
+           )
+     )
+   )
+   "'" >
+
+| <  STRING : ("L")? "\""
+   ( ( ~["\"","\\","\n","\r"])
+   | ("\\" (
+             ["n","t","v","b","r","f","a","\\","?","'","\"","\n"]
+            |
+             "0" (["0"-"7"])*
+            |
+             ["1"-"9"] (["0"-"9"])*
+            |
+             ("0x" | "0X") (["0"-"9","a"-"f","A"-"F"])+
+           )
+     )
+   )*
+   "\"" >
+}
+
+TOKEN :
+{
+  <  ID : ["a"-"z","A"-"Z","_"] (["a"-"z","A"-"Z","0"-"9","_"])* >
+}
+
+ASTtranslation_unit translation_unit() :
+{}
+{
+   (external_declaration())* <EOF>
+   { closeScopes(); return jjtThis; }
+}
+
+void external_declaration() :
+{}
+{
+    LOOKAHEAD(block_declaration()) block_declaration()
+   |
+    LOOKAHEAD(template_head()) template_declaration()
+   |
+    LOOKAHEAD((type_modifiers())* [scope_override()] "operator")
+       conversion_function_decl_or_def()
+   |
+    LOOKAHEAD(dtor_ctor_decl_spec() dtor_declarator() "{")
+       dtor_definition()
+   |
+    LOOKAHEAD(dtor_ctor_decl_spec() function_declarator_lookahead())
+       ctor_definition()
+   |
+    LOOKAHEAD(declaration_specifiers() function_declarator())
+       function_definition()
+   |
+    LOOKAHEAD("namespace") namespace_definition()
+   |
+    declaration()
+   |
+    ";"
+}
+
+void class_name() :
+{}
+{
+   LOOKAHEAD(template_id()) template_id()
+  |
+   <ID>
+}
+
+/*
+void function_definition() :
+{}
+{
+   [declaration_specifiers()] declarator()
+   (
+    [ctor_initializer()] function_body()
+   |
+    function_try_block()
+   )
+}
+*/
+void function_definition() :
+{}
+{
+    [LOOKAHEAD(3) declaration_specifiers()] function_declarator() func_decl_def()
+}
+
+void template_declaration() :
+{}
+{
+//   ["export"]
+   template_head() external_declaration()
+}
+
+void func_decl_def() :
+{}
+{
+    ";"
+   |
+    compound_statement()
+}
+
+void linkage_specification() :
+{}
+{
+   "extern" <STRING>
+   (
+    "{" ( external_declaration() )* "}" [LOOKAHEAD(";") ";"]
+   |
+    declaration()
+   )
+}
+
+void using_directive() :
+{
+   Token token;
+   String name = "";
+}
+{
+    "using" "namespace"
+    [LOOKAHEAD(scope_override_lookahead()) name = scope_override()]
+    token = <ID> ";"
+    {
+       extendScope( name + token.image );
+    }
+}
+
+void using_declaration() :
+{}
+{
+    "using" qualified_type() ";"
+}
+
+void namespace_definition() :
+{
+   Token token;
+   String name = "anonymous";
+}
+{
+    "namespace"
+    (
+     LOOKAHEAD(2)
+      [token = <ID> { name = token.image; }]
+      "{" { openScope( name ); }
+      ( external_declaration() )*
+      "}" { closeScope(); }
+     |
+      <ID> "=" [LOOKAHEAD(scope_override_lookahead()) scope_override()] <ID> ";"
+    )
+}
+
+void declaration() :
+{}
+{
+    LOOKAHEAD(2) declaration_specifiers() [init_declarator_list()] ";"
+   |
+    linkage_specification()
+}
+
+void declaration_specifiers() :
+{}
+{
+   (LOOKAHEAD(type_modifiers()) type_modifiers())+
+   (
+    (LOOKAHEAD(builtin_type_specifier()) builtin_type_specifier())+
+   |
+    (class_specifier() | enum_specifier() | qualified_type())
+   )
+   (LOOKAHEAD(type_modifiers()) type_modifiers())*
+  |
+   (LOOKAHEAD(builtin_type_specifier()) builtin_type_specifier())+
+   (LOOKAHEAD(type_modifiers()) type_modifiers())*
+  |
+   (class_specifier() | enum_specifier() | qualified_type())
+   (LOOKAHEAD(type_modifiers()) type_modifiers())*
+}
+
+void type_modifiers() :
+{}
+{
+     storage_class_specifier()
+    |
+     type_qualifier()
+    |
+     "inline"
+    |
+     "virtual"
+    |
+     "friend"
+}
+
+void storage_class_specifier() :
+{}
+{
+   "auto" | "register" | "static" | "extern" | "typedef"
+}
+
+void type_qualifier() :
+{}
+{
+    "const" | "volatile" | "typename" | "mutable"
+}
+
+void builtin_type_specifier() :
+{}
+{
+   "void" | "char" | "wchar_t" | "short" | "int" | "long" | "float" | "double" | "bool" | "signed" | "unsigned"
+}
+
+void scope_override_lookahead() :
+{}
+{
+    "::"
+   |
+    ["template"] <ID> [template_argument_list()] "::"
+}
+
+String scope_override() :
+{
+   String name = "";
+   Token t;
+}
+{
+  (
+    "::" { name += "::"; }
+    (
+      LOOKAHEAD(["template"] <ID> [template_argument_list()] "::")
+      ["template"] t = <ID> [template_argument_list()] "::"
+      { name += t.image + "::"; }
+    )*
+   |
+    (
+      LOOKAHEAD(["template"] <ID> [template_argument_list()] "::")
+      ["template"] t = <ID> [template_argument_list()] "::"
+      { name += t.image + "::"; }
+    )+
+  )
+  { return name; }
+}
+
+void qualified_id() :
+{}
+{
+    [LOOKAHEAD(scope_override_lookahead()) scope_override()]
+    (
+      <ID> [LOOKAHEAD(template_argument_list()) template_argument_list()]
+     |
+      "operator" operator()
+    )
+}
+
+void qualified_type() :
+{}
+{
+    [LOOKAHEAD(scope_override_lookahead()) scope_override()]
+    ["template"] <ID> [LOOKAHEAD(template_argument_list()) template_argument_list()]
+}
+
+void init_declarator_list() :
+{}
+{
+   init_declarator() ("," init_declarator())*
+}
+
+void init_declarator() :
+{}
+{
+   declarator() ["=" initializer() | "(" expression_list() ")"]
+}
+
+String class_head() :
+{
+   Token t;
+   String name = "";
+}
+{
+   class_key() [LOOKAHEAD(scope_override_lookahead()) name = scope_override()]
+   t = <ID> [LOOKAHEAD(template_argument_list()) template_argument_list()] // FIXME should probably include template arguments in name
+   [LOOKAHEAD(":") base_clause()]
+   { return name + t.image; }
+}
+
+void class_key() :
+{}
+{
+  "class" | "struct" | "union"
+}
+
+void class_specifier() :
+{
+   String name;
+}
+{
+   LOOKAHEAD(class_key() "{")
+    class_key() "{" [member_specification()] "}" // FIXME should probably open an empty scope
+  |
+   (
+    name = class_head()
+    [
+     LOOKAHEAD("{")
+     (
+      { putTypeName( name ); }
+      "{" { openScope( name ); }
+      [member_specification()]
+      "}" { closeScope(); }
+     )
+    ]
+   )
+}
+
+void base_clause() :
+{}
+{
+   ":" base_specifier() (LOOKAHEAD(",") "," base_specifier())*
+}
+
+void base_specifier() :
+{
+   Token t;
+   String name = "";
+}
+{
+   [ "virtual" [access_specifier()] | access_specifier() ["virtual"] ]
+   [LOOKAHEAD(scope_override_lookahead()) name = scope_override()]
+   t = <ID> [LOOKAHEAD(template_argument_list()) template_argument_list()]
+   {
+      extendScope( name + t.image );
+   }
+}
+
+void member_specification() :
+{}
+{
+  (
+    LOOKAHEAD(access_specifier()) access_specifier() ":"
+   |
+    member_declaration()
+  )+
+}
+
+void access_specifier() :
+{}
+{
+   "public" | "protected" | "private"
+}
+
+void member_declaration() :
+{}
+{
+    LOOKAHEAD((type_modifiers())* "operator")
+       conversion_function_decl_or_def()
+   |
+    LOOKAHEAD(dtor_ctor_decl_spec() dtor_declarator() [pure_specifier()] "{")
+       [LOOKAHEAD(template_head()) template_head()] dtor_definition()
+   |
+    LOOKAHEAD(dtor_ctor_decl_spec() "~")
+       dtor_ctor_decl_spec() simple_dtor_declarator() [pure_specifier()] ";"
+   |
+    LOOKAHEAD([template_head()] dtor_ctor_decl_spec() function_declarator() ";")
+       [LOOKAHEAD(template_head()) template_head()] dtor_ctor_decl_spec() ctor_declarator() ";"
+   |
+    LOOKAHEAD([template_head()] dtor_ctor_decl_spec() function_declarator_lookahead())
+       [LOOKAHEAD(template_head()) template_head()] ctor_definition()
+   |
+    LOOKAHEAD([template_head()] declaration_specifiers() function_declarator_lookahead())
+       [LOOKAHEAD(template_head()) template_head()] function_definition()
+   |
+    LOOKAHEAD([template_head()] declaration_specifiers())
+       [LOOKAHEAD(template_head()) template_head()] declaration_specifiers() [member_declarator_list()] ";" // (friend) class forward declaration
+   |
+    LOOKAHEAD("using") using_declaration()
+   |
+    qualified_id() ";" // TODO what is this for ?
+   |
+    ";"
+}
+
+void member_declarator_list() :
+{}
+{
+   declarator() [("=" | ":") assignment_expression()] ("," declarator() [("=" | ":") assignment_expression()])*
+}
+
+void pure_specifier():
+{}
+{
+  "=" <OCTALINT>
+}
+
+void conversion_function_decl_or_def() :
+{}
+{
+   operator_id()
+   "(" [parameter_list()] ")" cv_qualifier_seq() [exception_spec()] [pure_specifier()]
+   func_decl_def()
+}
+
+void operator_id() :
+{}
+{
+   (type_modifiers())*
+   [scope_override()]
+   "operator" declaration_specifiers() ["*" cv_qualifier_seq() | "&"]
+}
+
+void enum_specifier() :
+{ Token t; }
+{
+   "enum"
+   (
+    "{" [enumerator_list()] "}"
+   |
+    t = <ID> [LOOKAHEAD("{") "{" [enumerator_list()] "}"]
+    { putTypeName( t.image ); }
+   )
+}
+
+void enumerator_list() :
+{}
+{
+   (enumerator() [","])+
+}
+
+void enumerator() :
+{}
+{
+  <ID> ["=" assignment_expression()]
+}
+
+void ptr_operator() :
+{}
+{
+    "&"
+   |
+    "*" cv_qualifier_seq()
+   |
+    scope_override() "*" cv_qualifier_seq()
+}
+
+void cv_qualifier_seq() :
+{}
+{
+   [ LOOKAHEAD(2) (
+     "const" [ LOOKAHEAD(2) "volatile" ]
+    |
+     "volatile" [ LOOKAHEAD(2) "const" ] )
+   ]
+}
+
+void declarator() :
+{}
+{
+  (
+    LOOKAHEAD(ptr_operator())
+      ptr_operator() declarator()
+   |
+    direct_declarator()
+  )
+}
+
+void direct_declarator() :
+{}
+{
+    qualified_id() [LOOKAHEAD(declarator_suffixes()) declarator_suffixes()]
+   |
+    "(" declarator() ")" [LOOKAHEAD(declarator_suffixes()) declarator_suffixes()]
+}
+
+void declarator_suffixes() :
+{}
+{
+    "(" [parameter_list()] ")" cv_qualifier_seq() [exception_spec()]
+   |
+    ("[" [constant_expression()] "]")+
+}
+
+void function_declarator_lookahead() :
+{}
+{
+   (LOOKAHEAD(ptr_operator()) ptr_operator())* qualified_id() "("
+}
+
+void function_declarator() :
+{}
+{
+   (LOOKAHEAD(ptr_operator()) ptr_operator())* function_direct_declarator()
+}
+
+void function_direct_declarator() :
+{}
+{
+   qualified_id() "(" [parameter_list()] ")" cv_qualifier_seq() [exception_spec()] [pure_specifier()]
+}
+
+void dtor_ctor_decl_spec() :
+{}
+{
+   [("virtual"|"explicit") ["inline"] | "inline" ["virtual"|"explicit"]]
+}
+
+void dtor_definition() :
+{}
+{
+   dtor_ctor_decl_spec()
+   dtor_declarator()
+   [pure_specifier()]
+   compound_statement()
+}
+
+void ctor_definition() :
+{}
+{
+   dtor_ctor_decl_spec() ctor_declarator()
+   (
+     ";"
+    |
+     [ctor_initializer()] compound_statement()
+   )
+}
+
+void ctor_declarator() :
+{}
+{
+     qualified_type()
+     "(" [parameter_list()] ")"
+     [LOOKAHEAD(2) exception_spec()]
+}
+
+void ctor_initializer() :
+{}
+{
+   ":" mem_initializer() ("," mem_initializer())*
+}
+
+void mem_initializer() :
+{}
+{
+   mem_initializer_id() "(" [expression_list()] ")"
+}
+
+void mem_initializer_id() :
+{}
+{
+   [LOOKAHEAD(scope_override()) scope_override()] class_name()
+}
+
+void dtor_declarator() :
+{}
+{
+   [scope_override()] simple_dtor_declarator()
+}
+
+void simple_dtor_declarator() :
+{}
+{
+   "~" <ID> "(" ["void"] ")" [exception_spec()]
+}
+
+void parameter_list() :
+{}
+{
+    parameter_declaration_list() [LOOKAHEAD(2) [ "," ] "..."]
+   |
+    "..."
+}
+
+void parameter_declaration_list() :
+{}
+{
+   parameter_declaration() (LOOKAHEAD(2) "," parameter_declaration())*
+}
+
+void parameter_declaration() :
+{}
+{
+   declaration_specifiers()
+   (
+    LOOKAHEAD(declarator()) declarator()
+   |
+    [abstract_declarator()]
+   )
+   ["=" assignment_expression()]
+}
+
+void initializer() :
+{}
+{
+    LOOKAHEAD(3) "{" (initializer() [","])+ "}"
+   |
+    assignment_expression()
+}
+
+void type_id() :
+{}
+{
+   declaration_specifiers() [abstract_declarator()]
+}
+
+void abstract_declarator() :
+{}
+{
+     ptr_operator() [abstract_declarator()]
+    |
+     LOOKAHEAD(abstract_declarator_suffix())
+      (abstract_declarator_suffix())+
+    |
+     "(" abstract_declarator() ")" (abstract_declarator_suffix())*
+}
+
+void abstract_declarator_suffix() :
+{}
+{
+    "[" [constant_expression()] "]"
+   |
+    "(" [parameter_list()] ")" cv_qualifier_seq() [exception_spec()]
+}
+
+void template_head() :
+{}
+{
+   "template" "<" [template_parameter_list()] ">"
+}
+
+void template_parameter_list() :
+{}
+{
+   template_parameter() ("," template_parameter())*
+}
+
+void template_parameter() :
+{ Token t; }
+{
+    LOOKAHEAD(3)
+      ("class" | "typename") t = <ID> { putTypeName( t.image ); } ["=" parameter_declaration()]
+   |
+    parameter_declaration()
+}
+
+void template_argument_list() :
+{}
+{
+   "<" [template_argument() ("," template_argument())*] ">"
+}
+
+void template_argument() :
+{}
+{
+    LOOKAHEAD(type_id()(">"|",")) type_id()
+   |
+    additive_expression()
+}
+
+void statement_list() :
+{}
+{
+   (LOOKAHEAD(statement()) statement())+
+}
+
+void statement() :
+{}
+{
+    LOOKAHEAD(2)
+      labeled_statement()
+   |
+    LOOKAHEAD([expression()] ";")
+       [expression()] ";"
+   |
+    compound_statement()
+   |
+    selection_statement()
+   |
+    iteration_statement()
+   |
+    jump_statement()
+   |
+    declaration_statement()
+   |
+    try_block()
+}
+
+void declaration_statement() :
+{}
+{
+    block_declaration()
+}
+
+void block_declaration() :
+{}
+{
+    simple_declaration()
+//   |
+//    asm_definition()
+   |
+    namespace_alias_definition()
+   |
+    LOOKAHEAD("using" "namespace") using_directive()
+   |
+    LOOKAHEAD("using") using_declaration()
+}
+
+void namespace_alias_definition() :
+{}
+{
+    "namespace" <ID> "=" qualified_type() ";"
+}
+
+void simple_declaration() :
+{}
+{
+    [LOOKAHEAD(declaration_specifiers()) declaration_specifiers()] [init_declarator_list()] ";"
+}
+
+void labeled_statement() :
+{}
+{
+    <ID> ":" statement()
+   |
+    "case" constant_expression() ":" statement()
+   |
+    "default" ":" statement()
+}
+
+void compound_statement() :
+{}
+{
+   "{"
+      (statement_list())?
+   "}"
+}
+
+void selection_statement() :
+{}
+{
+    "if" "(" condition() ")" statement() [LOOKAHEAD(2) "else" statement()]
+   |
+    "switch" "(" condition() ")" statement()
+}
+
+void iteration_statement() :
+{}
+{
+    "while" "(" condition() ")" statement()
+   |
+    "do" statement() "while" "(" condition() ")" ";"
+   |
+    "for" "(" (LOOKAHEAD(declaration()) declaration() | [expression()] ";") [condition()] ";" [expression()] ")" statement()
+}
+
+void condition() :
+{}
+{
+   LOOKAHEAD(expression()) expression()
+  |
+   declaration_specifiers() declarator() "=" assignment_expression()
+}
+
+void jump_statement() :
+{}
+{
+    "goto" <ID> ";"
+   |
+    "continue" ";"
+   |
+    "break" ";"
+   |
+    "return" (expression())? ";"
+}
+
+void try_block() :
+{}
+{
+   "try" compound_statement() (handler())*
+}
+
+void handler() :
+{}
+{
+   "catch" "(" exception_declaration() ")"
+   compound_statement()
+}
+
+void exception_declaration() :
+{}
+{    parameter_declaration_list()
+   |
+     "..."
+}
+
+void throw_expression() :
+{}
+{
+    "throw" [LOOKAHEAD(assignment_expression()) assignment_expression()]
+}
+
+void expression() :
+{}
+{
+   assignment_expression() ("," assignment_expression())*
+}
+
+void assignment_expression() :
+{}
+{
+    conditional_expression()
+    [
+      LOOKAHEAD(2)
+      (
+          "="
+        | "*="
+        | "/="
+        | "%="
+        | "+="
+        | "-="
+        | "<<="
+        | ">>="
+        | "&="
+        | "^="
+        | "|="
+      )
+      assignment_expression()
+    ]
+   |
+    throw_expression()
+}
+
+void constant_expression() :
+{}
+{
+   conditional_expression()
+}
+
+void conditional_expression() :
+{}
+{
+   logical_or_expression() ["?" assignment_expression() ":" assignment_expression()]
+}
+
+void logical_or_expression() :
+{}
+{
+   logical_and_expression() ("||" logical_and_expression())*
+}
+
+void logical_and_expression() :
+{}
+{
+   inclusive_or_expression() ("&&" inclusive_or_expression())*
+}
+
+void inclusive_or_expression() :
+{}
+{
+   exclusive_or_expression() ("|" exclusive_or_expression())*
+}
+
+void exclusive_or_expression() :
+{}
+{
+   and_expression() ("^" and_expression())*
+}
+
+void and_expression() :
+{}
+{
+   equality_expression() (LOOKAHEAD(2) "&" equality_expression())*
+}
+
+void equality_expression() :
+{}
+{
+   relational_expression() (( "!=" | "==") relational_expression())*
+}
+
+void relational_expression() :
+{}
+{
+   shift_expression()
+   (
+     LOOKAHEAD(2)
+     (
+         "<"
+       | ">"
+       | "<="
+       | ">="
+     )
+     shift_expression()
+   )*
+}
+
+void shift_expression() :
+{}
+{
+    additive_expression()
+    (
+     (
+        "<<"
+      | ">>"
+     )
+     additive_expression()
+    )*
+}
+
+void additive_expression() :
+{}
+{
+   multiplicative_expression()
+   (LOOKAHEAD(2) ( "+" | "-") multiplicative_expression())*
+}
+
+void multiplicative_expression() :
+{}
+{
+   pm_expression()
+   (LOOKAHEAD(2) ( "*" | "/" | "%") pm_expression())*
+}
+
+void pm_expression() :
+{}
+{
+    cast_expression() (( ".*" | "->*" ) cast_expression())*
+}
+
+void cast_expression() :
+{}
+{
+    LOOKAHEAD("(" type_id() ")" cast_expression())
+     "(" type_id() ")" cast_expression()
+   |
+    LOOKAHEAD(builtin_type_specifier())
+     (builtin_type_specifier())+ "(" assignment_expression() ")"
+   |
+     unary_expression()
+}
+
+void unary_expression() :
+{}
+{
+     "++" cast_expression()
+   |
+     "--" cast_expression()
+   |
+     LOOKAHEAD(3)
+     unary_operator() cast_expression()
+   |
+     "sizeof"
+     (
+       LOOKAHEAD("(" type_id() ")")
+       "(" type_id() ")"
+     |
+       unary_expression()
+     )
+   |
+     postfix_expression()
+}
+
+void new_expression() :
+{}
+{
+   ["::"] "new" [LOOKAHEAD(new_placement()) new_placement()]
+   (
+       LOOKAHEAD("(" type_id() ")" )
+       "(" type_id() ")"
+      |
+       LOOKAHEAD(declaration_specifiers())
+        new_type_id()
+   )
+   [LOOKAHEAD(new_initializer()) new_initializer()]
+}
+
+void new_placement() :
+{}
+{
+    "(" expression_list() ")"
+}
+
+void new_type_id() :
+{}
+{
+   declaration_specifiers() [LOOKAHEAD(new_declarator()) new_declarator()]
+}
+
+void new_declarator() :
+{}
+{
+     direct_new_declarator()
+   |
+     ptr_operator() cv_qualifier_seq() [LOOKAHEAD(2) new_declarator()]
+}
+
+void direct_new_declarator() :
+{}
+{
+   (LOOKAHEAD("[") "[" expression() "]")+
+}
+
+void new_initializer() :
+{}
+{
+    "(" [expression_list()] ")"
+}
+
+void delete_expression() :
+{}
+{
+    ["::"] "delete" ["[" "]"] cast_expression()
+}
+
+void unary_operator() :
+{}
+{    "&"
+   | "*"
+   | "+"
+   | "-"
+   | "~"
+   | "!"
+}
+
+void postfix_expression() :
+{}
+{
+   LOOKAHEAD(primary_expression())
+    primary_expression()
+    (
+     LOOKAHEAD(2)
+     (
+       "[" expression() "]"
+      |
+       "(" [expression_list()] ")"
+      |
+       ("." | "->") [LOOKAHEAD("template") "template"] id_expression()
+      |
+       "++"
+      |
+       "--"
+     )
+    )*
+   |
+    simple_type_specifier() "(" [expression_list()] ")"
+}
+
+void simple_type_specifier() :
+{}
+{
+    builtin_type_specifier()
+   |
+    qualified_type()
+}
+
+void id_expression() :
+{}
+{
+   [LOOKAHEAD(scope_override_lookahead()) scope_override()] unqualified_id()
+}
+
+void unqualified_id() :
+{}
+{
+    LOOKAHEAD(template_id()) template_id()
+   |
+    LOOKAHEAD("operator" operator()) operator_function_id()
+   |
+    conversion_function_id()
+   |
+    "~" <ID>
+   |
+    <ID>
+}
+
+void operator_function_id() :
+{}
+{
+   "operator" operator() [LOOKAHEAD(template_argument_list()) template_argument_list()]
+}
+
+void conversion_function_id() :
+{}
+{
+  "operator" declaration_specifiers() (LOOKAHEAD(ptr_operator()) ptr_operator())*
+}
+
+void template_id() :
+{}
+{
+  <ID> template_argument_list()
+}
+
+void primary_expression() :
+{}
+{
+    "this"
+   |
+    (LOOKAHEAD(2) <STRING>)+
+   |
+    "(" expression() ")"
+   |
+    LOOKAHEAD(["::"] "new") new_expression()
+   |
+    LOOKAHEAD(["::"] "delete") delete_expression()
+   |
+    "typeid" "("
+    (
+     LOOKAHEAD(type_id() ")") type_id() ")"
+    |
+     expression() ")"
+    )
+   |
+    id_expression()
+   |
+    constant()
+}
+
+void expression_list() :
+{}
+{
+    assignment_expression() ("," assignment_expression())*
+}
+
+void constant() :
+{}
+{
+     <OCTALINT>
+   | <OCTALLONG>
+   | <DECIMALINT>
+   | <DECIMALLONG>
+   | <HEXADECIMALINT>
+   | <HEXADECIMALLONG>
+
+   | <UNSIGNED_OCTALINT>
+   | <UNSIGNED_OCTALLONG>
+   | <UNSIGNED_DECIMALINT>
+   | <UNSIGNED_DECIMALLONG>
+   | <UNSIGNED_HEXADECIMALINT>
+   | <UNSIGNED_HEXADECIMALLONG>
+
+   | <CHARACTER>
+   | <FLOATONE>
+   | <FLOATTWO>
+   | "true"
+   | "false"
+}
+
+void operator() :
+{}
+{
+     "new" [LOOKAHEAD(2) "[" "]"]
+   | "delete" [LOOKAHEAD(2) "[" "]"]
+   | "+"
+   | "-"
+   | "*"
+   | "/"
+   | "%"
+   | "^"
+   | "&"
+   | "|"
+   | "~"
+   | "!"
+   | "="
+   | "<"
+   | ">"
+   | "+="
+   | "-="
+   | "*="
+   | "/="
+   | "%="
+   | "^="
+   | "&="
+   | "|="
+   | "<<"
+   | ">>"
+   | ">>="
+   | "<<="
+   | "=="
+   | "!="
+   | "<="
+   | ">="
+   | "&&"
+   | "||"
+   | "++"
+   | "--"
+   | ","
+   | "->*"
+   | "->"
+   | "(" ")"
+   | "[" "]"
+}
+
+void exception_spec() :
+{}
+{
+   "throw" "(" [type_id_list()] ")"
+}
+
+void type_id_list() :
+{}
+{
+   type_id() ("," type_id())*
+}

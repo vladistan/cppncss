@@ -1,0 +1,3 @@
+void MyClass::MyMethod()
+{
+}

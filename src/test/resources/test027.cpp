@@ -1,0 +1,8 @@
+namespace
+{
+
+void MyFunction()
+{
+}
+
+}
