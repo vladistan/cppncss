@@ -28,7 +28,7 @@
 
 package cppncss;
 
-import cppncss.cppast.*;
+import cppast.*;
 
 /**
  * @author Mathieu Champlon

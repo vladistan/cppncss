@@ -34,9 +34,9 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
 import junit.framework.TestCase;
-import cppncss.cppast.ASTtranslation_unit;
-import cppncss.cppast.ParseException;
-import cppncss.cppast.Parser;
+import cppast.ASTtranslation_unit;
+import cppast.ParseException;
+import cppast.Parser;
 
 /**
  * @author Mathieu Champlon

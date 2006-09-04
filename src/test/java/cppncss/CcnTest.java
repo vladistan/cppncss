@@ -32,8 +32,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
 import tools.EasyMockTestCase;
-import cppncss.cppast.ParseException;
-import cppncss.cppast.Parser;
+import cppast.ParseException;
+import cppast.Parser;
 
 /**
  * @author Mathieu Champlon

@@ -28,11 +28,11 @@
 
 package cppncss;
 
-import cppncss.cppast.ASTconversion_function_decl_or_def;
-import cppncss.cppast.ASTctor_definition;
-import cppncss.cppast.ASTdtor_definition;
-import cppncss.cppast.ASTfunction_definition;
-import cppncss.cppast.SimpleNode;
+import cppast.ASTconversion_function_decl_or_def;
+import cppast.ASTctor_definition;
+import cppast.ASTdtor_definition;
+import cppast.ASTfunction_definition;
+import cppast.SimpleNode;
 
 /**
  * @author Mathieu Champlon

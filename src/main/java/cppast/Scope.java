@@ -1,5 +1,5 @@
 
-package cppncss.cppast;
+package cppast;
 
 import java.util.HashSet;
 import java.util.Hashtable;

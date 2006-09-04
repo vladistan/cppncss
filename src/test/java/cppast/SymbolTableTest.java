@@ -28,7 +28,7 @@
  * $Id: $
  */
 
-package cppncss.cppast;
+package cppast;
 
 import tools.EasyMockTestCase;
 

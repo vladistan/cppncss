@@ -1,5 +1,5 @@
 
-package cppncss.cppast;
+package cppast;
 
 /**
  * Manages the symbol table and scopes within a given compilation unit.

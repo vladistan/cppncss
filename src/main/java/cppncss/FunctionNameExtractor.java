@@ -28,12 +28,12 @@
 
 package cppncss;
 
-import cppncss.cppast.ASTctor_declarator;
-import cppncss.cppast.ASTdtor_declarator;
-import cppncss.cppast.ASTfunction_direct_declarator;
-import cppncss.cppast.ASToperator_id;
-import cppncss.cppast.SimpleNode;
-import cppncss.cppast.Token;
+import cppast.ASTctor_declarator;
+import cppast.ASTdtor_declarator;
+import cppast.ASTfunction_direct_declarator;
+import cppast.ASToperator_id;
+import cppast.SimpleNode;
+import cppast.Token;
 
 /**
  * @author Mathieu Champlon

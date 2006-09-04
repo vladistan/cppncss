@@ -43,10 +43,10 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-import cppncss.cppast.ParseException;
-import cppncss.cppast.Parser;
-import cppncss.cppast.ParserTokenManager;
-import cppncss.cppast.Token;
+import cppast.ParseException;
+import cppast.Parser;
+import cppast.ParserTokenManager;
+import cppast.Token;
 
 /**
  * @author Mathieu Champlon

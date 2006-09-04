@@ -30,11 +30,11 @@
 
 package cppncss;
 
-import cppncss.cppast.ASToperator_id;
-import cppncss.cppast.ASTqualified_id;
-import cppncss.cppast.ASTqualified_type;
-import cppncss.cppast.SimpleNode;
-import cppncss.cppast.Token;
+import cppast.ASToperator_id;
+import cppast.ASTqualified_id;
+import cppast.ASTqualified_type;
+import cppast.SimpleNode;
+import cppast.Token;
 
 /**
  * @author Mathieu Champlon

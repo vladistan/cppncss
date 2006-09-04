@@ -1,5 +1,5 @@
 
-package cppncss.cppast;
+package cppast;
 
 public class SimpleNode implements Node
 {

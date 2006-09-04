@@ -28,7 +28,7 @@
 
 package cppncss;
 
-import cppncss.cppast.Token;
+import cppast.Token;
 
 /**
  * @author Mathieu Champlon

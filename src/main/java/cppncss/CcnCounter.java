@@ -30,15 +30,15 @@
 
 package cppncss;
 
-import cppncss.cppast.ASTassignment_expression;
-import cppncss.cppast.ASTcompound_statement;
-import cppncss.cppast.ASThandler;
-import cppncss.cppast.ASTiteration_statement;
-import cppncss.cppast.ASTlabeled_statement;
-import cppncss.cppast.ASTselection_statement;
-import cppncss.cppast.Parser;
-import cppncss.cppast.SimpleNode;
-import cppncss.cppast.Token;
+import cppast.ASTassignment_expression;
+import cppast.ASTcompound_statement;
+import cppast.ASThandler;
+import cppast.ASTiteration_statement;
+import cppast.ASTlabeled_statement;
+import cppast.ASTselection_statement;
+import cppast.Parser;
+import cppast.SimpleNode;
+import cppast.Token;
 
 /**
  * @author Mathieu Champlon

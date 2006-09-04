@@ -31,9 +31,9 @@
 package cppncss;
 
 import java.io.Reader;
-import cppncss.cppast.ParserTokenManager;
-import cppncss.cppast.SimpleCharStream;
-import cppncss.cppast.Token;
+import cppast.ParserTokenManager;
+import cppast.SimpleCharStream;
+import cppast.Token;
 
 /**
  * @author Mathieu Champlon
