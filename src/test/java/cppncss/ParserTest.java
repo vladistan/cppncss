@@ -824,6 +824,11 @@ public class ParserTest extends TestCase
         parse( "void MyFunction() { ; }" );
     }
 
+    public void testTemplateForwardDeclarationDoesNotRegisterTemplateTypeAsType() throws ParseException
+    {
+        parse( "template< typename T > Type1; template< typename T > Type2;" );
+    }
+
     public void testTMP() throws IOException, ParseException
     {
         final Parser parser = new Parser( new StringReader( "" ) );

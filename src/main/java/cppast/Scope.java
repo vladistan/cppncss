@@ -52,9 +52,6 @@ public class Scope
             throw new IllegalArgumentException( "type name is null" );
         if( name.contains( "::" ) )
             throw new IllegalArgumentException( "type name '" + name + "' contains '::'" );
-        if( types.contains( name ) )
-            throw new IllegalArgumentException( "type name '" + name + "' already exists in scope : '" + this.name
-                    + "'" );
         types.add( name );
     }
 

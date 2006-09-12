@@ -872,10 +872,10 @@ void template_parameter_list() :
 }
 
 void template_parameter() :
-{ Token t; }
+{}
 {
     LOOKAHEAD(3)
-      ("class" | "typename") t = <ID> { putTypeName( t.image ); } ["=" parameter_declaration()]
+      ("class" | "typename") <ID> ["=" parameter_declaration()]
    |
     parameter_declaration()
 }
