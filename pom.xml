@@ -48,10 +48,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>javacc-maven-plugin</artifactId>
-        <version>2.1-SNAPSHOT</version>
-        <configuration>
-          <packageName>cppncss.cppast</packageName>
-        </configuration>
+        <version>2.2-SNAPSHOT</version>
         <executions>
           <execution>
             <id>jjtree</id>
@@ -60,9 +57,10 @@
             </goals>
             <configuration>
               <sourceDirectory>src/main/javacc</sourceDirectory>
-              <outputDirectory>src/main/java/cppncss/cppast</outputDirectory>
+              <outputDirectory>src/main/java</outputDirectory>
               <staticOption>false</staticOption>
               <multi>true</multi>
+              <nodePackage>cppast</nodePackage>
               <nodeUsesParser>true</nodeUsesParser>
               <visitor>true</visitor>
             </configuration>
@@ -73,9 +71,10 @@
               <goal>javacc</goal>
             </goals>
             <configuration>
-              <sourceDirectory>src/main/java/cppncss/cppast</sourceDirectory>
+              <sourceDirectory>src/main/java/cppast</sourceDirectory>
               <outputDirectory>src/main/java</outputDirectory>
               <isStatic>false</isStatic>
+              <packageName>cppast</packageName>
             </configuration>
           </execution>
         </executions>
