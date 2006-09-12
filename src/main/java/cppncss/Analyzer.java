@@ -167,10 +167,10 @@ public class Analyzer
             final String filename = iterator.next();
             if( debug )
                 System.out.println( "Parsing " + filename );
-            if( !process( visitor, filename ) )
-                if( !force )
-                    return parsed;
-            ++parsed;
+            if( process( visitor, filename ) )
+                ++parsed;
+            else if( !force )
+                return parsed;
         }
         return parsed;
     }
