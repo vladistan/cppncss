@@ -24,23 +24,54 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * $Id: $
  */
 
 package cppncss;
 
-import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Vector;
 
 /**
- * Provides code measurement for C++.
- * 
  * @author Mathieu Champlon
  */
-public class CppNcss
+public class CcnProcessor implements CcnObserver
 {
-    public static void main( final String[] args ) throws IOException
+    private final Vector<CcnFunction> result;
+    private final Comparator<CcnFunction> comparator;
+    private final int THRESHOLD = 30;
+
+    public CcnProcessor()
     {
-        final CcnProcessor processor = new CcnProcessor();
-        new Analyzer( args ).parse( new CcnVisitor( processor ) );
-        processor.display();
+        result = new Vector<CcnFunction>();
+        comparator = new Comparator<CcnFunction>()
+        {
+            public int compare( CcnFunction f1, CcnFunction f2 )
+            {
+                return f1.compare( f2 );
+            }
+        };
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void notify( final String function, final int count )
+    {
+        result.add( new CcnFunction( function, count ) );
+        Collections.sort( result, comparator );
+        if( result.size() > THRESHOLD )
+            result.remove( result.size() - 1 );
+    }
+
+    public void display()
+    {
+        System.out.println( "CCN" );
+        final Iterator<CcnFunction> iterator = result.iterator();
+        while( iterator.hasNext() )
+            System.out.println( iterator.next().toString() );
     }
 }
