@@ -234,20 +234,25 @@ public class Analyzer
 
     private void display( final ParseException exception, final String filename ) throws IOException
     {
-        final int line = getToken( exception ).beginLine;
+        final int start = getToken( exception ).beginLine;
         final BufferedReader reader = new BufferedReader( open( filename ) );
-        final int lines = 3;
-        for( int i = 0; i < line - lines; i++ )
-            reader.readLine();
-        for( int i = 0; i < lines; ++i )
-        {
-            final String content = reader.readLine();
-            System.out.println( content );
-        }
-        final int column = getToken( exception ).beginColumn;
+        displayLocation( start, 3, reader );
+        displayCursor( getToken( exception ).beginColumn );
+    }
+
+    private void displayCursor( final int column )
+    {
         for( int i = 0; i < column - 1; ++i )
             System.out.print( ' ' );
         System.out.println( '^' );
+    }
+
+    private void displayLocation( final int start, final int lines, final BufferedReader reader ) throws IOException
+    {
+        for( int i = 0; i < start - lines; i++ )
+            reader.readLine();
+        for( int i = 0; i < lines; ++i )
+            System.out.println( reader.readLine() );
     }
 
     private Token getToken( final ParseException exception )
