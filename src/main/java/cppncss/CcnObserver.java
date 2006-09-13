@@ -35,5 +35,5 @@ package cppncss;
  */
 public interface CcnObserver
 {
-    void notify( String function, int count );
+    void notifyCcn( String function, int count );
 }

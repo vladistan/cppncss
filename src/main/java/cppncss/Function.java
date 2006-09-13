@@ -33,18 +33,18 @@ package cppncss;
 /**
  * @author Mathieu Champlon
  */
-public class CcnFunction
+public class Function
 {
     private final int count;
     private final String function;
 
-    public CcnFunction( final String function, final int count )
+    public Function( final String function, final int count )
     {
         this.function = function;
         this.count = count;
     }
 
-    public final int compare( final CcnFunction other )
+    public final int compare( final Function other )
     {
         return other.count - count;
     }

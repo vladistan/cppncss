@@ -83,7 +83,7 @@ public class CcnVisitor extends Visitor
         final CcnCounter visitor = new CcnCounter();
         final Object result = node.childrenAccept( visitor, data );
         if( visitor.getCount() > 0 )
-            observer_.notify( getFunctionName( node ), visitor.getCount() );
+            observer_.notifyCcn( getFunctionName( node ), visitor.getCount() );
         return result;
     }
 

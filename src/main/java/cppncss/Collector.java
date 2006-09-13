@@ -38,18 +38,18 @@ import java.util.Vector;
 /**
  * @author Mathieu Champlon
  */
-public class CcnProcessor implements CcnObserver
+public class Collector implements CcnObserver
 {
-    private final Vector<CcnFunction> result;
-    private final Comparator<CcnFunction> comparator;
+    private final Vector<Function> result;
+    private final Comparator<Function> comparator;
     private final int THRESHOLD = 30;
 
-    public CcnProcessor()
+    public Collector()
     {
-        result = new Vector<CcnFunction>();
-        comparator = new Comparator<CcnFunction>()
+        result = new Vector<Function>();
+        comparator = new Comparator<Function>()
         {
-            public int compare( CcnFunction f1, CcnFunction f2 )
+            public int compare( Function f1, Function f2 )
             {
                 return f1.compare( f2 );
             }
@@ -59,18 +59,26 @@ public class CcnProcessor implements CcnObserver
     /**
      * {@inheritDoc}
      */
-    public void notify( final String function, final int count )
+    public void notifyCcn( final String function, final int count )
     {
-        result.add( new CcnFunction( function, count ) );
+        result.add( new Function( function, count ) );
         Collections.sort( result, comparator );
         if( result.size() > THRESHOLD )
             result.remove( result.size() - 1 );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void notifyNcss( final String function, final int count )
+    {
+        // TODO Auto-generated method stub
+    }
+
     public void display()
     {
         System.out.println( "CCN" );
-        final Iterator<CcnFunction> iterator = result.iterator();
+        final Iterator<Function> iterator = result.iterator();
         while( iterator.hasNext() )
             System.out.println( iterator.next().toString() );
     }

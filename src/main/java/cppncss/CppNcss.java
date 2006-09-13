@@ -39,8 +39,9 @@ public class CppNcss
 {
     public static void main( final String[] args ) throws IOException
     {
-        final CcnProcessor processor = new CcnProcessor();
-        new Analyzer( args ).parse( new CcnVisitor( processor ) );
-        processor.display();
+        final Analyzer analyzer = new Analyzer( args );
+        Collector collector = new Collector();
+        analyzer.accept( new CcnVisitor( collector ) );
+        collector.display();
     }
 }

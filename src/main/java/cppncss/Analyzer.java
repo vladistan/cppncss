@@ -149,7 +149,7 @@ public class Analyzer
         return files;
     }
 
-    public void parse( final Visitor visitor ) throws IOException
+    public void accept( final Visitor visitor ) throws IOException
     {
         final long start = System.currentTimeMillis();
         final int parsed = process( visitor );
