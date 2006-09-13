@@ -30,12 +30,12 @@
 
 package cppncss;
 
-import cppast.ASTassignment_expression;
-import cppast.ASTcompound_statement;
-import cppast.ASThandler;
-import cppast.ASTiteration_statement;
-import cppast.ASTlabeled_statement;
-import cppast.ASTselection_statement;
+import cppast.AstAssignmentExpression;
+import cppast.AstCaseStatement;
+import cppast.AstCompoundStatement;
+import cppast.AstHandler;
+import cppast.AstIfStatement;
+import cppast.AstIterationStatement;
 import cppast.Parser;
 import cppast.SimpleNode;
 import cppast.Token;
@@ -50,7 +50,7 @@ public class CcnCounter extends Visitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final ASTcompound_statement node, final Object data )
+    public Object visit( final AstCompoundStatement node, final Object data )
     {
         if( count_ == 0 )
             ++count_;
@@ -60,17 +60,7 @@ public class CcnCounter extends Visitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final ASTselection_statement node, final Object data )
-    {
-        if( node.getFirstToken().image == "if" )
-            ++count_;
-        return super.visit( node, data );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object visit( final ASTiteration_statement node, final Object data )
+    public Object visit( final AstIfStatement node, final Object data )
     {
         ++count_;
         return super.visit( node, data );
@@ -79,17 +69,7 @@ public class CcnCounter extends Visitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final ASTlabeled_statement node, final Object data )
-    {
-        if( node.getFirstToken().image == "case" )
-            ++count_;
-        return super.visit( node, data );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object visit( final ASThandler node, final Object data )
+    public Object visit( final AstIterationStatement node, final Object data )
     {
         ++count_;
         return super.visit( node, data );
@@ -98,7 +78,25 @@ public class CcnCounter extends Visitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final ASTassignment_expression node, final Object data )
+    public Object visit( final AstCaseStatement node, final Object data )
+    {
+        ++count_;
+        return super.visit( node, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstHandler node, final Object data )
+    {
+        ++count_;
+        return super.visit( node, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstAssignmentExpression node, final Object data )
     {
         count_ += count( node, Parser.AND );
         count_ += count( node, Parser.OR );

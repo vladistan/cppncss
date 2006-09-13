@@ -63,6 +63,8 @@
               <nodePackage>cppast</nodePackage>
               <nodeUsesParser>true</nodeUsesParser>
               <visitor>true</visitor>
+              <nodePrefix>Ast</nodePrefix>
+              <nodeDefaultVoid>true</nodeDefaultVoid>
             </configuration>
           </execution>
           <execution>

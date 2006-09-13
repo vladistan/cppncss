@@ -28,10 +28,9 @@
 
 package cppncss;
 
-import cppast.ASTconversion_function_decl_or_def;
-import cppast.ASTctor_definition;
-import cppast.ASTdtor_definition;
-import cppast.ASTfunction_definition;
+import cppast.AstConstructorDefinition;
+import cppast.AstDestructorDefinition;
+import cppast.AstFunctionDefinition;
 import cppast.SimpleNode;
 
 /**
@@ -49,7 +48,7 @@ public class CcnVisitor extends Visitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final ASTfunction_definition node, final Object data )
+    public Object visit( final AstFunctionDefinition node, final Object data )
     {
         return process( node, data );
     }
@@ -57,7 +56,7 @@ public class CcnVisitor extends Visitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final ASTctor_definition node, final Object data )
+    public Object visit( final AstConstructorDefinition node, final Object data )
     {
         return process( node, data );
     }
@@ -65,15 +64,7 @@ public class CcnVisitor extends Visitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final ASTdtor_definition node, final Object data )
-    {
-        return process( node, data );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object visit( final ASTconversion_function_decl_or_def node, final Object data )
+    public Object visit( final AstDestructorDefinition node, final Object data )
     {
         return process( node, data );
     }

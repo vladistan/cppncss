@@ -270,7 +270,7 @@ TOKEN :
   <  ID : ["a"-"z","A"-"Z","_"] (["a"-"z","A"-"Z","0"-"9","_"])* >
 }
 
-ASTtranslation_unit translation_unit() :
+AstTranslationUnit translation_unit() #TranslationUnit :
 {}
 {
    (external_declaration())* <EOF>
@@ -323,7 +323,7 @@ void function_definition() :
    )
 }
 */
-void function_definition() :
+void function_definition() #FunctionDefinition :
 {}
 {
     [LOOKAHEAD(3) declaration_specifiers()] function_declarator() func_decl_def()
@@ -631,10 +631,10 @@ void pure_specifier():
   "=" <OCTALINT>
 }
 
-void conversion_function_decl_or_def() :
+void conversion_function_decl_or_def() #FunctionDefinition :
 {}
 {
-   operator_id()
+   operator_id() #FunctionName
    "(" [parameter_list()] ")" cv_qualifier_seq() [exception_spec()] [pure_specifier()]
    func_decl_def()
 }
@@ -733,7 +733,7 @@ void function_declarator() :
 void function_direct_declarator() :
 {}
 {
-   qualified_id() "(" [parameter_list()] ")" cv_qualifier_seq() [exception_spec()] [pure_specifier()]
+   qualified_id() #FunctionName "(" [parameter_list()] ")" cv_qualifier_seq() [exception_spec()] [pure_specifier()]
 }
 
 void dtor_ctor_decl_spec() :
@@ -742,7 +742,7 @@ void dtor_ctor_decl_spec() :
    [("virtual"|"explicit") ["inline"] | "inline" ["virtual"|"explicit"]]
 }
 
-void dtor_definition() :
+void dtor_definition() #DestructorDefinition :
 {}
 {
    dtor_ctor_decl_spec()
@@ -751,7 +751,7 @@ void dtor_definition() :
    compound_statement()
 }
 
-void ctor_definition() :
+void ctor_definition() #ConstructorDefinition :
 {}
 {
    dtor_ctor_decl_spec() ctor_declarator()
@@ -765,7 +765,7 @@ void ctor_definition() :
 void ctor_declarator() :
 {}
 {
-     qualified_type()
+     qualified_type() #FunctionName
      "(" [parameter_list()] ")"
      [LOOKAHEAD(2) exception_spec()]
 }
@@ -791,7 +791,7 @@ void mem_initializer_id() :
 void dtor_declarator() :
 {}
 {
-   [scope_override()] simple_dtor_declarator()
+   ([scope_override()] "~" <ID>) #FunctionName "(" ["void"] ")" [exception_spec()]
 }
 
 void simple_dtor_declarator() :
@@ -959,12 +959,12 @@ void labeled_statement() :
 {
     <ID> ":" statement()
    |
-    "case" constant_expression() ":" statement()
+    "case" constant_expression() ":" statement() #CaseStatement
    |
     "default" ":" statement()
 }
 
-void compound_statement() :
+void compound_statement() #CompoundStatement :
 {}
 {
    "{"
@@ -975,12 +975,12 @@ void compound_statement() :
 void selection_statement() :
 {}
 {
-    "if" "(" condition() ")" statement() [LOOKAHEAD(2) "else" statement()]
+    "if" "(" condition() ")" statement() [LOOKAHEAD(2) "else" statement()] #IfStatement
    |
     "switch" "(" condition() ")" statement()
 }
 
-void iteration_statement() :
+void iteration_statement() #IterationStatement :
 {}
 {
     "while" "(" condition() ")" statement()
@@ -1016,7 +1016,7 @@ void try_block() :
    "try" compound_statement() (handler())*
 }
 
-void handler() :
+void handler() #Handler :
 {}
 {
    "catch" "(" exception_declaration() ")"
@@ -1042,7 +1042,7 @@ void expression() :
    assignment_expression() ("," assignment_expression())*
 }
 
-void assignment_expression() :
+void assignment_expression() #AssignmentExpression :
 {}
 {
     conditional_expression()

@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
 import junit.framework.TestCase;
-import cppast.ASTtranslation_unit;
 import cppast.ParseException;
 import cppast.Parser;
 
@@ -43,9 +42,9 @@ import cppast.Parser;
  */
 public class ParserTest extends TestCase
 {
-    private ASTtranslation_unit parse( final String data ) throws ParseException
+    private void parse( final String data ) throws ParseException
     {
-        return new Parser( new StringReader( data ) ).translation_unit();
+        new Parser( new StringReader( data ) ).translation_unit();
     }
 
     public void testTypedefType() throws ParseException

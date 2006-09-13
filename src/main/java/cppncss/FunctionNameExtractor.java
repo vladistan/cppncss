@@ -28,11 +28,7 @@
 
 package cppncss;
 
-import cppast.ASTctor_declarator;
-import cppast.ASTdtor_declarator;
-import cppast.ASTfunction_direct_declarator;
-import cppast.ASToperator_id;
-import cppast.SimpleNode;
+import cppast.AstFunctionName;
 import cppast.Token;
 
 /**
@@ -45,48 +41,20 @@ public class FunctionNameExtractor extends Visitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final ASTfunction_direct_declarator node, final Object data )
+    public Object visit( final AstFunctionName node, final Object data )
     {
-        return process( node, data );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object visit( final ASTctor_declarator node, final Object data )
-    {
-        return process( node, data );
-    }
-
-    private Object process( final SimpleNode node, final Object data )
-    {
-        final Visitor visitor = new NameExtractor();
-        node.childrenAccept( visitor, data );
-        name_ = visitor.toString();
-        return data;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object visit( final ASToperator_id node, final Object data )
-    {
-        final Visitor visitor = new NameExtractor();
-        node.jjtAccept( visitor, data );
-        name_ = visitor.toString();
-        return data;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object visit( final ASTdtor_declarator node, final Object data )
-    {
-        final StringBuffer buffer = new StringBuffer();
-        for( Token token = node.getFirstToken(); token.next != node.getLastToken(); token = token.next )
-            buffer.append( token.image );
+        final StringBuffer buffer = new StringBuffer(); // FIXME can probably be simplified
+        for( Token token = node.getFirstToken(); token != node.getLastToken().next; token = token.next )
+            buffer.append( decorate( token.image ) );
         name_ = node.resolve( buffer.toString() );
         return data;
+    }
+
+    private String decorate( final String value )
+    {
+        if( value.equals( "const" ) )
+            return " " + value + " ";
+        return value;
     }
 
     /**
