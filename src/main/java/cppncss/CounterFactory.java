@@ -24,63 +24,16 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * $Id: $
  */
 
 package cppncss;
 
-import cppast.AstConstructorDefinition;
-import cppast.AstDestructorDefinition;
-import cppast.AstFunctionDefinition;
-import cppast.SimpleNode;
-
 /**
  * @author Mathieu Champlon
  */
-public class CcnVisitor extends Visitor
+public interface CounterFactory
 {
-    private final FunctionObserver observer;
-
-    public CcnVisitor( final FunctionObserver observer )
-    {
-        this.observer = observer; // FIXME pass observer as 'data' ?
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object visit( final AstFunctionDefinition node, final Object data )
-    {
-        return process( node, data );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object visit( final AstConstructorDefinition node, final Object data )
-    {
-        return process( node, data );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object visit( final AstDestructorDefinition node, final Object data )
-    {
-        return process( node, data );
-    }
-
-    private Object process( final SimpleNode node, final Object data )
-    {
-        final CcnCounter visitor = new CcnCounter();
-        final Object result = node.childrenAccept( visitor, data );
-        observer.notify( getFunctionName( node ), visitor.getCount() );
-        return result;
-    }
-
-    private String getFunctionName( final SimpleNode node )
-    {
-        final Visitor visitor = new FunctionNameExtractor();
-        node.childrenAccept( visitor, null );
-        return visitor.toString();
-    }
+    Counter createCounter();
 }

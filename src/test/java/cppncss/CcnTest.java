@@ -42,6 +42,7 @@ public class CcnTest extends EasyMockTestCase
 {
     private Parser parser;
     private FunctionObserver observer;
+    private final CcnFactory factory = new CcnFactory();
 
     /**
      * {@inheritDoc}
@@ -58,7 +59,7 @@ public class CcnTest extends EasyMockTestCase
         if( resource == null )
             throw new IOException( "resource not found : " + name );
         parser.ReInit( resource.openStream() );
-        parser.translation_unit().jjtAccept( new CcnVisitor( observer ), null );
+        parser.translation_unit().jjtAccept( new FunctionVisitor( observer, factory ), null );
     }
 
     public void testMethodDefinitionIsValid() throws IOException, ParseException

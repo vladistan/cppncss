@@ -43,7 +43,7 @@ import cppast.Token;
 /**
  * @author Mathieu Champlon
  */
-public class CcnCounter extends Visitor
+public class CcnCounter extends Visitor implements Counter
 {
     private int count = 0;
 
@@ -113,7 +113,7 @@ public class CcnCounter extends Visitor
         return result;
     }
 
-    public final int getCount()
+    public final int count()
     {
         return count;
     }

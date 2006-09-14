@@ -28,21 +28,61 @@
 
 package cppncss;
 
-import java.io.IOException;
+import cppast.AstConstructorDefinition;
+import cppast.AstDestructorDefinition;
+import cppast.AstFunctionDefinition;
+import cppast.SimpleNode;
 
 /**
- * Provides code measurement for C++.
- * 
  * @author Mathieu Champlon
  */
-public class CppNcss
+public class FunctionVisitor extends Visitor
 {
-    public static void main( final String[] args ) throws IOException
+    private final FunctionObserver observer;
+    private final CounterFactory factory;
+
+    public FunctionVisitor( final FunctionObserver observer, final CounterFactory factory )
     {
-        final Analyzer analyzer = new Analyzer( args );
-        Collector collector = new Collector();
-        CounterFactory ccnFactory = new CcnFactory();
-        analyzer.accept( new FunctionVisitor( collector, ccnFactory  ) );
-        collector.display();
+        this.observer = observer; // FIXME pass observer as 'data' ?
+        this.factory = factory;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstFunctionDefinition node, final Object data )
+    {
+        return process( node, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstConstructorDefinition node, final Object data )
+    {
+        return process( node, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstDestructorDefinition node, final Object data )
+    {
+        return process( node, data );
+    }
+
+    private Object process( final SimpleNode node, final Object data )
+    {
+        final Counter counter = factory.createCounter();
+        final Object result = node.childrenAccept( counter, data );
+        observer.notify( getFunctionName( node ), counter.count() );
+        return result;
+    }
+
+    private String getFunctionName( final SimpleNode node )
+    {
+        final Visitor visitor = new FunctionNameExtractor();
+        node.childrenAccept( visitor, null );
+        return visitor.toString();
     }
 }
