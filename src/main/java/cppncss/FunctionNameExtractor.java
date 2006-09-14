@@ -43,7 +43,7 @@ public class FunctionNameExtractor extends Visitor
      */
     public Object visit( final AstFunctionName node, final Object data )
     {
-        final StringBuffer buffer = new StringBuffer(); // FIXME can probably be simplified
+        final StringBuffer buffer = new StringBuffer();
         for( Token token = node.getFirstToken(); token != node.getLastToken().next; token = token.next )
             buffer.append( decorate( token.image ) );
         name_ = node.resolve( buffer.toString() );

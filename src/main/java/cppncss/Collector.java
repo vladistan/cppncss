@@ -49,7 +49,7 @@ public class Collector implements CcnObserver
         result = new Vector<Function>();
         comparator = new Comparator<Function>()
         {
-            public int compare( Function f1, Function f2 )
+            public int compare( final Function f1, final Function f2 )
             {
                 return f1.compare( f2 );
             }
