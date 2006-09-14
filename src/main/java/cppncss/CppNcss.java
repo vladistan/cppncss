@@ -41,8 +41,7 @@ public class CppNcss
     {
         final Analyzer analyzer = new Analyzer( args );
         Collector collector = new Collector();
-        CounterFactory ccnFactory = new CcnFactory();
-        analyzer.accept( new FunctionVisitor( collector, ccnFactory  ) );
+        analyzer.accept( new FunctionVisitor( new CcnCounter( collector ) ) );
         collector.display();
     }
 }

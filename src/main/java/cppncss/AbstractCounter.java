@@ -33,13 +33,31 @@ package cppncss;
 /**
  * @author Mathieu Champlon
  */
-public class CcnFactory implements CounterFactory
+public class AbstractCounter extends Visitor
 {
+    private final FunctionObserver observer;
+    private final int start;
+    private int count;
+
+    public AbstractCounter( final FunctionObserver observer, final int start )
+    {
+        this.observer = observer;
+        this.start = start;
+        this.count = start;
+    }
+
     /**
      * {@inheritDoc}
      */
-    public Counter createCounter()
+    public void flush( final String function )
     {
-        return new CcnCounter();
+        final int result = count;
+        count = start;
+        observer.notify( function, result );
+    }
+
+    protected void increment()
+    {
+        ++count;
     }
 }

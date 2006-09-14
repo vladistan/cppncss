@@ -38,13 +38,11 @@ import cppast.SimpleNode;
  */
 public class FunctionVisitor extends Visitor
 {
-    private final FunctionObserver observer;
-    private final CounterFactory factory;
+    private final Counter counter;
 
-    public FunctionVisitor( final FunctionObserver observer, final CounterFactory factory )
+    public FunctionVisitor( final Counter counter )
     {
-        this.observer = observer; // FIXME pass observer as 'data' ?
-        this.factory = factory;
+        this.counter = counter;
     }
 
     /**
@@ -73,9 +71,8 @@ public class FunctionVisitor extends Visitor
 
     private Object process( final SimpleNode node, final Object data )
     {
-        final Counter counter = factory.createCounter();
         final Object result = node.childrenAccept( counter, data );
-        observer.notify( getFunctionName( node ), counter.count() );
+        counter.flush( getFunctionName( node ) );
         return result;
     }
 

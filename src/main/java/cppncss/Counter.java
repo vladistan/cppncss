@@ -37,5 +37,5 @@ import cppast.ParserVisitor;
  */
 public interface Counter extends ParserVisitor
 {
-    int count();
+    void flush( String function );
 }

@@ -32,7 +32,6 @@ package cppncss;
 
 import cppast.AstAssignmentExpression;
 import cppast.AstCaseStatement;
-import cppast.AstCompoundStatement;
 import cppast.AstHandler;
 import cppast.AstIfStatement;
 import cppast.AstIterationStatement;
@@ -43,18 +42,11 @@ import cppast.Token;
 /**
  * @author Mathieu Champlon
  */
-public class CcnCounter extends Visitor implements Counter
+public class CcnCounter extends AbstractCounter implements Counter
 {
-    private int count = 0;
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object visit( final AstCompoundStatement node, final Object data )
+    public CcnCounter( final FunctionObserver observer )
     {
-        if( count == 0 )
-            ++count;
-        return super.visit( node, data );
+        super( observer, 1 );
     }
 
     /**
@@ -62,7 +54,7 @@ public class CcnCounter extends Visitor implements Counter
      */
     public Object visit( final AstIfStatement node, final Object data )
     {
-        ++count;
+        increment();
         return super.visit( node, data );
     }
 
@@ -71,7 +63,7 @@ public class CcnCounter extends Visitor implements Counter
      */
     public Object visit( final AstIterationStatement node, final Object data )
     {
-        ++count;
+        increment();
         return super.visit( node, data );
     }
 
@@ -80,7 +72,7 @@ public class CcnCounter extends Visitor implements Counter
      */
     public Object visit( final AstCaseStatement node, final Object data )
     {
-        ++count;
+        increment();
         return super.visit( node, data );
     }
 
@@ -89,7 +81,7 @@ public class CcnCounter extends Visitor implements Counter
      */
     public Object visit( final AstHandler node, final Object data )
     {
-        ++count;
+        increment();
         return super.visit( node, data );
     }
 
@@ -98,23 +90,16 @@ public class CcnCounter extends Visitor implements Counter
      */
     public Object visit( final AstAssignmentExpression node, final Object data )
     {
-        count += count( node, Parser.AND );
-        count += count( node, Parser.OR );
-        count += count( node, Parser.QUESTIONMARK );
+        count( node, Parser.AND );
+        count( node, Parser.OR );
+        count( node, Parser.QUESTIONMARK );
         return data;
     }
 
-    private int count( final SimpleNode node, final int kind )
+    private void count( final SimpleNode node, final int kind )
     {
-        int result = 0;
         for( Token token = node.getFirstToken(); token != node.getLastToken().next; token = token.next )
             if( token.kind == kind )
-                ++result;
-        return result;
-    }
-
-    public final int count()
-    {
-        return count;
+                increment();
     }
 }
