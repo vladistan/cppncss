@@ -29,11 +29,9 @@
 package cppncss;
 
 /**
- * CCN (Cyclomatic Complexity Number) observer definition.
- *
  * @author Mathieu Champlon
  */
-public interface CcnObserver
+public interface FunctionObserver
 {
-    void notifyCcn( String function, int count );
+    void notify( String function, int count );
 }

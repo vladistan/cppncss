@@ -38,7 +38,7 @@ import java.util.Vector;
 /**
  * @author Mathieu Champlon
  */
-public class Collector implements CcnObserver
+public class Collector implements FunctionObserver
 {
     private final Vector<Function> result;
     private final Comparator<Function> comparator;
@@ -59,20 +59,12 @@ public class Collector implements CcnObserver
     /**
      * {@inheritDoc}
      */
-    public void notifyCcn( final String function, final int count )
+    public void notify( final String function, final int count )
     {
         result.add( new Function( function, count ) );
         Collections.sort( result, comparator );
         if( result.size() > THRESHOLD )
             result.remove( result.size() - 1 );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void notifyNcss( final String function, final int count )
-    {
-        // TODO Auto-generated method stub
     }
 
     public void display()

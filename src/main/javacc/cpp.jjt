@@ -294,39 +294,13 @@ void external_declaration() :
        ctor_definition()
    |
     LOOKAHEAD(declaration_specifiers() function_declarator())
-       function_definition()
+       function_decl_or_def()
    |
     LOOKAHEAD("namespace") namespace_definition()
    |
     declaration()
    |
     ";"
-}
-
-void class_name() :
-{}
-{
-   LOOKAHEAD(template_id()) template_id()
-  |
-   <ID>
-}
-
-/*
-void function_definition() :
-{}
-{
-   [declaration_specifiers()] declarator()
-   (
-    [ctor_initializer()] function_body()
-   |
-    function_try_block()
-   )
-}
-*/
-void function_definition() #FunctionDefinition :
-{}
-{
-    [LOOKAHEAD(3) declaration_specifiers()] function_declarator() func_decl_def()
 }
 
 void template_declaration() :
@@ -336,12 +310,33 @@ void template_declaration() :
    template_head() external_declaration()
 }
 
-void func_decl_def() :
+void function_decl_or_def() :
 {}
 {
-    ";"
+    LOOKAHEAD(function() ";") function() ";"
    |
-    compound_statement()
+    (function() compound_statement()) #FunctionDefinition
+}
+
+void function() :
+{}
+{
+    [LOOKAHEAD(3) declaration_specifiers()] function_declarator()
+}
+
+void conversion_function_decl_or_def() :
+{}
+{
+    LOOKAHEAD(conversion_function() ";") conversion_function() ";"
+   |
+    (conversion_function() compound_statement()) #FunctionDefinition
+}
+
+void conversion_function() :
+{}
+{
+    operator_id() #FunctionName
+    "(" [parameter_list()] ")" cv_qualifier_seq() [exception_spec()] [pure_specifier()]
 }
 
 void linkage_specification() :
@@ -607,7 +602,7 @@ void member_declaration() :
        [LOOKAHEAD(template_head()) template_head()] ctor_definition()
    |
     LOOKAHEAD([template_head()] declaration_specifiers() function_declarator_lookahead())
-       [LOOKAHEAD(template_head()) template_head()] function_definition()
+       [LOOKAHEAD(template_head()) template_head()] function_decl_or_def()
    |
     LOOKAHEAD([template_head()] declaration_specifiers())
        [LOOKAHEAD(template_head()) template_head()] declaration_specifiers() [member_declarator_list()] ";" // (friend) class forward declaration
@@ -629,14 +624,6 @@ void pure_specifier():
 {}
 {
   "=" <OCTALINT>
-}
-
-void conversion_function_decl_or_def() #FunctionDefinition :
-{}
-{
-   operator_id() #FunctionName
-   "(" [parameter_list()] ")" cv_qualifier_seq() [exception_spec()] [pure_specifier()]
-   func_decl_def()
 }
 
 void operator_id() :
@@ -756,8 +743,9 @@ void ctor_definition() #ConstructorDefinition :
 {
    dtor_ctor_decl_spec() ctor_declarator()
    (
-     ";"
-    |
+// FIXME check why unused
+//     ";"
+//    |
      [ctor_initializer()] compound_statement()
    )
 }
@@ -786,6 +774,14 @@ void mem_initializer_id() :
 {}
 {
    [LOOKAHEAD(scope_override()) scope_override()] class_name()
+}
+
+void class_name() :
+{}
+{
+   LOOKAHEAD(template_id()) template_id()
+  |
+   <ID>
 }
 
 void dtor_declarator() :
