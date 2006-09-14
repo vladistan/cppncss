@@ -960,7 +960,7 @@ void labeled_statement() :
     "default" ":" statement()
 }
 
-void compound_statement() #CompoundStatement :
+void compound_statement() :
 {}
 {
    "{"

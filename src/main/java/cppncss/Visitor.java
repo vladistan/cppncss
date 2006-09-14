@@ -30,7 +30,6 @@ package cppncss;
 
 import cppast.AstAssignmentExpression;
 import cppast.AstCaseStatement;
-import cppast.AstCompoundStatement;
 import cppast.AstConstructorDefinition;
 import cppast.AstDestructorDefinition;
 import cppast.AstFunctionDefinition;
@@ -83,14 +82,6 @@ public class Visitor implements ParserVisitor
      * {@inheritDoc}
      */
     public Object visit( final AstDestructorDefinition node, final Object data )
-    {
-        return node.childrenAccept( this, data );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object visit( final AstCompoundStatement node, final Object data )
     {
         return node.childrenAccept( this, data );
     }
