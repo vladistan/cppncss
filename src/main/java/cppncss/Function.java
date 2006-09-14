@@ -35,8 +35,8 @@ package cppncss;
  */
 public class Function
 {
-    private final int count;
     private final String function;
+    private final int count;
 
     public Function( final String function, final int count )
     {

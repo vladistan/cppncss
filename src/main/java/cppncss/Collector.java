@@ -41,19 +41,11 @@ import java.util.Vector;
 public class Collector implements FunctionObserver
 {
     private final Vector<Function> result;
-    private final Comparator<Function> comparator;
     private final int THRESHOLD = 30;
 
     public Collector()
     {
         result = new Vector<Function>();
-        comparator = new Comparator<Function>()
-        {
-            public int compare( final Function f1, final Function f2 )
-            {
-                return f1.compare( f2 );
-            }
-        };
     }
 
     /**
@@ -62,7 +54,13 @@ public class Collector implements FunctionObserver
     public void notify( final String function, final int count )
     {
         result.add( new Function( function, count ) );
-        Collections.sort( result, comparator );
+        Collections.sort( result, new Comparator<Function>()
+        {
+            public int compare( final Function f1, final Function f2 )
+            {
+                return f1.compare( f2 );
+            }
+        } );
         if( result.size() > THRESHOLD )
             result.remove( result.size() - 1 );
     }
