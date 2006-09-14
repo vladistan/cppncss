@@ -51,7 +51,7 @@ public class Collector implements FunctionObserver
     /**
      * {@inheritDoc}
      */
-    public void notify( final String function, final int count )
+    public final void notify( final String function, final int count )
     {
         result.add( new Function( function, count ) );
         Collections.sort( result, new Comparator<Function>()
@@ -65,7 +65,7 @@ public class Collector implements FunctionObserver
             result.remove( result.size() - 1 );
     }
 
-    public void display()
+    public final void display()
     {
         System.out.println( "CCN" );
         final Iterator<Function> iterator = result.iterator();
