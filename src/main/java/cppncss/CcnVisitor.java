@@ -38,11 +38,11 @@ import cppast.SimpleNode;
  */
 public class CcnVisitor extends Visitor
 {
-    private final CcnObserver observer_;
+    private final CcnObserver observer;
 
     public CcnVisitor( final CcnObserver observer )
     {
-        observer_ = observer; // FIXME pass observer as 'data' ?
+        this.observer = observer; // FIXME pass observer as 'data' ?
     }
 
     /**
@@ -74,7 +74,7 @@ public class CcnVisitor extends Visitor
         final CcnCounter visitor = new CcnCounter();
         final Object result = node.childrenAccept( visitor, data );
         if( visitor.getCount() > 0 )
-            observer_.notifyCcn( getFunctionName( node ), visitor.getCount() );
+            observer.notifyCcn( getFunctionName( node ), visitor.getCount() );
         return result;
     }
 

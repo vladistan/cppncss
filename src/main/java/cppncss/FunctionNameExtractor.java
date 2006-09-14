@@ -36,7 +36,7 @@ import cppast.Token;
  */
 public class FunctionNameExtractor extends Visitor
 {
-    private String name_;
+    private String name;
 
     /**
      * {@inheritDoc}
@@ -46,7 +46,7 @@ public class FunctionNameExtractor extends Visitor
         final StringBuffer buffer = new StringBuffer();
         for( Token token = node.getFirstToken(); token != node.getLastToken().next; token = token.next )
             buffer.append( decorate( token.image ) );
-        name_ = node.resolve( buffer.toString() );
+        name = node.resolve( buffer.toString() );
         return data;
     }
 
@@ -62,6 +62,6 @@ public class FunctionNameExtractor extends Visitor
      */
     public String toString()
     {
-        return name_;
+        return name;
     }
 }

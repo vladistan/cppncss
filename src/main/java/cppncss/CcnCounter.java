@@ -45,15 +45,15 @@ import cppast.Token;
  */
 public class CcnCounter extends Visitor
 {
-    private int count_ = 0;
+    private int count = 0;
 
     /**
      * {@inheritDoc}
      */
     public Object visit( final AstCompoundStatement node, final Object data )
     {
-        if( count_ == 0 )
-            ++count_;
+        if( count == 0 )
+            ++count;
         return super.visit( node, data );
     }
 
@@ -62,7 +62,7 @@ public class CcnCounter extends Visitor
      */
     public Object visit( final AstIfStatement node, final Object data )
     {
-        ++count_;
+        ++count;
         return super.visit( node, data );
     }
 
@@ -71,7 +71,7 @@ public class CcnCounter extends Visitor
      */
     public Object visit( final AstIterationStatement node, final Object data )
     {
-        ++count_;
+        ++count;
         return super.visit( node, data );
     }
 
@@ -80,7 +80,7 @@ public class CcnCounter extends Visitor
      */
     public Object visit( final AstCaseStatement node, final Object data )
     {
-        ++count_;
+        ++count;
         return super.visit( node, data );
     }
 
@@ -89,7 +89,7 @@ public class CcnCounter extends Visitor
      */
     public Object visit( final AstHandler node, final Object data )
     {
-        ++count_;
+        ++count;
         return super.visit( node, data );
     }
 
@@ -98,9 +98,9 @@ public class CcnCounter extends Visitor
      */
     public Object visit( final AstAssignmentExpression node, final Object data )
     {
-        count_ += count( node, Parser.AND );
-        count_ += count( node, Parser.OR );
-        count_ += count( node, Parser.QUESTIONMARK );
+        count += count( node, Parser.AND );
+        count += count( node, Parser.OR );
+        count += count( node, Parser.QUESTIONMARK );
         return data;
     }
 
@@ -115,6 +115,6 @@ public class CcnCounter extends Visitor
 
     public final int getCount()
     {
-        return count_;
+        return count;
     }
 }
