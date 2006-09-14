@@ -43,6 +43,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import cppast.AstTranslationUnit;
 import cppast.ParseException;
 import cppast.Parser;
 import cppast.ParserTokenManager;
@@ -57,7 +58,6 @@ public class Analyzer
     private final boolean verbose;
     private final boolean recursive;
     private final boolean force;
-    private final List<String> files;
     private final PreProcessor processor;
     private Parser parser;
     private static final String[] declarations =
@@ -72,15 +72,23 @@ public class Analyzer
     {
             ".svn", "CVS"
     };
+    private final List<AstTranslationUnit> tree;
 
-    public Analyzer( final String[] args )
+    public Analyzer( final String[] args ) throws IOException
     {
         final Options options = new Options( args );
         debug = options.hasOption( "d" );
         verbose = debug || options.hasOption( "v" );
         recursive = options.hasOption( "r" );
         force = options.hasOption( "f" );
-        processor = new PreProcessor();
+        processor = createProcessor( options );
+        tree = new Vector<AstTranslationUnit>();
+        parse( sort( resolve( options.getArgList() ) ) );
+    }
+
+    private PreProcessor createProcessor( final Options options )
+    {
+        final PreProcessor processor = new PreProcessor();
         final List<String> names = options.getOptionProperties( "D" );
         final List<String> values = options.getOptionPropertyValues( "D" );
         for( int i = 0; i < names.size(); ++i )
@@ -88,7 +96,7 @@ public class Analyzer
             processor.addMacro( names.get( i ), values.get( i ) );
             processor.addDefine( names.get( i ), values.get( i ) );
         }
-        files = sort( resolve( options.getArgList() ) );
+        return processor;
     }
 
     private List<String> resolve( final List<String> inputs )
@@ -149,16 +157,16 @@ public class Analyzer
         return files;
     }
 
-    public void accept( final Visitor visitor ) throws IOException
+    private void parse( final List<String> files ) throws IOException
     {
         final long start = System.currentTimeMillis();
-        final int parsed = process( visitor );
+        final int parsed = process( files );
         final long end = System.currentTimeMillis();
         final double time = (end - start) / 1000.0;
         System.out.println( "Successfully parsed " + parsed + " / " + files.size() + " files in " + time + " s" );
     }
 
-    private int process( final Visitor visitor ) throws IOException
+    private int process( final List<String> files ) throws IOException
     {
         final Iterator<String> iterator = files.iterator();
         int parsed = 0;
@@ -167,7 +175,7 @@ public class Analyzer
             final String filename = iterator.next();
             if( debug )
                 System.out.println( "Parsing " + filename );
-            if( process( visitor, filename ) )
+            if( process( filename ) )
                 ++parsed;
             else if( !force )
                 return parsed;
@@ -175,11 +183,11 @@ public class Analyzer
         return parsed;
     }
 
-    private boolean process( final Visitor visitor, final String filename ) throws IOException
+    private boolean process( final String filename ) throws IOException
     {
         try
         {
-            parse( visitor, filename );
+            tree.add( parse( filename ) );
             return true;
         }
         catch( FileNotFoundException exception )
@@ -201,14 +209,24 @@ public class Analyzer
         return false;
     }
 
-    private void parse( final Visitor visitor, final String filename ) throws ParseException, IOException
+    private AstTranslationUnit parse( final String filename ) throws IOException, ParseException
     {
         final ParserTokenManager manager = new TokenManagerAdapter( open( filename ) );
         if( parser == null )
             parser = new Parser( manager );
         else
             parser.ReInit( manager );
-        parser.translation_unit().jjtAccept( visitor, null );
+        return parser.translation_unit();
+    }
+
+    public void accept( final Visitor visitor )
+    {
+        final Iterator<AstTranslationUnit> iterator = tree.iterator();
+        while( iterator.hasNext() )
+        {
+            final AstTranslationUnit root = iterator.next();
+            root.jjtAccept( visitor, null );
+        }
     }
 
     private Reader open( final String filename ) throws IOException
