@@ -1,6 +1,6 @@
 class MyClass
 {
-  operator const char*() const
+  virtual operator const char*() const
   {
     return 0;
   }

@@ -335,8 +335,13 @@ void conversion_function_decl_or_def() :
 void conversion_function() :
 {}
 {
-    operator_id() #FunctionName
-    "(" [parameter_list()] ")" cv_qualifier_seq() [exception_spec()] [pure_specifier()]
+    (type_modifiers())* operator_id() "(" [parameter_list()] ")" cv_qualifier_seq() [exception_spec()] [pure_specifier()]
+}
+
+void operator_id() #FunctionName :
+{}
+{
+   [scope_override()] "operator" declaration_specifiers() ["*" cv_qualifier_seq() | "&"]
 }
 
 void linkage_specification() :
@@ -624,14 +629,6 @@ void pure_specifier():
 {}
 {
   "=" <OCTALINT>
-}
-
-void operator_id() :
-{}
-{
-   (type_modifiers())*
-   [scope_override()]
-   "operator" declaration_specifiers() ["*" cv_qualifier_seq() | "&"]
 }
 
 void enum_specifier() :
