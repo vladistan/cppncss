@@ -149,4 +149,11 @@ public class EasyMockTestCase extends TestCase
         while( i.hasNext() )
             EasyMock.verify( i.next() );
     }
+
+    /**
+     * This method serves no purpose but to deactivate the JUnit warning "No tests found in tools.EasyMockTestCase".
+     */
+    public final void testMethodToRemoveJUnitWarningAboutMissingTests()
+    {
+    }
 }

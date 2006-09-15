@@ -28,15 +28,18 @@
 
 package cppast;
 
+import java.util.Iterator;
+import java.util.Vector;
+
 /**
  * Provides a custom simple node JavaCC implementation.
  *
  * @author Mathieu Champlon
  */
-public class SimpleNode implements Node
+public abstract class SimpleNode implements Node
 {
     private Node parent;
-    private Node[] children;
+    private final Vector<Node> children = new Vector<Node>();
     private final int id;
     private Parser parser;
     private Token first, last;
@@ -120,17 +123,9 @@ public class SimpleNode implements Node
     /**
      * {@inheritDoc}
      */
-    public final void jjtAddChild( final Node n, final int i )
+    public final void jjtAddChild( final Node node, final int i )
     {
-        if( children == null )
-            children = new Node[i + 1];
-        else if( i >= children.length )
-        {
-            Node c[] = new Node[i + 1];
-            System.arraycopy( children, 0, c, 0, children.length );
-            children = c;
-        }
-        children[i] = n;
+        children.add( node );
     }
 
     /**
@@ -138,7 +133,7 @@ public class SimpleNode implements Node
      */
     public final Node jjtGetChild( final int i )
     {
-        return children[i];
+        return children.elementAt( i );
     }
 
     /**
@@ -146,15 +141,7 @@ public class SimpleNode implements Node
      */
     public final int jjtGetNumChildren()
     {
-        return children == null ? 0 : children.length;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object jjtAccept( final ParserVisitor visitor, final Object data )
-    {
-        return visitor.visit( this, data );
+        return children.size();
     }
 
     /**
@@ -164,12 +151,12 @@ public class SimpleNode implements Node
      * @param data the custom data
      * @return a custom result
      */
-    public Object childrenAccept( final ParserVisitor visitor, final Object data )
+    public final Object childrenAccept( final ParserVisitor visitor, final Object data )
     {
-        if( children != null )
-            for( int i = 0; i < children.length; ++i )
-                children[i].jjtAccept( visitor, data );
-        return data;
+        final Iterator<Node> iterator = children.iterator();
+        while( iterator.hasNext() )
+            iterator.next().jjtAccept( visitor, data );
+        return data; // FIXME it looks like return data is only set by root node ?!
     }
 
     /*
@@ -193,16 +180,8 @@ public class SimpleNode implements Node
     public void dump( final String prefix )
     {
         System.out.println( toString( prefix ) );
-        if( children != null )
-        {
-            for( int i = 0; i < children.length; ++i )
-            {
-                SimpleNode n = (SimpleNode)children[i];
-                if( n != null )
-                {
-                    n.dump( prefix + " " );
-                }
-            }
-        }
+        final Iterator<Node> iterator = children.iterator();
+        while( iterator.hasNext() )
+            ((SimpleNode)iterator.next()).dump( prefix + " " );
     }
 }
