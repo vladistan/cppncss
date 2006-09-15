@@ -42,7 +42,7 @@ import cppast.Token;
  *
  * @author Mathieu Champlon
  */
-public class CcnCounter extends AbstractCounter implements Counter
+public final class CcnCounter extends AbstractCounter implements Counter
 {
     /**
      * Create a CCN counter.
@@ -57,43 +57,48 @@ public class CcnCounter extends AbstractCounter implements Counter
     /**
      * {@inheritDoc}
      */
-    public final void visit( final AstIfStatement node )
+    public Object visit( final AstIfStatement node, final Object data )
     {
         increment();
+        return node.accept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public final void visit( final AstIterationStatement node )
+    public Object visit( final AstIterationStatement node, final Object data )
     {
         increment();
+        return node.accept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public final void visit( final AstCaseStatement node )
+    public Object visit( final AstCaseStatement node, final Object data )
     {
         increment();
+        return node.accept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public final void visit( final AstHandler node )
+    public Object visit( final AstHandler node, final Object data )
     {
         increment();
+        return node.accept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public final void visit( final AstAssignmentExpression node )
+    public Object visit( final AstAssignmentExpression node, final Object data )
     {
         count( node, Parser.AND );
         count( node, Parser.OR );
         count( node, Parser.QUESTIONMARK );
+        return node.accept( this, data );
     }
 
     private void count( final SimpleNode node, final int kind )

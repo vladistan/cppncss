@@ -32,16 +32,15 @@ import cppast.AbstractVisitor;
 import cppast.AstConstructorDefinition;
 import cppast.AstDestructorDefinition;
 import cppast.AstFunctionDefinition;
+import cppast.ParserVisitor;
 import cppast.SimpleNode;
-import cppast.Visitor;
-import cppast.VisitorAdapter;
 
 /**
  * Implements a visitor for functions.
  *
  * @author Mathieu Champlon
  */
-public class FunctionVisitor extends AbstractVisitor
+public final class FunctionVisitor extends AbstractVisitor
 {
     private final Counter counter;
 
@@ -58,38 +57,38 @@ public class FunctionVisitor extends AbstractVisitor
     /**
      * {@inheritDoc}
      */
-    public final void visit( final AstFunctionDefinition node )
+    public Object visit( final AstFunctionDefinition node, final Object data )
     {
-        process( node );
+        return process( node, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public final void visit( final AstConstructorDefinition node )
+    public Object visit( final AstConstructorDefinition node, final Object data )
     {
-        process( node );
+        return process( node, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public final void visit( final AstDestructorDefinition node )
+    public Object visit( final AstDestructorDefinition node, final Object data )
     {
-        process( node );
+        return process( node, data );
     }
 
-    private Object process( final SimpleNode node )
+    private Object process( final SimpleNode node, final Object data )
     {
-        final Object result = node.childrenAccept( new VisitorAdapter( counter ), null );
+        node.accept( counter, null );
         counter.flush( getFunctionName( node ) );
-        return result;
+        return node.accept( this, data );
     }
 
     private String getFunctionName( final SimpleNode node )
     {
-        final Visitor visitor = new FunctionNameExtractor();
-        node.childrenAccept( new VisitorAdapter( visitor ), null );
+        final ParserVisitor visitor = new FunctionNameExtractor();
+        node.accept( visitor, null );
         return visitor.toString();
     }
 }

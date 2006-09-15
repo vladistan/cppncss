@@ -34,7 +34,6 @@ import java.net.URL;
 import tools.EasyMockTestCase;
 import cppast.ParseException;
 import cppast.Parser;
-import cppast.VisitorAdapter;
 
 /**
  * @author Mathieu Champlon
@@ -59,8 +58,7 @@ public class CcnTest extends EasyMockTestCase
         if( resource == null )
             throw new IOException( "resource not found : " + name );
         parser.ReInit( resource.openStream() );
-        final VisitorAdapter visitor = new VisitorAdapter( new FunctionVisitor( new CcnCounter( observer ) ) );
-        parser.translation_unit().jjtAccept( visitor, null );
+        parser.translation_unit().jjtAccept( new FunctionVisitor( new CcnCounter( observer ) ), null );
     }
 
     public void testMethodDefinitionIsValid() throws IOException, ParseException

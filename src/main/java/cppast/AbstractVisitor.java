@@ -33,82 +33,93 @@ package cppast;
  *
  * @author Mathieu Champlon
  */
-public class AbstractVisitor implements Visitor
+public class AbstractVisitor implements ParserVisitor
 {
     /**
      * {@inheritDoc}
      */
-    public void visit( final SimpleNode node )
+    public Object visit( final SimpleNode node, final Object data )
     {
+        return node.accept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public void visit( final AstTranslationUnit node )
+    public Object visit( final AstTranslationUnit node, final Object data )
     {
+        return node.accept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public void visit( final AstFunctionDefinition node )
+    public Object visit( final AstFunctionDefinition node, final Object data )
     {
+        return node.accept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public void visit( final AstConstructorDefinition node )
+    public Object visit( final AstConstructorDefinition node, final Object data )
     {
+        return node.accept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public void visit( final AstDestructorDefinition node )
+    public Object visit( final AstDestructorDefinition node, final Object data )
     {
+        return node.accept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public void visit( final AstIfStatement node )
+    public Object visit( final AstIfStatement node, final Object data )
     {
+        return node.accept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public void visit( final AstCaseStatement node )
+    public Object visit( final AstCaseStatement node, final Object data )
     {
+        return node.accept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public void visit( final AstIterationStatement node )
+    public Object visit( final AstIterationStatement node, final Object data )
     {
+        return node.accept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public void visit( final AstHandler node )
+    public Object visit( final AstHandler node, final Object data )
     {
+        return node.accept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public void visit( final AstAssignmentExpression node )
+    public Object visit( final AstAssignmentExpression node, final Object data )
     {
+        return node.accept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public void visit( final AstFunctionName node )
+    public Object visit( final AstFunctionName node, final Object data )
     {
+        return node.accept( this, data );
     }
 }

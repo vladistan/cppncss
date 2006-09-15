@@ -40,24 +40,24 @@ import cppast.AstHandler;
 import cppast.AstIfStatement;
 import cppast.AstIterationStatement;
 import cppast.AstTranslationUnit;
+import cppast.ParserVisitor;
 import cppast.SimpleNode;
-import cppast.Visitor;
 
 /**
  * Provides a composite of visitors.
  *
  * @author Mathieu Champlon
  */
-public final class VisitorComposite implements Visitor
+public final class VisitorComposite implements ParserVisitor
 {
-    private final Vector<Visitor> visitors = new Vector<Visitor>();
+    private final Vector<ParserVisitor> visitors = new Vector<ParserVisitor>();
 
     /**
      * Add a visitor.
      *
      * @param visitor the visitor
      */
-    public void register( final Visitor visitor )
+    public void register( final ParserVisitor visitor )
     {
         visitors.add( visitor );
     }
@@ -65,110 +65,121 @@ public final class VisitorComposite implements Visitor
     /**
      * {@inheritDoc}
      */
-    public void visit( final SimpleNode node )
+    public Object visit( final SimpleNode node, final Object data )
     {
-        final Iterator<Visitor> iterator = visitors.iterator();
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
         while( iterator.hasNext() )
-            iterator.next().visit( node );
+            iterator.next().visit( node, data );
+        return data;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void visit( final AstTranslationUnit node )
+    public Object visit( final AstTranslationUnit node, final Object data )
     {
-        final Iterator<Visitor> iterator = visitors.iterator();
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
         while( iterator.hasNext() )
-            iterator.next().visit( node );
+            iterator.next().visit( node, data );
+        return data;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void visit( final AstFunctionDefinition node )
+    public Object visit( final AstFunctionDefinition node, final Object data )
     {
-        final Iterator<Visitor> iterator = visitors.iterator();
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
         while( iterator.hasNext() )
-            iterator.next().visit( node );
+            iterator.next().visit( node, data );
+        return data;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void visit( final AstConstructorDefinition node )
+    public Object visit( final AstFunctionName node, final Object data )
     {
-        final Iterator<Visitor> iterator = visitors.iterator();
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
         while( iterator.hasNext() )
-            iterator.next().visit( node );
+            iterator.next().visit( node, data );
+        return data;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void visit( final AstDestructorDefinition node )
+    public Object visit( final AstDestructorDefinition node, final Object data )
     {
-        final Iterator<Visitor> iterator = visitors.iterator();
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
         while( iterator.hasNext() )
-            iterator.next().visit( node );
+            iterator.next().visit( node, data );
+        return data;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void visit( final AstIfStatement node )
+    public Object visit( final AstConstructorDefinition node, final Object data )
     {
-        final Iterator<Visitor> iterator = visitors.iterator();
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
         while( iterator.hasNext() )
-            iterator.next().visit( node );
+            iterator.next().visit( node, data );
+        return data;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void visit( final AstCaseStatement node )
+    public Object visit( final AstCaseStatement node, final Object data )
     {
-        final Iterator<Visitor> iterator = visitors.iterator();
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
         while( iterator.hasNext() )
-            iterator.next().visit( node );
+            iterator.next().visit( node, data );
+        return data;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void visit( final AstIterationStatement node )
+    public Object visit( final AstIfStatement node, final Object data )
     {
-        final Iterator<Visitor> iterator = visitors.iterator();
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
         while( iterator.hasNext() )
-            iterator.next().visit( node );
+            iterator.next().visit( node, data );
+        return data;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void visit( final AstHandler node )
+    public Object visit( final AstIterationStatement node, final Object data )
     {
-        final Iterator<Visitor> iterator = visitors.iterator();
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
         while( iterator.hasNext() )
-            iterator.next().visit( node );
+            iterator.next().visit( node, data );
+        return data;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void visit( final AstAssignmentExpression node )
+    public Object visit( final AstHandler node, final Object data )
     {
-        final Iterator<Visitor> iterator = visitors.iterator();
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
         while( iterator.hasNext() )
-            iterator.next().visit( node );
+            iterator.next().visit( node, data );
+        return data;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void visit( final AstFunctionName node )
+    public Object visit( final AstAssignmentExpression node, final Object data )
     {
-        final Iterator<Visitor> iterator = visitors.iterator();
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
         while( iterator.hasNext() )
-            iterator.next().visit( node );
+            iterator.next().visit( node, data );
+        return data;
     }
 }

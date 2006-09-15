@@ -46,8 +46,6 @@ import cppast.Parser;
 import cppast.ParserTokenManager;
 import cppast.ParserVisitor;
 import cppast.Token;
-import cppast.Visitor;
-import cppast.VisitorAdapter;
 
 /**
  * @author Mathieu Champlon
@@ -162,10 +160,10 @@ public final class Analyzer
      *
      * @param visitor the visitor
      */
-    public void accept( final Visitor visitor ) throws IOException
+    public void accept( final ParserVisitor visitor ) throws IOException
     {
         final long start = System.currentTimeMillis();
-        final int parsed = process( new VisitorAdapter( visitor ) );
+        final int parsed = process( visitor );
         final long end = System.currentTimeMillis();
         final double time = (end - start) / 1000.0;
         System.out.println( "Successfully parsed " + parsed + " / " + files.size() + " files in " + time + " s" );

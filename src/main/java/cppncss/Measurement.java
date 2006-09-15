@@ -78,9 +78,13 @@ public class Measurement
     }
 
     /**
-     * @param function
-     * @param count
-     * @return
+     * Add a measurement value to the recorder values.
+     * <p>
+     * If the function name does not match the name of the measurement the value is not recorded.
+     *
+     * @param function the function name
+     * @param count the measurement to record
+     * @return whether the measurement has been added or not
      */
     public final boolean update( final String function, final int count )
     {

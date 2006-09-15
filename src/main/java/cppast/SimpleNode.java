@@ -151,7 +151,7 @@ public abstract class SimpleNode implements Node
      * @param data the custom data
      * @return a custom result
      */
-    public final Object childrenAccept( final ParserVisitor visitor, final Object data )
+    public final Object accept( final ParserVisitor visitor, final Object data )
     {
         final Iterator<Node> iterator = children.iterator();
         Object result = data;

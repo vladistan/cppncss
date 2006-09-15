@@ -28,14 +28,14 @@
 
 package cppncss;
 
-import cppast.Visitor;
+import cppast.ParserVisitor;
 
 /**
  * Defines a measurement visitor.
  *
  * @author Mathieu Champlon
  */
-public interface Counter extends Visitor
+public interface Counter extends ParserVisitor
 {
     /**
      * Notify the end of a measurement.

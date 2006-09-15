@@ -33,7 +33,7 @@ package cppncss;
  *
  * @author Mathieu Champlon
  */
-public class NcssCounter extends AbstractCounter implements Counter
+public final class NcssCounter extends AbstractCounter implements Counter
 {
     /**
      * Create a NCSS counter.

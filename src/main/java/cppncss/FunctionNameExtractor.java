@@ -37,19 +37,20 @@ import cppast.Token;
  *
  * @author Mathieu Champlon
  */
-public class FunctionNameExtractor extends AbstractVisitor
+public final class FunctionNameExtractor extends AbstractVisitor
 {
     private String name;
 
     /**
      * {@inheritDoc}
      */
-    public final void visit( final AstFunctionName node )
+    public Object visit( final AstFunctionName node, final Object data )
     {
         final StringBuffer buffer = new StringBuffer();
         for( Token token = node.getFirstToken(); token != node.getLastToken().next; token = token.next )
             buffer.append( decorate( token.image ) );
         name = node.resolve( buffer.toString() );
+        return data;
     }
 
     private String decorate( final String value )
@@ -62,7 +63,7 @@ public class FunctionNameExtractor extends AbstractVisitor
     /**
      * {@inheritDoc}
      */
-    public final String toString()
+    public String toString()
     {
         return name;
     }
