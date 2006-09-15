@@ -28,17 +28,20 @@
 
 package cppncss;
 
+import cppast.AbstractVisitor;
 import cppast.AstConstructorDefinition;
 import cppast.AstDestructorDefinition;
 import cppast.AstFunctionDefinition;
 import cppast.SimpleNode;
+import cppast.Visitor;
+import cppast.VisitorAdapter;
 
 /**
  * Implements a visitor for functions.
  *
  * @author Mathieu Champlon
  */
-public class FunctionVisitor extends Visitor
+public class FunctionVisitor extends AbstractVisitor
 {
     private final Counter counter;
 
@@ -55,30 +58,30 @@ public class FunctionVisitor extends Visitor
     /**
      * {@inheritDoc}
      */
-    public final Object visit( final AstFunctionDefinition node, final Object data )
+    public final void visit( final AstFunctionDefinition node )
     {
-        return process( node, data );
+        process( node );
     }
 
     /**
      * {@inheritDoc}
      */
-    public final Object visit( final AstConstructorDefinition node, final Object data )
+    public final void visit( final AstConstructorDefinition node )
     {
-        return process( node, data );
+        process( node );
     }
 
     /**
      * {@inheritDoc}
      */
-    public final Object visit( final AstDestructorDefinition node, final Object data )
+    public final void visit( final AstDestructorDefinition node )
     {
-        return process( node, data );
+        process( node );
     }
 
-    private Object process( final SimpleNode node, final Object data )
+    private Object process( final SimpleNode node )
     {
-        final Object result = node.childrenAccept( counter, data );
+        final Object result = node.childrenAccept( new VisitorAdapter( counter ), null );
         counter.flush( getFunctionName( node ) );
         return result;
     }
@@ -86,7 +89,7 @@ public class FunctionVisitor extends Visitor
     private String getFunctionName( final SimpleNode node )
     {
         final Visitor visitor = new FunctionNameExtractor();
-        node.childrenAccept( visitor, null );
+        node.childrenAccept( new VisitorAdapter( visitor ), null );
         return visitor.toString();
     }
 }

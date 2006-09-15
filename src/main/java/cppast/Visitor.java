@@ -26,49 +26,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
-
-import cppast.AbstractVisitor;
+package cppast;
 
 /**
- * Factorizes counters common behaviours.
- *
  * @author Mathieu Champlon
  */
-public class AbstractCounter extends AbstractVisitor
+public interface Visitor
 {
-    private final FunctionObserver observer;
-    private final int start;
-    private int count;
+    public void visit( final SimpleNode node );
 
-    /**
-     * Create an abstract counter.
-     *
-     * @param observer a function observer
-     * @param start the starting value
-     */
-    public AbstractCounter( final FunctionObserver observer, final int start )
-    {
-        this.observer = observer;
-        this.start = start;
-        this.count = start;
-    }
+    public void visit( final AstTranslationUnit node );
 
-    /**
-     * {@inheritDoc}
-     */
-    public final void flush( final String function )
-    {
-        final int result = count;
-        count = start;
-        observer.notify( function, result );
-    }
+    public void visit( final AstFunctionDefinition node );
 
-    /**
-     * Increments the counter.
-     */
-    protected final void increment()
-    {
-        ++count;
-    }
+    public void visit( final AstConstructorDefinition node );
+
+    public void visit( final AstDestructorDefinition node );
+
+    public void visit( final AstIfStatement node );
+
+    public void visit( final AstCaseStatement node );
+
+    public void visit( final AstIterationStatement node );
+
+    public void visit( final AstHandler node );
+
+    public void visit( final AstAssignmentExpression node );
+
+    public void visit( final AstFunctionName node );
 }

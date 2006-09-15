@@ -28,6 +28,7 @@
 
 package cppncss;
 
+import cppast.AbstractVisitor;
 import cppast.AstFunctionName;
 import cppast.Token;
 
@@ -36,20 +37,19 @@ import cppast.Token;
  *
  * @author Mathieu Champlon
  */
-public class FunctionNameExtractor extends Visitor
+public class FunctionNameExtractor extends AbstractVisitor
 {
     private String name;
 
     /**
      * {@inheritDoc}
      */
-    public final Object visit( final AstFunctionName node, final Object data )
+    public final void visit( final AstFunctionName node )
     {
         final StringBuffer buffer = new StringBuffer();
         for( Token token = node.getFirstToken(); token != node.getLastToken().next; token = token.next )
             buffer.append( decorate( token.image ) );
         name = node.resolve( buffer.toString() );
-        return data;
     }
 
     private String decorate( final String value )

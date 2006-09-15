@@ -24,113 +24,93 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * $Id: $
  */
 
-package cppncss;
-
-import cppast.AstAssignmentExpression;
-import cppast.AstCaseStatement;
-import cppast.AstConstructorDefinition;
-import cppast.AstDestructorDefinition;
-import cppast.AstFunctionDefinition;
-import cppast.AstFunctionName;
-import cppast.AstHandler;
-import cppast.AstIfStatement;
-import cppast.AstIterationStatement;
-import cppast.AstTranslationUnit;
-import cppast.ParserVisitor;
-import cppast.SimpleNode;
+package cppast;
 
 /**
+ * Provides an abstract visitor to only override needed methods.
+ *
  * @author Mathieu Champlon
  */
-public class Visitor implements ParserVisitor
+public class AbstractVisitor implements Visitor
 {
     /**
      * {@inheritDoc}
      */
-    public Object visit( final SimpleNode node, final Object data )
+    public void visit( final SimpleNode node )
     {
-        return node.childrenAccept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstTranslationUnit node, final Object data )
+    public void visit( final AstTranslationUnit node )
     {
-        return node.childrenAccept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstFunctionDefinition node, final Object data )
+    public void visit( final AstFunctionDefinition node )
     {
-        return node.childrenAccept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstConstructorDefinition node, final Object data )
+    public void visit( final AstConstructorDefinition node )
     {
-        return node.childrenAccept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstDestructorDefinition node, final Object data )
+    public void visit( final AstDestructorDefinition node )
     {
-        return node.childrenAccept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstIfStatement node, final Object data )
+    public void visit( final AstIfStatement node )
     {
-        return node.childrenAccept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstCaseStatement node, final Object data )
+    public void visit( final AstCaseStatement node )
     {
-        return node.childrenAccept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstIterationStatement node, final Object data )
+    public void visit( final AstIterationStatement node )
     {
-        return node.childrenAccept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstHandler node, final Object data )
+    public void visit( final AstHandler node )
     {
-        return node.childrenAccept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstAssignmentExpression node, final Object data )
+    public void visit( final AstAssignmentExpression node )
     {
-        return node.childrenAccept( this, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstFunctionName node, final Object data )
+    public void visit( final AstFunctionName node )
     {
-        return node.childrenAccept( this, data );
     }
 }

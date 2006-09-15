@@ -24,6 +24,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * $Id: $
  */
 
 package cppncss;
@@ -41,15 +43,15 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-import cppast.AstTranslationUnit;
 import cppast.ParseException;
 import cppast.Parser;
 import cppast.ParserTokenManager;
+import cppast.ParserVisitor;
 import cppast.Token;
+import cppast.Visitor;
+import cppast.VisitorAdapter;
 
 /**
- * Deals with the analysis.
- *
  * @author Mathieu Champlon
  */
 public class Analyzer
@@ -58,50 +60,38 @@ public class Analyzer
     private final boolean verbose;
     private final boolean recursive;
     private final boolean force;
+    private final List<String> files;
     private final PreProcessor processor;
     private Parser parser;
-    private static final String[] DECLARATIONS =
+    private static final String[] declarations =
     {
             ".h", ".hpp"
     };
-    private static final String[] DEFINITIONS =
+    private static final String[] definitions =
     {
             ".cpp", ".cxx", ".inl"
     };
-    private static final String[] SKIPPED =
+    private static final String[] skip =
     {
             ".svn", "CVS"
     };
-    private final List<AstTranslationUnit> tree;
 
-    /**
-     * Create an analyzer.
-     *
-     * @param args the program arguments
-     */
-    public Analyzer( final String[] args ) throws IOException
+    public Analyzer( final String[] args )
     {
         final Options options = new Options( args );
         debug = options.hasOption( "d" );
         verbose = debug || options.hasOption( "v" );
         recursive = options.hasOption( "r" );
         force = options.hasOption( "f" );
-        processor = createProcessor( options );
-        tree = new Vector<AstTranslationUnit>();
-        parse( sort( resolve( options.getArgList() ) ) );
-    }
-
-    private PreProcessor createProcessor( final Options options )
-    {
-        final PreProcessor result = new PreProcessor();
+        processor = new PreProcessor();
         final List<String> names = options.getOptionProperties( "D" );
         final List<String> values = options.getOptionPropertyValues( "D" );
         for( int i = 0; i < names.size(); ++i )
         {
-            result.addMacro( names.get( i ), values.get( i ) );
-            result.addDefine( names.get( i ), values.get( i ) );
+            processor.addMacro( names.get( i ), values.get( i ) );
+            processor.addDefine( names.get( i ), values.get( i ) );
         }
-        return result;
+        files = sort( resolve( options.getArgList() ) );
     }
 
     private List<String> resolve( final List<String> inputs )
@@ -118,7 +108,7 @@ public class Analyzer
         final File file = new File( string );
         if( !file.isDirectory() )
         {
-            if( isFrom( string, DECLARATIONS ) || isFrom( string, DEFINITIONS ) )
+            if( isFrom( string, declarations ) || isFrom( string, definitions ) )
                 result.add( string );
         }
         else if( processDirectory )
@@ -127,7 +117,7 @@ public class Analyzer
             {
                 public boolean accept( final File dir, final String name )
                 {
-                    return !isFrom( name, SKIPPED );
+                    return !isFrom( name, skip );
                 }
             } );
             for( int i = 0; i < content.length; ++i )
@@ -152,9 +142,9 @@ public class Analyzer
         {
             public int compare( final String lhs, final String rhs )
             {
-                if( isFrom( lhs, DECLARATIONS ) && isFrom( rhs, DEFINITIONS ) )
+                if( isFrom( lhs, declarations ) && isFrom( rhs, definitions ) )
                     return -1;
-                if( isFrom( lhs, DEFINITIONS ) && isFrom( rhs, DECLARATIONS ) )
+                if( isFrom( lhs, definitions ) && isFrom( rhs, declarations ) )
                     return 1;
                 return 0;
             }
@@ -162,16 +152,23 @@ public class Analyzer
         return files;
     }
 
-    private void parse( final List<String> files ) throws IOException
+    /**
+     * Parse the files and visit the abstract syntax trees.
+     * <p>
+     * Because of memory consumption the trees cannot be cached therefore this method must probably be called only once.
+     *
+     * @param visitor the visitor
+     */
+    public void accept( final Visitor visitor ) throws IOException
     {
         final long start = System.currentTimeMillis();
-        final int parsed = process( files );
+        final int parsed = process( new VisitorAdapter( visitor ) );
         final long end = System.currentTimeMillis();
         final double time = (end - start) / 1000.0;
         System.out.println( "Successfully parsed " + parsed + " / " + files.size() + " files in " + time + " s" );
     }
 
-    private int process( final List<String> files ) throws IOException
+    private int process( final ParserVisitor visitor ) throws IOException
     {
         final Iterator<String> iterator = files.iterator();
         int parsed = 0;
@@ -180,7 +177,7 @@ public class Analyzer
             final String filename = iterator.next();
             if( debug )
                 System.out.println( "Parsing " + filename );
-            if( process( filename ) )
+            if( process( visitor, filename ) )
                 ++parsed;
             else if( !force )
                 return parsed;
@@ -188,11 +185,11 @@ public class Analyzer
         return parsed;
     }
 
-    private boolean process( final String filename ) throws IOException
+    private boolean process( final ParserVisitor visitor, final String filename ) throws IOException
     {
         try
         {
-            tree.add( parse( filename ) );
+            parse( visitor, filename );
             return true;
         }
         catch( FileNotFoundException exception )
@@ -214,29 +211,14 @@ public class Analyzer
         return false;
     }
 
-    private AstTranslationUnit parse( final String filename ) throws IOException, ParseException
+    private void parse( final ParserVisitor visitor, final String filename ) throws ParseException, IOException
     {
         final ParserTokenManager manager = new TokenManagerAdapter( open( filename ) );
         if( parser == null )
             parser = new Parser( manager );
         else
             parser.ReInit( manager );
-        return parser.translation_unit();
-    }
-
-    /**
-     * Accept a visitor for the abstract syntax trees.
-     *
-     * @param visitor the visitor
-     */
-    public final void accept( final Visitor visitor )
-    {
-        final Iterator<AstTranslationUnit> iterator = tree.iterator();
-        while( iterator.hasNext() )
-        {
-            final AstTranslationUnit root = iterator.next();
-            root.jjtAccept( visitor, null );
-        }
+        parser.translation_unit().jjtAccept( visitor, null );
     }
 
     private Reader open( final String filename ) throws IOException

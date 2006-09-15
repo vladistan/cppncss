@@ -57,48 +57,43 @@ public class CcnCounter extends AbstractCounter implements Counter
     /**
      * {@inheritDoc}
      */
-    public final Object visit( final AstIfStatement node, final Object data )
+    public final void visit( final AstIfStatement node )
     {
         increment();
-        return super.visit( node, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public final Object visit( final AstIterationStatement node, final Object data )
+    public final void visit( final AstIterationStatement node )
     {
         increment();
-        return super.visit( node, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public final Object visit( final AstCaseStatement node, final Object data )
+    public final void visit( final AstCaseStatement node )
     {
         increment();
-        return super.visit( node, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public final Object visit( final AstHandler node, final Object data )
+    public final void visit( final AstHandler node )
     {
         increment();
-        return super.visit( node, data );
     }
 
     /**
      * {@inheritDoc}
      */
-    public final Object visit( final AstAssignmentExpression node, final Object data )
+    public final void visit( final AstAssignmentExpression node )
     {
         count( node, Parser.AND );
         count( node, Parser.OR );
         count( node, Parser.QUESTIONMARK );
-        return data;
     }
 
     private void count( final SimpleNode node, final int kind )

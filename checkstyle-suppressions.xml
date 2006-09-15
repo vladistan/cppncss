@@ -11,4 +11,5 @@
     <suppress checks=".*" files="Token.java"/>
     <suppress checks=".*" files="SimpleCharStream.java"/>
     <suppress checks=".*" files="TokenMgrError.java"/>
+    <suppress checks=".*" files=".*.html"/>
 </suppressions>
