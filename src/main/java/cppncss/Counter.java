@@ -24,8 +24,6 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- * $Id: $
  */
 
 package cppncss;
@@ -33,9 +31,16 @@ package cppncss;
 import cppast.ParserVisitor;
 
 /**
+ * Defines a measurement visitor.
+ *
  * @author Mathieu Champlon
  */
 public interface Counter extends ParserVisitor
 {
+    /**
+     * Notify the end of a measurement.
+     *
+     * @param function the scoped name of the measured function
+     */
     void flush( String function );
 }

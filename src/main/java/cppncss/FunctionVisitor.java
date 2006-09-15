@@ -34,12 +34,19 @@ import cppast.AstFunctionDefinition;
 import cppast.SimpleNode;
 
 /**
+ * Implements a visitor for functions.
+ *
  * @author Mathieu Champlon
  */
 public class FunctionVisitor extends Visitor
 {
     private final Counter counter;
 
+    /**
+     * Create a function visitor.
+     *
+     * @param counter the counter to apply
+     */
     public FunctionVisitor( final Counter counter )
     {
         this.counter = counter;
@@ -48,7 +55,7 @@ public class FunctionVisitor extends Visitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstFunctionDefinition node, final Object data )
+    public final Object visit( final AstFunctionDefinition node, final Object data )
     {
         return process( node, data );
     }
@@ -56,7 +63,7 @@ public class FunctionVisitor extends Visitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstConstructorDefinition node, final Object data )
+    public final Object visit( final AstConstructorDefinition node, final Object data )
     {
         return process( node, data );
     }
@@ -64,7 +71,7 @@ public class FunctionVisitor extends Visitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstDestructorDefinition node, final Object data )
+    public final Object visit( final AstDestructorDefinition node, final Object data )
     {
         return process( node, data );
     }

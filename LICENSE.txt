@@ -24,33 +24,4 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- * $Id: $
  */
-
-package cppncss;
-
-/**
- * @author Mathieu Champlon
- */
-public class Function
-{
-    private final String function;
-    private final int count;
-
-    public Function( final String function, final int count )
-    {
-        this.function = function;
-        this.count = count;
-    }
-
-    public final int compare( final Function other )
-    {
-        return other.count - count;
-    }
-
-    public final String toString()
-    {
-        return count + " " + function;
-    }
-}

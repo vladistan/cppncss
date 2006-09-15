@@ -24,8 +24,6 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- * $Id: $
  */
 
 package cppncss;
@@ -50,6 +48,8 @@ import cppast.ParserTokenManager;
 import cppast.Token;
 
 /**
+ * Deals with the analysis.
+ *
  * @author Mathieu Champlon
  */
 public class Analyzer
@@ -60,20 +60,25 @@ public class Analyzer
     private final boolean force;
     private final PreProcessor processor;
     private Parser parser;
-    private static final String[] declarations =
+    private static final String[] DECLARATIONS =
     {
             ".h", ".hpp"
     };
-    private static final String[] definitions =
+    private static final String[] DEFINITIONS =
     {
             ".cpp", ".cxx", ".inl"
     };
-    private static final String[] skip =
+    private static final String[] SKIPPED =
     {
             ".svn", "CVS"
     };
     private final List<AstTranslationUnit> tree;
 
+    /**
+     * Create an analyzer.
+     *
+     * @param args the program arguments
+     */
     public Analyzer( final String[] args ) throws IOException
     {
         final Options options = new Options( args );
@@ -88,15 +93,15 @@ public class Analyzer
 
     private PreProcessor createProcessor( final Options options )
     {
-        final PreProcessor processor = new PreProcessor();
+        final PreProcessor result = new PreProcessor();
         final List<String> names = options.getOptionProperties( "D" );
         final List<String> values = options.getOptionPropertyValues( "D" );
         for( int i = 0; i < names.size(); ++i )
         {
-            processor.addMacro( names.get( i ), values.get( i ) );
-            processor.addDefine( names.get( i ), values.get( i ) );
+            result.addMacro( names.get( i ), values.get( i ) );
+            result.addDefine( names.get( i ), values.get( i ) );
         }
-        return processor;
+        return result;
     }
 
     private List<String> resolve( final List<String> inputs )
@@ -113,7 +118,7 @@ public class Analyzer
         final File file = new File( string );
         if( !file.isDirectory() )
         {
-            if( isFrom( string, declarations ) || isFrom( string, definitions ) )
+            if( isFrom( string, DECLARATIONS ) || isFrom( string, DEFINITIONS ) )
                 result.add( string );
         }
         else if( processDirectory )
@@ -122,7 +127,7 @@ public class Analyzer
             {
                 public boolean accept( final File dir, final String name )
                 {
-                    return !isFrom( name, skip );
+                    return !isFrom( name, SKIPPED );
                 }
             } );
             for( int i = 0; i < content.length; ++i )
@@ -147,9 +152,9 @@ public class Analyzer
         {
             public int compare( final String lhs, final String rhs )
             {
-                if( isFrom( lhs, declarations ) && isFrom( rhs, definitions ) )
+                if( isFrom( lhs, DECLARATIONS ) && isFrom( rhs, DEFINITIONS ) )
                     return -1;
-                if( isFrom( lhs, definitions ) && isFrom( rhs, declarations ) )
+                if( isFrom( lhs, DEFINITIONS ) && isFrom( rhs, DECLARATIONS ) )
                     return 1;
                 return 0;
             }
@@ -219,7 +224,12 @@ public class Analyzer
         return parser.translation_unit();
     }
 
-    public void accept( final Visitor visitor )
+    /**
+     * Accept a visitor for the abstract syntax trees.
+     *
+     * @param visitor the visitor
+     */
+    public final void accept( final Visitor visitor )
     {
         final Iterator<AstTranslationUnit> iterator = tree.iterator();
         while( iterator.hasNext() )

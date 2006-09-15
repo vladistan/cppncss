@@ -24,8 +24,6 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- * $Id: $
  */
 
 package cppncss;
@@ -36,12 +34,19 @@ import cppast.SimpleCharStream;
 import cppast.Token;
 
 /**
+ * Adapts the two token management systems.
+ *
  * @author Mathieu Champlon
  */
 public class TokenManagerAdapter extends ParserTokenManager implements TokenProvider
 {
     private final TokenProvider provider;
 
+    /**
+     * Create an adapter.
+     *
+     * @param reader the input
+     */
     public TokenManagerAdapter( final Reader reader )
     {
         super( new SimpleCharStream( reader, 1, 1 ) );
@@ -53,13 +58,13 @@ public class TokenManagerAdapter extends ParserTokenManager implements TokenProv
      */
     public final Token getNextToken()
     {
-        return provider.nextToken();
+        return provider.next();
     }
 
     /**
      * {@inheritDoc}
      */
-    public Token nextToken()
+    public final Token next()
     {
         return super.getNextToken();
     }

@@ -29,6 +29,8 @@
 package cppncss;
 
 /**
+ * Manages macro pre-processing.
+ *
  * @author Mathieu Champlon
  */
 public class Macro
@@ -36,6 +38,12 @@ public class Macro
     private final String name;
     private final String value;
 
+    /**
+     * Create a macro.
+     *
+     * @param name the name of the symbol
+     * @param value the value of the macro
+     */
     public Macro( final String name, final String value )
     {
         if( name == null )
@@ -46,6 +54,12 @@ public class Macro
         this.value = value;
     }
 
+    /**
+     * Filter define occurences.
+     *
+     * @param text the text to filter
+     * @return the filtered text
+     */
     public final String replace( final String text )
     {
         int index = text.indexOf( name );
@@ -93,6 +107,12 @@ public class Macro
         return end;
     }
 
+    /**
+     * Test if a given symbol matches.
+     *
+     * @param name the symbol
+     * @return whether the symbol matches or not
+     */
     public final boolean matches( final String name )
     {
         return this.name.equals( name );

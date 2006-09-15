@@ -24,8 +24,6 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- * $Id: $
  */
 
 package cppncss;
@@ -40,10 +38,17 @@ import cppast.SimpleNode;
 import cppast.Token;
 
 /**
+ * Implements a CCN counter.
+ *
  * @author Mathieu Champlon
  */
 public class CcnCounter extends AbstractCounter implements Counter
 {
+    /**
+     * Create a CCN counter.
+     *
+     * @param observer a function observer
+     */
     public CcnCounter( final FunctionObserver observer )
     {
         super( observer, 1 );
@@ -52,7 +57,7 @@ public class CcnCounter extends AbstractCounter implements Counter
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstIfStatement node, final Object data )
+    public final Object visit( final AstIfStatement node, final Object data )
     {
         increment();
         return super.visit( node, data );
@@ -61,7 +66,7 @@ public class CcnCounter extends AbstractCounter implements Counter
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstIterationStatement node, final Object data )
+    public final Object visit( final AstIterationStatement node, final Object data )
     {
         increment();
         return super.visit( node, data );
@@ -70,7 +75,7 @@ public class CcnCounter extends AbstractCounter implements Counter
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstCaseStatement node, final Object data )
+    public final Object visit( final AstCaseStatement node, final Object data )
     {
         increment();
         return super.visit( node, data );
@@ -79,7 +84,7 @@ public class CcnCounter extends AbstractCounter implements Counter
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstHandler node, final Object data )
+    public final Object visit( final AstHandler node, final Object data )
     {
         increment();
         return super.visit( node, data );
@@ -88,7 +93,7 @@ public class CcnCounter extends AbstractCounter implements Counter
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstAssignmentExpression node, final Object data )
+    public final Object visit( final AstAssignmentExpression node, final Object data )
     {
         count( node, Parser.AND );
         count( node, Parser.OR );

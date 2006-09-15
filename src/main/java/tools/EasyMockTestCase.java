@@ -1,3 +1,30 @@
+/**
+ * Redistribution  and use  in source  and binary  forms, with  or without
+ * modification, are permitted provided  that the following conditions are
+ * met :
+ *
+ * . Redistributions  of  source  code  must  retain  the  above copyright
+ *   notice, this list of conditions and the following disclaimer.
+ *
+ * . Redistributions in  binary form  must reproduce  the above  copyright
+ *   notice, this list of conditions  and the following disclaimer in  the
+ *   documentation and/or other materials provided with the distribution.
+ *
+ * . The name of the author may not be used to endorse or promote products
+ *   derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS  PROVIDED BY THE  AUTHOR ``AS IS''  AND ANY EXPRESS  OR
+ * IMPLIED  WARRANTIES,  INCLUDING,  BUT   NOT  LIMITED  TO,  THE   IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND  FITNESS FOR A PARTICULAR  PURPOSE ARE
+ * DISCLAIMED.  IN NO  EVENT SHALL  THE AUTHOR  BE LIABLE  FOR ANY  DIRECT,
+ * INDIRECT,  INCIDENTAL,  SPECIAL,  EXEMPLARY,  OR  CONSEQUENTIAL  DAMAGES
+ * (INCLUDING,  BUT  NOT LIMITED  TO,  PROCUREMENT OF  SUBSTITUTE  GOODS OR
+ * SERVICES;  LOSS  OF USE,  DATA,  OR PROFITS;  OR  BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED  AND ON  ANY THEORY  OF LIABILITY,  WHETHER IN  CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
 
 package tools;
 
@@ -30,19 +57,19 @@ public class EasyMockTestCase extends TestCase
     /**
      * The mock objects.
      */
-    private final Vector<Object> mocks_;
+    private final Vector<Object> mocks;
     /**
      * Whether a forced replay is needed before verifying all controls.
      */
-    private boolean mustForceReplay_;
+    private boolean mustForceReplay;
 
     /**
      * Create an easy mock test case.
      */
     public EasyMockTestCase()
     {
-        mocks_ = new Vector<Object>();
-        mustForceReplay_ = true;
+        mocks = new Vector<Object>();
+        mustForceReplay = true;
     }
 
     /**
@@ -62,27 +89,28 @@ public class EasyMockTestCase extends TestCase
             {
                 tearDown();
             }
-            if( mustForceReplay_ )
+            if( mustForceReplay )
                 replay();
             verify();
         }
         finally
         {
-            mocks_.clear();
-            mustForceReplay_ = true;
+            mocks.clear();
+            mustForceReplay = true;
         }
     }
 
     /**
      * Factory method to create a mock object of a given type.
      *
+     * @param <T> the type of the created mock object
      * @param type the type of the mock object to create
      * @return the created mock object
      */
     protected final <T> T createMock( final Class<T> type )
     {
         final T mock = EasyMock.createMock( type );
-        mocks_.add( mock );
+        mocks.add( mock );
         return mock;
     }
 
@@ -93,8 +121,8 @@ public class EasyMockTestCase extends TestCase
      */
     protected final void reset()
     {
-        mustForceReplay_ = true;
-        final Iterator i = mocks_.iterator();
+        mustForceReplay = true;
+        final Iterator i = mocks.iterator();
         while( i.hasNext() )
             EasyMock.reset( i.next() );
     }
@@ -104,8 +132,8 @@ public class EasyMockTestCase extends TestCase
      */
     protected final void replay()
     {
-        mustForceReplay_ = false;
-        final Iterator i = mocks_.iterator();
+        mustForceReplay = false;
+        final Iterator i = mocks.iterator();
         while( i.hasNext() )
             EasyMock.replay( i.next() );
     }
@@ -117,12 +145,8 @@ public class EasyMockTestCase extends TestCase
      */
     protected final void verify()
     {
-        final Iterator i = mocks_.iterator();
+        final Iterator i = mocks.iterator();
         while( i.hasNext() )
             EasyMock.verify( i.next() );
-    }
-
-    public final void testMethodToRemoveJUnitWarningAboutMissingTests()
-    {
     }
 }

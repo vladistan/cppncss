@@ -24,8 +24,6 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- * $Id: $
  */
 
 package cppncss;
@@ -40,35 +38,33 @@ import java.util.Vector;
  */
 public class Collector implements FunctionObserver
 {
-    private final Vector<Function> result;
-    private final int THRESHOLD = 30;
-
-    public Collector()
-    {
-        result = new Vector<Function>();
-    }
+    private final Vector<Measurement> result = new Vector<Measurement>();
+    private static final int THRESHOLD = 30;
 
     /**
      * {@inheritDoc}
      */
     public final void notify( final String function, final int count )
     {
-        result.add( new Function( function, count ) );
-        Collections.sort( result, new Comparator<Function>()
+        result.add( new Measurement( function, count ) );
+        Collections.sort( result, new Comparator<Measurement>()
         {
-            public int compare( final Function f1, final Function f2 )
+            public int compare( final Measurement m1, final Measurement m2 )
             {
-                return f1.compare( f2 );
+                return m1.compare( m2 );
             }
         } );
         if( result.size() > THRESHOLD )
             result.remove( result.size() - 1 );
     }
 
+    /**
+     * Display results to <em>System.out</em>.
+     */
     public final void display()
     {
         System.out.println( "CCN" );
-        final Iterator<Function> iterator = result.iterator();
+        final Iterator<Measurement> iterator = result.iterator();
         while( iterator.hasNext() )
             System.out.println( iterator.next().toString() );
     }

@@ -31,9 +31,16 @@ package cppncss;
 import cppast.Token;
 
 /**
+ * Defines a token provider.
+ *
  * @author Mathieu Champlon
  */
 public interface TokenProvider
 {
-    public Token nextToken();
+    /**
+     * Retrieve the next available token.
+     *
+     * @return the next token
+     */
+    Token next();
 }

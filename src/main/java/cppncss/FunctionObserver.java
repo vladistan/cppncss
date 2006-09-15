@@ -29,9 +29,17 @@
 package cppncss;
 
 /**
+ * Defines an observer for function measurements.
+ *
  * @author Mathieu Champlon
  */
 public interface FunctionObserver
 {
+    /**
+     * Notify about a measurement.
+     *
+     * @param function the name of the function
+     * @param count the value of the measurement
+     */
     void notify( String function, int count );
 }

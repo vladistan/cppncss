@@ -24,13 +24,13 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- * $Id: $
  */
 
 package cppncss;
 
 /**
+ * Factorizes counters common behaviours.
+ *
  * @author Mathieu Champlon
  */
 public class AbstractCounter extends Visitor
@@ -39,6 +39,12 @@ public class AbstractCounter extends Visitor
     private final int start;
     private int count;
 
+    /**
+     * Create an abstract counter.
+     *
+     * @param observer a function observer
+     * @param start the starting value
+     */
     public AbstractCounter( final FunctionObserver observer, final int start )
     {
         this.observer = observer;
@@ -49,14 +55,17 @@ public class AbstractCounter extends Visitor
     /**
      * {@inheritDoc}
      */
-    public void flush( final String function )
+    public final void flush( final String function )
     {
         final int result = count;
         count = start;
         observer.notify( function, result );
     }
 
-    protected void increment()
+    /**
+     * Increments the counter.
+     */
+    protected final void increment()
     {
         ++count;
     }

@@ -1,8 +1,37 @@
+/**
+ * Redistribution  and use  in source  and binary  forms, with  or without
+ * modification, are permitted provided  that the following conditions are
+ * met :
+ *
+ * . Redistributions  of  source  code  must  retain  the  above copyright
+ *   notice, this list of conditions and the following disclaimer.
+ *
+ * . Redistributions in  binary form  must reproduce  the above  copyright
+ *   notice, this list of conditions  and the following disclaimer in  the
+ *   documentation and/or other materials provided with the distribution.
+ *
+ * . The name of the author may not be used to endorse or promote products
+ *   derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS  PROVIDED BY THE  AUTHOR ``AS IS''  AND ANY EXPRESS  OR
+ * IMPLIED  WARRANTIES,  INCLUDING,  BUT   NOT  LIMITED  TO,  THE   IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND  FITNESS FOR A PARTICULAR  PURPOSE ARE
+ * DISCLAIMED.  IN NO  EVENT SHALL  THE AUTHOR  BE LIABLE  FOR ANY  DIRECT,
+ * INDIRECT,  INCIDENTAL,  SPECIAL,  EXEMPLARY,  OR  CONSEQUENTIAL  DAMAGES
+ * (INCLUDING,  BUT  NOT LIMITED  TO,  PROCUREMENT OF  SUBSTITUTE  GOODS OR
+ * SERVICES;  LOSS  OF USE,  DATA,  OR PROFITS;  OR  BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED  AND ON  ANY THEORY  OF LIABILITY,  WHETHER IN  CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
 
 package cppast;
 
 /**
- * Manages the symbol table and scopes within a given compilation unit.
+ * Manages the symbol table and scopes.
+ *
+ * @author Mathieu Champlon
  */
 public class SymbolTable
 {
@@ -61,25 +90,30 @@ public class SymbolTable
         return false;
     }
 
+    /**
+     * Close current scope.
+     */
     public final void closeScope()
     {
         current = current.close();
     }
 
+    /**
+     * Close all scopes.
+     */
     public final void closeScopes()
     {
         current = root;
     }
 
+    /**
+     * Add a type name to current scope.
+     *
+     * @param name the name of the type to add
+     */
     public final void putTypeName( final String name )
     {
         current.putTypeName( name );
-    }
-
-    public final boolean isConstructor( final String name ) // FIXME probably not needed anymore ?
-    {
-        final Scope scope = getScope( name );
-        return scope != null && scope.isConstructor( getLastName( name ) );
     }
 
     private String getLastName( final String name )
@@ -98,7 +132,12 @@ public class SymbolTable
     }
 
     /**
-     * Returns B in A::B::C.
+     * Returns the parent scope of a fully scoped name.
+     * <p>
+     * e.g. the scope B in A::B::C.
+     *
+     * @param name the name of the scope
+     * @return the parent scope
      */
     private Scope getScope( final String name )
     {
@@ -117,6 +156,11 @@ public class SymbolTable
         return scope.getScope( name.substring( 0, index ) );
     }
 
+    /**
+     * Extend the current scope with another scope.
+     *
+     * @param name the name of the extension scope
+     */
     public final void extend( final String name )
     {
         final Scope scope = getScope( name );

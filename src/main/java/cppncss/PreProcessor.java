@@ -32,6 +32,8 @@ import java.util.Iterator;
 import java.util.Vector;
 
 /**
+ * Provides a simple pre-processor implementation.
+ *
  * @author Mathieu Champlon
  */
 public class PreProcessor
@@ -39,6 +41,12 @@ public class PreProcessor
     private final Vector<Define> defines = new Vector<Define>();
     private final Vector<Macro> macros = new Vector<Macro>();
 
+    /**
+     * Expand macros and defines.
+     *
+     * @param text the input text
+     * @return the resulting text
+     */
     public final String filter( final String text )
     {
         return replaceDefines( replaceMacros( text ) );
@@ -62,7 +70,13 @@ public class PreProcessor
         return result;
     }
 
-    public void addDefine( final String name, final String value )
+    /**
+     * Add a define.
+     *
+     * @param name the name of the symbol
+     * @param value the value of the symbol
+     */
+    public final void addDefine( final String name, final String value )
     {
         final Iterator<Define> iterator = defines.iterator();
         while( iterator.hasNext() )
@@ -71,7 +85,13 @@ public class PreProcessor
         defines.add( new Define( name, value ) );
     }
 
-    public void addMacro( final String name, final String value )
+    /**
+     * Add a macro.
+     *
+     * @param name the name of the symbol
+     * @param value the value of the symbol
+     */
+    public final void addMacro( final String name, final String value )
     {
         final Iterator<Macro> iterator = macros.iterator();
         while( iterator.hasNext() )

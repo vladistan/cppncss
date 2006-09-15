@@ -32,11 +32,15 @@ import java.io.IOException;
 
 /**
  * Provides code measurement for C++.
- * 
+ *
  * @author Mathieu Champlon
  */
-public class CppNcss
+public final class CppNcss
 {
+    private CppNcss()
+    {
+    }
+
     public static void main( final String[] args ) throws IOException
     {
         final Analyzer analyzer = new Analyzer( args );

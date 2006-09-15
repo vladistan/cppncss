@@ -24,8 +24,6 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- * $Id: $
  */
 
 package cppncss;
@@ -34,17 +32,29 @@ import java.util.List;
 import java.util.Vector;
 
 /**
+ * Implemens a simple program options handler.
+ *
  * @author Mathieu Champlon
  */
 public class Options
 {
     private final String[] args;
 
+    /**
+     * Create a program options handler.
+     *
+     * @param args program arguments
+     */
     public Options( final String[] args )
     {
         this.args = args;
     }
 
+    /**
+     * Retrieve a list of non-parsable remaining arguments.
+     *
+     * @return a list of arguments
+     */
     public final List<String> getArgList()
     {
         final Vector<String> result = new Vector<String>();
@@ -54,6 +64,12 @@ public class Options
         return result;
     }
 
+    /**
+     * Test if an option is set.
+     *
+     * @param name the option
+     * @return whether the option has been set or not
+     */
     public final boolean hasOption( final String name )
     {
         for( int i = 0; i < args.length; ++i )
@@ -67,6 +83,14 @@ public class Options
         return arg.length() > name.length() + 1 && arg.startsWith( '-' + name );
     }
 
+    /**
+     * Retrieve a list of all values for a given option.
+     * <p>
+     * With the option <em>-optionvalue</em> and the name <em>option</em> will return <em>value</em>.
+     *
+     * @param name the option
+     * @return a list of values
+     */
     public final List<String> getOptionValues( final String name )
     {
         final Vector<String> result = new Vector<String>();
@@ -76,6 +100,14 @@ public class Options
         return result;
     }
 
+    /**
+     * Retrieve a list of all properties for a given option.
+     * <p>
+     * With the option <em>-optionproperty=value</em> and the name <em>option</em> will return <em>property</em>.
+     *
+     * @param name the option
+     * @return a list of values
+     */
     public final List<String> getOptionProperties( final String name )
     {
         final Vector<String> result = new Vector<String>();
@@ -91,6 +123,14 @@ public class Options
         return result;
     }
 
+    /**
+     * Retrieve a list of all property values for a given option.
+     * <p>
+     * With the option <em>-optionproperty=value</em> and the name <em>option</em> will return <em>value</em>.
+     *
+     * @param name the option
+     * @return a list of values
+     */
     public final List<String> getOptionPropertyValues( final String name )
     {
         final Vector<String> result = new Vector<String>();

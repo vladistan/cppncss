@@ -24,8 +24,6 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- * $Id: $
  */
 
 package cppncss;
@@ -47,8 +45,8 @@ public class PreProcessor2 implements TokenProvider
     /**
      * {@inheritDoc}
      */
-    public final Token nextToken()
+    public final Token next()
     {
-        return provider.nextToken();
+        return provider.next();
     }
 }

@@ -28,35 +28,37 @@
 
 package cppncss;
 
-import cppast.AstFunctionName;
-import cppast.Token;
-
 /**
- * Provides a visitor implementation to extract a function name.
+ * Provides a result measurement for functions.
  *
  * @author Mathieu Champlon
  */
-public class FunctionNameExtractor extends Visitor
+public class Measurement
 {
-    private String name;
+    private final String function;
+    private final int count;
 
     /**
-     * {@inheritDoc}
+     * Create a measurement.
+     *
+     * @param function the name of the function
+     * @param count the value of the measurement
      */
-    public final Object visit( final AstFunctionName node, final Object data )
+    public Measurement( final String function, final int count )
     {
-        final StringBuffer buffer = new StringBuffer();
-        for( Token token = node.getFirstToken(); token != node.getLastToken().next; token = token.next )
-            buffer.append( decorate( token.image ) );
-        name = node.resolve( buffer.toString() );
-        return data;
+        this.function = function;
+        this.count = count;
     }
 
-    private String decorate( final String value )
+    /**
+     * Compare to another measurement for sorting purpose.
+     *
+     * @param other the compared measurement
+     * @return the difference between the other measurement value and the value of this measurement
+     */
+    public final int compare( final Measurement other )
     {
-        if( value.equals( "const" ) )
-            return " " + value + " ";
-        return value;
+        return other.count - count;
     }
 
     /**
@@ -64,6 +66,6 @@ public class FunctionNameExtractor extends Visitor
      */
     public final String toString()
     {
-        return name;
+        return count + " " + function;
     }
 }

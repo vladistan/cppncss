@@ -24,16 +24,21 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- * $Id: $
  */
 
 package cppncss;
 
 /**
+ * Defines a factory for counters.
+ *
  * @author Mathieu Champlon
  */
 public interface CounterFactory
 {
-    Counter createCounter();
+    /**
+     * Create a counter.
+     *
+     * @return the newly created counter
+     */
+    Counter create();
 }

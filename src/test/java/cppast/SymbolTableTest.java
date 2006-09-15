@@ -44,68 +44,9 @@ public class SymbolTableTest extends EasyMockTestCase
         symbols = new SymbolTable();
     }
 
-    public void testConstructorMatchesClassDeclaration()
-    {
-        symbols.openScope( "MyClass" );
-        assertTrue( symbols.isConstructor( "MyClass" ) );
-        assertTrue( symbols.isConstructor( "MyClass::MyClass" ) );
-        assertFalse( symbols.isConstructor( "my_namespace::MyClass::MyClass" ) );
-    }
-
-    public void testSeparateConstructorMatchesClassDeclaration()
-    {
-        symbols.openScope( "MyClass" );
-        symbols.closeScope();
-        assertFalse( symbols.isConstructor( "MyClass" ) );
-        assertTrue( symbols.isConstructor( "MyClass::MyClass" ) );
-        assertFalse( symbols.isConstructor( "my_namespace::MyClass::MyClass" ) );
-    }
-
-    public void testConstructorInClassAndNamespaceMatchesClassDeclaration()
-    {
-        symbols.openScope( "my_namespace" );
-        symbols.openScope( "MyClass" );
-        assertTrue( symbols.isConstructor( "MyClass" ) );
-        assertTrue( symbols.isConstructor( "MyClass::MyClass" ) );
-        assertTrue( symbols.isConstructor( "my_namespace::MyClass::MyClass" ) );
-    }
-
-    public void testConstructorInNamespaceMatchesClassDeclaration()
-    {
-        symbols.openScope( "my_namespace" );
-        symbols.openScope( "MyClass" );
-        symbols.closeScope();
-        assertFalse( symbols.isConstructor( "MyClass" ) );
-        assertTrue( symbols.isConstructor( "MyClass::MyClass" ) );
-        assertTrue( symbols.isConstructor( "my_namespace::MyClass::MyClass" ) );
-    }
-
-    public void testSeparateConstructorInNamespaceMatchesClassDeclaration()
-    {
-        symbols.openScope( "my_namespace" );
-        symbols.openScope( "MyClass" );
-        symbols.closeScope();
-        symbols.closeScope();
-        assertFalse( symbols.isConstructor( "MyClass" ) );
-        assertFalse( symbols.isConstructor( "MyClass::MyClass" ) );
-        assertTrue( symbols.isConstructor( "my_namespace::MyClass::MyClass" ) );
-    }
-
     public void testExtendingWithNonExistingScopeIsNoOp()
     {
         symbols.extend( "std::runtime_error" );
-    }
-
-    public void testExtendingScopeAllowsToFindClassDeclaration()
-    {
-        symbols.openScope( "my_namespace" );
-        symbols.openScope( "MyClass" );
-        symbols.closeScope();
-        symbols.closeScope();
-        symbols.extend( "my_namespace" );
-        assertFalse( symbols.isConstructor( "MyClass" ) );
-        assertTrue( symbols.isConstructor( "MyClass::MyClass" ) );
-        assertTrue( symbols.isConstructor( "my_namespace::MyClass::MyClass" ) );
     }
 
     public void testResolveReturnsFullScope()

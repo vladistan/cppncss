@@ -29,6 +29,8 @@
 package cppncss;
 
 /**
+ * Manages define pre-proprecessing.
+ *
  * @author Mathieu Champlon
  */
 public class Define
@@ -36,6 +38,12 @@ public class Define
     private final String name;
     private final String value;
 
+    /**
+     * Create a define definition.
+     *
+     * @param name the symbol
+     * @param value the value
+     */
     public Define( final String name, final String value )
     {
         if( name == null )
@@ -46,11 +54,23 @@ public class Define
         this.value = value;
     }
 
+    /**
+     * Filter define occurences.
+     *
+     * @param text the text to filter
+     * @return the filtered text
+     */
     public final String replace( final String text )
     {
         return text.replaceAll( name, value );
     }
 
+    /**
+     * Test if a given symbol matches.
+     *
+     * @param name the symbol
+     * @return whether the symbol matches or not
+     */
     public final boolean matches( final String name )
     {
         return this.name.equals( name );
