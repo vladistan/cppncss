@@ -44,8 +44,11 @@ public final class CppNcss
     public static void main( final String[] args ) throws IOException
     {
         final Analyzer analyzer = new Analyzer( args );
-        Collector collector = new Collector();
-        analyzer.accept( new FunctionVisitor( new CcnCounter( collector ) ) );
+        final Collector collector = new Collector();
+        final VisitorComposite visitor = new VisitorComposite();
+        visitor.register( new FunctionVisitor( new CcnCounter( collector ) ) );
+        visitor.register( new FunctionVisitor( new NcssCounter( collector ) ) );
+        analyzer.accept( visitor );
         collector.display();
     }
 }

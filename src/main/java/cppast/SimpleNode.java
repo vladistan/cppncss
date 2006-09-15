@@ -154,9 +154,10 @@ public abstract class SimpleNode implements Node
     public final Object childrenAccept( final ParserVisitor visitor, final Object data )
     {
         final Iterator<Node> iterator = children.iterator();
+        Object result = data;
         while( iterator.hasNext() )
-            iterator.next().jjtAccept( visitor, data );
-        return data; // FIXME it looks like return data is only set by root node ?!
+            result = iterator.next().jjtAccept( visitor, result );
+        return result;
     }
 
     /*

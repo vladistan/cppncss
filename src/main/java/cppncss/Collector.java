@@ -34,6 +34,12 @@ import java.util.Iterator;
 import java.util.Vector;
 
 /**
+ * Collects function measurements.
+ * <p>
+ * The results are sorted according to the value of the first measurement.
+ * <p>
+ * The different measurements for a given function must be recorded one after another.
+ *
  * @author Mathieu Champlon
  */
 public class Collector implements FunctionObserver
@@ -45,6 +51,21 @@ public class Collector implements FunctionObserver
      * {@inheritDoc}
      */
     public final void notify( final String function, final int count )
+    {
+        if( !update( function, count ) )
+            insert( function, count );
+    }
+
+    private boolean update( final String function, final int count )
+    {
+        final Iterator<Measurement> iterator = result.iterator();
+        while( iterator.hasNext() )
+            if( iterator.next().update( function, count ) )
+                return true;
+        return false;
+    }
+
+    private void insert( final String function, final int count )
     {
         result.add( new Measurement( function, count ) );
         Collections.sort( result, new Comparator<Measurement>()
@@ -63,7 +84,7 @@ public class Collector implements FunctionObserver
      */
     public final void display()
     {
-        System.out.println( "CCN" );
+        System.out.println( "CCN [NCSS]" );
         final Iterator<Measurement> iterator = result.iterator();
         while( iterator.hasNext() )
             System.out.println( iterator.next().toString() );

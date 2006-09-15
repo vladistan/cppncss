@@ -28,65 +28,20 @@
 
 package cppncss;
 
-import java.util.Vector;
-
 /**
- * Provides a result measurement for functions.
+ * Implements a NCSS counter.
  *
  * @author Mathieu Champlon
  */
-public class Measurement
+public class NcssCounter extends AbstractCounter implements Counter
 {
-    private final String function;
-    private final int count;
-    private final Vector<Integer> counts;
-
     /**
-     * Create a measurement.
+     * Create a NCSS counter.
      *
-     * @param function the name of the function
-     * @param count the value of the measurement
+     * @param observer a function observer
      */
-    public Measurement( final String function, final int count )
+    public NcssCounter( final FunctionObserver observer )
     {
-        if( function == null )
-            throw new IllegalArgumentException( "argument 'function' is null" );
-        if( count < 0 )
-            throw new IllegalArgumentException( "argument 'count' is < 0" );
-        this.function = function;
-        this.count = count;
-        counts = new Vector<Integer>();
-    }
-
-    /**
-     * Compare to another measurement for sorting purpose.
-     *
-     * @param other the compared measurement
-     * @return the difference between the other measurement value and the value of this measurement
-     */
-    public final int compare( final Measurement other )
-    {
-        return other.count - count;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public final String toString()
-    {
-        return count + " " + counts.toString() + " " + function;
-    }
-
-    /**
-     * @param function
-     * @param count
-     * @return
-     */
-    public final boolean update( final String function, final int count )
-    {
-        if( !this.function.equals( function ) )
-            return false;
-        counts.add( count );
-        return true;
+        super( observer, 0 );
     }
 }
