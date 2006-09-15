@@ -750,9 +750,7 @@ void ctor_definition() #ConstructorDefinition :
 void ctor_declarator() :
 {}
 {
-     qualified_type() #FunctionName
-     "(" [parameter_list()] ")"
-     [LOOKAHEAD(2) exception_spec()]
+     qualified_type() #FunctionName "(" [parameter_list()] ")" [exception_spec()]
 }
 
 void ctor_initializer() :
