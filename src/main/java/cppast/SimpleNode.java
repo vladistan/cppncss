@@ -1,6 +1,38 @@
+/**
+ * Redistribution  and use  in source  and binary  forms, with  or without
+ * modification, are permitted provided  that the following conditions are
+ * met :
+ *
+ * . Redistributions  of  source  code  must  retain  the  above copyright
+ *   notice, this list of conditions and the following disclaimer.
+ *
+ * . Redistributions in  binary form  must reproduce  the above  copyright
+ *   notice, this list of conditions  and the following disclaimer in  the
+ *   documentation and/or other materials provided with the distribution.
+ *
+ * . The name of the author may not be used to endorse or promote products
+ *   derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS  PROVIDED BY THE  AUTHOR ``AS IS''  AND ANY EXPRESS  OR
+ * IMPLIED  WARRANTIES,  INCLUDING,  BUT   NOT  LIMITED  TO,  THE   IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND  FITNESS FOR A PARTICULAR  PURPOSE ARE
+ * DISCLAIMED.  IN NO  EVENT SHALL  THE AUTHOR  BE LIABLE  FOR ANY  DIRECT,
+ * INDIRECT,  INCIDENTAL,  SPECIAL,  EXEMPLARY,  OR  CONSEQUENTIAL  DAMAGES
+ * (INCLUDING,  BUT  NOT LIMITED  TO,  PROCUREMENT OF  SUBSTITUTE  GOODS OR
+ * SERVICES;  LOSS  OF USE,  DATA,  OR PROFITS;  OR  BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED  AND ON  ANY THEORY  OF LIABILITY,  WHETHER IN  CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
 
 package cppast;
 
+/**
+ * Provides a custom simple node JavaCC implementation.
+ *
+ * @author Mathieu Champlon
+ */
 public class SimpleNode implements Node
 {
     private Node parent;
@@ -21,43 +53,74 @@ public class SimpleNode implements Node
         parser = p;
     }
 
-    public void jjtOpen()
+    /**
+     * {@inheritDoc}
+     */
+    public final void jjtOpen()
     {
         first = parser.getToken( 1 );
         scope = parser.getCurrentScope();
     }
 
-    public void jjtClose()
+    /**
+     * {@inheritDoc}
+     */
+    public final void jjtClose()
     {
         last = parser.getToken( 0 );
     }
 
+    /**
+     * Resolve a symbol to a fully scoped name.
+     *
+     * @param name the symbol
+     * @return a fully scoped symbol name
+     */
     public final String resolve( final String name )
     {
         return scope.resolve( name );
     }
 
-    public Token getFirstToken()
+    /**
+     * Retrieve the node first token.
+     *
+     * @return a token
+     */
+    public final Token getFirstToken()
     {
         return first;
     }
 
-    public Token getLastToken()
+    /**
+     * Retrive the node last token.
+     *
+     * @return a token
+     */
+    public final Token getLastToken()
     {
         return last;
     }
 
-    public void jjtSetParent( final Node n )
+    /**
+     * {@inheritDoc}
+     */
+    public final void jjtSetParent( final Node n )
     {
         parent = n;
     }
 
-    public Node jjtGetParent()
+    /**
+     * {@inheritDoc}
+     */
+    public final Node jjtGetParent()
     {
         return parent;
     }
 
-    public void jjtAddChild( Node n, int i )
+    /**
+     * {@inheritDoc}
+     */
+    public final void jjtAddChild( final Node n, final int i )
     {
         if( children == null )
             children = new Node[i + 1];
@@ -70,23 +133,37 @@ public class SimpleNode implements Node
         children[i] = n;
     }
 
-    public Node jjtGetChild( int i )
+    /**
+     * {@inheritDoc}
+     */
+    public final Node jjtGetChild( final int i )
     {
         return children[i];
     }
 
-    public int jjtGetNumChildren()
+    /**
+     * {@inheritDoc}
+     */
+    public final int jjtGetNumChildren()
     {
         return children == null ? 0 : children.length;
     }
 
-    /** Accept the visitor. * */
+    /**
+     * {@inheritDoc}
+     */
     public Object jjtAccept( final ParserVisitor visitor, final Object data )
     {
         return visitor.visit( this, data );
     }
 
-    /** Accept the visitor. * */
+    /**
+     * Visit the children of the node.
+     *
+     * @param visitor the visitor
+     * @param data the custom data
+     * @return a custom result
+     */
     public Object childrenAccept( final ParserVisitor visitor, final Object data )
     {
         if( children != null )

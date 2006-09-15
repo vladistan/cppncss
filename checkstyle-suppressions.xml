@@ -5,11 +5,5 @@
     "http://www.puppycrawl.com/dtds/suppressions_1_0.dtd">
 
 <suppressions>
-    <suppress checks=".*" files="Parse.*.java"/>
-    <suppress checks=".*" files="Ast.*.java"/>
-    <suppress checks=".*" files="Node.java"/>
-    <suppress checks=".*" files="Token.java"/>
-    <suppress checks=".*" files="SimpleCharStream.java"/>
-    <suppress checks=".*" files="TokenMgrError.java"/>
     <suppress checks=".*" files=".*.html"/>
 </suppressions>

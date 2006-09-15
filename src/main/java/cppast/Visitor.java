@@ -29,29 +29,31 @@
 package cppast;
 
 /**
+ * Defines a simple visitor.
+ *
  * @author Mathieu Champlon
  */
 public interface Visitor
 {
-    public void visit( final SimpleNode node );
+    void visit( final SimpleNode node );
 
-    public void visit( final AstTranslationUnit node );
+    void visit( final AstTranslationUnit node );
 
-    public void visit( final AstFunctionDefinition node );
+    void visit( final AstFunctionDefinition node );
 
-    public void visit( final AstConstructorDefinition node );
+    void visit( final AstConstructorDefinition node );
 
-    public void visit( final AstDestructorDefinition node );
+    void visit( final AstDestructorDefinition node );
 
-    public void visit( final AstIfStatement node );
+    void visit( final AstIfStatement node );
 
-    public void visit( final AstCaseStatement node );
+    void visit( final AstCaseStatement node );
 
-    public void visit( final AstIterationStatement node );
+    void visit( final AstIterationStatement node );
 
-    public void visit( final AstHandler node );
+    void visit( final AstHandler node );
 
-    public void visit( final AstAssignmentExpression node );
+    void visit( final AstAssignmentExpression node );
 
-    public void visit( final AstFunctionName node );
+    void visit( final AstFunctionName node );
 }
