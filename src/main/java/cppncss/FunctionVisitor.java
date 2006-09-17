@@ -86,6 +86,6 @@ public final class FunctionVisitor extends AbstractVisitor
 
     private String getFunctionName( final SimpleNode node )
     {
-        return (String)new FunctionNameExtractor().visit( node, null );
+        return new FunctionNameExtractor().visit( node, null ).toString();
     }
 }

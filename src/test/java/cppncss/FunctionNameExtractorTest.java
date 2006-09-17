@@ -54,7 +54,7 @@ public class FunctionNameExtractorTest extends TestCase
 
     public void testFunctionDefinitionWithoutParameters() throws ParseException
     {
-        assertEquals( "MyFunction()", extract( "void MyFunction() { char* p; }" ) );
+        assertEquals( "MyFunction()", extract( "void MyFunction() {}" ) );
     }
 
     public void testFunctionDefinitionWithIntegerParameter() throws ParseException
@@ -149,7 +149,7 @@ public class FunctionNameExtractorTest extends TestCase
     public void testConversionOperatorDefinition() throws ParseException
     {
         assertEquals( "MyClass::operator const unsigned char*()",
-                extract( "MyClass::operator const unsigned char*() const { char* result = 0; return result; }" ) );
+                extract( "MyClass::operator const unsigned char*() const {}" ) );
     }
 
     public void testConstructorDefinition() throws ParseException
@@ -165,5 +165,15 @@ public class FunctionNameExtractorTest extends TestCase
     public void testDestructorDefinition() throws ParseException
     {
         assertEquals( "MyClass::~MyClass()", extract( "MyClass::~MyClass() {}" ) );
+    }
+
+    public void testFunctionBodyDoesNotAlterFunctionSignature() throws ParseException
+    {
+        assertEquals( "MyFunction()", extract( "void MyFunction() { char *p; }" ) );
+    }
+
+    public void testArrayArgument() throws ParseException
+    {
+        assertEquals( "MyFunction( MyType[3] )", extract( "void MyFunction( MyType p[3] ) {}" ) );
     }
 }
