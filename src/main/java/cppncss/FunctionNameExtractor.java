@@ -31,9 +31,9 @@ package cppncss;
 import cppast.AbstractVisitor;
 import cppast.AstFunctionBody;
 import cppast.AstFunctionName;
-import cppast.AstFunctionParameterType;
 import cppast.AstFunctionParameterTypeQualifier;
 import cppast.AstFunctionParameters;
+import cppast.AstParameterType;
 import cppast.Parser;
 import cppast.SimpleNode;
 import cppast.Token;
@@ -96,7 +96,7 @@ public final class FunctionNameExtractor extends AbstractVisitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstFunctionParameterType node, final Object data )
+    public Object visit( final AstParameterType node, final Object data )
     {
         final String result = " " + build( node, new Filter()
         {

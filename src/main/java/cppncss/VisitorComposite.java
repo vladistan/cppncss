@@ -37,13 +37,13 @@ import cppast.AstDestructorDefinition;
 import cppast.AstFunctionBody;
 import cppast.AstFunctionDefinition;
 import cppast.AstFunctionName;
-import cppast.AstFunctionParameter;
-import cppast.AstFunctionParameterType;
 import cppast.AstFunctionParameterTypeQualifier;
 import cppast.AstFunctionParameters;
 import cppast.AstHandler;
 import cppast.AstIfStatement;
 import cppast.AstIterationStatement;
+import cppast.AstParameter;
+import cppast.AstParameterType;
 import cppast.AstTranslationUnit;
 import cppast.ParserVisitor;
 import cppast.SimpleNode;
@@ -202,7 +202,7 @@ public final class VisitorComposite implements ParserVisitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstFunctionParameter node, final Object data )
+    public Object visit( final AstParameter node, final Object data )
     {
         final Iterator<ParserVisitor> iterator = visitors.iterator();
         while( iterator.hasNext() )
@@ -213,7 +213,7 @@ public final class VisitorComposite implements ParserVisitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstFunctionParameterType node, final Object data )
+    public Object visit( final AstParameterType node, final Object data )
     {
         final Iterator<ParserVisitor> iterator = visitors.iterator();
         while( iterator.hasNext() )

@@ -792,10 +792,10 @@ void parameter_declaration_list() :
    parameter_declaration() (LOOKAHEAD(2) "," parameter_declaration())*
 }
 
-void parameter_declaration() #FunctionParameter :
+void parameter_declaration() #Parameter :
 {}
 {
-   (declaration_specifiers() #FunctionParameterType)
+   (declaration_specifiers() #ParameterType)
    (
     LOOKAHEAD(declarator()) declarator()
    |
@@ -813,7 +813,13 @@ void type_id() :
 void declarator() :
 {}
 {
-    (LOOKAHEAD(ptr_operator()) ptr_operator())* #FunctionParameterTypeQualifier direct_declarator()
+    declarator_prefixes() direct_declarator()
+}
+
+void declarator_prefixes() #FunctionParameterTypeQualifier :
+{}
+{
+   (LOOKAHEAD(ptr_operator()) ptr_operator())*
 }
 
 void direct_declarator() :

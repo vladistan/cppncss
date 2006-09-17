@@ -176,4 +176,9 @@ public class FunctionNameExtractorTest extends TestCase
     {
         assertEquals( "MyFunction( MyType[3] )", extract( "void MyFunction( MyType p[3] ) {}" ) );
     }
+
+    public void testArrayArgumentWithoutParameterName() throws ParseException
+    {
+        assertEquals( "MyFunction( MyType[3] )", extract( "void MyFunction( MyType [3] ) {}" ) );
+    }
 }

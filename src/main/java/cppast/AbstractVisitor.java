@@ -134,7 +134,7 @@ public class AbstractVisitor implements ParserVisitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstFunctionParameter node, final Object data )
+    public Object visit( final AstParameter node, final Object data )
     {
         return node.accept( this, data );
     }
@@ -142,7 +142,7 @@ public class AbstractVisitor implements ParserVisitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstFunctionParameterType node, final Object data )
+    public Object visit( final AstParameterType node, final Object data )
     {
         return node.accept( this, data );
     }
