@@ -868,10 +868,9 @@ void template_parameter_list() :
 void template_parameter() :
 {}
 {
-    LOOKAHEAD(3)
-      ("class" | "typename") <ID> ["=" declaration_specifiers()]
+    LOOKAHEAD(3) ("class" | "typename") <ID> ["=" parameter_declaration()]
    |
-    declaration_specifiers()
+    parameter_declaration()
 }
 
 void template_argument_list() :
@@ -1019,7 +1018,7 @@ void handler() #Handler :
 
 void exception_declaration() :
 {}
-{    parameter_declaration_list()
+{    parameter_declaration()
    |
      "..."
 }

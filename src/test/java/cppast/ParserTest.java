@@ -848,6 +848,21 @@ public class ParserTest extends TestCase
         parse( "void MyFunction( int x, ... ) {}" );
     }
 
+    public void testIntegerParameterInTemplateDeclaration() throws ParseException
+    {
+        parse( "template< typename T, int n > void MyFunction();" );
+    }
+
+    public void testVoidDefaultTemplateParameterDeclaration() throws ParseException
+    {
+        parse( "template< typename T = void > void MyFunction();" );
+    }
+
+    public void testVoidPointerDefaultTemplateParameterDeclaration() throws ParseException
+    {
+        parse( "template< typename T = void* > void MyFunction();" );
+    }
+
     public void testTMP() throws IOException, ParseException
     {
         final Parser parser = new Parser( new StringReader( "" ) );
