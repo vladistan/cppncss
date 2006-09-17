@@ -43,8 +43,8 @@ public class FunctionNameExtractorTest extends TestCase
 {
     private String extract( final String data ) throws ParseException
     {
-        final AstTranslationUnit root = new Parser( new StringReader( data ) ).translation_unit();
-        return (String)root.accept( new FunctionNameExtractor(), null );
+        final AstTranslationUnit node = new Parser( new StringReader( data ) ).translation_unit();
+        return (String)new FunctionNameExtractor().visit( node, null );
     }
 
     public void testNotFunctionReturnsNull() throws ParseException
@@ -179,6 +179,6 @@ public class FunctionNameExtractorTest extends TestCase
 
     public void testArrayArgumentWithoutParameterName() throws ParseException
     {
-        assertEquals( "MyFunction( MyType[3] )", extract( "void MyFunction( MyType [3] ) {}" ) );
+        assertEquals( "MyFunction( MyType[3] )", extract( "void MyFunction( MyType[3] ) {}" ) );
     }
 }
