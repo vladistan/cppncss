@@ -122,4 +122,44 @@ public class AbstractVisitor implements ParserVisitor
     {
         return node.accept( this, data );
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstFunctionParameters node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstFunctionParameter node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstFunctionParameterType node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstFunctionParameterTypeQualifier node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstFunctionBody node, final Object data )
+    {
+        return node.accept( this, data );
+    }
 }

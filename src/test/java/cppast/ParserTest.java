@@ -28,7 +28,7 @@
  * $Id: $
  */
 
-package cppncss;
+package cppast;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -826,6 +826,26 @@ public class ParserTest extends TestCase
     public void testTemplateForwardDeclarationDoesNotRegisterTemplateTypeAsType() throws ParseException
     {
         parse( "template< typename T > Type1; template< typename T > Type2;" );
+    }
+
+    public void testOneVariableArgumentFunctionDeclaration() throws ParseException
+    {
+        parse( "void MyFunction( ... );" );
+    }
+
+    public void testVariableArgumentFunctionDeclaration() throws ParseException
+    {
+        parse( "void MyFunction( int x, ...);" );
+    }
+
+    public void testOneVariableArgumentFunctionDefinition() throws ParseException
+    {
+        parse( "void MyFunction( ... ) {}" );
+    }
+
+    public void testVariableArgumentFunctionDefinition() throws ParseException
+    {
+        parse( "void MyFunction( int x, ... ) {}" );
     }
 
     public void testTMP() throws IOException, ParseException

@@ -32,7 +32,6 @@ import cppast.AbstractVisitor;
 import cppast.AstConstructorDefinition;
 import cppast.AstDestructorDefinition;
 import cppast.AstFunctionDefinition;
-import cppast.ParserVisitor;
 import cppast.SimpleNode;
 
 /**
@@ -87,8 +86,6 @@ public final class FunctionVisitor extends AbstractVisitor
 
     private String getFunctionName( final SimpleNode node )
     {
-        final ParserVisitor visitor = new FunctionNameExtractor();
-        node.accept( visitor, null );
-        return visitor.toString();
+        return (String)new FunctionNameExtractor().visit( node, null );
     }
 }

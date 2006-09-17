@@ -30,12 +30,12 @@
 
 package cppast;
 
-import tools.EasyMockTestCase;
+import junit.framework.TestCase;
 
 /**
  * @author Mathieu Champlon
  */
-public class SymbolTableTest extends EasyMockTestCase
+public class SymbolTableTest extends TestCase
 {
     private SymbolTable symbols;
 

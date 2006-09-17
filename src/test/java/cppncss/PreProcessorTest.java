@@ -30,12 +30,12 @@
 
 package cppncss;
 
-import tools.EasyMockTestCase;
+import junit.framework.TestCase;
 
 /**
  * @author Mathieu Champlon
  */
-public class PreProcessorTest extends EasyMockTestCase
+public class PreProcessorTest extends TestCase
 {
     private PreProcessor processor;
 

@@ -28,8 +28,6 @@
 
 package cppast;
 
-import java.util.Iterator;
-import java.util.Vector;
 
 /**
  * Provides a custom simple node JavaCC implementation.
@@ -39,7 +37,7 @@ import java.util.Vector;
 public abstract class SimpleNode implements Node
 {
     private Node parent;
-    private final Vector<Node> children = new Vector<Node>();
+    private Node[] children = new Node[0];
     private final int id;
     private Parser parser;
     private Token first, last;
@@ -107,9 +105,9 @@ public abstract class SimpleNode implements Node
     /**
      * {@inheritDoc}
      */
-    public final void jjtSetParent( final Node n )
+    public final void jjtSetParent( final Node node )
     {
-        parent = n;
+        parent = node;
     }
 
     /**
@@ -123,17 +121,23 @@ public abstract class SimpleNode implements Node
     /**
      * {@inheritDoc}
      */
-    public final void jjtAddChild( final Node node, final int i )
+    public final void jjtAddChild( final Node node, final int index )
     {
-        children.add( node );
+        if( index >= children.length )
+        {
+            final Node c[] = new Node[index + 1];
+            System.arraycopy( children, 0, c, 0, children.length );
+            children = c;
+        }
+        children[index] = node;
     }
 
     /**
      * {@inheritDoc}
      */
-    public final Node jjtGetChild( final int i )
+    public final Node jjtGetChild( final int index )
     {
-        return children.elementAt( i );
+        return children[index];
     }
 
     /**
@@ -141,7 +145,7 @@ public abstract class SimpleNode implements Node
      */
     public final int jjtGetNumChildren()
     {
-        return children.size();
+        return children.length;
     }
 
     /**
@@ -153,10 +157,9 @@ public abstract class SimpleNode implements Node
      */
     public final Object accept( final ParserVisitor visitor, final Object data )
     {
-        final Iterator<Node> iterator = children.iterator();
         Object result = data;
-        while( iterator.hasNext() )
-            result = iterator.next().jjtAccept( visitor, result );
+        for( int index = 0; index < children.length; ++index )
+            result = children[index].jjtAccept( visitor, result );
         return result;
     }
 
@@ -181,8 +184,7 @@ public abstract class SimpleNode implements Node
     public void dump( final String prefix )
     {
         System.out.println( toString( prefix ) );
-        final Iterator<Node> iterator = children.iterator();
-        while( iterator.hasNext() )
-            ((SimpleNode)iterator.next()).dump( prefix + " " );
+        for( int index = 0; index < children.length; ++index )
+            ((SimpleNode)children[index]).dump( prefix + " " );
     }
 }

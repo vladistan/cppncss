@@ -315,7 +315,7 @@ void function_decl_or_def() :
 {
     LOOKAHEAD(function() ";") function() ";"
    |
-    (function() compound_statement()) #FunctionDefinition
+    (function() compound_statement() #FunctionBody) #FunctionDefinition
 }
 
 void function() :
@@ -335,7 +335,21 @@ void conversion_function_decl_or_def() :
 void conversion_function() :
 {}
 {
-    (type_modifiers())* operator_id() "(" [parameter_list()] ")" cv_qualifier_seq() [exception_spec()] [pure_specifier()]
+    (type_modifiers())* operator_id() function_parameters() cv_qualifier_seq() [exception_spec()] [pure_specifier()]
+}
+
+void function_parameters() #FunctionParameters :
+{}
+{
+  "(" [parameter_list()] ")"
+}
+
+void parameter_list() :
+{}
+{
+    parameter_declaration_list() ["," "..."]
+   |
+    "..."
 }
 
 void operator_id() #FunctionName :
@@ -512,6 +526,14 @@ void init_declarator() :
    declarator() ["=" initializer() | "(" expression_list() ")"]
 }
 
+void initializer() :
+{}
+{
+    LOOKAHEAD(3) "{" (initializer() [","])+ "}"
+   |
+    assignment_expression()
+}
+
 String class_head() :
 {
    Token t;
@@ -675,33 +697,6 @@ void cv_qualifier_seq() :
    ]
 }
 
-void declarator() :
-{}
-{
-  (
-    LOOKAHEAD(ptr_operator())
-      ptr_operator() declarator()
-   |
-    direct_declarator()
-  )
-}
-
-void direct_declarator() :
-{}
-{
-    qualified_id() [LOOKAHEAD(declarator_suffixes()) declarator_suffixes()]
-   |
-    "(" declarator() ")" [LOOKAHEAD(declarator_suffixes()) declarator_suffixes()]
-}
-
-void declarator_suffixes() :
-{}
-{
-    "(" [parameter_list()] ")" cv_qualifier_seq() [exception_spec()]
-   |
-    ("[" [constant_expression()] "]")+
-}
-
 void function_declarator_lookahead() :
 {}
 {
@@ -717,7 +712,7 @@ void function_declarator() :
 void function_direct_declarator() :
 {}
 {
-   qualified_id() #FunctionName "(" [parameter_list()] ")" cv_qualifier_seq() [exception_spec()] [pure_specifier()]
+   (qualified_id() #FunctionName) function_parameters() cv_qualifier_seq() [exception_spec()] [pure_specifier()]
 }
 
 void dtor_ctor_decl_spec() :
@@ -740,7 +735,7 @@ void ctor_definition() #ConstructorDefinition :
 {
    dtor_ctor_decl_spec() ctor_declarator()
    (
-// FIXME check why unused
+// FIXME check why unnecessary
 //     ";"
 //    |
      [ctor_initializer()] compound_statement()
@@ -750,7 +745,7 @@ void ctor_definition() #ConstructorDefinition :
 void ctor_declarator() :
 {}
 {
-     qualified_type() #FunctionName "(" [parameter_list()] ")" [exception_spec()]
+   (qualified_type() #FunctionName) function_parameters() [exception_spec()]
 }
 
 void ctor_initializer() :
@@ -782,7 +777,7 @@ void class_name() :
 void dtor_declarator() :
 {}
 {
-   ([scope_override()] "~" <ID>) #FunctionName "(" ["void"] ")" [exception_spec()]
+   (([scope_override()] "~" <ID>) #FunctionName) ("(" ["void"] ")") #FunctionParameters [exception_spec()]
 }
 
 void simple_dtor_declarator() :
@@ -791,24 +786,16 @@ void simple_dtor_declarator() :
    "~" <ID> "(" ["void"] ")" [exception_spec()]
 }
 
-void parameter_list() :
-{}
-{
-    parameter_declaration_list() [LOOKAHEAD(2) [ "," ] "..."]
-   |
-    "..."
-}
-
 void parameter_declaration_list() :
 {}
 {
    parameter_declaration() (LOOKAHEAD(2) "," parameter_declaration())*
 }
 
-void parameter_declaration() :
+void parameter_declaration() #FunctionParameter :
 {}
 {
-   declaration_specifiers()
+   (declaration_specifiers() #FunctionParameterType)
    (
     LOOKAHEAD(declarator()) declarator()
    |
@@ -817,27 +804,43 @@ void parameter_declaration() :
    ["=" assignment_expression()]
 }
 
-void initializer() :
-{}
-{
-    LOOKAHEAD(3) "{" (initializer() [","])+ "}"
-   |
-    assignment_expression()
-}
-
 void type_id() :
 {}
 {
    declaration_specifiers() [abstract_declarator()]
 }
 
-void abstract_declarator() :
+void declarator() :
+{}
+{
+    (LOOKAHEAD(ptr_operator()) ptr_operator())* #FunctionParameterTypeQualifier direct_declarator()
+}
+
+void direct_declarator() :
+{}
+{
+   (
+     qualified_id()
+    |
+     "(" declarator() ")"
+   )
+   [LOOKAHEAD(declarator_suffixes()) declarator_suffixes()]
+}
+
+void declarator_suffixes() :
+{}
+{
+    function_parameters() cv_qualifier_seq() [exception_spec()]
+   |
+    ("[" [constant_expression()] "]")+
+}
+
+void abstract_declarator() #FunctionParameterTypeQualifier :
 {}
 {
      ptr_operator() [abstract_declarator()]
     |
-     LOOKAHEAD(abstract_declarator_suffix())
-      (abstract_declarator_suffix())+
+     LOOKAHEAD(abstract_declarator_suffix()) (abstract_declarator_suffix())+
     |
      "(" abstract_declarator() ")" (abstract_declarator_suffix())*
 }
@@ -847,7 +850,7 @@ void abstract_declarator_suffix() :
 {
     "[" [constant_expression()] "]"
    |
-    "(" [parameter_list()] ")" cv_qualifier_seq() [exception_spec()]
+    function_parameters() cv_qualifier_seq() [exception_spec()]
 }
 
 void template_head() :
@@ -866,9 +869,9 @@ void template_parameter() :
 {}
 {
     LOOKAHEAD(3)
-      ("class" | "typename") <ID> ["=" parameter_declaration()]
+      ("class" | "typename") <ID> ["=" declaration_specifiers()]
    |
-    parameter_declaration()
+    declaration_specifiers()
 }
 
 void template_argument_list() :

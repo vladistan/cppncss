@@ -34,8 +34,13 @@ import cppast.AstAssignmentExpression;
 import cppast.AstCaseStatement;
 import cppast.AstConstructorDefinition;
 import cppast.AstDestructorDefinition;
+import cppast.AstFunctionBody;
 import cppast.AstFunctionDefinition;
 import cppast.AstFunctionName;
+import cppast.AstFunctionParameter;
+import cppast.AstFunctionParameterType;
+import cppast.AstFunctionParameterTypeQualifier;
+import cppast.AstFunctionParameters;
 import cppast.AstHandler;
 import cppast.AstIfStatement;
 import cppast.AstIterationStatement;
@@ -176,6 +181,61 @@ public final class VisitorComposite implements ParserVisitor
      * {@inheritDoc}
      */
     public Object visit( final AstAssignmentExpression node, final Object data )
+    {
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
+        while( iterator.hasNext() )
+            iterator.next().visit( node, data );
+        return data;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstFunctionParameters node, final Object data )
+    {
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
+        while( iterator.hasNext() )
+            iterator.next().visit( node, data );
+        return data;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstFunctionParameter node, final Object data )
+    {
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
+        while( iterator.hasNext() )
+            iterator.next().visit( node, data );
+        return data;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstFunctionParameterType node, final Object data )
+    {
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
+        while( iterator.hasNext() )
+            iterator.next().visit( node, data );
+        return data;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstFunctionParameterTypeQualifier node, final Object data )
+    {
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
+        while( iterator.hasNext() )
+            iterator.next().visit( node, data );
+        return data;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstFunctionBody node, final Object data )
     {
         final Iterator<ParserVisitor> iterator = visitors.iterator();
         while( iterator.hasNext() )

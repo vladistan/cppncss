@@ -1,4 +1,4 @@
 class MyClass
 {
-  operator const char*() const;
+  operator char*() const;
 };

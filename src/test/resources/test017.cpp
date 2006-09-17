@@ -1,4 +1,4 @@
-MyClass::operator const char*() const
+MyClass::operator char*() const
 {
   return 0;
 }

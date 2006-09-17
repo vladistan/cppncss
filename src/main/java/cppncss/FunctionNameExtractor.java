@@ -29,7 +29,13 @@
 package cppncss;
 
 import cppast.AbstractVisitor;
+import cppast.AstFunctionBody;
 import cppast.AstFunctionName;
+import cppast.AstFunctionParameterType;
+import cppast.AstFunctionParameterTypeQualifier;
+import cppast.AstFunctionParameters;
+import cppast.Parser;
+import cppast.SimpleNode;
 import cppast.Token;
 
 /**
@@ -39,32 +45,115 @@ import cppast.Token;
  */
 public final class FunctionNameExtractor extends AbstractVisitor
 {
-    private String name;
+    private boolean isFirstParameter;
 
     /**
      * {@inheritDoc}
      */
     public Object visit( final AstFunctionName node, final Object data )
     {
-        final StringBuffer buffer = new StringBuffer();
-        for( Token token = node.getFirstToken(); token != node.getLastToken().next; token = token.next )
-            buffer.append( decorate( token.image ) );
-        name = node.resolve( buffer.toString() );
-        return data;
-    }
-
-    private String decorate( final String value )
-    {
-        if( value.equals( "const" ) )
-            return " " + value + " ";
-        return value;
+        return node.resolve( build( node, new Filter()
+        {
+            public String decorate( final Token token )
+            {
+                final String value = token.image;
+                switch( token.kind )
+                {
+                    case Parser.SCOPE :
+                    case Parser.TILDE :
+                        return value;
+                }
+                switch( token.next.kind )
+                {
+                    case Parser.SCOPE :
+                    case Parser.LPARENTHESIS :
+                    case Parser.AMPERSAND :
+                    case Parser.STAR :
+                        return value;
+                }
+                return value + " ";
+            }
+        } ) );
     }
 
     /**
      * {@inheritDoc}
      */
-    public String toString()
+    public Object visit( final AstFunctionParameters node, final Object data )
     {
-        return name;
+        return data + "(" + process( node ) + ")";
+    }
+
+    private String process( final SimpleNode node )
+    {
+        isFirstParameter = true;
+        final String result = (String)node.accept( this, "" );
+        if( !isFirstParameter )
+            return result + " ";
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstFunctionParameterType node, final Object data )
+    {
+        final String result = " " + build( node, new Filter()
+        {
+            public String decorate( final Token token )
+            {
+                final String value = token.image;
+                switch( token.kind )
+                {
+                    case Parser.CONST :
+                    case Parser.SIGNED :
+                    case Parser.UNSIGNED :
+                        return value + " ";
+                }
+                return value;
+            }
+        } );
+        if( !isFirstParameter )
+            return data + "," + result;
+        isFirstParameter = false;
+        return data + result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstFunctionParameterTypeQualifier node, final Object data )
+    {
+        return data + build( node, new Filter()
+        {
+            public String decorate( final Token token )
+            {
+                final String value = token.image;
+                if( token.kind == Parser.CONST )
+                    return " " + value;
+                return value;
+            }
+        } );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstFunctionBody node, final Object data )
+    {
+        return data;
+    }
+
+    private interface Filter
+    {
+        String decorate( final Token token );
+    }
+
+    private String build( final SimpleNode node, final Filter filter )
+    {
+        final StringBuffer buffer = new StringBuffer();
+        for( Token token = node.getFirstToken(); token != node.getLastToken().next; token = token.next )
+            buffer.append( filter.decorate( token ) );
+        return buffer.toString();
     }
 }
