@@ -329,7 +329,7 @@ void conversion_function_decl_or_def() :
 {
     LOOKAHEAD(conversion_function() ";") conversion_function() ";"
    |
-    (conversion_function() compound_statement()) #FunctionDefinition
+    (conversion_function() compound_statement() #FunctionBody) #FunctionDefinition
 }
 
 void conversion_function() :
