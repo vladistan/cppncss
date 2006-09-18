@@ -76,6 +76,17 @@ public final class Scope
      */
     public Scope createScope( final String name )
     {
+        final int index = name.indexOf( "::" );
+        if( index != -1 )
+        {
+            Scope scope = getScope( name.substring( 0, index ) );
+            if( scope == null )
+            {
+                scope = new Scope( name.substring( 0, index ), this );
+                scopes.put( name, scope );
+            }
+            return scope.createScope( name.substring( index + 2 ) );
+        }
         final Scope scope = new Scope( name, this );
         scopes.put( name, scope );
         return scope;
