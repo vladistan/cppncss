@@ -196,4 +196,16 @@ public class FunctionNameExtractorTest extends TestCase
     {
         assertEquals( "MyFunction( MyClass< T, F >& )", extract( "void MyFunction( MyClass< T, F >& ) {}" ) );
     }
+
+    public void testPointerOnMemberParameterFunction() throws ParseException
+    {
+        assertEquals( "MyFunction( void (C::*)( char, float ) )",
+                extract( "void MyFunction( void (C::*M)( char, float ) ) {}" ) );
+    }
+
+    public void testPointerOnFunctionParameterFunction() throws ParseException
+    {
+        assertEquals( "MyFunction( void (*)( char, float ) )",
+                extract( "void MyFunction( void (*F)( char, float ) ) {}" ) );
+    }
 }
