@@ -53,13 +53,15 @@ public class Scope
     public Scope( final String name, final Scope parent )
     {
         if( name == null )
-            throw new IllegalArgumentException( "name must not be null" );
+            throw new IllegalArgumentException( "scope name is null" );
         if( parent == null )
-            throw new IllegalArgumentException( "parent must not be null" );
+            throw new IllegalArgumentException( "scope parent is null" );
         if( name.contains( "::" ) )
-            throw new IllegalArgumentException( "scope name must not contain '::'" );
+            throw new IllegalArgumentException( "scope name '" + name + "' contains '::'" );
         this.name = name;
         this.parent = parent;
+        parent.types.add( name );
+        parent.scopes.put( name, this );
     }
 
     /**
@@ -68,6 +70,7 @@ public class Scope
     public Scope()
     {
         this.name = "";
+        this.parent = null;
     }
 
     /**
@@ -75,27 +78,13 @@ public class Scope
      *
      * @param name the name of the type
      */
-    public final void putTypeName( final String name )
+    public final void addType( final String name )
     {
         if( name == null )
             throw new IllegalArgumentException( "type name is null" );
         if( name.contains( "::" ) )
             throw new IllegalArgumentException( "type name '" + name + "' contains '::'" );
         types.add( name );
-    }
-
-    /**
-     * Add a type name and scope to the scope.
-     *
-     * @param name the name of the type
-     * @param scope the scope of the type
-     */
-    public final void putTypeName( final String name, final Scope scope )
-    {
-        if( name.contains( "::" ) )
-            throw new IllegalArgumentException( "type name must not contain '::'" );
-        types.add( name );
-        scopes.put( name, scope );
     }
 
     /**

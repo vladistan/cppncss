@@ -44,25 +44,73 @@ public class SymbolTableTest extends TestCase
         symbols = new SymbolTable();
     }
 
+    public void testResolveOutsideOfAnyScopeDoesNotAddAnyPrefix()
+    {
+        assertEquals( "Symbol", symbols.getCurrentScope().resolve( "Symbol" ) );
+    }
+
     public void testExtendingWithNonExistingScopeIsNoOp()
     {
         symbols.extend( "std::runtime_error" );
+        assertEquals( "Symbol", symbols.getCurrentScope().resolve( "Symbol" ) );
     }
 
-    public void testResolveReturnsFullScope()
+    public void testResolveInsideSimpleScopeAddsPrefix()
     {
-        symbols.openScope( "my_namespace" );
-        symbols.openScope( "MyClass" );
-        final Scope scope1 = symbols.getCurrentScope();
+        symbols.openScope( "my_scope" );
+        assertEquals( "my_scope::Symbol", symbols.getCurrentScope().resolve( "Symbol" ) );
+    }
+
+    public void testResolveInsideComplexScopeAddsPrefix()
+    {
+        symbols.openScope( "my_scope1" );
+        symbols.openScope( "my_scope2" );
+        assertEquals( "my_scope1::my_scope2::Symbol", symbols.getCurrentScope().resolve( "Symbol" ) );
+    }
+
+    public void testOpenSeveralScopesAtTheSameTime()
+    {
+        symbols.openScope( "my_scope1::my_scope2" );
+        assertEquals( "my_scope1::my_scope2::Symbol", symbols.getCurrentScope().resolve( "Symbol" ) );
+    }
+
+    public void testOpenSeveralScopesAtTheSameTimeAndCloseOne()
+    {
+        symbols.openScope( "my_scope1::my_scope2" );
         symbols.closeScope();
-        final Scope scope2 = symbols.getCurrentScope();
+        assertEquals( "my_scope1::Symbol", symbols.getCurrentScope().resolve( "Symbol" ) );
+    }
+
+    public void testResolveSubPathOutsideOfScopeAddsPrefix()
+    {
+        symbols.openScope( "my_scope1" );
+        symbols.openScope( "my_scope2" );
         symbols.closeScope();
-        final Scope scope3 = symbols.getCurrentScope();
-        symbols.extend( "my_namespace" );
-        final Scope scope4 = symbols.getCurrentScope();
-        assertEquals( "my_namespace::MyClass::Anything", scope1.resolve( "Anything" ) );
-        assertEquals( "my_namespace::MyClass::Anything", scope2.resolve( "MyClass::Anything" ) );
-        assertEquals( "my_namespace::MyClass::Anything", scope3.resolve( "my_namespace::MyClass::Anything" ) );
-        assertEquals( "my_namespace::MyClass::Anything", scope4.resolve( "MyClass::Anything" ) );
+        assertEquals( "my_scope1::Symbol", symbols.getCurrentScope().resolve( "Symbol" ) );
+        assertEquals( "my_scope1::my_scope2::Symbol", symbols.getCurrentScope().resolve( "my_scope2::Symbol" ) );
+    }
+
+    public void testResolveSearchesInExtendingScopes()
+    {
+        symbols.openScope( "my_scope1" );
+        symbols.openScope( "my_scope2" );
+        symbols.closeScopes();
+        symbols.extend( "my_scope1" );
+        assertEquals( "my_scope1::my_scope2::Symbol", symbols.getCurrentScope().resolve( "my_scope2::Symbol" ) );
+    }
+
+    public void testResolveSearchesInExtendingSubScopes()
+    {
+        symbols.openScope( "my_scope1" );
+        symbols.openScope( "my_scope2" );
+        symbols.openScope( "my_scope3" );
+        symbols.closeScopes();
+        symbols.extend( "my_scope1::my_scope2" );
+        assertEquals( "my_scope1::my_scope2::my_scope3::Symbol", symbols.getCurrentScope().resolve( "my_scope3::Symbol" ) );
+    }
+
+    public void testTmp()
+    {
+        assertEquals("", "::".substring( 2 ));
     }
 }

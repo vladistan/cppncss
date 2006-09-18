@@ -52,9 +52,9 @@ public final class Parser
      symbols.closeScopes();
   }
 
-  private void putTypeName( final String name )
+  private void addType( final String name )
   {
-     symbols.putTypeName( name );
+     symbols.addType( name );
   }
 
   private void extendScope( final String name )
@@ -565,7 +565,7 @@ void class_specifier() :
     [
      LOOKAHEAD("{")
      (
-      { putTypeName( name ); }
+      { addType( name ); }
       "{" { openScope( name ); }
       [member_specification()]
       "}" { closeScope(); }
@@ -661,7 +661,7 @@ void enum_specifier() :
     "{" [enumerator_list()] "}"
    |
     t = <ID> [LOOKAHEAD("{") "{" [enumerator_list()] "}"]
-    { putTypeName( t.image ); }
+    { addType( t.image ); }
    )
 }
 
