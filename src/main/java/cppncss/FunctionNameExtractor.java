@@ -69,6 +69,8 @@ public final class FunctionNameExtractor extends AbstractVisitor
                     case Parser.LPARENTHESIS :
                     case Parser.AMPERSAND :
                     case Parser.STAR :
+                    case Parser.LESSTHAN :
+                    case Parser.COMMA :
                         return value;
                 }
                 return value + " ";
@@ -108,7 +110,11 @@ public final class FunctionNameExtractor extends AbstractVisitor
                     case Parser.CONST :
                     case Parser.SIGNED :
                     case Parser.UNSIGNED :
+                    case Parser.LESSTHAN :
+                    case Parser.COMMA :
                         return value + " ";
+                    case Parser.GREATERTHAN :
+                        return " " + value;
                 }
                 return value;
             }

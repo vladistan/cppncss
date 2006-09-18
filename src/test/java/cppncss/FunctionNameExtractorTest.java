@@ -181,4 +181,19 @@ public class FunctionNameExtractorTest extends TestCase
     {
         assertEquals( "MyFunction( MyType[3] )", extract( "void MyFunction( MyType[3] ) {}" ) );
     }
+
+    public void testTemplateClassMethod() throws ParseException
+    {
+        assertEquals( "MyClass< T, F >::MyMethod()", extract( "void MyClass< T, F >::MyMethod() {}" ) );
+    }
+
+    public void testTemplateParameterFunction() throws ParseException
+    {
+        assertEquals( "MyFunction( MyClass< T, F >& )", extract( "void MyFunction( MyClass< T, F >& p ) {}" ) );
+    }
+
+    public void testTemplateParameterFunctionWithoutParameterName() throws ParseException
+    {
+        assertEquals( "MyFunction( MyClass< T, F >& )", extract( "void MyFunction( MyClass< T, F >& ) {}" ) );
+    }
 }
