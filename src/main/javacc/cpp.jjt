@@ -30,7 +30,7 @@ package cppast;
 
 public final class Parser
 {
-  private SymbolTable symbols = new SymbolTable();
+  private final SymbolTable symbols = new SymbolTable();
 
   Scope getCurrentScope()
   {
@@ -50,11 +50,6 @@ public final class Parser
   private void closeScopes()
   {
      symbols.closeScopes();
-  }
-
-  private void addType( final String name )
-  {
-     symbols.addType( name );
   }
 
   private void extendScope( final String name )
@@ -565,7 +560,6 @@ void class_specifier() :
     [
      LOOKAHEAD("{")
      (
-      { addType( name ); }
       "{" { openScope( name ); }
       [member_specification()]
       "}" { closeScope(); }
@@ -654,14 +648,13 @@ void pure_specifier():
 }
 
 void enum_specifier() :
-{ Token t; }
+{}
 {
    "enum"
    (
     "{" [enumerator_list()] "}"
    |
-    t = <ID> [LOOKAHEAD("{") "{" [enumerator_list()] "}"]
-    { addType( t.image ); }
+    <ID> [LOOKAHEAD("{") "{" [enumerator_list()] "}"]
    )
 }
 

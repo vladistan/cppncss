@@ -33,7 +33,7 @@ package cppast;
  *
  * @author Mathieu Champlon
  */
-public class SymbolTable
+public final class SymbolTable
 {
     private final Scope root;
     private Scope current;
@@ -52,7 +52,7 @@ public class SymbolTable
      *
      * @param name a non-null scope name
      */
-    public final void openScope( final String name )
+    public void openScope( final String name )
     {
         final Scope scope = findScope( name );
         if( scope != null )
@@ -64,18 +64,13 @@ public class SymbolTable
         final Scope scope = current.getScope( name );
         if( scope != null )
             return scope;
-        return createScope( name );
-    }
-
-    private Scope createScope( final String name )
-    {
-        return new Scope( name, current );
+        return current.createScope( name );
     }
 
     /**
      * Close current scope.
      */
-    public final void closeScope()
+    public void closeScope()
     {
         current = current.close();
     }
@@ -83,22 +78,12 @@ public class SymbolTable
     /**
      * Close all scopes.
      */
-    public final void closeScopes()
+    public void closeScopes()
     {
         current = root;
     }
 
-    /**
-     * Add a type name to current scope.
-     *
-     * @param name the name of the type to add
-     */
-    public final void addType( final String name )
-    {
-        current.addType( name );
-    }
-
-    public final Scope getCurrentScope()
+    public Scope getCurrentScope()
     {
         return current;
     }
@@ -108,7 +93,7 @@ public class SymbolTable
      *
      * @param name the name of the extension scope
      */
-    public final void extend( final String name )
+    public void extend( final String name )
     {
         current.extend( getScope( name ) );
     }

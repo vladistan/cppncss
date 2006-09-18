@@ -37,10 +37,9 @@ import java.util.Set;
  *
  * @author Mathieu Champlon
  */
-public class Scope
+public final class Scope
 {
     private final String name;
-    private final Set<String> types = new HashSet<String>();
     private final Hashtable<String, Scope> scopes = new Hashtable<String, Scope>();
     private Scope parent;
 
@@ -50,7 +49,7 @@ public class Scope
      * @param name the name of the scope
      * @param parent the parent of the scope
      */
-    public Scope( final String name, final Scope parent )
+    private Scope( final String name, final Scope parent )
     {
         if( name == null )
             throw new IllegalArgumentException( "scope name is null" );
@@ -60,8 +59,6 @@ public class Scope
             throw new IllegalArgumentException( "scope name '" + name + "' contains '::'" );
         this.name = name;
         this.parent = parent;
-        parent.types.add( name );
-        parent.scopes.put( name, this );
     }
 
     /**
@@ -74,17 +71,16 @@ public class Scope
     }
 
     /**
-     * Add a type name to the scope.
+     * Create a sub-scope to the scope.
      *
-     * @param name the name of the type
+     * @param name the name of the sub-scope
+     * @return the new sub-scope
      */
-    public final void addType( final String name )
+    public Scope createScope( final String name )
     {
-        if( name == null )
-            throw new IllegalArgumentException( "type name is null" );
-        if( name.contains( "::" ) )
-            throw new IllegalArgumentException( "type name '" + name + "' contains '::'" );
-        types.add( name );
+        final Scope scope = new Scope( name, this );
+        scopes.put( name, scope );
+        return scope;
     }
 
     /**
@@ -94,13 +90,10 @@ public class Scope
      *
      * @param scope the scope to merge into the current scope
      */
-    public final void extend( final Scope scope )
+    public void extend( final Scope scope )
     {
         if( scope != null )
-        {
-            types.addAll( scope.types );
             scopes.putAll( scope.scopes );
-        }
     }
 
     /**
@@ -109,35 +102,21 @@ public class Scope
      * @param name the name of the scope
      * @return the matching scope
      */
-    public final Scope getScope( final String name )
+    public Scope getScope( final String name )
     {
         final int index = name.indexOf( "::" );
         if( index != -1 )
         {
-            final String prefix = name.substring( 0, index );
-            final String postfix = name.substring( index + 2 );
-            final Scope scope = getScope( prefix );
-            if( scope == null )
-                return null;
-            return scope.getScope( postfix );
+            final Scope scope = getScope( name.substring( 0, index ) );
+            if( scope != null )
+                return scope.getScope( name.substring( index + 2 ) );
+            return null;
         }
-        if( !scopes.containsKey( name ) )
-        {
-            if( parent == null )
-                return null;
+        if( scopes.containsKey( name ) )
+            return scopes.get( name );
+        if( parent != null )
             return parent.getScope( name );
-        }
-        return scopes.get( name );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public final String toString()
-    {
-        if( parent == null )
-            return "";
-        return parent.toString() + name + "::";
+        return null;
     }
 
     /**
@@ -145,7 +124,7 @@ public class Scope
      *
      * @return the parent scope
      */
-    public final Scope close()
+    public Scope close()
     {
         if( parent == null )
             return this;
@@ -158,7 +137,7 @@ public class Scope
      * @param name the name
      * @return the fully scoped name
      */
-    public final String resolve( final String name )
+    public String resolve( final String name )
     {
         final int index = name.lastIndexOf( "::" );
         if( index == -1 )
@@ -166,6 +145,16 @@ public class Scope
         final Scope scope = getScope( name.substring( 0, index ) );
         if( scope == null )
             return toString() + name;
-        return scope.toString() + name.substring( index + 2 );
+        return scope.resolve( name.substring( index + 2 ) );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String toString()
+    {
+        if( parent == null )
+            return "";
+        return parent.toString() + name + "::";
     }
 }
