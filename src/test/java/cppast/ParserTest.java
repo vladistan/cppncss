@@ -229,7 +229,7 @@ public class ParserTest extends TestCase
 
     public void testSpecializedTemplateMemberPointerClassDeclaration() throws ParseException
     {
-        parse( "Class MyClass< void (MyOtherClass::*)() > {};" );
+        parse( "class MyClass< void (MyOtherClass::*)() > {};" );
     }
 
     public void testTemplateMethodOfTemplateClassSeparateDefinition() throws ParseException
@@ -389,6 +389,11 @@ public class ParserTest extends TestCase
     public void testConstructorDefinitionThrowSpecification() throws ParseException
     {
         parse( "class MyClass{}; MyClass::MyClass() throw() {}" );
+    }
+
+    public void testNamespacedConstructorDefinition() throws ParseException
+    {
+        parse( "my_namespace::MyClass::MyClass() {}" );
     }
 
     public void testConversionOperator() throws ParseException
