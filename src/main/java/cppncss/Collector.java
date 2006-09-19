@@ -45,15 +45,34 @@ import java.util.Vector;
 public class Collector implements FunctionObserver
 {
     private final Vector<Measurement> result = new Vector<Measurement>();
-    private static final int THRESHOLD = 30;
+    private final String name;
+    private final int threshold;
+
+    /**
+     * Create a collector indexed by a given measurement name.
+     *
+     * @param name the index measurement name
+     * @param threshold the number of measurements to keep
+     */
+    public Collector( final String name, int threshold )
+    {
+        if( name == null )
+            throw new IllegalArgumentException( "argument 'name' is null" );
+        if( threshold <= 0 )
+            throw new IllegalArgumentException( "threshold is <= 0" );
+        this.name = name;
+        this.threshold = threshold;
+    }
 
     /**
      * {@inheritDoc}
      */
-    public final void notify( final String function, final int line, final int count )
+    public final void notify( final String name, final String function, final int line, final int count )
     {
-        if( !update( function, line, count ) )
+        if( this.name.equals( name ) )
             insert( function, line, count );
+        else
+            update( function, line, count );
     }
 
     private boolean update( final String function, final int line, final int count )
@@ -75,7 +94,7 @@ public class Collector implements FunctionObserver
                 return m1.compare( m2 );
             }
         } );
-        if( result.size() > THRESHOLD )
+        if( result.size() > threshold )
             result.remove( result.size() - 1 );
     }
 

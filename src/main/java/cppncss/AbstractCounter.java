@@ -37,6 +37,7 @@ import cppast.AbstractVisitor;
  */
 public class AbstractCounter extends AbstractVisitor implements Counter
 {
+    private final String name;
     private final FunctionObserver observer;
     private final int start;
     private int count;
@@ -44,11 +45,13 @@ public class AbstractCounter extends AbstractVisitor implements Counter
     /**
      * Create an abstract counter.
      *
+     * @param name the name of the counter
      * @param observer a function observer
      * @param start the starting value
      */
-    public AbstractCounter( final FunctionObserver observer, final int start )
+    public AbstractCounter( final String name, final FunctionObserver observer, final int start )
     {
+        this.name = name;
         this.observer = observer;
         this.start = start;
         this.count = start;
@@ -61,7 +64,7 @@ public class AbstractCounter extends AbstractVisitor implements Counter
     {
         final int result = count;
         count = start;
-        observer.notify( function, line, result );
+        observer.notify( name, function, line, result );
     }
 
     /**

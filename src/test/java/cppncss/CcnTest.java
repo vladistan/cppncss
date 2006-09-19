@@ -56,84 +56,84 @@ public class CcnTest extends EasyMockTestCase
 
     public void testFunctionWithEmptyBodyHasCcnValueOfOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 1 );
+        observer.notify( "CCN", "MyFunction()", 1, 1 );
         replay();
         parse( "void MyFunction() {}" );
     }
 
     public void testFunctionWithIfHasCcnValueOfTwo() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 2 );
+        observer.notify( "CCN", "MyFunction()", 1, 2 );
         replay();
         parse( "void MyFunction() { if( true ); }" );
     }
 
     public void testForStatementIncrementsCcnByOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 2 );
+        observer.notify( "CCN", "MyFunction()", 1, 2 );
         replay();
         parse( "void MyFunction() { for( ;; ); }" );
     }
 
     public void testWhileStatementIncrementsCcnByOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 2 );
+        observer.notify( "CCN", "MyFunction()", 1, 2 );
         replay();
         parse( "void MyFunction() { while( true ); }" );
     }
 
     public void testSwitchStatementIncrementsCcnByOnePerCase() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 4 );
+        observer.notify( "CCN", "MyFunction()", 1, 4 );
         replay();
         parse( "void MyFunction() { switch( i ) { case 0: break; case 1: case 2: break; default: break; } }" );
     }
 
     public void testSwitchStatementDoesNotIncrementCcnForDefault() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 1 );
+        observer.notify( "CCN", "MyFunction()", 1, 1 );
         replay();
         parse( "void MyFunction() { switch( i ) { default: break; } }" );
     }
 
     public void testCatchStatementIncrementsCcnByOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 3 );
+        observer.notify( "CCN", "MyFunction()", 1, 3 );
         replay();
         parse( "void MyFunction() { try {} catch( std::exception& ) {} catch(...) {} }" );
     }
 
     public void testDoStatementIncrementsCcnByOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 2 );
+        observer.notify( "CCN", "MyFunction()", 1, 2 );
         replay();
         parse( "void MyFunction() { do {} while( true ); }" );
     }
 
     public void testAndExpressionIncrementsCcnByOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 2 );
+        observer.notify( "CCN", "MyFunction()", 1, 2 );
         replay();
         parse( "void MyFunction() { i && j; }" );
     }
 
     public void testOrExpressionIncrementsCcnByOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 2 );
+        observer.notify( "CCN", "MyFunction()", 1, 2 );
         replay();
         parse( "void MyFunction() { i || j; }" );
     }
 
     public void testConditionalExpressionIncrementsCcnByOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 2 );
+        observer.notify( "CCN", "MyFunction()", 1, 2 );
         replay();
         parse( "void MyFunction() { i ? j : 0; }" );
     }
 
     public void testExpressionWithAndOrAndConditionalIncrementsCcnByThree() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 4 );
+        observer.notify( "CCN", "MyFunction()", 1, 4 );
         replay();
         parse( "void MyFunction() { i ? (j && k) : (l || m); }" );
     }

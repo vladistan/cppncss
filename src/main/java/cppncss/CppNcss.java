@@ -37,6 +37,9 @@ import java.io.IOException;
  */
 public final class CppNcss
 {
+    private static final String INDEX = "NCSS";
+    private static final int THRESHOLD = 100;
+
     private CppNcss()
     {
     }
@@ -44,10 +47,10 @@ public final class CppNcss
     public static void main( final String[] args ) throws IOException
     {
         final Analyzer analyzer = new Analyzer( args );
-        final Collector collector = new Collector();
+        final Collector collector = new Collector( INDEX, THRESHOLD );
         final VisitorComposite visitor = new VisitorComposite();
-        visitor.register( new FunctionVisitor( new NcssCounter( collector ) ) );
-//        visitor.register( new FunctionVisitor( new CcnCounter( collector ) ) );
+        visitor.register( new FunctionVisitor( new NcssCounter( collector ) ) ); // FIXME first counter must be INDEX
+        visitor.register( new FunctionVisitor( new CcnCounter( collector ) ) );
         analyzer.accept( visitor );
         collector.display();
     }

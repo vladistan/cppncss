@@ -56,126 +56,126 @@ public class NcssTest extends EasyMockTestCase
 
     public void testFunctionWithEmptyBodyHasNcssValueOfOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 1 );
+        observer.notify( "NCSS", "MyFunction()", 1, 1 );
         replay();
         parse( "void MyFunction() {}" );
     }
 
     public void testConstructorInitializerIncrementsNcssByOne() throws ParseException
     {
-        observer.notify( "MyClass::MyClass()", 1, 2 );
+        observer.notify( "NCSS", "MyClass::MyClass()", 1, 2 );
         replay();
         parse( "MyClass::MyClass() : i() {}" );
     }
 
     public void testSemiColumnDoesNotIncrementNcss() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 1 );
+        observer.notify( "NCSS", "MyFunction()", 1, 1 );
         replay();
         parse( "void MyFunction() { ; }" );
     }
 
     public void testDeclarationStatementIncrementsNcssByOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 2 );
+        observer.notify( "NCSS", "MyFunction()", 1, 2 );
         replay();
         parse( "void MyFunction() { int i = 0; }" );
     }
 
     public void testExpressionStatementIncrementsNcssByOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 2 );
+        observer.notify( "NCSS", "MyFunction()", 1, 2 );
         replay();
         parse( "void MyFunction() { i + 1; }" );
     }
 
     public void testIfStatementIncrementsNcssByOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 2 );
+        observer.notify( "NCSS", "MyFunction()", 1, 2 );
         replay();
         parse( "void MyFunction() { if( true ); }" );
     }
 
     public void testElseStatementIncrementsNcssByOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 3 );
+        observer.notify( "NCSS", "MyFunction()", 1, 3 );
         replay();
         parse( "void MyFunction() { if( true ); else; }" );
     }
 
     public void testWhileStatementIncrementsNcssByOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 2 );
+        observer.notify( "NCSS", "MyFunction()", 1, 2 );
         replay();
         parse( "void MyFunction() { while( true ); }" );
     }
 
     public void testDoStatementIncrementsNcssByOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 2 );
+        observer.notify( "NCSS", "MyFunction()", 1, 2 );
         replay();
         parse( "void MyFunction() { do {} while( true ); }" );
     }
 
     public void testForStatementIncrementsNcssByOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 2 );
+        observer.notify( "NCSS", "MyFunction()", 1, 2 );
         replay();
         parse( "void MyFunction() { for( ;; ); }" );
     }
 
     public void testSwitchStatementIncrementsNcssByOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 2 );
+        observer.notify( "NCSS", "MyFunction()", 1, 2 );
         replay();
         parse( "void MyFunction() { switch( i ); }" );
     }
 
     public void testBreakStatementIncrementsNcssByOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 3 );
+        observer.notify( "NCSS", "MyFunction()", 1, 3 );
         replay();
         parse( "void MyFunction() { for( ;; ) { break; } }" );
     }
 
     public void testContinueStatementIncrementsNcssByOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 3 );
+        observer.notify( "NCSS", "MyFunction()", 1, 3 );
         replay();
         parse( "void MyFunction() { for( ;; ) { continue; } }" );
     }
 
     public void testReturnStatementIncrementsNcssByOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 2 );
+        observer.notify( "NCSS", "MyFunction()", 1, 2 );
         replay();
         parse( "void MyFunction() { return; }" );
     }
 
     public void testGotoStatementIncrementsNcssByOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 2 );
+        observer.notify( "NCSS", "MyFunction()", 1, 2 );
         replay();
         parse( "void MyFunction() { goto label; }" );
     }
 
     public void testCatchStatementIncrementsNcssByOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 3 );
+        observer.notify( "NCSS", "MyFunction()", 1, 3 );
         replay();
         parse( "void MyFunction() { try {} catch( std::exception& ) {} catch(...) {} }" );
     }
 
     public void testLabelIncrementsNcssByOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 2 );
+        observer.notify( "NCSS", "MyFunction()", 1, 2 );
         replay();
         parse( "void MyFunction() { label: ; }" );
     }
 
     public void testDefaultStatementIncrementsNcssByOne() throws ParseException
     {
-        observer.notify( "MyFunction()", 1, 3 );
+        observer.notify( "NCSS", "MyFunction()", 1, 3 );
         replay();
         parse( "void MyFunction() { switch( i ) { default : ; } }" );
     }

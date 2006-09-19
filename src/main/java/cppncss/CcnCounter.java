@@ -51,7 +51,7 @@ public final class CcnCounter extends AbstractCounter
      */
     public CcnCounter( final FunctionObserver observer )
     {
-        super( observer, 1 );
+        super( "CCN", observer, 1 );
     }
 
     /**
