@@ -50,24 +50,24 @@ public class Collector implements FunctionObserver
     /**
      * {@inheritDoc}
      */
-    public final void notify( final String function, final int count )
+    public final void notify( final String function, final int line, final int count )
     {
-        if( !update( function, count ) )
-            insert( function, count );
+        if( !update( function, line, count ) )
+            insert( function, line, count );
     }
 
-    private boolean update( final String function, final int count )
+    private boolean update( final String function, final int line, int count )
     {
         final Iterator<Measurement> iterator = result.iterator();
         while( iterator.hasNext() )
-            if( iterator.next().update( function, count ) )
+            if( iterator.next().update( function, line, count ) )
                 return true;
         return false;
     }
 
-    private void insert( final String function, final int count )
+    private void insert( final String function, final int line, int count )
     {
-        result.add( new Measurement( function, count ) );
+        result.add( new Measurement( function, line, count ) );
         Collections.sort( result, new Comparator<Measurement>()
         {
             public int compare( final Measurement m1, final Measurement m2 )

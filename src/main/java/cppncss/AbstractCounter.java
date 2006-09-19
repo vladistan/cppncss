@@ -57,11 +57,11 @@ public class AbstractCounter extends AbstractVisitor implements Counter
     /**
      * {@inheritDoc}
      */
-    public final void flush( final String function )
+    public final void flush( final String function, int line )
     {
         final int result = count;
         count = start;
-        observer.notify( function, result );
+        observer.notify( function, line, result );
     }
 
     /**

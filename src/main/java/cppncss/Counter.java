@@ -41,6 +41,7 @@ public interface Counter extends ParserVisitor
      * Notify the end of a measurement.
      *
      * @param function the scoped name of the measured function
+     * @param line the location of the given function in the input
      */
-    void flush( String function );
+    void flush( String function, int line ); // TODO add filename somehow
 }

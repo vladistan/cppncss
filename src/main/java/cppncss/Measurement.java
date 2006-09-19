@@ -38,6 +38,7 @@ import java.util.Vector;
 public class Measurement
 {
     private final String function;
+    private final int line;
     private final int count;
     private final Vector<Integer> counts;
 
@@ -45,15 +46,19 @@ public class Measurement
      * Create a measurement.
      *
      * @param function the name of the function
+     * @param line the location of the function
      * @param count the value of the measurement
      */
-    public Measurement( final String function, final int count )
+    public Measurement( final String function, final int line, int count )
     {
         if( function == null )
             throw new IllegalArgumentException( "argument 'function' is null" );
+        if( line < 0 )
+            throw new IllegalArgumentException( "argument 'line' is < 0" );
         if( count < 0 )
             throw new IllegalArgumentException( "argument 'count' is < 0" );
         this.function = function;
+        this.line = line;
         this.count = count;
         counts = new Vector<Integer>();
     }
@@ -83,12 +88,13 @@ public class Measurement
      * If the function name does not match the name of the measurement the value is not recorded.
      *
      * @param function the function name
+     * @param line the location of the function
      * @param count the measurement to record
      * @return whether the measurement has been added or not
      */
-    public final boolean update( final String function, final int count )
+    public final boolean update( final String function, final int line, int count )
     {
-        if( !this.function.equals( function ) )
+        if( !this.function.equals( function ) || this.line != line )
             return false;
         counts.add( count );
         return true;

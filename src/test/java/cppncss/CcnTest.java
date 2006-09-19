@@ -63,21 +63,21 @@ public class CcnTest extends EasyMockTestCase
 
     public void testMethodDefinitionIsValid() throws IOException, ParseException
     {
-        observer.notify( "MyClass::MyMethod()", 1 );
+        observer.notify( "MyClass::MyMethod()", 3, 1 );
         replay();
         parse( "test001.h" );
     }
 
     public void testSeparateMethodDefinitionIsValid() throws IOException, ParseException
     {
-        observer.notify( "MyClass::MyMethod()", 1 );
+        observer.notify( "MyClass::MyMethod()", 1, 1 );
         replay();
         parse( "test001.cpp" );
     }
 
     public void testVirtualMethodDefinitionIsValid() throws IOException, ParseException
     {
-        observer.notify( "MyClass::MyMethod()", 1 );
+        observer.notify( "MyClass::MyMethod()", 3, 1 );
         replay();
         parse( "test002.h" );
     }
@@ -90,7 +90,7 @@ public class CcnTest extends EasyMockTestCase
 
     public void testFunctionDefinitionIsValid() throws IOException, ParseException
     {
-        observer.notify( "MyFunction()", 1 );
+        observer.notify( "MyFunction()", 1, 1 );
         replay();
         parse( "test004.h" );
     }
@@ -103,7 +103,7 @@ public class CcnTest extends EasyMockTestCase
 
     public void testConstructorDefinitionIsValid() throws IOException, ParseException
     {
-        observer.notify( "MyClass::MyClass()", 1 );
+        observer.notify( "MyClass::MyClass()", 3, 1 );
         replay();
         parse( "test006.h" );
     }
@@ -116,7 +116,7 @@ public class CcnTest extends EasyMockTestCase
 
     public void testSeparateConstructorDefinitionIsValid() throws IOException, ParseException
     {
-        observer.notify( "MyClass::MyClass()", 1 );
+        observer.notify( "MyClass::MyClass()", 1, 1 );
         replay();
         parse( "test007.h" );
         parse( "test007.cpp" );
@@ -124,7 +124,7 @@ public class CcnTest extends EasyMockTestCase
 
     public void testDestructorDefinitionIsValid() throws IOException, ParseException
     {
-        observer.notify( "MyClass::~MyClass()", 1 );
+        observer.notify( "MyClass::~MyClass()", 3, 1 );
         replay();
         parse( "test008.h" );
     }
@@ -137,7 +137,7 @@ public class CcnTest extends EasyMockTestCase
 
     public void testSeparateDestructorDefinitionIsValid() throws IOException, ParseException
     {
-        observer.notify( "MyClass::~MyClass()", 1 );
+        observer.notify( "MyClass::~MyClass()", 1, 1 );
         replay();
         parse( "test009.h" );
         parse( "test009.cpp" );
@@ -145,7 +145,7 @@ public class CcnTest extends EasyMockTestCase
 
     public void testOperatorDefinitionIsValid() throws IOException, ParseException
     {
-        observer.notify( "MyClass::operator ==( const MyClass& )", 1 );
+        observer.notify( "MyClass::operator ==( const MyClass& )", 3, 1 );
         replay();
         parse( "test010.h" );
     }
@@ -158,7 +158,7 @@ public class CcnTest extends EasyMockTestCase
 
     public void testSeparateOperatorDefinitionIsValid() throws IOException, ParseException
     {
-        observer.notify( "MyClass::operator ==( const MyClass& )", 1 );
+        observer.notify( "MyClass::operator ==( const MyClass& )", 1, 1 );
         replay();
         parse( "test011.h" );
         parse( "test011.cpp" );
@@ -166,7 +166,7 @@ public class CcnTest extends EasyMockTestCase
 
     public void testConstMethodWithReturnTypeAndParametersDefinitionIsValid() throws IOException, ParseException
     {
-        observer.notify( "MyClass::MyMethod( int, float&, const double& )", 1 );
+        observer.notify( "MyClass::MyMethod( int, float&, const double& )", 3, 1 );
         replay();
         parse( "test012.h" );
     }
@@ -180,7 +180,7 @@ public class CcnTest extends EasyMockTestCase
     public void testConstMethodWithReturnTypeAndParametersSeparateDefinitionIsValid() throws IOException,
             ParseException
     {
-        observer.notify( "MyClass::MyMethod( int, float&, const double& )", 1 );
+        observer.notify( "MyClass::MyMethod( int, float&, const double& )", 1, 1 );
         replay();
         parse( "test013.h" );
         parse( "test013.cpp" );
@@ -188,7 +188,7 @@ public class CcnTest extends EasyMockTestCase
 
     public void testConstructorWithParametersDefinitionIsValid() throws IOException, ParseException
     {
-        observer.notify( "MyClass::MyClass( int, float&, const double )", 1 );
+        observer.notify( "MyClass::MyClass( int, float&, const double )", 3, 1 );
         replay();
         parse( "test014.h" );
     }
@@ -201,7 +201,7 @@ public class CcnTest extends EasyMockTestCase
 
     public void testConstructorWithParametersSeparateDefinitionIsValid() throws IOException, ParseException
     {
-        observer.notify( "MyClass::MyClass( int, float&, const double )", 1 );
+        observer.notify( "MyClass::MyClass( int, float&, const double )", 1, 1 );
         replay();
         parse( "test015.h" );
         parse( "test015.cpp" );
@@ -209,7 +209,7 @@ public class CcnTest extends EasyMockTestCase
 
     public void testConversionOperatorDefinitionIsValid() throws IOException, ParseException
     {
-        observer.notify( "MyClass::operator const char*()", 1 );
+        observer.notify( "MyClass::operator const char*()", 3, 1 );
         replay();
         parse( "test016.h" );
     }
@@ -222,7 +222,7 @@ public class CcnTest extends EasyMockTestCase
 
     public void testConversionOperatorSeparateDefinitionIsValid() throws IOException, ParseException
     {
-        observer.notify( "MyClass::operator char*()", 1 );
+        observer.notify( "MyClass::operator char*()", 1, 1 );
         replay();
         parse( "test017.h" );
         parse( "test017.cpp" );
@@ -230,82 +230,82 @@ public class CcnTest extends EasyMockTestCase
 
     public void testFunctionWithDirectControlFlowHasCcnValueOfOne() throws IOException, ParseException
     {
-        observer.notify( "MyFunction()", 1 );
+        observer.notify( "MyFunction()", 1, 1 );
         replay();
         parse( "test018.cpp" );
     }
 
     public void testFunctionWithIfHasCcnValueOfTwo() throws IOException, ParseException
     {
-        observer.notify( "MyFunction()", 2 );
+        observer.notify( "MyFunction()", 1, 2 );
         replay();
         parse( "test019.cpp" );
     }
 
     public void testFunctionWithForHasCcnValueOfTwo() throws IOException, ParseException
     {
-        observer.notify( "MyFunction()", 2 );
+        observer.notify( "MyFunction()", 1, 2 );
         replay();
         parse( "test020.cpp" );
     }
 
     public void testFunctionWithWhileHasCcnValueOfTwo() throws IOException, ParseException
     {
-        observer.notify( "MyFunction()", 2 );
+        observer.notify( "MyFunction()", 1, 2 );
         replay();
         parse( "test021.cpp" );
     }
 
     public void testFunctionWithSwitchIncrementsOneCcnPerCase() throws IOException, ParseException
     {
-        observer.notify( "MyFunction()", 3 );
+        observer.notify( "MyFunction()", 1, 3 );
         replay();
         parse( "test022.cpp" );
     }
 
     public void testFunctionWithTryCatchIncrementsOneCcnPerCatch() throws IOException, ParseException
     {
-        observer.notify( "MyFunction()", 3 );
+        observer.notify( "MyFunction()", 1, 3 );
         replay();
         parse( "test023.cpp" );
     }
 
     public void testFunctionWithDoWhileHasCcnValueOfTwo() throws IOException, ParseException
     {
-        observer.notify( "MyFunction()", 2 );
+        observer.notify( "MyFunction()", 1, 2 );
         replay();
         parse( "test024.cpp" );
     }
 
     public void testFunctionsWithHiddenIfHaveCcnValueOfTwo() throws IOException, ParseException
     {
-        observer.notify( "MyFunction()", 2 );
-        observer.notify( "MyOtherFunction()", 2 );
-        observer.notify( "MyThirdFunction()", 2 );
-        observer.notify( "MyAssignmentFunction()", 2 );
-        observer.notify( "MyAssignmentOtherFunction()", 2 );
-        observer.notify( "MyAssignmentThirdFunction()", 2 );
+        observer.notify( "MyFunction()", 2, 2 );
+        observer.notify( "MyOtherFunction()", 7, 2 );
+        observer.notify( "MyThirdFunction()", 12, 2 );
+        observer.notify( "MyAssignmentFunction()", 17, 2 );
+        observer.notify( "MyAssignmentOtherFunction()", 22, 2 );
+        observer.notify( "MyAssignmentThirdFunction()", 27, 2 );
         replay();
         parse( "test025.cpp" );
     }
 
     public void testFunctionInNamespaceDefinitionIsValid() throws IOException, ParseException
     {
-        observer.notify( "my_namespace::MyFunction()", 1 );
+        observer.notify( "my_namespace::MyFunction()", 4, 1 );
         replay();
         parse( "test026.cpp" );
     }
 
     public void testFunctionInAnonymousNamespaceDefinitionIsValid() throws IOException, ParseException
     {
-        observer.notify( "anonymous::MyFunction()", 1 );
+        observer.notify( "anonymous::MyFunction()", 4, 1 );
         replay();
         parse( "test027.cpp" );
     }
 
     public void testSeparateDestructorDefinitionInNamespaceIsValid() throws IOException, ParseException
     {
-        observer.notify( "my_namespace::MyClass::~MyClass()", 1 );
+        observer.notify( "my_namespace::MyClass::~MyClass()", 4, 1 );
         replay();
         parse( "test028.h" );
         parse( "test028.cpp" );
@@ -313,7 +313,7 @@ public class CcnTest extends EasyMockTestCase
 
     public void testSeparateDestructorDefinitionUsingNamespaceIsValid() throws IOException, ParseException
     {
-        observer.notify( "my_namespace::MyClass::~MyClass()", 1 );
+        observer.notify( "my_namespace::MyClass::~MyClass()", 3, 1 );
         replay();
         parse( "test029.h" );
         parse( "test029.cpp" );
@@ -321,7 +321,7 @@ public class CcnTest extends EasyMockTestCase
 
     public void testSeparateDestructorDefinitionWithNamespacePrefixIsValid() throws IOException, ParseException
     {
-        observer.notify( "my_namespace::MyClass::~MyClass()", 1 );
+        observer.notify( "my_namespace::MyClass::~MyClass()", 1, 1 );
         replay();
         parse( "test030.h" );
         parse( "test030.cpp" );
@@ -329,7 +329,7 @@ public class CcnTest extends EasyMockTestCase
 
     public void testUnaryTildeOperatorIsNotDestructor() throws IOException, ParseException
     {
-        observer.notify( "MyFunction()", 1 );
+        observer.notify( "MyFunction()", 1, 1 );
         replay();
         parse( "test031.cpp" );
     }
