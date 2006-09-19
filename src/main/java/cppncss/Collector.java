@@ -54,7 +54,7 @@ public class Collector implements FunctionObserver
      * @param name the index measurement name
      * @param threshold the number of measurements to keep
      */
-    public Collector( final String name, int threshold )
+    public Collector( final String name, final int threshold )
     {
         if( name == null )
             throw new IllegalArgumentException( "argument 'name' is null" );

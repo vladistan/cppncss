@@ -231,7 +231,10 @@ public final class Analyzer
     {
         final FileInputStream stream = new FileInputStream( filename );
         final byte content[] = new byte[stream.available()];
-        stream.read( content );
+        final int read = stream.read( content );
+        if( read != content.length )
+            throw new IOException( "error reading content of file '" + filename + "' : could only read " + read
+                    + " bytes out of " + content.length + " available" );
         return new String( content );
     }
 
