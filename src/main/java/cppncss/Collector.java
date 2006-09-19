@@ -84,7 +84,7 @@ public class Collector implements FunctionObserver
      */
     public final void display()
     {
-        System.out.println( "CCN [NCSS]" );
+        System.out.println( "NCSS [CCN]" );
         final Iterator<Measurement> iterator = result.iterator();
         while( iterator.hasNext() )
             System.out.println( iterator.next().toString() );

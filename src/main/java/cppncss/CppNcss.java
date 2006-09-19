@@ -46,8 +46,8 @@ public final class CppNcss
         final Analyzer analyzer = new Analyzer( args );
         final Collector collector = new Collector();
         final VisitorComposite visitor = new VisitorComposite();
-        visitor.register( new FunctionVisitor( new CcnCounter( collector ) ) );
         visitor.register( new FunctionVisitor( new NcssCounter( collector ) ) );
+//        visitor.register( new FunctionVisitor( new CcnCounter( collector ) ) );
         analyzer.accept( visitor );
         collector.display();
     }

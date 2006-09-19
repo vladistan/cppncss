@@ -747,7 +747,7 @@ void ctor_initializer() :
    ":" mem_initializer() ("," mem_initializer())*
 }
 
-void mem_initializer() :
+void mem_initializer() #ConstructorInitializer :
 {}
 {
    mem_initializer_id() "(" [expression_list()] ")"
@@ -895,11 +895,14 @@ void statement_list() :
 void statement() :
 {}
 {
-    LOOKAHEAD(2)
-      labeled_statement()
+//    LOOKAHEAD(";") ";"
+//   |
+//    LOOKAHEAD(labeled_statement()) labeled_statement()
+//   |
+//    LOOKAHEAD(expression()) (expression() ";") #ExpressionStatement
+    LOOKAHEAD(2) labeled_statement()
    |
-    LOOKAHEAD([expression()] ";")
-       [expression()] ";"
+    LOOKAHEAD([expression()] ";") [expression() #ExpressionStatement] ";"
    |
     compound_statement()
    |
@@ -909,7 +912,7 @@ void statement() :
    |
     jump_statement()
    |
-    declaration_statement()
+    declaration_statement() #DeclarationStatement
    |
     try_block()
 }
@@ -949,11 +952,11 @@ void simple_declaration() :
 void labeled_statement() :
 {}
 {
-    <ID> ":" statement()
+    <ID> ":" statement() #LabelStatement
    |
     "case" constant_expression() ":" statement() #CaseStatement
    |
-    "default" ":" statement()
+    "default" ":" statement() #DefaultStatement
 }
 
 void compound_statement() :
@@ -967,9 +970,9 @@ void compound_statement() :
 void selection_statement() :
 {}
 {
-    "if" "(" condition() ")" statement() [LOOKAHEAD(2) "else" statement()] #IfStatement
+    "if" "(" condition() ")" statement() [LOOKAHEAD("else") "else" statement() #ElseStatement] #IfStatement
    |
-    "switch" "(" condition() ")" statement()
+    "switch" "(" condition() ")" statement() #SwitchStatement
 }
 
 void iteration_statement() #IterationStatement :
@@ -990,7 +993,7 @@ void condition() :
    declaration_specifiers() declarator() "=" assignment_expression()
 }
 
-void jump_statement() :
+void jump_statement() #JumpStatement :
 {}
 {
     "goto" <ID> ";"
@@ -1005,14 +1008,13 @@ void jump_statement() :
 void try_block() :
 {}
 {
-   "try" compound_statement() (handler())*
+   "try" compound_statement() (handler())+
 }
 
 void handler() #Handler :
 {}
 {
-   "catch" "(" exception_declaration() ")"
-   compound_statement()
+   "catch" "(" exception_declaration() ")" compound_statement()
 }
 
 void exception_declaration() :

@@ -28,12 +28,25 @@
 
 package cppncss;
 
+import cppast.AstConstructorInitializer;
+import cppast.AstDeclarationStatement;
+import cppast.AstDefaultStatement;
+import cppast.AstElseStatement;
+import cppast.AstExpressionStatement;
+import cppast.AstFunctionBody;
+import cppast.AstHandler;
+import cppast.AstIfStatement;
+import cppast.AstIterationStatement;
+import cppast.AstJumpStatement;
+import cppast.AstLabelStatement;
+import cppast.AstSwitchStatement;
+
 /**
  * Implements a NCSS counter.
  *
  * @author Mathieu Champlon
  */
-public final class NcssCounter extends AbstractCounter implements Counter
+public final class NcssCounter extends AbstractCounter
 {
     /**
      * Create a NCSS counter.
@@ -43,5 +56,113 @@ public final class NcssCounter extends AbstractCounter implements Counter
     public NcssCounter( final FunctionObserver observer )
     {
         super( observer, 0 );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstFunctionBody node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstConstructorInitializer node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstDeclarationStatement node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstExpressionStatement node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstIfStatement node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstElseStatement node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstIterationStatement node, final Object data ) // FIXME homogeneity
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstSwitchStatement node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstJumpStatement node, final Object data ) // FIXME homogeneity
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstHandler node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstLabelStatement node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstDefaultStatement node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
     }
 }

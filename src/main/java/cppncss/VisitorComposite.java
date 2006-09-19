@@ -33,7 +33,12 @@ import java.util.Vector;
 import cppast.AstAssignmentExpression;
 import cppast.AstCaseStatement;
 import cppast.AstConstructorDefinition;
+import cppast.AstConstructorInitializer;
+import cppast.AstDeclarationStatement;
+import cppast.AstDefaultStatement;
 import cppast.AstDestructorDefinition;
+import cppast.AstElseStatement;
+import cppast.AstExpressionStatement;
 import cppast.AstFunctionBody;
 import cppast.AstFunctionDefinition;
 import cppast.AstFunctionName;
@@ -42,8 +47,11 @@ import cppast.AstFunctionParameters;
 import cppast.AstHandler;
 import cppast.AstIfStatement;
 import cppast.AstIterationStatement;
+import cppast.AstJumpStatement;
+import cppast.AstLabelStatement;
 import cppast.AstParameter;
 import cppast.AstParameterType;
+import cppast.AstSwitchStatement;
 import cppast.AstTranslationUnit;
 import cppast.ParserVisitor;
 import cppast.SimpleNode;
@@ -236,6 +244,94 @@ public final class VisitorComposite implements ParserVisitor
      * {@inheritDoc}
      */
     public Object visit( final AstFunctionBody node, final Object data )
+    {
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
+        while( iterator.hasNext() )
+            iterator.next().visit( node, data );
+        return data;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstConstructorInitializer node, final Object data )
+    {
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
+        while( iterator.hasNext() )
+            iterator.next().visit( node, data );
+        return data;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstExpressionStatement node, final Object data )
+    {
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
+        while( iterator.hasNext() )
+            iterator.next().visit( node, data );
+        return data;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstElseStatement node, final Object data )
+    {
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
+        while( iterator.hasNext() )
+            iterator.next().visit( node, data );
+        return data;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstDeclarationStatement node, final Object data )
+    {
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
+        while( iterator.hasNext() )
+            iterator.next().visit( node, data );
+        return data;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstSwitchStatement node, final Object data )
+    {
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
+        while( iterator.hasNext() )
+            iterator.next().visit( node, data );
+        return data;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstJumpStatement node, final Object data )
+    {
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
+        while( iterator.hasNext() )
+            iterator.next().visit( node, data );
+        return data;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstLabelStatement node, final Object data )
+    {
+        final Iterator<ParserVisitor> iterator = visitors.iterator();
+        while( iterator.hasNext() )
+            iterator.next().visit( node, data );
+        return data;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstDefaultStatement node, final Object data )
     {
         final Iterator<ParserVisitor> iterator = visitors.iterator();
         while( iterator.hasNext() )

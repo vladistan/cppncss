@@ -79,7 +79,7 @@ public final class FunctionVisitor extends AbstractVisitor
 
     private Object process( final SimpleNode node, final Object data )
     {
-        node.accept( counter, null );
+        node.accept( counter, data );
         counter.flush( getFunctionName( node ), node.getFirstToken().beginLine );
         return node.accept( this, data );
     }
