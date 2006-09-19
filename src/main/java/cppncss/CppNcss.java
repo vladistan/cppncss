@@ -38,7 +38,7 @@ import java.io.IOException;
 public final class CppNcss
 {
     private static final String INDEX = "NCSS";
-    private static final int THRESHOLD = 100;
+    private static final int THRESHOLD = 30;
 
     private CppNcss()
     {
