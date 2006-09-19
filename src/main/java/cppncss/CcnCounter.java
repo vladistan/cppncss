@@ -42,7 +42,7 @@ import cppast.Token;
  *
  * @author Mathieu Champlon
  */
-public final class CcnCounter extends AbstractCounter implements Counter
+public final class CcnCounter extends AbstractCounter
 {
     /**
      * Create a CCN counter.
@@ -98,7 +98,7 @@ public final class CcnCounter extends AbstractCounter implements Counter
         count( node, Parser.AND );
         count( node, Parser.OR );
         count( node, Parser.QUESTIONMARK );
-        return node.accept( this, data );
+        return node.accept( this, data ); // FIXME probably counts too many
     }
 
     private void count( final SimpleNode node, final int kind )

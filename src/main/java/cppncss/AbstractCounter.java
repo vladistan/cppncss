@@ -35,7 +35,7 @@ import cppast.AbstractVisitor;
  *
  * @author Mathieu Champlon
  */
-public class AbstractCounter extends AbstractVisitor
+public class AbstractCounter extends AbstractVisitor implements Counter
 {
     private final FunctionObserver observer;
     private final int start;
