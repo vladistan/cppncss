@@ -49,7 +49,7 @@ public class Measurement
      * @param line the location of the function
      * @param count the value of the measurement
      */
-    public Measurement( final String function, final int line, int count )
+    public Measurement( final String function, final int line, final int count )
     {
         if( function == null )
             throw new IllegalArgumentException( "argument 'function' is null" );
@@ -92,7 +92,7 @@ public class Measurement
      * @param count the measurement to record
      * @return whether the measurement has been added or not
      */
-    public final boolean update( final String function, final int line, int count )
+    public final boolean update( final String function, final int line, final int count )
     {
         if( !this.function.equals( function ) || this.line != line )
             return false;

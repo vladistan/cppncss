@@ -56,7 +56,7 @@ public class Collector implements FunctionObserver
             insert( function, line, count );
     }
 
-    private boolean update( final String function, final int line, int count )
+    private boolean update( final String function, final int line, final int count )
     {
         final Iterator<Measurement> iterator = result.iterator();
         while( iterator.hasNext() )
@@ -65,7 +65,7 @@ public class Collector implements FunctionObserver
         return false;
     }
 
-    private void insert( final String function, final int line, int count )
+    private void insert( final String function, final int line, final int count )
     {
         result.add( new Measurement( function, line, count ) );
         Collections.sort( result, new Comparator<Measurement>()
