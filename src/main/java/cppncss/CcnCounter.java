@@ -98,7 +98,7 @@ public final class CcnCounter extends AbstractCounter
         count( node, Parser.AND );
         count( node, Parser.OR );
         count( node, Parser.QUESTIONMARK );
-        return node.accept( this, data ); // FIXME probably counts too many
+        return data;
     }
 
     private void count( final SimpleNode node, final int kind )

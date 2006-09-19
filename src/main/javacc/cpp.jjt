@@ -720,7 +720,7 @@ void dtor_definition() #DestructorDefinition :
    dtor_ctor_decl_spec()
    dtor_declarator()
    [pure_specifier()]
-   compound_statement()
+   compound_statement() #FunctionBody
 }
 
 void ctor_definition() #ConstructorDefinition :
@@ -731,7 +731,7 @@ void ctor_definition() #ConstructorDefinition :
 // FIXME check why unnecessary
 //     ";"
 //    |
-     [ctor_initializer()] compound_statement()
+     [ctor_initializer()] compound_statement() #FunctionBody
    )
 }
 

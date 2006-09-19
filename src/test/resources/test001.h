@@ -1,6 +1,0 @@
-class MyClass
-{
-  void MyMethod()
-  {
-  }
-};
