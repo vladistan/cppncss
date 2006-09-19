@@ -67,6 +67,7 @@ public final class FunctionNameExtractor extends AbstractVisitor
                 {
                     case Parser.SCOPE :
                     case Parser.LPARENTHESIS :
+                    case Parser.RPARENTHESIS :
                     case Parser.AMPERSAND :
                     case Parser.STAR :
                     case Parser.LESSTHAN :
