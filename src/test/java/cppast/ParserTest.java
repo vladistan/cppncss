@@ -868,6 +868,11 @@ public class ParserTest extends TestCase
         parse( "template< typename T = void* > void MyFunction();" );
     }
 
+    public void testHexadecimalEscapeSequenceInString() throws ParseException
+    {
+        parse( "char* str = \"\\\\x02\\\\x03\";" );
+    }
+
     public void testTMP() throws IOException, ParseException
     {
         final Parser parser = new Parser( new StringReader( "" ) );
