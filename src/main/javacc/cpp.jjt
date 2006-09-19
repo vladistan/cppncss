@@ -821,7 +821,7 @@ void direct_declarator() :
    (
      qualified_id()
     |
-     "(" declarator() ")"
+     "(" #FunctionParameterTypeQualifier declarator() ")" #FunctionParameterTypeQualifier
    )
    [LOOKAHEAD(declarator_suffixes()) declarator_suffixes()]
 }
@@ -831,7 +831,7 @@ void declarator_suffixes() :
 {
     function_parameters() cv_qualifier_seq() [exception_spec()]
    |
-    ("[" [constant_expression()] "]")+
+    ("[" [constant_expression()] "]")+ #FunctionParameterTypeQualifier
 }
 
 void abstract_declarator() #FunctionParameterTypeQualifier :

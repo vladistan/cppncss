@@ -136,8 +136,12 @@ public final class FunctionNameExtractor extends AbstractVisitor
             public String decorate( final Token token )
             {
                 final String value = token.image;
-                if( token.kind == Parser.CONST )
-                    return " " + value;
+                switch( token.kind )
+                {
+                    case Parser.CONST :
+                    case Parser.LPARENTHESIS :
+                        return " " + value;
+                }
                 return value;
             }
         } );
