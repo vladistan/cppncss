@@ -28,6 +28,7 @@
 
 package cppncss;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -44,7 +45,24 @@ import java.util.Vector;
  */
 public final class Collector implements FunctionObserver, FileObserver
 {
+    /**
+     * @author Mathieu Champlon
+     */
+    private static final class MeasurementComparator implements Comparator<Measurement>, Serializable
+    {
+        private static final long serialVersionUID = 3425352873656018004L;
+
+        /**
+         * {@inheritDoc}
+         */
+        public int compare( final Measurement m1, final Measurement m2 )
+        {
+            return m1.compare( m2 );
+        }
+    }
+
     private final Vector<Measurement> result = new Vector<Measurement>();
+    private final Comparator<Measurement> comparator = new MeasurementComparator();
     private final String index;
     private final int threshold;
     private String filename;
@@ -88,13 +106,7 @@ public final class Collector implements FunctionObserver, FileObserver
     private void insert( final String function, final int line, final int count )
     {
         result.add( new Measurement( function, filename, line, count ) );
-        Collections.sort( result, new Comparator<Measurement>()
-        {
-            public int compare( final Measurement m1, final Measurement m2 )
-            {
-                return m1.compare( m2 );
-            }
-        } );
+        Collections.sort( result, comparator );
         if( result.size() > threshold )
             result.remove( result.size() - 1 );
     }

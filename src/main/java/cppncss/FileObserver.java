@@ -36,7 +36,7 @@ package cppncss;
 public interface FileObserver
 {
     /**
-     * Specify the file being processed
+     * Specify the file being processed.
      *
      * @param filename the name of the fle
      */
