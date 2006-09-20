@@ -52,14 +52,6 @@ import cppast.Token;
  */
 public final class Analyzer
 {
-    private final boolean debug;
-    private final boolean verbose;
-    private final boolean recursive;
-    private final boolean force;
-    private final List<String> files;
-    private final PreProcessor processor;
-    private Parser parser;
-    private final FileObserver observer;
     private static final String[] DECLARATIONS =
     {
             ".h", ".hpp"
@@ -72,6 +64,16 @@ public final class Analyzer
     {
             ".svn", "CVS"
     };
+    private static final int ERROR_LINES_DISPLAYED = 3;
+    private static final double MS_PER_S = 1000.0;
+    private final boolean debug;
+    private final boolean verbose;
+    private final boolean recursive;
+    private final boolean force;
+    private final List<String> files;
+    private final PreProcessor processor;
+    private Parser parser;
+    private final FileObserver observer;
 
     /**
      * Create an analyzer.
@@ -162,13 +164,14 @@ public final class Analyzer
      * Because of memory consumption the trees cannot be cached therefore this method must probably be called only once.
      *
      * @param visitor the visitor
+     * @throws IOException an exception occurs reading a file
      */
     public void accept( final ParserVisitor visitor ) throws IOException
     {
         final long start = System.currentTimeMillis();
         final int parsed = process( visitor );
         final long end = System.currentTimeMillis();
-        final double time = (end - start) / 1000.0;
+        final double time = (end - start) / MS_PER_S;
         System.out.println( "Successfully parsed " + parsed + " / " + files.size() + " files in " + time + " s" );
     }
 
@@ -235,7 +238,7 @@ public final class Analyzer
     private String read( final String filename ) throws IOException
     {
         final FileInputStream stream = new FileInputStream( filename );
-        final byte content[] = new byte[stream.available()];
+        final byte[] content = new byte[stream.available()];
         final int read = stream.read( content );
         if( read != content.length )
             throw new IOException( "error reading content of file '" + filename + "' : could only read " + read
@@ -254,7 +257,7 @@ public final class Analyzer
     private void display( final ParseException exception, final String filename ) throws IOException
     {
         final int start = getToken( exception ).beginLine;
-        displayLocation( start, 3, filename );
+        displayLocation( start, ERROR_LINES_DISPLAYED, filename );
         displayCursor( getToken( exception ).beginColumn );
     }
 

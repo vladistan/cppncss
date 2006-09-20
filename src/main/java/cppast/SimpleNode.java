@@ -28,9 +28,8 @@
 
 package cppast;
 
-
 /**
- * Provides a custom simple node JavaCC implementation.
+ * Provides a custom JavaCC base node implementation.
  *
  * @author Mathieu Champlon
  */
@@ -39,19 +38,33 @@ public abstract class SimpleNode implements Node
     private Node parent;
     private Node[] children = new Node[0];
     private final int id;
-    private Parser parser;
+    private final Parser parser;
     private Token first, last;
     private Scope scope;
 
-    public SimpleNode( final int i )
+    /**
+     * Create a node.
+     * <p>
+     * SHOULD NEVER BE CALLED !
+     *
+     * @param id the node identifier
+     */
+    public SimpleNode( final int id )
     {
-        id = i;
+        throw new IllegalStateException(
+                "parsing without a parser should never happen : set JJTree option NODE_USES_PARSER to 'true'" );
     }
 
-    public SimpleNode( final Parser p, final int i )
+    /**
+     * Create a node.
+     *
+     * @param parser the parser
+     * @param id the node identifier
+     */
+    public SimpleNode( final Parser parser, final int id )
     {
-        this( i );
-        parser = p;
+        this.id = id;
+        this.parser = parser;
     }
 
     /**
@@ -125,7 +138,7 @@ public abstract class SimpleNode implements Node
     {
         if( index >= children.length )
         {
-            final Node c[] = new Node[index + 1];
+            final Node[] c = new Node[index + 1];
             System.arraycopy( children, 0, c, 0, children.length );
             children = c;
         }
@@ -163,28 +176,11 @@ public abstract class SimpleNode implements Node
         return result;
     }
 
-    /*
-     * You can override these two methods in subclasses of SimpleNode to customize the way the node appears when the
-     * tree is dumped. If your output uses more than one line you should override toString(String), otherwise overriding
-     * toString() is probably all you need to do.
+    /**
+     * {@inheritDoc}
      */
-    public String toString()
+    public final String toString()
     {
         return ParserTreeConstants.jjtNodeName[id];
-    }
-
-    public String toString( final String prefix )
-    {
-        return prefix + toString();
-    }
-
-    /*
-     * Override this method if you want to customize how the node dumps out its children.
-     */
-    public void dump( final String prefix )
-    {
-        System.out.println( toString( prefix ) );
-        for( int index = 0; index < children.length; ++index )
-            ((SimpleNode)children[index]).dump( prefix + " " );
     }
 }

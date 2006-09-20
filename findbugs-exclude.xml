@@ -4,4 +4,6 @@
   <Match class="cppast.ParserTokenManager" />
   <Match class="cppast.SimpleCharStream" />
   <Match class="cppast.TokenMgrError" />
+  <Match class="cppast.ParserConstants" />
+  <Match class="cppast.ParserTreeConstants" />
 </FindBugsFilter>
