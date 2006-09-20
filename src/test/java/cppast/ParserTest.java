@@ -871,9 +871,14 @@ public class ParserTest extends TestCase
         parse( "char* str = \"\\x02\\x03\";" );
     }
 
-    public void testBackslashAtEndOfLineIsIgnored() throws ParseException
+    public void testBackslashEndOfLineIsIgnored() throws ParseException
     {
         parse( "int i\\\n; int j\\\r;" );
+    }
+
+    public void testBackslashEndOfLineInStringIsIgnored() throws ParseException
+    {
+        parse( "char* str = \"abc\\\ndef\";" );
     }
 
     public void testTMP() throws IOException, ParseException
