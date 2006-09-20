@@ -28,33 +28,15 @@
 
 package cppncss;
 
-import java.io.IOException;
-
 /**
- * Provides code measurement for C++.
- *
  * @author Mathieu Champlon
  */
-public final class CppNcss
+public interface MeasurementVisitor
 {
-    private static final String INDEX = "NCSS";
-    private static final int THRESHOLD = 30;
-
-    private CppNcss()
-    {
-    }
-
-    public static void main( final String[] args ) throws IOException
-    {
-        final Collector collector = new Collector( INDEX, THRESHOLD );
-        final Analyzer analyzer = new Analyzer( args, collector );
-        final VisitorComposite visitor = new VisitorComposite();
-        visitor.register( new FunctionVisitor( new NcssCounter( collector ) ) ); // FIXME first counter must be INDEX
-        visitor.register( new FunctionVisitor( new CcnCounter( collector ) ) );
-        analyzer.accept( visitor );
-        final ConsoleLogger logger = new ConsoleLogger();
-        logger.register( "NCSS" ); // FIXME registration order must be the same as for counters
-        logger.register( "CCN" );
-        collector.accept( logger );
-    }
+    /**
+     * Visit a measurement.
+     * @param count the result of the measurement
+     * @param function the name of the measured function
+     */
+    void visit( int count, String function );
 }

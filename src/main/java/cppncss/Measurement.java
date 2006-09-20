@@ -35,7 +35,7 @@ import java.util.Vector;
  *
  * @author Mathieu Champlon
  */
-public class Measurement
+public final class Measurement
 {
     private final String function;
     private final int line;
@@ -72,23 +72,15 @@ public class Measurement
      * @param other the compared measurement
      * @return the difference between the other measurement value and the value of this measurement
      */
-    public final int compare( final Measurement other )
+    public int compare( final Measurement other )
     {
         return other.count - count;
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public final String toString()
-    {
-        return count + " " + counts.toString() + " " + function + " at " + filename + ":" + line;
-    }
-
-    /**
      * Add a measurement value to the recorder values.
      * <p>
-     * If the function name does not match the name of the measurement the value is not recorded.
+     * If the function name does not match the measurement the value is not recorded.
      *
      * @param function the function name
      * @param filename the file name of the function
@@ -96,11 +88,23 @@ public class Measurement
      * @param count the measurement to record
      * @return whether the measurement has been added or not
      */
-    public final boolean update( final String function, final String filename, final int line, final int count )
+    public boolean update( final String function, final String filename, final int line, final int count )
     {
         if( !this.function.equals( function ) || this.filename != filename || this.line != line )
             return false;
         counts.add( count );
         return true;
+    }
+
+    /**
+     * Accept a visitor.
+     *
+     * @param visitor the visitor
+     */
+    public void accept( final MeasurementVisitor visitor )
+    {
+        visitor.visit( count, function + " at " + filename + ":" + line );
+        for( int index = 0; index < counts.size(); ++index )
+            visitor.visit( counts.get( index ), function + " at " + filename + ":" + line );
     }
 }

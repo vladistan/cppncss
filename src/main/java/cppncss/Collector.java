@@ -112,14 +112,15 @@ public final class Collector implements FunctionObserver, FileObserver
     }
 
     /**
-     * Display results to <em>System.out</em>.
+     * Accept a visitor.
+     *
+     * @param visitor the visitor
      */
-    public void display()
+    public void accept( final MeasurementVisitor visitor )
     {
-        System.out.println( "NCSS [CCN]" );
         final Iterator<Measurement> iterator = result.iterator();
         while( iterator.hasNext() )
-            System.out.println( iterator.next().toString() );
+            iterator.next().accept( visitor );
     }
 
     /**
