@@ -77,6 +77,7 @@ public final class Analyzer
      * Create an analyzer.
      *
      * @param args the program arguments
+     * @param observer a file observer
      */
     public Analyzer( final String[] args, final FileObserver observer )
     {
