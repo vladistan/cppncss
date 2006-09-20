@@ -86,12 +86,19 @@ public final class ConsoleEventHandler implements EventHandler
     /**
      * {@inheritDoc}
      */
-    public void display( final BufferedReader reader, final int line, final int column ) throws IOException
+    public void display( final BufferedReader reader, final int line, final int column )
     {
-        if( verbose )
+        try
         {
-            displayLocation( line, ERROR_LINES_DISPLAYED, reader );
-            displayCursor( column );
+            if( verbose )
+            {
+                displayLocation( line, ERROR_LINES_DISPLAYED, reader );
+                displayCursor( column );
+            }
+        }
+        catch( IOException e )
+        {
+            error( "internal", e, "while trying to display error location" );
         }
     }
 

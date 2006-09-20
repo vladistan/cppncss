@@ -31,7 +31,6 @@ package cppncss;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.Reader;
@@ -198,10 +197,6 @@ public final class Analyzer
         {
             parse( visitor, filename );
             return true;
-        }
-        catch( FileNotFoundException exception )
-        {
-            handler.error( filename, exception, "File not found" );
         }
         catch( ParseException exception )
         {

@@ -29,7 +29,6 @@
 package cppncss;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 
 /**
  * @author Mathieu Champlon
@@ -64,7 +63,6 @@ public interface EventHandler extends FileObserver
      * @param reader a reader
      * @param line the line number
      * @param column the column offset
-     * @throws IOException crap !
      */
-    void display( BufferedReader reader, int line, int column ) throws IOException; // FIXME crappy
+    void display( BufferedReader reader, int line, int column );
 }
