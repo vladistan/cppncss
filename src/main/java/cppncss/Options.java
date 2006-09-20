@@ -47,7 +47,7 @@ public class Options
      */
     public Options( final String[] args )
     {
-        this.args = args;
+        this.args = args.clone();
     }
 
     /**
