@@ -59,6 +59,7 @@ public final class Analyzer
     private final List<String> files;
     private final PreProcessor processor;
     private Parser parser;
+    private final FileObserver observer;
     private static final String[] DECLARATIONS =
     {
             ".h", ".hpp"
@@ -77,7 +78,7 @@ public final class Analyzer
      *
      * @param args the program arguments
      */
-    public Analyzer( final String[] args )
+    public Analyzer( final String[] args, final FileObserver observer )
     {
         final Options options = new Options( args );
         debug = options.hasOption( "d" );
@@ -92,6 +93,7 @@ public final class Analyzer
             processor.addMacro( names.get( i ), values.get( i ) );
             processor.addDefine( names.get( i ), values.get( i ) );
         }
+        this.observer = observer;
         files = sort( resolve( options.getArgList() ) );
     }
 
@@ -214,6 +216,8 @@ public final class Analyzer
 
     private void parse( final ParserVisitor visitor, final String filename ) throws ParseException, IOException
     {
+        if( observer != null )
+            observer.changed( filename );
         final ParserTokenManager manager = new TokenManagerAdapter( open( filename ) );
         if( parser == null )
             parser = new Parser( manager );

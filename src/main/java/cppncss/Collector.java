@@ -42,34 +42,35 @@ import java.util.Vector;
  *
  * @author Mathieu Champlon
  */
-public class Collector implements FunctionObserver
+public final class Collector implements FunctionObserver, FileObserver
 {
     private final Vector<Measurement> result = new Vector<Measurement>();
-    private final String name;
+    private final String index;
     private final int threshold;
+    private String filename;
 
     /**
      * Create a collector indexed by a given measurement name.
      *
-     * @param name the index measurement name
+     * @param index the index measurement name
      * @param threshold the number of measurements to keep
      */
-    public Collector( final String name, final int threshold )
+    public Collector( final String index, final int threshold )
     {
-        if( name == null )
-            throw new IllegalArgumentException( "argument 'name' is null" );
+        if( index == null )
+            throw new IllegalArgumentException( "argument 'index' is null" );
         if( threshold <= 0 )
             throw new IllegalArgumentException( "threshold is <= 0" );
-        this.name = name;
+        this.index = index;
         this.threshold = threshold;
     }
 
     /**
      * {@inheritDoc}
      */
-    public final void notify( final String name, final String function, final int line, final int count )
+    public void notify( final String name, final String function, final int line, final int count )
     {
-        if( this.name.equals( name ) )
+        if( this.index.equals( name ) )
             insert( function, line, count );
         else
             update( function, line, count );
@@ -79,14 +80,14 @@ public class Collector implements FunctionObserver
     {
         final Iterator<Measurement> iterator = result.iterator();
         while( iterator.hasNext() )
-            if( iterator.next().update( function, line, count ) )
+            if( iterator.next().update( function, filename, line, count ) )
                 return true;
         return false;
     }
 
     private void insert( final String function, final int line, final int count )
     {
-        result.add( new Measurement( function, line, count ) );
+        result.add( new Measurement( function, filename, line, count ) );
         Collections.sort( result, new Comparator<Measurement>()
         {
             public int compare( final Measurement m1, final Measurement m2 )
@@ -101,11 +102,19 @@ public class Collector implements FunctionObserver
     /**
      * Display results to <em>System.out</em>.
      */
-    public final void display()
+    public void display()
     {
         System.out.println( "NCSS [CCN]" );
         final Iterator<Measurement> iterator = result.iterator();
         while( iterator.hasNext() )
             System.out.println( iterator.next().toString() );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void changed( final String filename )
+    {
+        this.filename = filename;
     }
 }

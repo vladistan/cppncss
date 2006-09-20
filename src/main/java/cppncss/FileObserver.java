@@ -28,30 +28,12 @@
 
 package cppncss;
 
-import java.io.IOException;
-
 /**
- * Provides code measurement for C++.
+ * Provides a means to be notified about the file being processed.
  *
  * @author Mathieu Champlon
  */
-public final class CppNcss
+public interface FileObserver
 {
-    private static final String INDEX = "NCSS";
-    private static final int THRESHOLD = 30;
-
-    private CppNcss()
-    {
-    }
-
-    public static void main( final String[] args ) throws IOException
-    {
-        final Collector collector = new Collector( INDEX, THRESHOLD );
-        final Analyzer analyzer = new Analyzer( args, collector );
-        final VisitorComposite visitor = new VisitorComposite();
-        visitor.register( new FunctionVisitor( new NcssCounter( collector ) ) ); // FIXME first counter must be INDEX
-        visitor.register( new FunctionVisitor( new CcnCounter( collector ) ) );
-        analyzer.accept( visitor );
-        collector.display();
-    }
+    void changed( String filename );
 }

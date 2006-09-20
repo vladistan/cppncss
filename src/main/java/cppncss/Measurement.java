@@ -41,15 +41,17 @@ public class Measurement
     private final int line;
     private final int count;
     private final Vector<Integer> counts;
+    private final String filename;
 
     /**
      * Create a measurement.
      *
      * @param function the name of the function
+     * @param filename the file name of the function
      * @param line the location of the function
      * @param count the value of the measurement
      */
-    public Measurement( final String function, final int line, final int count )
+    public Measurement( final String function, final String filename, final int line, final int count )
     {
         if( function == null )
             throw new IllegalArgumentException( "argument 'function' is null" );
@@ -59,6 +61,7 @@ public class Measurement
             throw new IllegalArgumentException( "argument 'count' is < 0" );
         this.function = function;
         this.line = line;
+        this.filename = filename;
         this.count = count;
         counts = new Vector<Integer>();
     }
@@ -88,13 +91,14 @@ public class Measurement
      * If the function name does not match the name of the measurement the value is not recorded.
      *
      * @param function the function name
+     * @param filename the file name of the function
      * @param line the location of the function
      * @param count the measurement to record
      * @return whether the measurement has been added or not
      */
-    public final boolean update( final String function, final int line, final int count )
+    public final boolean update( final String function, final String filename, final int line, final int count )
     {
-        if( !this.function.equals( function ) || this.line != line )
+        if( !this.function.equals( function ) || this.filename != filename || this.line != line )
             return false;
         counts.add( count );
         return true;
