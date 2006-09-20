@@ -28,41 +28,43 @@
 
 package cppncss;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 
 /**
- * Provides code measurement for C++.
- *
  * @author Mathieu Champlon
  */
-public final class CppNcss
+public interface EventHandler extends FileObserver
 {
-    private static final String INDEX = "NCSS";
-    private static final int THRESHOLD = 30;
+    /**
+     * Notify a start event.
+     */
+    void started();
 
-    private CppNcss()
-    {
-    }
+    /**
+     * Notify an end event.
+     *
+     * @param parsed number of files parsed
+     * @param total total number of files
+     */
+    void finished( int parsed, int total );
 
-    public static void main( final String[] args ) throws IOException
-    {
-        final Collector collector = new Collector( INDEX, THRESHOLD );
-        final VisitorComposite visitor = new VisitorComposite();
-        visitor.register( new FunctionVisitor( new NcssCounter( collector ) ) ); // FIXME first counter must be INDEX
-        visitor.register( new FunctionVisitor( new CcnCounter( collector ) ) );
-        final Analyzer analyzer = createAnalyzer( args, collector );
-        final ConsoleLogger logger = new ConsoleLogger();
-        logger.register( "NCSS" ); // FIXME registration order must be the same as for counters
-        logger.register( "CCN" );
-        analyzer.accept( visitor );
-        collector.accept( logger );
-    }
+    /**
+     * Notify an error.
+     *
+     * @param filename the location of the error
+     * @param throwable the error
+     * @param reason the description of the error
+     */
+    void error( String filename, Throwable throwable, String reason );
 
-    private static Analyzer createAnalyzer( final String[] args, final FileObserver observer )
-    {
-        final Options options = new Options( args );
-        final boolean debug = options.hasOption( "d" );
-        final boolean verbose = debug || options.hasOption( "v" );
-        return new Analyzer( options, observer, new ConsoleEventHandler( debug, verbose ) );
-    }
+    /**
+     * Display a diagnostic.
+     *
+     * @param reader a reader
+     * @param line the line number
+     * @param column the column offset
+     * @throws IOException crap !
+     */
+    void display( BufferedReader reader, int line, int column ) throws IOException; // FIXME crappy
 }

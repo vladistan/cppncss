@@ -64,28 +64,29 @@ public final class Analyzer
     {
             ".svn", "CVS"
     };
-    private static final int ERROR_LINES_DISPLAYED = 3;
-    private static final double MS_PER_S = 1000.0;
-    private final boolean debug;
-    private final boolean verbose;
     private final boolean recursive;
     private final boolean force;
     private final List<String> files;
     private final PreProcessor processor;
-    private Parser parser;
     private final FileObserver observer;
+    private final EventHandler handler;
+    private Parser parser;
 
     /**
      * Create an analyzer.
      *
-     * @param args the program arguments
+     * @param options the options
      * @param observer a file observer
+     * @param handler an event handler
      */
-    public Analyzer( final String[] args, final FileObserver observer )
+    public Analyzer( final Options options, final FileObserver observer, final EventHandler handler )
     {
-        final Options options = new Options( args );
-        debug = options.hasOption( "d" );
-        verbose = debug || options.hasOption( "v" );
+        if( options == null )
+            throw new IllegalArgumentException( "argument 'options' is null" );
+        if( observer == null )
+            throw new IllegalArgumentException( "argument 'observer' is null" );
+        if( handler == null )
+            throw new IllegalArgumentException( "argument 'handler' is null" );
         recursive = options.hasOption( "r" );
         force = options.hasOption( "f" );
         processor = new PreProcessor();
@@ -97,6 +98,7 @@ public final class Analyzer
             processor.addDefine( names.get( i ), values.get( i ) );
         }
         this.observer = observer;
+        this.handler = handler;
         files = sort( resolve( options.getArgList() ) );
     }
 
@@ -168,11 +170,9 @@ public final class Analyzer
      */
     public void accept( final ParserVisitor visitor ) throws IOException
     {
-        final long start = System.currentTimeMillis();
+        handler.started();
         final int parsed = process( visitor );
-        final long end = System.currentTimeMillis();
-        final double time = (end - start) / MS_PER_S;
-        System.out.println( "Successfully parsed " + parsed + " / " + files.size() + " files in " + time + " s" );
+        handler.finished( parsed, files.size() );
     }
 
     private int process( final ParserVisitor visitor ) throws IOException
@@ -182,8 +182,8 @@ public final class Analyzer
         while( iterator.hasNext() )
         {
             final String filename = iterator.next();
-            if( debug )
-                System.out.println( "Parsing " + filename );
+            observer.changed( filename );
+            handler.changed( filename );
             if( process( visitor, filename ) )
                 ++parsed;
             else if( !force )
@@ -201,27 +201,32 @@ public final class Analyzer
         }
         catch( FileNotFoundException exception )
         {
-            error( filename, exception, "File not found" );
+            handler.error( filename, exception, "File not found" );
         }
         catch( ParseException exception )
         {
-            final String message = "Parse error (line " + getToken( exception ).endLine + ", column "
-                    + getToken( exception ).endColumn + ")";
-            error( filename, exception, message );
-            if( verbose )
-                display( exception, filename );
+            final Token token = getToken( exception );
+            final String message = "Parse error (line " + token.endLine + ", column " + token.endColumn + ")";
+            handler.error( filename, exception, message );
+            handler.display( new BufferedReader( open( filename ) ), token.beginLine, token.beginColumn );
         }
         catch( Throwable throwable )
         {
-            error( filename, throwable, throwable.getMessage() );
+            handler.error( filename, throwable, throwable.getMessage() );
         }
         return false;
     }
 
+    private Token getToken( final ParseException exception )
+    {
+        Token token = exception.currentToken.next;
+        while( token.next != null )
+            token = token.next;
+        return token;
+    }
+
     private void parse( final ParserVisitor visitor, final String filename ) throws ParseException, IOException
     {
-        if( observer != null )
-            observer.changed( filename );
         final ParserTokenManager manager = new TokenManagerAdapter( open( filename ) );
         if( parser == null )
             parser = new Parser( manager );
@@ -244,44 +249,5 @@ public final class Analyzer
             throw new IOException( "error reading content of file '" + filename + "' : could only read " + read
                     + " bytes out of " + content.length + " available" );
         return new String( content );
-    }
-
-    private void error( final String filename, final Throwable throwable, final String reason )
-    {
-        if( debug )
-            throwable.printStackTrace();
-        if( verbose )
-            System.out.println( "Skipping " + filename + " : " + reason );
-    }
-
-    private void display( final ParseException exception, final String filename ) throws IOException
-    {
-        final int start = getToken( exception ).beginLine;
-        displayLocation( start, ERROR_LINES_DISPLAYED, filename );
-        displayCursor( getToken( exception ).beginColumn );
-    }
-
-    private Token getToken( final ParseException exception )
-    {
-        Token token = exception.currentToken.next;
-        while( token.next != null )
-            token = token.next;
-        return token;
-    }
-
-    private void displayCursor( final int column )
-    {
-        for( int i = 0; i < column - 1; ++i )
-            System.out.print( ' ' );
-        System.out.println( '^' );
-    }
-
-    private void displayLocation( final int start, final int lines, final String filename ) throws IOException
-    {
-        final BufferedReader reader = new BufferedReader( open( filename ) );
-        for( int i = 0; i < start - lines; i++ )
-            reader.readLine();
-        for( int i = 0; i < lines; ++i )
-            System.out.println( reader.readLine() );
     }
 }
