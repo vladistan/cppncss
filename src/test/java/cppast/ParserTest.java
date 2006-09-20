@@ -34,8 +34,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
 import junit.framework.TestCase;
-import cppast.ParseException;
-import cppast.Parser;
 
 /**
  * @author Mathieu Champlon
@@ -870,7 +868,12 @@ public class ParserTest extends TestCase
 
     public void testHexadecimalEscapeSequenceInString() throws ParseException
     {
-        parse( "char* str = \"\\\\x02\\\\x03\";" );
+        parse( "char* str = \"\\x02\\x03\";" );
+    }
+
+    public void testBackslashAtEndOfLineIsIgnored() throws ParseException
+    {
+        parse( "int i\\\n; int j\\\r;" );
     }
 
     public void testTMP() throws IOException, ParseException
