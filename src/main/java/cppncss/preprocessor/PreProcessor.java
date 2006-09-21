@@ -29,7 +29,6 @@
 package cppncss.preprocessor;
 
 import java.io.Reader;
-import java.util.Iterator;
 import java.util.Stack;
 import java.util.Vector;
 import cppast.ParserTokenManager;
@@ -38,7 +37,7 @@ import cppast.Token;
 
 /**
  * Adapts the two token management systems.
- * 
+ *
  * @author Mathieu Champlon
  */
 public final class PreProcessor extends ParserTokenManager implements TokenProvider
@@ -56,7 +55,7 @@ public final class PreProcessor extends ParserTokenManager implements TokenProvi
 
     /**
      * Set a new input.
-     * 
+     *
      * @param reader the input reader
      */
     public void reset( final Reader reader )
@@ -88,16 +87,15 @@ public final class PreProcessor extends ParserTokenManager implements TokenProvi
 
     private boolean filter( final Token token )
     {
-        final Iterator<TokenFilter> iterator = filters.iterator();
-        while( iterator.hasNext() )
-            if( iterator.next().process( token ) )
+        for( TokenFilter filter : filters )
+            if( filter.process( token ) )
                 return true;
         return false;
     }
 
     /**
      * Add a define.
-     * 
+     *
      * @param name the name of the symbol
      * @param value the value of the symbol
      */
@@ -108,7 +106,7 @@ public final class PreProcessor extends ParserTokenManager implements TokenProvi
 
     /**
      * Add a macro.
-     * 
+     *
      * @param name the name of the symbol
      * @param value the value of the symbol
      */
@@ -119,12 +117,9 @@ public final class PreProcessor extends ParserTokenManager implements TokenProvi
 
     private void register( final String name, final TokenFilter macro )
     {
-        final Iterator<TokenFilter> iterator = filters.iterator();
-        while( iterator.hasNext() )
-        {
-            if( iterator.next().matches( name ) )
+        for( TokenFilter filter : filters )
+            if( filter.matches( name ) )
                 throw new RuntimeException( "macro redefinition '" + name + "'" );
-        }
         filters.add( macro );
     }
 }

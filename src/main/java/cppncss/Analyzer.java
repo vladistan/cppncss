@@ -35,7 +35,6 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 import cppast.ParseException;
@@ -71,7 +70,7 @@ public final class Analyzer
 
     /**
      * Create an analyzer.
-     * 
+     *
      * @param options the options
      * @param observer a file observer
      * @param handler an event handler
@@ -108,9 +107,8 @@ public final class Analyzer
     private List<String> resolve( final List<String> inputs )
     {
         final Vector<String> result = new Vector<String>();
-        final Iterator<String> iterator = inputs.iterator();
-        while( iterator.hasNext() )
-            resolve( result, iterator.next(), true );
+        for( String input : inputs )
+            resolve( result, input, true );
         return result;
     }
 
@@ -167,7 +165,7 @@ public final class Analyzer
      * Parse the files and visit the abstract syntax trees.
      * <p>
      * Because of memory consumption the trees cannot be cached therefore this method must probably be called only once.
-     * 
+     *
      * @param visitor the visitor
      */
     public void accept( final ParserVisitor visitor )
@@ -179,11 +177,9 @@ public final class Analyzer
 
     private int process( final ParserVisitor visitor )
     {
-        final Iterator<String> iterator = files.iterator();
         int parsed = 0;
-        while( iterator.hasNext() )
+        for( String filename : files )
         {
-            final String filename = iterator.next();
             observer.changed( filename );
             handler.changed( filename );
             if( process( visitor, filename ) )

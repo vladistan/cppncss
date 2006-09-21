@@ -28,7 +28,6 @@
 
 package cppncss;
 
-import java.util.Iterator;
 import java.util.Vector;
 import cppast.AstAssignmentExpression;
 import cppast.AstCaseStatement;
@@ -58,7 +57,7 @@ import cppast.SimpleNode;
 
 /**
  * Provides a composite of visitors.
- * 
+ *
  * @author Mathieu Champlon
  */
 public final class VisitorComposite implements ParserVisitor
@@ -67,7 +66,7 @@ public final class VisitorComposite implements ParserVisitor
 
     /**
      * Add a visitor.
-     * 
+     *
      * @param visitor the visitor
      */
     public void register( final ParserVisitor visitor )
@@ -80,9 +79,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final SimpleNode node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -91,9 +89,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstTranslationUnit node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -102,9 +99,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstFunctionDefinition node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -113,9 +109,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstFunctionName node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -124,9 +119,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstDestructorDefinition node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -135,9 +129,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstConstructorDefinition node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -146,9 +139,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstCaseStatement node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -157,9 +149,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstIfStatement node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -168,9 +159,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstIterationStatement node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -179,9 +169,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstHandler node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -190,9 +179,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstAssignmentExpression node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -201,9 +189,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstFunctionParameters node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -212,9 +199,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstParameter node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -223,9 +209,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstParameterType node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -234,9 +219,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstFunctionParameterTypeQualifier node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -245,9 +229,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstFunctionBody node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -256,9 +239,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstConstructorInitializer node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -267,9 +249,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstExpressionStatement node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -278,9 +259,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstElseStatement node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -289,9 +269,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstDeclarationStatement node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -300,9 +279,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstSwitchStatement node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -311,9 +289,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstJumpStatement node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -322,9 +299,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstLabelStatement node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 
@@ -333,9 +309,8 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstDefaultStatement node, final Object data )
     {
-        final Iterator<ParserVisitor> iterator = visitors.iterator();
-        while( iterator.hasNext() )
-            iterator.next().visit( node, data );
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
         return data;
     }
 }

@@ -31,7 +31,6 @@ package cppncss;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.Vector;
 import cppncss.counter.CounterObserver;
 
@@ -97,9 +96,8 @@ public final class Collector implements CounterObserver, FileObserver
 
     private boolean update( final String item, final int line, final int count )
     {
-        final Iterator<Measurement> iterator = result.iterator();
-        while( iterator.hasNext() )
-            if( iterator.next().update( item, filename, line, count ) )
+        for( Measurement measurement : result )
+            if( measurement.update( item, filename, line, count ) )
                 return true;
         return false;
     }
@@ -119,9 +117,8 @@ public final class Collector implements CounterObserver, FileObserver
      */
     public void accept( final MeasurementVisitor visitor )
     {
-        final Iterator<Measurement> iterator = result.iterator();
-        while( iterator.hasNext() )
-            iterator.next().accept( visitor );
+        for( Measurement measurement : result )
+            measurement.accept( visitor );
     }
 
     /**

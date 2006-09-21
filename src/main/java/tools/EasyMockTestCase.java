@@ -28,7 +28,6 @@
 
 package tools;
 
-import java.util.Iterator;
 import java.util.Vector;
 import junit.framework.TestCase;
 import org.easymock.classextension.EasyMock;
@@ -122,9 +121,8 @@ public class EasyMockTestCase extends TestCase
     protected final void reset()
     {
         mustForceReplay = true;
-        final Iterator i = mocks.iterator();
-        while( i.hasNext() )
-            EasyMock.reset( i.next() );
+        for( Object mock : mocks )
+            EasyMock.reset( mock );
     }
 
     /**
@@ -133,9 +131,8 @@ public class EasyMockTestCase extends TestCase
     protected final void replay()
     {
         mustForceReplay = false;
-        final Iterator i = mocks.iterator();
-        while( i.hasNext() )
-            EasyMock.replay( i.next() );
+        for( Object mock : mocks )
+            EasyMock.replay( mock );
     }
 
     /**
@@ -145,9 +142,8 @@ public class EasyMockTestCase extends TestCase
      */
     protected final void verify()
     {
-        final Iterator i = mocks.iterator();
-        while( i.hasNext() )
-            EasyMock.verify( i.next() );
+        for( Object mock : mocks )
+            EasyMock.verify( mock );
     }
 
     /**

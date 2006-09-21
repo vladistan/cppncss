@@ -29,7 +29,6 @@
 package cppncss;
 
 import java.io.PrintStream;
-import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -86,10 +85,10 @@ public final class ConsoleLogger implements MeasurementVisitor
 
     private void printHeaders( final Vector<String> labels )
     {
+        stream.println();
         stream.print( "Nr. " );
-        final Iterator<String> iterator = labels.iterator();
-        while( iterator.hasNext() )
-            stream.print( iterator.next() + " " );
+        for( String label : labels )
+            stream.print( label + " " );
         stream.println( item );
     }
 

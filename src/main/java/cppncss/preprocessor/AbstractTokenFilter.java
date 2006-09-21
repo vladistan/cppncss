@@ -29,7 +29,6 @@
 package cppncss.preprocessor;
 
 import java.io.StringReader;
-import java.util.Iterator;
 import java.util.Stack;
 import java.util.Vector;
 import cppast.ParserTokenManager;
@@ -38,7 +37,7 @@ import cppast.Token;
 
 /**
  * Captures filter common behaviours.
- * 
+ *
  * @author Mathieu Champlon
  */
 public abstract class AbstractTokenFilter implements TokenFilter
@@ -49,7 +48,7 @@ public abstract class AbstractTokenFilter implements TokenFilter
 
     /**
      * Create an abstract token filter.
-     * 
+     *
      * @param buffer the token stack where to output filtered tokens
      * @param name the name of the filter
      * @param value the raw value of the filtering result
@@ -94,7 +93,7 @@ public abstract class AbstractTokenFilter implements TokenFilter
 
     /**
      * Put both tokens back into the flow.
-     * 
+     *
      * @param token the head of the flow
      * @param next the token following the head
      */
@@ -106,14 +105,13 @@ public abstract class AbstractTokenFilter implements TokenFilter
 
     /**
      * Insert filtered tokens into the token flow.
-     * 
+     *
      * @param location the location of the insertion
      */
     protected final void insert( final Token location )
     {
-        final Iterator<Token> iterator = tokens.iterator();
-        while( iterator.hasNext() )
-            buffer.push( copy( iterator.next(), location ) );
+        for( Token token : tokens )
+            buffer.push( copy( token, location ) );
     }
 
     private Token copy( final Token token, final Token location )
