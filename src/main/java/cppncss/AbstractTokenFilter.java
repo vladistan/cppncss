@@ -61,8 +61,22 @@ public abstract class AbstractTokenFilter implements TokenFilter
         if( name == null )
             throw new IllegalArgumentException( "parameter 'name' is null" );
         this.buffer = buffer;
-        this.name = name;
+        this.name = check( name );
         this.tokens = parse( value );
+    }
+
+    private String check( final String name )
+    {
+        if( name.length() == 0 )
+            throw new IllegalArgumentException( "Empty macro/define name specified" );
+        final ParserTokenManager manager = new ParserTokenManager( new SimpleCharStream( new StringReader( name ) ) );
+        final Token token = manager.getNextToken();
+        if( token.kind != ParserTokenManager.ID )
+            throw new IllegalArgumentException( "Illegal macro/define name : " + "'" + name + "'" );
+        final Token next = manager.getNextToken();
+        if( next.kind != ParserTokenManager.EOF )
+            throw new IllegalArgumentException( "Illegal macro/define name : " + "'" + name + "'" );
+        return name;
     }
 
     private Vector<Token> parse( final String value )

@@ -67,6 +67,45 @@ public class PreProcessorTest extends TestCase
         assertToken( PreProcessor.EOF, "" );
     }
 
+    public void testEmptyNameIsInvalid()
+    {
+        try
+        {
+            processor.addDefine( "  ", "" );
+        }
+        catch( Exception e )
+        {
+            return;
+        }
+        fail( "should have thrown" );
+    }
+
+    public void testDefineNameMustBeMadeOfTokenOfTypeId()
+    {
+        try
+        {
+            processor.addDefine( "this", "" );
+        }
+        catch( Exception e )
+        {
+            return;
+        }
+        fail( "should have thrown" );
+    }
+
+    public void testDefineNameMustBeMadeOfOneToken()
+    {
+        try
+        {
+            processor.addDefine( "one two", "" );
+        }
+        catch( Exception e )
+        {
+            return;
+        }
+        fail( "should have thrown" );
+    }
+
     public void testDefineReplacesOccurenceWithinInputTokens()
     {
         processor.addDefine( "my", "your" );
