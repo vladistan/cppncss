@@ -44,10 +44,10 @@ public final class Macro extends AbstractTokenFilter
     /**
      * Create a macro.
      *
-     * @param provider
-     * @param buffer
-     * @param name the name of the symbol
-     * @param value the value of the macro
+     * @param provider the token provider to retrieve subsequent tokens
+     * @param buffer the token stack where to output filtered tokens
+     * @param name the define symbol
+     * @param value the define value
      */
     public Macro( final TokenProvider provider, final Stack<Token> buffer, final String name, final String value )
     {

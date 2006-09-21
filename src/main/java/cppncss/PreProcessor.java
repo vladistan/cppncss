@@ -48,8 +48,6 @@ public final class PreProcessor extends ParserTokenManager implements TokenProvi
 
     /**
      * Create an adapter.
-     *
-     * @param reader the input
      */
     public PreProcessor()
     {

@@ -36,14 +36,14 @@ import cppast.Token;
  *
  * @author Mathieu Champlon
  */
-public class Define extends AbstractTokenFilter
+public final class Define extends AbstractTokenFilter
 {
     /**
      * Create a define definition.
      *
-     * @param buffer
-     * @param name the symbol
-     * @param value the value
+     * @param buffer the token stack where to output filtered tokens
+     * @param name the define symbol
+     * @param value the define value
      */
     public Define( final Stack<Token> buffer, final String name, final String value )
     {

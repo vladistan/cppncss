@@ -77,8 +77,6 @@ public final class Analyzer
      */
     public Analyzer( final Options options, final FileObserver observer, final EventHandler handler )
     {
-        if( options == null )
-            throw new IllegalArgumentException( "argument 'options' is null" );
         if( observer == null )
             throw new IllegalArgumentException( "argument 'observer' is null" );
         if( handler == null )
@@ -216,23 +214,20 @@ public final class Analyzer
         return false;
     }
 
+    private void parse( final ParserVisitor visitor, final String filename ) throws ParseException, IOException
+    {
+        final BufferedReader reader = new BufferedReader( new FileReader( filename ) );
+        manager.reset( reader );
+        parser.ReInit( manager );
+        parser.translation_unit().jjtAccept( visitor, null );
+        reader.close();
+    }
+
     private Token getToken( final ParseException exception )
     {
         Token token = exception.currentToken.next;
         while( token.next != null )
             token = token.next;
         return token;
-    }
-
-    private void parse( final ParserVisitor visitor, final String filename ) throws ParseException, IOException
-    {
-        manager.reset( open( filename ) );
-        parser.ReInit( manager );
-        parser.translation_unit().jjtAccept( visitor, null );
-    }
-
-    private BufferedReader open( final String filename ) throws IOException
-    {
-        return new BufferedReader( new FileReader( filename ) );
     }
 }

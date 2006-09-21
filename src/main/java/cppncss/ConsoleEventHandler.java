@@ -117,6 +117,7 @@ public final class ConsoleEventHandler implements EventHandler
             reader.readLine();
         for( int i = 0; i < lines; ++i )
             System.out.println( reader.readLine() );
+        reader.close();
     }
 
     /**

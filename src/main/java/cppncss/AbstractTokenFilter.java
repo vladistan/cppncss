@@ -48,7 +48,7 @@ public abstract class AbstractTokenFilter implements TokenFilter
     private final String name;
 
     /**
-     * Create an abstract token filter
+     * Create an abstract token filter.
      *
      * @param buffer the token stack where to output filtered tokens
      * @param name the name of the filter
