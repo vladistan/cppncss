@@ -28,51 +28,28 @@
 
 package cppncss;
 
+import cppast.Token;
+
 /**
- * Manages define pre-proprecessing.
+ * Defines a token flow filter.
  *
  * @author Mathieu Champlon
  */
-public final class Define
+public interface TokenFilter
 {
-    private final String name;
-    private final String value;
+    /**
+     * Test if the filter name matches a given name.
+     *
+     * @param name the name to test
+     * @return whether the filter name matches or not
+     */
+    boolean matches( String name );
 
     /**
-     * Create a define definition.
+     * Trigger filtering based on a given token.
      *
-     * @param name the symbol
-     * @param value the value
+     * @param token the head of the token flow
+     * @return whether the filter has been applied or not
      */
-    public Define( final String name, final String value )
-    {
-        if( name == null )
-            throw new IllegalArgumentException( "parameter 'name' is null" );
-        if( value == null )
-            throw new IllegalArgumentException( "parameter 'value' is null" );
-        this.name = name;
-        this.value = value;
-    }
-
-    /**
-     * Filter define occurences.
-     *
-     * @param text the text to filter
-     * @return the filtered text
-     */
-    public String replace( final String text )
-    {
-        return text.replaceAll( name, value );
-    }
-
-    /**
-     * Test if a given symbol matches.
-     *
-     * @param name the symbol
-     * @return whether the symbol matches or not
-     */
-    public boolean matches( final String name )
-    {
-        return this.name.equals( name );
-    }
+    boolean process( Token token );
 }

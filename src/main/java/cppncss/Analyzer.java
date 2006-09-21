@@ -30,11 +30,9 @@ package cppncss;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -42,9 +40,7 @@ import java.util.List;
 import java.util.Vector;
 import cppast.ParseException;
 import cppast.Parser;
-import cppast.ParserTokenManager;
 import cppast.ParserVisitor;
-import cppast.SimpleCharStream;
 import cppast.Token;
 
 /**
@@ -67,7 +63,7 @@ public final class Analyzer
     private final boolean recursive;
     private final boolean force;
     private final List<String> files;
-    private final PreProcessor processor;
+    private final PreProcessor2 manager;
     private final FileObserver observer;
     private final EventHandler handler;
     private Parser parser;
@@ -89,17 +85,24 @@ public final class Analyzer
             throw new IllegalArgumentException( "argument 'handler' is null" );
         recursive = options.hasOption( "r" );
         force = options.hasOption( "f" );
-        processor = new PreProcessor();
-        final List<String> names = options.getOptionProperties( "D" );
-        final List<String> values = options.getOptionPropertyValues( "D" );
-        for( int i = 0; i < names.size(); ++i )
-        {
-            processor.addMacro( names.get( i ), values.get( i ) );
-            processor.addDefine( names.get( i ), values.get( i ) );
-        }
+        this.manager = createManager( options );
         this.observer = observer;
         this.handler = handler;
         files = sort( resolve( options.getArgList() ) );
+    }
+
+    private PreProcessor2 createManager( final Options options )
+    {
+        final PreProcessor2 processor = new PreProcessor2();
+        final List<String> defineNames = options.getOptionProperties( "D" );
+        final List<String> defineValues = options.getOptionPropertyValues( "D" );
+        for( int i = 0; i < defineNames.size(); ++i )
+            processor.addDefine( defineNames.get( i ), defineValues.get( i ) );
+        final List<String> macroNames = options.getOptionProperties( "M" );
+        final List<String> macroValues = options.getOptionPropertyValues( "M" );
+        for( int i = 0; i < macroNames.size(); ++i )
+            processor.addMacro( macroNames.get( i ), macroValues.get( i ) );
+        return processor;
     }
 
     private List<String> resolve( final List<String> inputs )
@@ -204,7 +207,7 @@ public final class Analyzer
             final Token token = getToken( exception );
             final String message = "Parse error (line " + token.endLine + ", column " + token.endColumn + ")";
             handler.error( filename, exception, message );
-            handler.display( new BufferedReader( open( filename ) ), token.beginLine, token.beginColumn );
+            handler.display( open( filename ), token.beginLine, token.beginColumn );
         }
         catch( Throwable throwable )
         {
@@ -223,7 +226,7 @@ public final class Analyzer
 
     private void parse( final ParserVisitor visitor, final String filename ) throws ParseException, IOException
     {
-        final ParserTokenManager manager = new ParserTokenManager( new SimpleCharStream( open( filename ) ) );
+        manager.reset( open( filename ) );
         if( parser == null )
             parser = new Parser( manager );
         else
@@ -231,19 +234,8 @@ public final class Analyzer
         parser.translation_unit().jjtAccept( visitor, null );
     }
 
-    private Reader open( final String filename ) throws IOException
+    private BufferedReader open( final String filename ) throws IOException
     {
-        return new StringReader( processor.filter( read( filename ) ) );
-    }
-
-    private String read( final String filename ) throws IOException
-    {
-        final FileInputStream stream = new FileInputStream( filename );
-        final byte[] content = new byte[stream.available()];
-        final int read = stream.read( content );
-        if( read != content.length )
-            throw new IOException( "error reading content of file '" + filename + "' : could only read " + read
-                    + " bytes out of " + content.length + " available" );
-        return new String( content );
+        return new BufferedReader( new FileReader( filename ) );
     }
 }

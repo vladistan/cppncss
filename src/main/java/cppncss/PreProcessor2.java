@@ -28,46 +28,73 @@
 
 package cppncss;
 
+import java.io.Reader;
 import java.util.Iterator;
+import java.util.Stack;
 import java.util.Vector;
+import cppast.ParserTokenManager;
+import cppast.SimpleCharStream;
+import cppast.Token;
 
 /**
- * Provides a simple pre-processor implementation.
+ * Adapts the two token management systems.
  *
  * @author Mathieu Champlon
  */
-public class PreProcessor
+public final class PreProcessor2 extends ParserTokenManager implements TokenProvider
 {
-    private final Vector<Define> defines = new Vector<Define>();
-    private final Vector<Macro> macros = new Vector<Macro>();
+    private final Vector<TokenFilter> filters = new Vector<TokenFilter>();
+    private final Stack<Token> buffer = new Stack<Token>();
 
     /**
-     * Expand macros and defines.
+     * Create an adapter.
      *
-     * @param text the input text
-     * @return the resulting text
+     * @param reader the input
      */
-    public final String filter( final String text )
+    public PreProcessor2()
     {
-        return replaceDefines( replaceMacros( text ) );
+        super( null );
     }
 
-    private String replaceMacros( final String text )
+    /**
+     * Set a new input.
+     *
+     * @param reader the input reader
+     */
+    public void reset( final Reader reader )
     {
-        String result = text;
-        final Iterator<Macro> names = macros.iterator();
-        while( names.hasNext() )
-            result = names.next().replace( result );
-        return result;
+        buffer.clear();
+        ReInit( new SimpleCharStream( reader ) );
     }
 
-    private String replaceDefines( final String text )
+    /**
+     * {@inheritDoc}
+     */
+    public Token next()
     {
-        String result = text;
-        final Iterator<Define> iterator = defines.iterator();
+        return super.getNextToken();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Token getNextToken()
+    {
+        if( !buffer.empty() )
+            return buffer.pop();
+        final Token token = next();
+        if( filter( token ) )
+            return getNextToken();
+        return token;
+    }
+
+    private boolean filter( final Token token )
+    {
+        final Iterator<TokenFilter> iterator = filters.iterator();
         while( iterator.hasNext() )
-            result = iterator.next().replace( result );
-        return result;
+            if( iterator.next().process( token ) )
+                return true;
+        return false;
     }
 
     /**
@@ -76,13 +103,9 @@ public class PreProcessor
      * @param name the name of the symbol
      * @param value the value of the symbol
      */
-    public final void addDefine( final String name, final String value )
+    public void addDefine( final String name, final String value )
     {
-        final Iterator<Define> iterator = defines.iterator();
-        while( iterator.hasNext() )
-            if( iterator.next().matches( name ) )
-                throw new RuntimeException( "macro redefinition '" + name + "'" );
-        defines.add( new Define( name, value ) );
+        register( name, new Define2( buffer, name, value ) );
     }
 
     /**
@@ -91,12 +114,19 @@ public class PreProcessor
      * @param name the name of the symbol
      * @param value the value of the symbol
      */
-    public final void addMacro( final String name, final String value )
+    public void addMacro( final String name, final String value )
     {
-        final Iterator<Macro> iterator = macros.iterator();
+        register( name, new Macro2( this, buffer, name, value ) );
+    }
+
+    private void register( final String name, final TokenFilter macro )
+    {
+        final Iterator<TokenFilter> iterator = filters.iterator();
         while( iterator.hasNext() )
+        {
             if( iterator.next().matches( name ) )
                 throw new RuntimeException( "macro redefinition '" + name + "'" );
-        macros.add( new Macro( name, value ) );
+        }
+        filters.add( macro );
     }
 }

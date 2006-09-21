@@ -28,44 +28,70 @@
 
 package cppncss;
 
-import java.io.Reader;
+import java.util.Stack;
 import cppast.ParserTokenManager;
-import cppast.SimpleCharStream;
 import cppast.Token;
 
 /**
- * Adapts the two token management systems.
+ * Manages macro pre-processing.
  *
  * @author Mathieu Champlon
  */
-public class TokenManagerAdapter extends ParserTokenManager implements TokenProvider
+public final class Macro2 extends AbstractTokenFilter
 {
     private final TokenProvider provider;
 
     /**
-     * Create an adapter.
+     * Create a macro.
      *
-     * @param reader the input
+     * @param provider
+     * @param buffer
+     * @param name the name of the symbol
+     * @param value the value of the macro
      */
-    public TokenManagerAdapter( final Reader reader )
+    public Macro2( final TokenProvider provider, final Stack<Token> buffer, final String name, final String value )
     {
-        super( new SimpleCharStream( reader, 1, 1 ) );
-        provider = new PreProcessor2( this );
+        super( buffer, name, value );
+        if( provider == null )
+            throw new IllegalArgumentException( "parameter 'provider' is null" );
+        this.provider = provider;
     }
 
     /**
      * {@inheritDoc}
      */
-    public final Token getNextToken()
+    public boolean process( final Token token )
     {
-        return provider.next();
+        if( matches( token.image ) )
+        {
+            final Token next = provider.next();
+            if( next.kind == ParserTokenManager.LPARENTHESIS )
+                replace();
+            else
+                undo( token, next );
+            return true;
+        }
+        return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public final Token next()
+    private void replace()
     {
-        return super.getNextToken();
+        erase();
+        insert();
+    }
+
+    private void erase()
+    {
+        Token token = null;
+        int level = 1;
+        do
+        {
+            token = provider.next();
+            if( token.kind == ParserTokenManager.LPARENTHESIS )
+                ++level;
+            if( token.kind == ParserTokenManager.RPARENTHESIS )
+                --level;
+        }
+        while( level != 0 || token.kind != ParserTokenManager.RPARENTHESIS );
     }
 }

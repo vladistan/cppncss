@@ -881,6 +881,16 @@ public class ParserTest extends TestCase
         parse( "char* str = \"abc\\\ndef\"; char* str2 = \"abc\\\rdef\"; char* str3 = \"abc\\\r\ndef\";" );
     }
 
+    public void testCp1252NotAsciiCharacterInCommentIsValid() throws ParseException
+    {
+        parse( "// ’ € Œ" );
+    }
+
+    public void testCp1252NotAsciiCharacterInMultiCommentIsValid() throws ParseException
+    {
+        parse( "/* ’ € Œ */" );
+    }
+
     public void testTMP() throws IOException, ParseException
     {
         final Parser parser = new Parser( new StringReader( "" ) );
