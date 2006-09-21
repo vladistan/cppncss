@@ -33,7 +33,7 @@ package cppncss;
  *
  * @author Mathieu Champlon
  */
-public class Define
+public final class Define
 {
     private final String name;
     private final String value;
@@ -60,7 +60,7 @@ public class Define
      * @param text the text to filter
      * @return the filtered text
      */
-    public final String replace( final String text )
+    public String replace( final String text )
     {
         return text.replaceAll( name, value );
     }
@@ -71,7 +71,7 @@ public class Define
      * @param name the symbol
      * @return whether the symbol matches or not
      */
-    public final boolean matches( final String name )
+    public boolean matches( final String name )
     {
         return this.name.equals( name );
     }

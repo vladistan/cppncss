@@ -33,7 +33,7 @@ package cppncss;
  *
  * @author Mathieu Champlon
  */
-public class Macro
+public final class Macro
 {
     private final String name;
     private final String value;
@@ -60,7 +60,7 @@ public class Macro
      * @param text the text to filter
      * @return the filtered text
      */
-    public final String replace( final String text )
+    public String replace( final String text )
     {
         int index = text.indexOf( name );
         if( index == -1 )
@@ -113,7 +113,7 @@ public class Macro
      * @param name the symbol
      * @return whether the symbol matches or not
      */
-    public final boolean matches( final String name )
+    public boolean matches( final String name )
     {
         return this.name.equals( name );
     }
