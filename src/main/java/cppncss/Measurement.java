@@ -31,13 +31,13 @@ package cppncss;
 import java.util.Vector;
 
 /**
- * Provides a result measurement for functions.
- * 
+ * Stores a result measurement.
+ *
  * @author Mathieu Champlon
  */
 public final class Measurement
 {
-    private final String function;
+    private final String item;
     private final int line;
     private final int count;
     private final Vector<Integer> counts;
@@ -45,21 +45,21 @@ public final class Measurement
 
     /**
      * Create a measurement.
-     * 
-     * @param function the name of the function
-     * @param filename the file name of the function
-     * @param line the location of the function
+     *
+     * @param item the name of the measured item
+     * @param filename the name of the file containing the item
+     * @param line the location of the item within the file
      * @param count the value of the measurement
      */
-    public Measurement( final String function, final String filename, final int line, final int count )
+    public Measurement( final String item, final String filename, final int line, final int count )
     {
-        if( function == null )
-            throw new IllegalArgumentException( "argument 'function' is null" );
+        if( item == null )
+            throw new IllegalArgumentException( "argument 'item' is null" );
         if( line < 0 )
             throw new IllegalArgumentException( "argument 'line' is < 0" );
         if( count < 0 )
             throw new IllegalArgumentException( "argument 'count' is < 0" );
-        this.function = function;
+        this.item = item;
         this.line = line;
         this.filename = filename;
         this.count = count;
@@ -68,7 +68,7 @@ public final class Measurement
 
     /**
      * Compare to another measurement for sorting purpose.
-     * 
+     *
      * @param other the compared measurement
      * @return the difference between the other measurement value and the value of this measurement
      */
@@ -78,19 +78,19 @@ public final class Measurement
     }
 
     /**
-     * Add a measurement value to the recorder values.
+     * Add a measurement value to the recorded values.
      * <p>
-     * If the function name does not match the measurement the value is not recorded.
-     * 
-     * @param function the function name
-     * @param filename the file name of the function
-     * @param line the location of the function
+     * If the item name does not match the measurement the value is not recorded.
+     *
+     * @param item the item name
+     * @param filename the file name of the item
+     * @param line the location of the item
      * @param count the measurement to record
      * @return whether the measurement has been added or not
      */
-    public boolean update( final String function, final String filename, final int line, final int count )
+    public boolean update( final String item, final String filename, final int line, final int count )
     {
-        if( !this.function.equals( function ) || this.filename != filename || this.line != line )
+        if( !this.item.equals( item ) || this.filename != filename || this.line != line )
             return false;
         counts.add( count );
         return true;
@@ -98,13 +98,13 @@ public final class Measurement
 
     /**
      * Accept a visitor.
-     * 
+     *
      * @param visitor the visitor
      */
     public void accept( final MeasurementVisitor visitor )
     {
-        visitor.visit( count, function + " at " + filename + ":" + line );
+        visitor.visit( count, item + " at " + filename + ":" + line );
         for( int index = 0; index < counts.size(); ++index )
-            visitor.visit( counts.get( index ), function + " at " + filename + ":" + line );
+            visitor.visit( counts.get( index ), item + " at " + filename + ":" + line );
     }
 }

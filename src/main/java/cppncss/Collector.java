@@ -36,12 +36,12 @@ import java.util.Vector;
 import cppncss.counter.CounterObserver;
 
 /**
- * Collects function measurements.
+ * Collects measurements.
  * <p>
  * The results are sorted according to the value of the first measurement.
  * <p>
- * The different measurements for a given function must be recorded one after another.
- * 
+ * The different measurements for a given item must be recorded one after another.
+ *
  * @author Mathieu Champlon
  */
 public final class Collector implements CounterObserver, FileObserver
@@ -70,7 +70,7 @@ public final class Collector implements CounterObserver, FileObserver
 
     /**
      * Create a collector indexed by a given measurement name.
-     * 
+     *
      * @param index the index measurement name
      * @param threshold the number of measurements to keep
      */
@@ -87,26 +87,26 @@ public final class Collector implements CounterObserver, FileObserver
     /**
      * {@inheritDoc}
      */
-    public void notify( final String name, final String function, final int line, final int count )
+    public void notify( final String label, final String item, final int line, final int count )
     {
-        if( this.index.equals( name ) )
-            insert( function, line, count );
+        if( this.index.equals( label ) )
+            insert( item, line, count );
         else
-            update( function, line, count );
+            update( item, line, count );
     }
 
-    private boolean update( final String function, final int line, final int count )
+    private boolean update( final String item, final int line, final int count )
     {
         final Iterator<Measurement> iterator = result.iterator();
         while( iterator.hasNext() )
-            if( iterator.next().update( function, filename, line, count ) )
+            if( iterator.next().update( item, filename, line, count ) )
                 return true;
         return false;
     }
 
-    private void insert( final String function, final int line, final int count )
+    private void insert( final String item, final int line, final int count )
     {
-        result.add( new Measurement( function, filename, line, count ) );
+        result.add( new Measurement( item, filename, line, count ) );
         Collections.sort( result, comparator );
         if( result.size() > threshold )
             result.remove( result.size() - 1 );
@@ -114,7 +114,7 @@ public final class Collector implements CounterObserver, FileObserver
 
     /**
      * Accept a visitor.
-     * 
+     *
      * @param visitor the visitor
      */
     public void accept( final MeasurementVisitor visitor )

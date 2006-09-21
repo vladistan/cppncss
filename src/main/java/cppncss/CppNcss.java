@@ -34,7 +34,7 @@ import cppncss.counter.NcssCounter;
 
 /**
  * Provides code measurement for C++.
- * 
+ *
  * @author Mathieu Champlon
  */
 public final class CppNcss
@@ -53,7 +53,7 @@ public final class CppNcss
         visitor.register( new FunctionVisitor( new NcssCounter( collector ) ) ); // FIXME first counter must be INDEX
         visitor.register( new FunctionVisitor( new CcnCounter( collector ) ) );
         final Analyzer analyzer = createAnalyzer( args, collector );
-        final ConsoleLogger logger = new ConsoleLogger();
+        final ConsoleLogger logger = new ConsoleLogger( "Function" );
         logger.register( "NCSS" ); // FIXME registration order must be the same as for counters
         logger.register( "CCN" );
         analyzer.accept( visitor );

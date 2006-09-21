@@ -33,18 +33,34 @@ import java.util.Iterator;
 import java.util.Vector;
 
 /**
+ * Implements a console logger.
+ *
  * @author Mathieu Champlon
  */
 public final class ConsoleLogger implements MeasurementVisitor
 {
-    private final Vector<String> labels = new Vector<String>();
-    private int current = 0;
-    private int index = 0;
+    private final Vector<String> labels;
+    private int current;
+    private int index;
+    private final String item;
     private final PrintStream stream = System.out;
 
     /**
+     * Create a logger to the console.
+     *
+     * @param item the name of the measured item
+     */
+    public ConsoleLogger( final String item )
+    {
+        this.labels = new Vector<String>();
+        this.current = 0;
+        this.index = 0;
+        this.item = item;
+    }
+
+    /**
      * Register a measurement label.
-     * 
+     *
      * @param label the name of the measurement
      */
     public void register( final String label )
@@ -74,7 +90,7 @@ public final class ConsoleLogger implements MeasurementVisitor
         final Iterator<String> iterator = labels.iterator();
         while( iterator.hasNext() )
             stream.print( iterator.next() + " " );
-        stream.println( "Function" );
+        stream.println( item );
     }
 
     private void printIndex( final int index )
