@@ -55,7 +55,7 @@ public final class NcssCounter extends AbstractCounter
      */
     public NcssCounter( final FunctionObserver observer )
     {
-        super( "NCSS", observer, 0 );
+        super( "NCSS", observer );
     }
 
     /**

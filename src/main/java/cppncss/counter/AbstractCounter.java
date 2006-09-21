@@ -32,31 +32,28 @@ import cppast.AbstractVisitor;
 
 /**
  * Factorizes counters common behaviours.
- * 
+ *
  * @author Mathieu Champlon
  */
 public class AbstractCounter extends AbstractVisitor implements Counter
 {
     private final String name;
     private final FunctionObserver observer;
-    private final int start;
     private int count;
 
     /**
      * Create an abstract counter.
-     * 
+     *
      * @param name the name of the counter
      * @param observer a function observer
-     * @param start the starting value
      */
-    public AbstractCounter( final String name, final FunctionObserver observer, final int start )
+    public AbstractCounter( final String name, final FunctionObserver observer )
     {
         if( observer == null )
             throw new IllegalArgumentException( "argument 'observer' is null" );
         this.name = name;
         this.observer = observer;
-        this.start = start;
-        this.count = start;
+        this.count = 0;
     }
 
     /**
@@ -64,9 +61,8 @@ public class AbstractCounter extends AbstractVisitor implements Counter
      */
     public final void flush( final String function, final int line )
     {
-        final int result = count;
-        count = start;
-        observer.notify( name, function, line, result );
+        observer.notify( name, function, line, count );
+        count = 0;
     }
 
     /**

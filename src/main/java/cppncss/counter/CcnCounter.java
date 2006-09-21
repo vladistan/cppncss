@@ -30,6 +30,7 @@ package cppncss.counter;
 
 import cppast.AstAssignmentExpression;
 import cppast.AstCaseStatement;
+import cppast.AstFunctionBody;
 import cppast.AstHandler;
 import cppast.AstIfStatement;
 import cppast.AstIterationStatement;
@@ -39,19 +40,28 @@ import cppast.Token;
 
 /**
  * Implements a CCN counter.
- * 
+ *
  * @author Mathieu Champlon
  */
 public final class CcnCounter extends AbstractCounter
 {
     /**
      * Create a CCN counter.
-     * 
+     *
      * @param observer a function observer
      */
     public CcnCounter( final FunctionObserver observer )
     {
-        super( "CCN", observer, 1 );
+        super( "CCN", observer );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstFunctionBody node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
     }
 
     /**
