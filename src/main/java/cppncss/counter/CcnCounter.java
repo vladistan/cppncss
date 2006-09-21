@@ -50,7 +50,7 @@ public final class CcnCounter extends AbstractCounter
      *
      * @param observer a function observer
      */
-    public CcnCounter( final FunctionObserver observer )
+    public CcnCounter( final CounterObserver observer )
     {
         super( "CCN", observer );
     }

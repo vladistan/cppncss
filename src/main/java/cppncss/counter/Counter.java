@@ -31,17 +31,17 @@ package cppncss.counter;
 import cppast.ParserVisitor;
 
 /**
- * Defines a measurement visitor.
- * 
+ * Defines a counter.
+ *
  * @author Mathieu Champlon
  */
 public interface Counter extends ParserVisitor
 {
     /**
      * Notify the end of a measurement.
-     * 
-     * @param function the scoped name of the measured function
-     * @param line the location of the given function in the input
+     *
+     * @param item the item measured
+     * @param line the location of the item
      */
-    void flush( String function, int line );
+    void flush( String item, int line );
 }

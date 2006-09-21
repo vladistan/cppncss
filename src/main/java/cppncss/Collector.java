@@ -33,7 +33,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Vector;
-import cppncss.counter.FunctionObserver;
+import cppncss.counter.CounterObserver;
 
 /**
  * Collects function measurements.
@@ -44,7 +44,7 @@ import cppncss.counter.FunctionObserver;
  * 
  * @author Mathieu Champlon
  */
-public final class Collector implements FunctionObserver, FileObserver
+public final class Collector implements CounterObserver, FileObserver
 {
     /**
      * @author Mathieu Champlon

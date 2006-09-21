@@ -37,21 +37,21 @@ import cppast.AbstractVisitor;
  */
 public class AbstractCounter extends AbstractVisitor implements Counter
 {
-    private final String name;
-    private final FunctionObserver observer;
+    private final String label;
+    private final CounterObserver observer;
     private int count;
 
     /**
      * Create an abstract counter.
      *
-     * @param name the name of the counter
-     * @param observer a function observer
+     * @param label the name of the measurement
+     * @param observer a counter observer
      */
-    public AbstractCounter( final String name, final FunctionObserver observer )
+    public AbstractCounter( final String label, final CounterObserver observer )
     {
         if( observer == null )
             throw new IllegalArgumentException( "argument 'observer' is null" );
-        this.name = name;
+        this.label = label;
         this.observer = observer;
         this.count = 0;
     }
@@ -59,9 +59,9 @@ public class AbstractCounter extends AbstractVisitor implements Counter
     /**
      * {@inheritDoc}
      */
-    public final void flush( final String function, final int line )
+    public final void flush( final String item, final int line )
     {
-        observer.notify( name, function, line, count );
+        observer.notify( label, item, line, count );
         count = 0;
     }
 

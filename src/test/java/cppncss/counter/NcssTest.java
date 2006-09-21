@@ -32,7 +32,7 @@ import java.io.StringReader;
 import tools.EasyMockTestCase;
 import cppast.ParseException;
 import cppast.Parser;
-import cppncss.counter.FunctionObserver;
+import cppncss.counter.CounterObserver;
 import cppncss.counter.FunctionVisitor;
 import cppncss.counter.NcssCounter;
 
@@ -41,14 +41,14 @@ import cppncss.counter.NcssCounter;
  */
 public class NcssTest extends EasyMockTestCase
 {
-    private FunctionObserver observer;
+    private CounterObserver observer;
 
     /**
      * {@inheritDoc}
      */
     protected void setUp()
     {
-        observer = createMock( FunctionObserver.class );
+        observer = createMock( CounterObserver.class );
     }
 
     private void parse( final String data ) throws ParseException

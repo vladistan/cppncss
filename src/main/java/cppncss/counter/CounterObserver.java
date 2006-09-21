@@ -29,19 +29,19 @@
 package cppncss.counter;
 
 /**
- * Defines an observer for function measurements.
- * 
+ * Defines an observer for measurements.
+ *
  * @author Mathieu Champlon
  */
-public interface FunctionObserver
+public interface CounterObserver
 {
     /**
      * Notify about a measurement.
-     * 
-     * @param name the name of the measurement
-     * @param function the name of the function
-     * @param line the location of the function
+     *
+     * @param label the name of the measurement
+     * @param item the name of the item measured
+     * @param line the location of the item
      * @param count the value of the measurement
      */
-    void notify( String name, String function, int line, int count );
+    void notify( String label, String item, int line, int count );
 }

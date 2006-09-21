@@ -33,7 +33,7 @@ import tools.EasyMockTestCase;
 import cppast.ParseException;
 import cppast.Parser;
 import cppncss.counter.CcnCounter;
-import cppncss.counter.FunctionObserver;
+import cppncss.counter.CounterObserver;
 import cppncss.counter.FunctionVisitor;
 
 /**
@@ -41,14 +41,14 @@ import cppncss.counter.FunctionVisitor;
  */
 public class CcnTest extends EasyMockTestCase
 {
-    private FunctionObserver observer;
+    private CounterObserver observer;
 
     /**
      * {@inheritDoc}
      */
     protected void setUp()
     {
-        observer = createMock( FunctionObserver.class );
+        observer = createMock( CounterObserver.class );
     }
 
     private void parse( final String data ) throws ParseException
