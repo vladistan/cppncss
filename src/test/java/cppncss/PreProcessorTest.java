@@ -57,6 +57,15 @@ public class PreProcessorTest extends TestCase
         assertNull( token.next );
     }
 
+    private void assertLocation( final Token token, final int beginLine, final int beginColumn, final int endLine,
+            final int endColumn )
+    {
+        assertEquals( beginLine, token.beginLine );
+        assertEquals( beginColumn, token.beginColumn );
+        assertEquals( endLine, token.endLine );
+        assertEquals( endColumn, token.endColumn );
+    }
+
     public void testNoMacroNoDefineDoesNotModifyTokens()
     {
         parse( "here is my text" );
@@ -275,5 +284,27 @@ public class PreProcessorTest extends TestCase
         assertToken( PreProcessor.ID, "is" );
         assertToken( PreProcessor.ID, "text" );
         assertToken( PreProcessor.EOF, "" );
+    }
+
+    public void testInsertedTokensLinesAndColumnsAreThoseOfTheDefineNameToken()
+    {
+        processor.addDefine( "my", "this()" );
+        parse( "here is my text" );
+        processor.getNextToken();
+        processor.getNextToken();
+        assertLocation( processor.getNextToken(), 1, 9, 1, 10 );
+        assertLocation( processor.getNextToken(), 1, 9, 1, 10 );
+        assertLocation( processor.getNextToken(), 1, 9, 1, 10 );
+    }
+
+    public void testInsertedTokensLinesAndColumnsAreThoseOfTheMacroNameToken()
+    {
+        processor.addMacro( "my", "this()" );
+        parse( "here is my() text" );
+        processor.getNextToken();
+        processor.getNextToken();
+        assertLocation( processor.getNextToken(), 1, 9, 1, 10 );
+        assertLocation( processor.getNextToken(), 1, 9, 1, 10 );
+        assertLocation( processor.getNextToken(), 1, 9, 1, 10 );
     }
 }

@@ -57,7 +57,7 @@ public final class Define extends AbstractTokenFilter
     {
         if( matches( token.image ) )
         {
-            insert();
+            insert( token );
             return true;
         }
         return false;

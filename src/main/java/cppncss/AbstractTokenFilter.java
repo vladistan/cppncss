@@ -106,23 +106,24 @@ public abstract class AbstractTokenFilter implements TokenFilter
 
     /**
      * Insert filtered tokens into the token flow.
+     *
+     * @param location the location of the insertion
      */
-    protected final void insert()
+    protected final void insert( final Token location )
     {
         final Iterator<Token> iterator = tokens.iterator();
         while( iterator.hasNext() )
-            buffer.push( copy( iterator.next() ) );
+            buffer.push( copy( iterator.next(), location ) );
     }
 
-    private Token copy( final Token token )
+    private Token copy( final Token token, final Token location )
     {
         final Token result = Token.newToken( token.kind );
         result.kind = token.kind;
-        // FIXME lines and columns should point to real input
-        // result.beginColumn = token.beginColumn;
-        // result.beginLine = token.beginLine;
-        // result.endColumn = token.endColumn;
-        // result.endLine = token.endLine;
+        result.beginColumn = location.beginColumn;
+        result.beginLine = location.beginLine;
+        result.endColumn = location.endColumn;
+        result.endLine = location.endLine;
         result.image = token.image;
         result.next = token.next;
         result.specialToken = token.specialToken;

@@ -66,7 +66,7 @@ public final class Macro extends AbstractTokenFilter
         {
             final Token next = provider.next();
             if( next.kind == ParserTokenManager.LPARENTHESIS )
-                replace();
+                replace( token );
             else
                 undo( token, next );
             return true;
@@ -74,10 +74,10 @@ public final class Macro extends AbstractTokenFilter
         return false;
     }
 
-    private void replace()
+    private void replace( final Token token )
     {
         erase();
-        insert();
+        insert( token );
     }
 
     private void erase()
