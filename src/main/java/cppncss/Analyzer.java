@@ -44,6 +44,7 @@ import cppast.ParseException;
 import cppast.Parser;
 import cppast.ParserTokenManager;
 import cppast.ParserVisitor;
+import cppast.SimpleCharStream;
 import cppast.Token;
 
 /**
@@ -222,7 +223,7 @@ public final class Analyzer
 
     private void parse( final ParserVisitor visitor, final String filename ) throws ParseException, IOException
     {
-        final ParserTokenManager manager = new TokenManagerAdapter( open( filename ) );
+        final ParserTokenManager manager = new ParserTokenManager( new SimpleCharStream( open( filename ) ) );
         if( parser == null )
             parser = new Parser( manager );
         else
