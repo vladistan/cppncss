@@ -42,6 +42,7 @@ import cppast.ParseException;
 import cppast.Parser;
 import cppast.ParserVisitor;
 import cppast.Token;
+import cppncss.preprocessor.PreProcessor;
 
 /**
  * @author Mathieu Champlon
@@ -70,7 +71,7 @@ public final class Analyzer
 
     /**
      * Create an analyzer.
-     *
+     * 
      * @param options the options
      * @param observer a file observer
      * @param handler an event handler
@@ -166,7 +167,7 @@ public final class Analyzer
      * Parse the files and visit the abstract syntax trees.
      * <p>
      * Because of memory consumption the trees cannot be cached therefore this method must probably be called only once.
-     *
+     * 
      * @param visitor the visitor
      */
     public void accept( final ParserVisitor visitor )

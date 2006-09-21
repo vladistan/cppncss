@@ -58,7 +58,7 @@ import cppast.SimpleNode;
 
 /**
  * Provides a composite of visitors.
- *
+ * 
  * @author Mathieu Champlon
  */
 public final class VisitorComposite implements ParserVisitor
@@ -67,7 +67,7 @@ public final class VisitorComposite implements ParserVisitor
 
     /**
      * Add a visitor.
-     *
+     * 
      * @param visitor the visitor
      */
     public void register( final ParserVisitor visitor )

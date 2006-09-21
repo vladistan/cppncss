@@ -26,52 +26,85 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
+package cppncss.counter;
 
-import cppast.AbstractVisitor;
+import cppast.AstAssignmentExpression;
+import cppast.AstCaseStatement;
+import cppast.AstHandler;
+import cppast.AstIfStatement;
+import cppast.AstIterationStatement;
+import cppast.Parser;
+import cppast.SimpleNode;
+import cppast.Token;
 
 /**
- * Factorizes counters common behaviours.
- *
+ * Implements a CCN counter.
+ * 
  * @author Mathieu Champlon
  */
-public class AbstractCounter extends AbstractVisitor implements Counter
+public final class CcnCounter extends AbstractCounter
 {
-    private final String name;
-    private final FunctionObserver observer;
-    private final int start;
-    private int count;
-
     /**
-     * Create an abstract counter.
-     *
-     * @param name the name of the counter
+     * Create a CCN counter.
+     * 
      * @param observer a function observer
-     * @param start the starting value
      */
-    public AbstractCounter( final String name, final FunctionObserver observer, final int start )
+    public CcnCounter( final FunctionObserver observer )
     {
-        this.name = name;
-        this.observer = observer;
-        this.start = start;
-        this.count = start;
+        super( "CCN", observer, 1 );
     }
 
     /**
      * {@inheritDoc}
      */
-    public final void flush( final String function, final int line )
+    public Object visit( final AstIfStatement node, final Object data )
     {
-        final int result = count;
-        count = start;
-        observer.notify( name, function, line, result );
+        increment();
+        return node.accept( this, data );
     }
 
     /**
-     * Increments the counter.
+     * {@inheritDoc}
      */
-    protected final void increment()
+    public Object visit( final AstIterationStatement node, final Object data )
     {
-        ++count;
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstCaseStatement node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstHandler node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstAssignmentExpression node, final Object data )
+    {
+        count( node, Parser.AND );
+        count( node, Parser.OR );
+        count( node, Parser.QUESTIONMARK );
+        return data;
+    }
+
+    private void count( final SimpleNode node, final int kind )
+    {
+        for( Token token = node.getFirstToken(); token != node.getLastToken().next; token = token.next )
+            if( token.kind == kind )
+                increment();
     }
 }

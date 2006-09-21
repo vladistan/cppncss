@@ -28,9 +28,13 @@
 
 package cppncss;
 
+import cppncss.counter.CcnCounter;
+import cppncss.counter.FunctionVisitor;
+import cppncss.counter.NcssCounter;
+
 /**
  * Provides code measurement for C++.
- *
+ * 
  * @author Mathieu Champlon
  */
 public final class CppNcss

@@ -26,22 +26,54 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
+package cppncss.counter;
+
+import cppast.AbstractVisitor;
 
 /**
- * Defines an observer for function measurements.
- *
+ * Factorizes counters common behaviours.
+ * 
  * @author Mathieu Champlon
  */
-public interface FunctionObserver
+public class AbstractCounter extends AbstractVisitor implements Counter
 {
+    private final String name;
+    private final FunctionObserver observer;
+    private final int start;
+    private int count;
+
     /**
-     * Notify about a measurement.
-     *
-     * @param name the name of the measurement
-     * @param function the name of the function
-     * @param line the location of the function
-     * @param count the value of the measurement
+     * Create an abstract counter.
+     * 
+     * @param name the name of the counter
+     * @param observer a function observer
+     * @param start the starting value
      */
-    void notify( String name, String function, int line, int count );
+    public AbstractCounter( final String name, final FunctionObserver observer, final int start )
+    {
+        if( observer == null )
+            throw new IllegalArgumentException( "argument 'observer' is null" );
+        this.name = name;
+        this.observer = observer;
+        this.start = start;
+        this.count = start;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public final void flush( final String function, final int line )
+    {
+        final int result = count;
+        count = start;
+        observer.notify( name, function, line, result );
+    }
+
+    /**
+     * Increments the counter.
+     */
+    protected final void increment()
+    {
+        ++count;
+    }
 }

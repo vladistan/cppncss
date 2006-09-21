@@ -33,6 +33,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Vector;
+import cppncss.counter.FunctionObserver;
 
 /**
  * Collects function measurements.
@@ -40,7 +41,7 @@ import java.util.Vector;
  * The results are sorted according to the value of the first measurement.
  * <p>
  * The different measurements for a given function must be recorded one after another.
- *
+ * 
  * @author Mathieu Champlon
  */
 public final class Collector implements FunctionObserver, FileObserver
@@ -69,7 +70,7 @@ public final class Collector implements FunctionObserver, FileObserver
 
     /**
      * Create a collector indexed by a given measurement name.
-     *
+     * 
      * @param index the index measurement name
      * @param threshold the number of measurements to keep
      */
@@ -113,7 +114,7 @@ public final class Collector implements FunctionObserver, FileObserver
 
     /**
      * Accept a visitor.
-     *
+     * 
      * @param visitor the visitor
      */
     public void accept( final MeasurementVisitor visitor )

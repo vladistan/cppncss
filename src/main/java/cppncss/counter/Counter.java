@@ -26,40 +26,22 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
+package cppncss.counter;
 
-import java.util.Stack;
-import cppast.Token;
+import cppast.ParserVisitor;
 
 /**
- * Manages define pre-proprecessing.
- *
+ * Defines a measurement visitor.
+ * 
  * @author Mathieu Champlon
  */
-public final class Define extends AbstractTokenFilter
+public interface Counter extends ParserVisitor
 {
     /**
-     * Create a define definition.
-     *
-     * @param buffer the token stack where to output filtered tokens
-     * @param name the define symbol
-     * @param value the define value
+     * Notify the end of a measurement.
+     * 
+     * @param function the scoped name of the measured function
+     * @param line the location of the given function in the input
      */
-    public Define( final Stack<Token> buffer, final String name, final String value )
-    {
-        super( buffer, name, value );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean process( final Token token )
-    {
-        if( matches( token.image ) )
-        {
-            insert( token );
-            return true;
-        }
-        return false;
-    }
+    void flush( String function, int line );
 }

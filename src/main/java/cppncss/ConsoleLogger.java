@@ -44,7 +44,7 @@ public final class ConsoleLogger implements MeasurementVisitor
 
     /**
      * Register a measurement label.
-     *
+     * 
      * @param label the name of the measurement
      */
     public void register( final String label )

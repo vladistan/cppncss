@@ -26,30 +26,22 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
-
-import cppast.Token;
+package cppncss.counter;
 
 /**
- * Defines a token flow filter.
- *
+ * Defines an observer for function measurements.
+ * 
  * @author Mathieu Champlon
  */
-public interface TokenFilter
+public interface FunctionObserver
 {
     /**
-     * Test if the filter name matches a given name.
-     *
-     * @param name the name to test
-     * @return whether the filter name matches or not
+     * Notify about a measurement.
+     * 
+     * @param name the name of the measurement
+     * @param function the name of the function
+     * @param line the location of the function
+     * @param count the value of the measurement
      */
-    boolean matches( String name );
-
-    /**
-     * Trigger filtering based on a given token.
-     *
-     * @param token the head of the token flow
-     * @return whether the filter has been applied or not
-     */
-    boolean process( Token token );
+    void notify( String name, String function, int line, int count );
 }

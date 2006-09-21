@@ -35,6 +35,7 @@ public interface MeasurementVisitor
 {
     /**
      * Visit a measurement.
+     * 
      * @param count the result of the measurement
      * @param function the name of the measured function
      */

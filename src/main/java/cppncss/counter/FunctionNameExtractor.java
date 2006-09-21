@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
+package cppncss.counter;
 
 import cppast.AbstractVisitor;
 import cppast.AstFunctionBody;
@@ -40,7 +40,7 @@ import cppast.Token;
 
 /**
  * Provides a visitor implementation to extract a function name.
- *
+ * 
  * @author Mathieu Champlon
  */
 public final class FunctionNameExtractor extends AbstractVisitor

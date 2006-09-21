@@ -26,72 +26,68 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
+package cppncss.counter;
 
-import java.util.Stack;
-import cppast.ParserTokenManager;
-import cppast.Token;
+import cppast.AbstractVisitor;
+import cppast.AstConstructorDefinition;
+import cppast.AstDestructorDefinition;
+import cppast.AstFunctionDefinition;
+import cppast.SimpleNode;
 
 /**
- * Manages macro pre-processing.
- *
+ * Implements a visitor for functions.
+ * 
  * @author Mathieu Champlon
  */
-public final class Macro extends AbstractTokenFilter
+public final class FunctionVisitor extends AbstractVisitor
 {
-    private final TokenProvider provider;
+    private final Counter counter;
 
     /**
-     * Create a macro.
-     *
-     * @param provider the token provider to retrieve subsequent tokens
-     * @param buffer the token stack where to output filtered tokens
-     * @param name the define symbol
-     * @param value the define value
+     * Create a function visitor.
+     * 
+     * @param counter the counter to apply
      */
-    public Macro( final TokenProvider provider, final Stack<Token> buffer, final String name, final String value )
+    public FunctionVisitor( final Counter counter )
     {
-        super( buffer, name, value );
-        if( provider == null )
-            throw new IllegalArgumentException( "parameter 'provider' is null" );
-        this.provider = provider;
+        if( counter == null )
+            throw new IllegalArgumentException( "argument 'counter' is null" );
+        this.counter = counter;
     }
 
     /**
      * {@inheritDoc}
      */
-    public boolean process( final Token token )
+    public Object visit( final AstFunctionDefinition node, final Object data )
     {
-        if( matches( token.image ) )
-        {
-            final Token next = provider.next();
-            if( next.kind == ParserTokenManager.LPARENTHESIS )
-                replace( token );
-            else
-                undo( token, next );
-            return true;
-        }
-        return false;
+        return process( node, data );
     }
 
-    private void replace( final Token token )
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstConstructorDefinition node, final Object data )
     {
-        erase();
-        insert( token );
+        return process( node, data );
     }
 
-    private void erase()
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstDestructorDefinition node, final Object data )
     {
-        Token token = null;
-        int level = 1;
-        do
-        {
-            token = provider.next();
-            if( token.kind == ParserTokenManager.LPARENTHESIS )
-                ++level;
-            if( token.kind == ParserTokenManager.RPARENTHESIS )
-                --level;
-        }
-        while( level != 0 || token.kind != ParserTokenManager.RPARENTHESIS );
+        return process( node, data );
+    }
+
+    private Object process( final SimpleNode node, final Object data )
+    {
+        node.accept( counter, data );
+        counter.flush( getFunctionName( node ), node.getFirstToken().beginLine );
+        return node.accept( this, data );
+    }
+
+    private String getFunctionName( final SimpleNode node )
+    {
+        return (String)new FunctionNameExtractor().visit( node, null );
     }
 }

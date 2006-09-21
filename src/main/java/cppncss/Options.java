@@ -33,7 +33,7 @@ import java.util.Vector;
 
 /**
  * Implemens a simple program options handler.
- *
+ * 
  * @author Mathieu Champlon
  */
 public class Options
@@ -42,7 +42,7 @@ public class Options
 
     /**
      * Create a program options handler.
-     *
+     * 
      * @param args program arguments
      */
     public Options( final String[] args )
@@ -52,7 +52,7 @@ public class Options
 
     /**
      * Retrieve a list of non-parsable remaining arguments.
-     *
+     * 
      * @return a list of arguments
      */
     public final List<String> getArgList()
@@ -66,7 +66,7 @@ public class Options
 
     /**
      * Test if an option is set.
-     *
+     * 
      * @param name the option
      * @return whether the option has been set or not
      */
@@ -87,7 +87,7 @@ public class Options
      * Retrieve a list of all values for a given option.
      * <p>
      * With the option <em>-optionvalue</em> and the name <em>option</em> will return <em>value</em>.
-     *
+     * 
      * @param name the option
      * @return a list of values
      */
@@ -104,7 +104,7 @@ public class Options
      * Retrieve a list of all properties for a given option.
      * <p>
      * With the option <em>-optionproperty=value</em> and the name <em>option</em> will return <em>property</em>.
-     *
+     * 
      * @param name the option
      * @return a list of values
      */
@@ -127,7 +127,7 @@ public class Options
      * Retrieve a list of all property values for a given option.
      * <p>
      * With the option <em>-optionproperty=value</em> and the name <em>option</em> will return <em>value</em>.
-     *
+     * 
      * @param name the option
      * @return a list of values
      */

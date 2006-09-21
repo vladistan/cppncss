@@ -32,7 +32,7 @@ import java.util.Vector;
 
 /**
  * Provides a result measurement for functions.
- *
+ * 
  * @author Mathieu Champlon
  */
 public final class Measurement
@@ -45,7 +45,7 @@ public final class Measurement
 
     /**
      * Create a measurement.
-     *
+     * 
      * @param function the name of the function
      * @param filename the file name of the function
      * @param line the location of the function
@@ -68,7 +68,7 @@ public final class Measurement
 
     /**
      * Compare to another measurement for sorting purpose.
-     *
+     * 
      * @param other the compared measurement
      * @return the difference between the other measurement value and the value of this measurement
      */
@@ -81,7 +81,7 @@ public final class Measurement
      * Add a measurement value to the recorder values.
      * <p>
      * If the function name does not match the measurement the value is not recorded.
-     *
+     * 
      * @param function the function name
      * @param filename the file name of the function
      * @param line the location of the function
@@ -98,7 +98,7 @@ public final class Measurement
 
     /**
      * Accept a visitor.
-     *
+     * 
      * @param visitor the visitor
      */
     public void accept( final MeasurementVisitor visitor )

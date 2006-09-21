@@ -26,12 +26,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
+package cppncss.counter;
 
 import java.io.StringReader;
 import tools.EasyMockTestCase;
 import cppast.ParseException;
 import cppast.Parser;
+import cppncss.counter.FunctionObserver;
+import cppncss.counter.FunctionVisitor;
+import cppncss.counter.NcssCounter;
 
 /**
  * @author Mathieu Champlon
