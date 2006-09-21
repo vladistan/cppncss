@@ -28,7 +28,6 @@
 
 package cppncss;
 
-import java.io.BufferedReader;
 
 /**
  * @author Mathieu Champlon
@@ -60,9 +59,9 @@ public interface EventHandler extends FileObserver
     /**
      * Display a diagnostic.
      *
-     * @param reader a reader
+     * @param filename the file name
      * @param line the line number
      * @param column the column offset
      */
-    void display( BufferedReader reader, int line, int column );
+    void display( String filename, int line, int column );
 }

@@ -41,7 +41,7 @@ import cppast.Token;
  *
  * @author Mathieu Champlon
  */
-public final class PreProcessor2 extends ParserTokenManager implements TokenProvider
+public final class PreProcessor extends ParserTokenManager implements TokenProvider
 {
     private final Vector<TokenFilter> filters = new Vector<TokenFilter>();
     private final Stack<Token> buffer = new Stack<Token>();
@@ -51,7 +51,7 @@ public final class PreProcessor2 extends ParserTokenManager implements TokenProv
      *
      * @param reader the input
      */
-    public PreProcessor2()
+    public PreProcessor()
     {
         super( null );
     }
@@ -105,7 +105,7 @@ public final class PreProcessor2 extends ParserTokenManager implements TokenProv
      */
     public void addDefine( final String name, final String value )
     {
-        register( name, new Define2( buffer, name, value ) );
+        register( name, new Define( buffer, name, value ) );
     }
 
     /**
@@ -116,7 +116,7 @@ public final class PreProcessor2 extends ParserTokenManager implements TokenProv
      */
     public void addMacro( final String name, final String value )
     {
-        register( name, new Macro2( this, buffer, name, value ) );
+        register( name, new Macro( this, buffer, name, value ) );
     }
 
     private void register( final String name, final TokenFilter macro )

@@ -29,32 +29,25 @@
 package cppncss;
 
 import java.util.Stack;
-import cppast.ParserTokenManager;
 import cppast.Token;
 
 /**
- * Manages macro pre-processing.
+ * Manages define pre-proprecessing.
  *
  * @author Mathieu Champlon
  */
-public final class Macro2 extends AbstractTokenFilter
+public class Define extends AbstractTokenFilter
 {
-    private final TokenProvider provider;
-
     /**
-     * Create a macro.
+     * Create a define definition.
      *
-     * @param provider
      * @param buffer
-     * @param name the name of the symbol
-     * @param value the value of the macro
+     * @param name the symbol
+     * @param value the value
      */
-    public Macro2( final TokenProvider provider, final Stack<Token> buffer, final String name, final String value )
+    public Define( final Stack<Token> buffer, final String name, final String value )
     {
         super( buffer, name, value );
-        if( provider == null )
-            throw new IllegalArgumentException( "parameter 'provider' is null" );
-        this.provider = provider;
     }
 
     /**
@@ -64,34 +57,9 @@ public final class Macro2 extends AbstractTokenFilter
     {
         if( matches( token.image ) )
         {
-            final Token next = provider.next();
-            if( next.kind == ParserTokenManager.LPARENTHESIS )
-                replace();
-            else
-                undo( token, next );
+            insert();
             return true;
         }
         return false;
-    }
-
-    private void replace()
-    {
-        erase();
-        insert();
-    }
-
-    private void erase()
-    {
-        Token token = null;
-        int level = 1;
-        do
-        {
-            token = provider.next();
-            if( token.kind == ParserTokenManager.LPARENTHESIS )
-                ++level;
-            if( token.kind == ParserTokenManager.RPARENTHESIS )
-                --level;
-        }
-        while( level != 0 || token.kind != ParserTokenManager.RPARENTHESIS );
     }
 }

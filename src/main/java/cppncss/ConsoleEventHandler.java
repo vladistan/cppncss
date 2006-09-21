@@ -29,6 +29,7 @@
 package cppncss;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 
 /**
@@ -86,13 +87,13 @@ public final class ConsoleEventHandler implements EventHandler
     /**
      * {@inheritDoc}
      */
-    public void display( final BufferedReader reader, final int line, final int column )
+    public void display( final String filename, final int line, final int column )
     {
         try
         {
             if( verbose )
             {
-                displayLocation( line, ERROR_LINES_DISPLAYED, reader );
+                displayLocation( line, ERROR_LINES_DISPLAYED, filename );
                 displayCursor( column );
             }
         }
@@ -109,8 +110,9 @@ public final class ConsoleEventHandler implements EventHandler
         System.out.println( '^' );
     }
 
-    private void displayLocation( final int start, final int lines, final BufferedReader reader ) throws IOException
+    private void displayLocation( final int start, final int lines, final String filename ) throws IOException
     {
+        final BufferedReader reader = new BufferedReader( new FileReader( filename ) );
         for( int i = 0; i < start - lines; i++ )
             reader.readLine();
         for( int i = 0; i < lines; ++i )

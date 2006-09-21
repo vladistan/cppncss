@@ -35,13 +35,13 @@ import cppast.Token;
 /**
  * @author Mathieu Champlon
  */
-public class PreProcessor2Test extends TestCase
+public class PreProcessorTest extends TestCase
 {
-    private PreProcessor2 processor;
+    private PreProcessor processor;
 
     protected void setUp()
     {
-        processor = new PreProcessor2();
+        processor = new PreProcessor();
     }
 
     private void parse( final String data )
@@ -60,80 +60,80 @@ public class PreProcessor2Test extends TestCase
     public void testNoMacroNoDefineDoesNotModifyTokens()
     {
         parse( "here is my text" );
-        assertToken( PreProcessor2.ID, "here" );
-        assertToken( PreProcessor2.ID, "is" );
-        assertToken( PreProcessor2.ID, "my" );
-        assertToken( PreProcessor2.ID, "text" );
-        assertToken( PreProcessor2.EOF, "" );
+        assertToken( PreProcessor.ID, "here" );
+        assertToken( PreProcessor.ID, "is" );
+        assertToken( PreProcessor.ID, "my" );
+        assertToken( PreProcessor.ID, "text" );
+        assertToken( PreProcessor.EOF, "" );
     }
 
     public void testDefineReplacesOccurenceWithinInputTokens()
     {
         processor.addDefine( "my", "your" );
         parse( "here is my text" );
-        assertToken( PreProcessor2.ID, "here" );
-        assertToken( PreProcessor2.ID, "is" );
-        assertToken( PreProcessor2.ID, "your" );
-        assertToken( PreProcessor2.ID, "text" );
-        assertToken( PreProcessor2.EOF, "" );
+        assertToken( PreProcessor.ID, "here" );
+        assertToken( PreProcessor.ID, "is" );
+        assertToken( PreProcessor.ID, "your" );
+        assertToken( PreProcessor.ID, "text" );
+        assertToken( PreProcessor.EOF, "" );
     }
 
     public void testMacroWithoutContentReplacesOccurenceWithinInputTokens()
     {
         processor.addMacro( "my", "your" );
         parse( "here is my() text" );
-        assertToken( PreProcessor2.ID, "here" );
-        assertToken( PreProcessor2.ID, "is" );
-        assertToken( PreProcessor2.ID, "your" );
-        assertToken( PreProcessor2.ID, "text" );
-        assertToken( PreProcessor2.EOF, "" );
+        assertToken( PreProcessor.ID, "here" );
+        assertToken( PreProcessor.ID, "is" );
+        assertToken( PreProcessor.ID, "your" );
+        assertToken( PreProcessor.ID, "text" );
+        assertToken( PreProcessor.EOF, "" );
     }
 
     public void testMacroWithContentReplacesOccurenceWithinInputTokens()
     {
         processor.addMacro( "my", "your" );
         parse( "here is my( anything ! ) text" );
-        assertToken( PreProcessor2.ID, "here" );
-        assertToken( PreProcessor2.ID, "is" );
-        assertToken( PreProcessor2.ID, "your" );
-        assertToken( PreProcessor2.ID, "text" );
-        assertToken( PreProcessor2.EOF, "" );
+        assertToken( PreProcessor.ID, "here" );
+        assertToken( PreProcessor.ID, "is" );
+        assertToken( PreProcessor.ID, "your" );
+        assertToken( PreProcessor.ID, "text" );
+        assertToken( PreProcessor.EOF, "" );
     }
 
     public void testMacroWithExpressionContentReplacesOccurenceWithinInputTokens()
     {
         processor.addMacro( "my", "your" );
         parse( "here is my( ((anything ! (anything !)) anything !) ) text" );
-        assertToken( PreProcessor2.ID, "here" );
-        assertToken( PreProcessor2.ID, "is" );
-        assertToken( PreProcessor2.ID, "your" );
-        assertToken( PreProcessor2.ID, "text" );
-        assertToken( PreProcessor2.EOF, "" );
+        assertToken( PreProcessor.ID, "here" );
+        assertToken( PreProcessor.ID, "is" );
+        assertToken( PreProcessor.ID, "your" );
+        assertToken( PreProcessor.ID, "text" );
+        assertToken( PreProcessor.EOF, "" );
     }
 
     public void testMacroReplacesSeveralOccurencesWithinInputTokens()
     {
         processor.addMacro( "my", "your" );
         parse( "here is my( something ) my( something else ) text" );
-        assertToken( PreProcessor2.ID, "here" );
-        assertToken( PreProcessor2.ID, "is" );
-        assertToken( PreProcessor2.ID, "your" );
-        assertToken( PreProcessor2.ID, "your" );
-        assertToken( PreProcessor2.ID, "text" );
-        assertToken( PreProcessor2.EOF, "" );
+        assertToken( PreProcessor.ID, "here" );
+        assertToken( PreProcessor.ID, "is" );
+        assertToken( PreProcessor.ID, "your" );
+        assertToken( PreProcessor.ID, "your" );
+        assertToken( PreProcessor.ID, "text" );
+        assertToken( PreProcessor.EOF, "" );
     }
 
     public void testMacroNameWithoutParenthesisIsNoOp()
     {
         processor.addMacro( "my", "your" );
         parse( "here is my text()" );
-        assertToken( PreProcessor2.ID, "here" );
-        assertToken( PreProcessor2.ID, "is" );
-        assertToken( PreProcessor2.ID, "my" );
-        assertToken( PreProcessor2.ID, "text" );
-        assertToken( PreProcessor2.LPARENTHESIS, "(" );
-        assertToken( PreProcessor2.RPARENTHESIS, ")" );
-        assertToken( PreProcessor2.EOF, "" );
+        assertToken( PreProcessor.ID, "here" );
+        assertToken( PreProcessor.ID, "is" );
+        assertToken( PreProcessor.ID, "my" );
+        assertToken( PreProcessor.ID, "text" );
+        assertToken( PreProcessor.LPARENTHESIS, "(" );
+        assertToken( PreProcessor.RPARENTHESIS, ")" );
+        assertToken( PreProcessor.EOF, "" );
     }
 
     public void testRegisterSameMacroNameTwiceThrowsAnException()
@@ -154,87 +154,87 @@ public class PreProcessor2Test extends TestCase
     {
         processor.addMacro( "my", ";" );
         parse( "here is my() text" );
-        assertToken( PreProcessor2.ID, "here" );
-        assertToken( PreProcessor2.ID, "is" );
-        assertToken( PreProcessor2.SEMICOLON, ";" );
-        assertToken( PreProcessor2.ID, "text" );
-        assertToken( PreProcessor2.EOF, "" );
+        assertToken( PreProcessor.ID, "here" );
+        assertToken( PreProcessor.ID, "is" );
+        assertToken( PreProcessor.SEMICOLON, ";" );
+        assertToken( PreProcessor.ID, "text" );
+        assertToken( PreProcessor.EOF, "" );
     }
 
     public void testDefineWithNonIdTokenReplacesOccurenceWithinInputTokens()
     {
         processor.addDefine( "my", ";" );
         parse( "here is my text" );
-        assertToken( PreProcessor2.ID, "here" );
-        assertToken( PreProcessor2.ID, "is" );
-        assertToken( PreProcessor2.SEMICOLON, ";" );
-        assertToken( PreProcessor2.ID, "text" );
-        assertToken( PreProcessor2.EOF, "" );
+        assertToken( PreProcessor.ID, "here" );
+        assertToken( PreProcessor.ID, "is" );
+        assertToken( PreProcessor.SEMICOLON, ";" );
+        assertToken( PreProcessor.ID, "text" );
+        assertToken( PreProcessor.EOF, "" );
     }
 
     public void testMacroWithSeveralNonIdTokensReplacesOccurenceWithinInputTokens()
     {
         processor.addMacro( "my", "this()" );
         parse( "here is my() text" );
-        assertToken( PreProcessor2.ID, "here" );
-        assertToken( PreProcessor2.ID, "is" );
-        assertToken( PreProcessor2.THIS, "this" );
-        assertToken( PreProcessor2.LPARENTHESIS, "(" );
-        assertToken( PreProcessor2.RPARENTHESIS, ")" );
-        assertToken( PreProcessor2.ID, "text" );
-        assertToken( PreProcessor2.EOF, "" );
+        assertToken( PreProcessor.ID, "here" );
+        assertToken( PreProcessor.ID, "is" );
+        assertToken( PreProcessor.THIS, "this" );
+        assertToken( PreProcessor.LPARENTHESIS, "(" );
+        assertToken( PreProcessor.RPARENTHESIS, ")" );
+        assertToken( PreProcessor.ID, "text" );
+        assertToken( PreProcessor.EOF, "" );
     }
 
     public void testDefineWithSeveralNonIdTokensReplacesOccurenceWithinInputTokens()
     {
         processor.addDefine( "my", "this()" );
         parse( "here is my text" );
-        assertToken( PreProcessor2.ID, "here" );
-        assertToken( PreProcessor2.ID, "is" );
-        assertToken( PreProcessor2.THIS, "this" );
-        assertToken( PreProcessor2.LPARENTHESIS, "(" );
-        assertToken( PreProcessor2.RPARENTHESIS, ")" );
-        assertToken( PreProcessor2.ID, "text" );
-        assertToken( PreProcessor2.EOF, "" );
+        assertToken( PreProcessor.ID, "here" );
+        assertToken( PreProcessor.ID, "is" );
+        assertToken( PreProcessor.THIS, "this" );
+        assertToken( PreProcessor.LPARENTHESIS, "(" );
+        assertToken( PreProcessor.RPARENTHESIS, ")" );
+        assertToken( PreProcessor.ID, "text" );
+        assertToken( PreProcessor.EOF, "" );
     }
 
     public void testMacroWithEmptyValueRemovesOccurenceWithinInputTokens()
     {
         processor.addMacro( "my", "" );
         parse( "here is my() text" );
-        assertToken( PreProcessor2.ID, "here" );
-        assertToken( PreProcessor2.ID, "is" );
-        assertToken( PreProcessor2.ID, "text" );
-        assertToken( PreProcessor2.EOF, "" );
+        assertToken( PreProcessor.ID, "here" );
+        assertToken( PreProcessor.ID, "is" );
+        assertToken( PreProcessor.ID, "text" );
+        assertToken( PreProcessor.EOF, "" );
     }
 
     public void testDefineWithEmptyValueRemovesOccurenceWithinInputTokens()
     {
         processor.addDefine( "my", "" );
         parse( "here is my text" );
-        assertToken( PreProcessor2.ID, "here" );
-        assertToken( PreProcessor2.ID, "is" );
-        assertToken( PreProcessor2.ID, "text" );
-        assertToken( PreProcessor2.EOF, "" );
+        assertToken( PreProcessor.ID, "here" );
+        assertToken( PreProcessor.ID, "is" );
+        assertToken( PreProcessor.ID, "text" );
+        assertToken( PreProcessor.EOF, "" );
     }
 
     public void testMacroWithEmptyValueRemovesTwoConsecutiveOccurencesWithinInputTokens()
     {
         processor.addMacro( "my", "" );
         parse( "here is my() my() text" );
-        assertToken( PreProcessor2.ID, "here" );
-        assertToken( PreProcessor2.ID, "is" );
-        assertToken( PreProcessor2.ID, "text" );
-        assertToken( PreProcessor2.EOF, "" );
+        assertToken( PreProcessor.ID, "here" );
+        assertToken( PreProcessor.ID, "is" );
+        assertToken( PreProcessor.ID, "text" );
+        assertToken( PreProcessor.EOF, "" );
     }
 
     public void testDefineWithEmptyValueRemovesTwoConsecutiveOccurencesWithinInputTokens()
     {
         processor.addDefine( "my", "" );
         parse( "here is my my text" );
-        assertToken( PreProcessor2.ID, "here" );
-        assertToken( PreProcessor2.ID, "is" );
-        assertToken( PreProcessor2.ID, "text" );
-        assertToken( PreProcessor2.EOF, "" );
+        assertToken( PreProcessor.ID, "here" );
+        assertToken( PreProcessor.ID, "is" );
+        assertToken( PreProcessor.ID, "text" );
+        assertToken( PreProcessor.EOF, "" );
     }
 }

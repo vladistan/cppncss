@@ -63,10 +63,10 @@ public final class Analyzer
     private final boolean recursive;
     private final boolean force;
     private final List<String> files;
-    private final PreProcessor2 manager;
+    private final PreProcessor manager;
     private final FileObserver observer;
     private final EventHandler handler;
-    private Parser parser;
+    private final Parser parser;
 
     /**
      * Create an analyzer.
@@ -86,14 +86,15 @@ public final class Analyzer
         recursive = options.hasOption( "r" );
         force = options.hasOption( "f" );
         this.manager = createManager( options );
+        this.parser = new Parser( manager );
         this.observer = observer;
         this.handler = handler;
         files = sort( resolve( options.getArgList() ) );
     }
 
-    private PreProcessor2 createManager( final Options options )
+    private PreProcessor createManager( final Options options )
     {
-        final PreProcessor2 processor = new PreProcessor2();
+        final PreProcessor processor = new PreProcessor();
         final List<String> defineNames = options.getOptionProperties( "D" );
         final List<String> defineValues = options.getOptionPropertyValues( "D" );
         for( int i = 0; i < defineNames.size(); ++i )
@@ -169,16 +170,15 @@ public final class Analyzer
      * Because of memory consumption the trees cannot be cached therefore this method must probably be called only once.
      *
      * @param visitor the visitor
-     * @throws IOException an exception occurs reading a file
      */
-    public void accept( final ParserVisitor visitor ) throws IOException
+    public void accept( final ParserVisitor visitor )
     {
         handler.started();
         final int parsed = process( visitor );
         handler.finished( parsed, files.size() );
     }
 
-    private int process( final ParserVisitor visitor ) throws IOException
+    private int process( final ParserVisitor visitor )
     {
         final Iterator<String> iterator = files.iterator();
         int parsed = 0;
@@ -195,7 +195,7 @@ public final class Analyzer
         return parsed;
     }
 
-    private boolean process( final ParserVisitor visitor, final String filename ) throws IOException
+    private boolean process( final ParserVisitor visitor, final String filename )
     {
         try
         {
@@ -207,7 +207,7 @@ public final class Analyzer
             final Token token = getToken( exception );
             final String message = "Parse error (line " + token.endLine + ", column " + token.endColumn + ")";
             handler.error( filename, exception, message );
-            handler.display( open( filename ), token.beginLine, token.beginColumn );
+            handler.display( filename, token.beginLine, token.beginColumn );
         }
         catch( Throwable throwable )
         {
@@ -227,10 +227,7 @@ public final class Analyzer
     private void parse( final ParserVisitor visitor, final String filename ) throws ParseException, IOException
     {
         manager.reset( open( filename ) );
-        if( parser == null )
-            parser = new Parser( manager );
-        else
-            parser.ReInit( manager );
+        parser.ReInit( manager );
         parser.translation_unit().jjtAccept( visitor, null );
     }
 

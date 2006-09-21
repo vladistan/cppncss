@@ -28,8 +28,6 @@
 
 package cppncss;
 
-import java.io.IOException;
-
 /**
  * Provides code measurement for C++.
  *
@@ -44,7 +42,7 @@ public final class CppNcss
     {
     }
 
-    public static void main( final String[] args ) throws IOException
+    public static void main( final String[] args )
     {
         final Collector collector = new Collector( INDEX, THRESHOLD );
         final VisitorComposite visitor = new VisitorComposite();
