@@ -24,8 +24,6 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- * $Id: $
  */
 
 package cppncss;
@@ -41,6 +39,11 @@ public final class FileObserverComposite implements FileObserver
 {
     private final Vector<FileObserver> observers = new Vector<FileObserver>();
 
+    /**
+     * Register a component.
+     *
+     * @param observer the component to register
+     */
     public void register( final FileObserver observer )
     {
         observers.add( observer );
