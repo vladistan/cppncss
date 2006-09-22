@@ -103,8 +103,15 @@ public final class Measurement
      */
     public void accept( final MeasurementVisitor visitor )
     {
-        visitor.visit( count, item + " at " + filename + ":" + line );
+        visitor.visit( count, item + getLocation() );
         for( int index = 0; index < counts.size(); ++index )
-            visitor.visit( counts.get( index ), item + " at " + filename + ":" + line );
+            visitor.visit( counts.get( index ), item + getLocation() );
+    }
+
+    private String getLocation()
+    {
+        if( filename == null )
+            return "";
+        return " at " + filename + ":" + line;
     }
 }
