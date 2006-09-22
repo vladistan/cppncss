@@ -28,9 +28,12 @@
 
 package cppncss;
 
+import java.util.Vector;
 import tools.Options;
 import cppast.VisitorComposite;
 import cppncss.counter.CcnCounter;
+import cppncss.counter.Counter;
+import cppncss.counter.CounterObserver;
 import cppncss.counter.FileVisitor;
 import cppncss.counter.FunctionVisitor;
 import cppncss.counter.NcssCounter;
@@ -42,8 +45,71 @@ import cppncss.counter.NcssCounter;
  */
 public final class CppNcss
 {
-    private static final String INDEX = "NCSS";
     private static final int THRESHOLD = 30;
+    private static final CounterFactory[] COUNTER_FACTORIES =
+    {
+            new CounterFactory()
+            {
+                public Counter createCounter( final CounterObserver observer )
+                {
+                    return new NcssCounter( observer );
+                }
+
+                public String getLabel()
+                {
+                    return "NCSS";
+                }
+            }, new CounterFactory()
+            {
+                public Counter createCounter( final CounterObserver observer )
+                {
+                    return new CcnCounter( observer );
+                }
+
+                public String getLabel()
+                {
+                    return "CCN";
+                }
+            }
+    };
+    private static final String INDEX = COUNTER_FACTORIES[0].getLabel();
+    private static final CollectorFactory[] COLLECTOR_FACTORIES =
+    {
+            new CollectorFactory()
+            {
+                public Collector createCollector( final FileObserverComposite observer, final VisitorComposite visitor )
+                {
+                    final Collector collector = new Collector( INDEX, THRESHOLD );
+                    observer.register( collector );
+                    for( CounterFactory factory : COUNTER_FACTORIES )
+                        visitor.register( new FunctionVisitor( factory.createCounter( collector ) ) );
+                    return collector;
+                }
+
+                public String getLabel()
+                {
+                    return "Function";
+                }
+            }, new CollectorFactory()
+            {
+                public Collector createCollector( final FileObserverComposite observer, final VisitorComposite visitor )
+                {
+                    final Collector collector = new Collector( INDEX, THRESHOLD );
+                    for( CounterFactory factory : COUNTER_FACTORIES )
+                    {
+                        final FileVisitor fv = new FileVisitor( factory.createCounter( collector ) );
+                        observer.register( fv );
+                        visitor.register( fv );
+                    }
+                    return collector;
+                }
+
+                public String getLabel()
+                {
+                    return "File";
+                }
+            }
+    };
 
     private CppNcss()
     {
@@ -51,30 +117,23 @@ public final class CppNcss
 
     public static void main( final String[] args )
     {
-        final Collector collector = new Collector( INDEX, THRESHOLD );
-        final Collector collector2 = new Collector( INDEX, THRESHOLD );
         final FileObserverComposite observer = new FileObserverComposite();
-        observer.register( collector );
-        // observer.register( collector2 );
-        final Analyzer analyzer = createAnalyzer( args, observer );
         final VisitorComposite visitor = new VisitorComposite();
-        visitor.register( new FunctionVisitor( new NcssCounter( collector ) ) ); // FIXME first counter must be INDEX
-        visitor.register( new FunctionVisitor( new CcnCounter( collector ) ) );
-        final FileVisitor fv1 = new FileVisitor( new NcssCounter( collector2 ) );
-        final FileVisitor fv2 = new FileVisitor( new CcnCounter( collector2 ) );
-        observer.register( fv1 );
-        observer.register( fv2 );
-        visitor.register( fv1 );
-        visitor.register( fv2 );
+        final Vector<Collector> collectors = new Vector<Collector>();
+        for( CollectorFactory factory : COLLECTOR_FACTORIES )
+            collectors.add( factory.createCollector( observer, visitor ) );
+        final Analyzer analyzer = createAnalyzer( args, observer );
         analyzer.accept( visitor );
-        final ConsoleLogger logger = new ConsoleLogger( "Function" );
-        logger.register( "NCSS" ); // FIXME registration order must be the same as for counters
-        logger.register( "CCN" );
-        collector.accept( logger );
-        final ConsoleLogger logger2 = new ConsoleLogger( "File" );
-        logger2.register( "NCSS" ); // FIXME registration order must be the same as for counters
-        logger2.register( "CCN" );
-        collector2.accept( logger2 );
+        for( int index = 0; index < collectors.size(); ++index )
+            collectors.elementAt( index ).accept( createLogger( COLLECTOR_FACTORIES[index].getLabel() ) );
+    }
+
+    private static ConsoleLogger createLogger( final String item )
+    {
+        final ConsoleLogger logger = new ConsoleLogger( item );
+        for( CounterFactory factory : COUNTER_FACTORIES )
+            logger.register( factory.getLabel() );
+        return logger;
     }
 
     private static Analyzer createAnalyzer( final String[] args, final FileObserver observer )
