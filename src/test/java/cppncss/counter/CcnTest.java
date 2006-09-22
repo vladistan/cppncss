@@ -32,9 +32,6 @@ import java.io.StringReader;
 import tools.EasyMockTestCase;
 import cppast.ParseException;
 import cppast.Parser;
-import cppncss.counter.CcnCounter;
-import cppncss.counter.CounterObserver;
-import cppncss.counter.FunctionVisitor;
 
 /**
  * @author Mathieu Champlon

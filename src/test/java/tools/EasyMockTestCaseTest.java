@@ -3,7 +3,6 @@ package tools;
 
 import java.util.Collection;
 import java.util.Vector;
-import tools.EasyMockTestCase;
 import junit.framework.TestCase;
 import junit.framework.TestResult;
 

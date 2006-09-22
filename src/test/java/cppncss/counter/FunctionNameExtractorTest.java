@@ -35,7 +35,6 @@ import junit.framework.TestCase;
 import cppast.AstTranslationUnit;
 import cppast.ParseException;
 import cppast.Parser;
-import cppncss.counter.FunctionNameExtractor;
 
 /**
  * @author Mathieu Champlon

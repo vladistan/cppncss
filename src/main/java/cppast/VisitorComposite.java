@@ -26,34 +26,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
+package cppast;
 
 import java.util.Vector;
-import cppast.AstAssignmentExpression;
-import cppast.AstCaseStatement;
-import cppast.AstConstructorDefinition;
-import cppast.AstConstructorInitializer;
-import cppast.AstDeclarationStatement;
-import cppast.AstDefaultStatement;
-import cppast.AstDestructorDefinition;
-import cppast.AstElseStatement;
-import cppast.AstExpressionStatement;
-import cppast.AstFunctionBody;
-import cppast.AstFunctionDefinition;
-import cppast.AstFunctionName;
-import cppast.AstFunctionParameterTypeQualifier;
-import cppast.AstFunctionParameters;
-import cppast.AstHandler;
-import cppast.AstIfStatement;
-import cppast.AstIterationStatement;
-import cppast.AstJumpStatement;
-import cppast.AstLabelStatement;
-import cppast.AstParameter;
-import cppast.AstParameterType;
-import cppast.AstSwitchStatement;
-import cppast.AstTranslationUnit;
-import cppast.ParserVisitor;
-import cppast.SimpleNode;
 
 /**
  * Provides a composite of visitors.

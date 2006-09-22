@@ -28,7 +28,7 @@
  * $Id: $
  */
 
-package cppncss;
+package tools;
 
 import java.util.List;
 import junit.framework.TestCase;

@@ -31,7 +31,6 @@ package cppncss.preprocessor;
 import java.io.StringReader;
 import junit.framework.TestCase;
 import cppast.Token;
-import cppncss.preprocessor.PreProcessor;
 
 /**
  * @author Mathieu Champlon

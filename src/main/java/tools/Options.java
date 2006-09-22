@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
+package tools;
 
 import java.util.List;
 import java.util.Vector;

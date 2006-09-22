@@ -28,6 +28,8 @@
 
 package cppncss;
 
+import tools.Options;
+import cppast.VisitorComposite;
 import cppncss.counter.CcnCounter;
 import cppncss.counter.FileVisitor;
 import cppncss.counter.FunctionVisitor;

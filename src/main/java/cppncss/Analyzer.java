@@ -37,6 +37,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
+import tools.Options;
 import cppast.ParseException;
 import cppast.Parser;
 import cppast.ParserVisitor;
