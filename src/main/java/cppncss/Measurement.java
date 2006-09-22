@@ -35,7 +35,7 @@ import java.util.Vector;
  *
  * @author Mathieu Champlon
  */
-public final class Measurement
+public final class Measurement implements Comparable
 {
     private final String item;
     private final int line;
@@ -67,17 +67,6 @@ public final class Measurement
     }
 
     /**
-     * Compare to another measurement for sorting purpose.
-     *
-     * @param other the compared measurement
-     * @return the difference between the other measurement value and the value of this measurement
-     */
-    public int compare( final Measurement other )
-    {
-        return other.count - count;
-    }
-
-    /**
      * Add a measurement value to the recorded values.
      * <p>
      * If the item name does not match the measurement the value is not recorded.
@@ -90,7 +79,7 @@ public final class Measurement
      */
     public boolean update( final String item, final String filename, final int line, final int count )
     {
-        if( !this.item.equals( item ) || this.filename != filename || this.line != line )
+        if( !matches( item, filename, line ) )
             return false;
         counts.add( count );
         return true;
@@ -103,15 +92,41 @@ public final class Measurement
      */
     public void accept( final MeasurementVisitor visitor )
     {
-        visitor.visit( count, item + getLocation() );
+        visitor.visit( count, toString() );
         for( int index = 0; index < counts.size(); ++index )
-            visitor.visit( counts.get( index ), item + getLocation() );
+            visitor.visit( counts.get( index ), toString() );
     }
 
-    private String getLocation()
+    /**
+     * {@inheritDoc}
+     */
+    public String toString()
     {
         if( filename == null )
-            return "";
-        return " at " + filename + ":" + line;
+            return item;
+        return item + " at " + filename + ":" + line;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int compareTo( final Object object )
+    {
+        final Measurement measurement = (Measurement)object;
+        if( matches( measurement.item, measurement.filename, measurement.line ) )
+            return 0;
+        final int delta = (measurement).count - count;
+        if( delta == 0 )
+            return 1;
+        return delta;
+    }
+
+    private boolean matches( final String item, final String filename, final int line )
+    {
+        if( !this.item.equals( item ) || this.line != line )
+            return false;
+        if( this.filename == null )
+            return filename == null;
+        return this.filename.equals( filename );
     }
 }
