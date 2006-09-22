@@ -64,7 +64,7 @@ public class CcnTest extends EasyMockTestCase
         parse( "void MyFunction() {}" );
     }
 
-    public void testFunctionWithIfHasCcnValueOfTwo() throws ParseException
+    public void testIfStatementIncrementsCcnByOne() throws ParseException
     {
         observer.notify( "CCN", "MyFunction()", 1, 2 );
         replay();
