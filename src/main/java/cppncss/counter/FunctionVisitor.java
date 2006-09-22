@@ -36,7 +36,7 @@ import cppast.SimpleNode;
 
 /**
  * Implements a visitor for functions.
- * 
+ *
  * @author Mathieu Champlon
  */
 public final class FunctionVisitor extends AbstractVisitor
@@ -45,7 +45,7 @@ public final class FunctionVisitor extends AbstractVisitor
 
     /**
      * Create a function visitor.
-     * 
+     *
      * @param counter the counter to apply
      */
     public FunctionVisitor( final Counter counter )

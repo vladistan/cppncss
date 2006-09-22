@@ -40,7 +40,7 @@ public interface EventHandler extends FileObserver
 
     /**
      * Notify an end event.
-     * 
+     *
      * @param parsed number of files parsed
      * @param total total number of files
      */
@@ -48,7 +48,7 @@ public interface EventHandler extends FileObserver
 
     /**
      * Notify an error.
-     * 
+     *
      * @param filename the location of the error
      * @param throwable the error
      * @param reason the description of the error
@@ -57,7 +57,7 @@ public interface EventHandler extends FileObserver
 
     /**
      * Display a diagnostic.
-     * 
+     *
      * @param filename the file name
      * @param line the line number
      * @param column the column offset

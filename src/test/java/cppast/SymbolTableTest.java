@@ -106,11 +106,12 @@ public class SymbolTableTest extends TestCase
         symbols.openScope( "my_scope3" );
         symbols.closeScopes();
         symbols.extend( "my_scope1::my_scope2" );
-        assertEquals( "my_scope1::my_scope2::my_scope3::Symbol", symbols.getCurrentScope().resolve( "my_scope3::Symbol" ) );
+        assertEquals( "my_scope1::my_scope2::my_scope3::Symbol", symbols.getCurrentScope()
+                .resolve( "my_scope3::Symbol" ) );
     }
 
     public void testTmp()
     {
-        assertEquals("", "::".substring( 2 ));
+        assertEquals( "", "::".substring( 2 ) );
     }
 }

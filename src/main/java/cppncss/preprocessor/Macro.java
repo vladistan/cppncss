@@ -34,7 +34,7 @@ import cppast.Token;
 
 /**
  * Manages macro pre-processing.
- * 
+ *
  * @author Mathieu Champlon
  */
 public final class Macro extends AbstractTokenFilter
@@ -43,7 +43,7 @@ public final class Macro extends AbstractTokenFilter
 
     /**
      * Create a macro.
-     * 
+     *
      * @param provider the token provider to retrieve subsequent tokens
      * @param buffer the token stack where to output filtered tokens
      * @param name the define symbol

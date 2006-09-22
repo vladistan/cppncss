@@ -32,14 +32,14 @@ import cppast.Token;
 
 /**
  * Defines a token provider.
- * 
+ *
  * @author Mathieu Champlon
  */
 public interface TokenProvider
 {
     /**
      * Retrieve the next available token.
-     * 
+     *
      * @return the next token
      */
     Token next();

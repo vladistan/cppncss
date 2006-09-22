@@ -33,14 +33,14 @@ import cppast.Token;
 
 /**
  * Manages define pre-proprecessing.
- * 
+ *
  * @author Mathieu Champlon
  */
 public final class Define extends AbstractTokenFilter
 {
     /**
      * Create a define definition.
-     * 
+     *
      * @param buffer the token stack where to output filtered tokens
      * @param name the define symbol
      * @param value the define value

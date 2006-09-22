@@ -40,7 +40,7 @@ import cppast.Token;
 
 /**
  * Provides a visitor implementation to extract a function name.
- * 
+ *
  * @author Mathieu Champlon
  */
 public final class FunctionNameExtractor extends AbstractVisitor

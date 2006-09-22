@@ -80,8 +80,7 @@ public class OptionsTest extends TestCase
     {
         final List actual = new Options( new String[]
         {
-            "-optionvalue",
-            "-optionanother_value"
+                "-optionvalue", "-optionanother_value"
         } ).getOptionValues( "option" );
         assertEquals( 2, actual.size() );
         assertEquals( "value", actual.get( 0 ) );

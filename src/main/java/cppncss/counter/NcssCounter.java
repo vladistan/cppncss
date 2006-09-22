@@ -43,14 +43,14 @@ import cppast.AstSwitchStatement;
 
 /**
  * Implements a NCSS counter.
- * 
+ *
  * @author Mathieu Champlon
  */
 public final class NcssCounter extends AbstractCounter
 {
     /**
      * Create a NCSS counter.
-     * 
+     *
      * @param observer a function observer
      */
     public NcssCounter( final CounterObserver observer )

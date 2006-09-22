@@ -45,7 +45,7 @@ public final class ConsoleEventHandler implements EventHandler
 
     /**
      * Create a console event handler.
-     * 
+     *
      * @param debug activate debug events
      * @param verbose activate verbose events
      */

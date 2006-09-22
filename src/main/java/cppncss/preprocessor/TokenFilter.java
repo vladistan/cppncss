@@ -32,14 +32,14 @@ import cppast.Token;
 
 /**
  * Defines a token flow filter.
- * 
+ *
  * @author Mathieu Champlon
  */
 public interface TokenFilter
 {
     /**
      * Test if the filter name matches a given name.
-     * 
+     *
      * @param name the name to test
      * @return whether the filter name matches or not
      */
@@ -47,7 +47,7 @@ public interface TokenFilter
 
     /**
      * Trigger filtering based on a given token.
-     * 
+     *
      * @param token the head of the token flow
      * @return whether the filter has been applied or not
      */

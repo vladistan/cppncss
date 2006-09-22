@@ -55,7 +55,7 @@ public final class CppNcss
         final Collector collector2 = new Collector( INDEX, THRESHOLD );
         final FileObserverComposite observer = new FileObserverComposite();
         observer.register( collector );
-//        observer.register( collector2 );
+        // observer.register( collector2 );
         final Analyzer analyzer = createAnalyzer( args, observer );
         final VisitorComposite visitor = new VisitorComposite();
         visitor.register( new FunctionVisitor( new NcssCounter( collector ) ) ); // FIXME first counter must be INDEX

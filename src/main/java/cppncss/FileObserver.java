@@ -30,14 +30,14 @@ package cppncss;
 
 /**
  * Provides a means to be notified about the file being processed.
- * 
+ *
  * @author Mathieu Champlon
  */
 public interface FileObserver
 {
     /**
      * Specify the file being processed.
-     * 
+     *
      * @param filename the name of the fle
      */
     void changed( String filename );
