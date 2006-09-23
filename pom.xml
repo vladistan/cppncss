@@ -5,7 +5,7 @@
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>CppNcss</name>
-  <url>http://cppncss.sourceforge.net</url>
+  <url>http://${pom.artifactId}.sourceforge.net</url>
   <description>
     CppNcss computes NCSS (Non Commenting Source Statement) and CCN (Cyclomatic Complexity Number) for C++ source code.
   </description>
@@ -16,6 +16,33 @@
       <distribution>manual</distribution>
     </license>
   </licenses>
+  <scm>
+    <connection>scm:svn:https://svn.sourceforge.net/svnroot/${pom.artifactId}</connection>
+    <developerConnection>scm:svn:https://svn.sourceforge.net/svnroot/${pom.artifactId}</developerConnection>
+    <url>http://svn.sourceforge.net/cppncss</url>
+  </scm>
+  <distributionManagement>
+    <site>
+      <id>sourceforge</id>
+      <url>scp://shell.sourceforge.net/home/groups/c/cp/${pom.artifactId}/htdocs/</url> <!-- substring ?! -->
+    </site>
+  </distributionManagement>
+  <issueManagement>
+    <system>sourceforge</system>
+    <url>http://sourceforge.net/tracker/?group_id=175984</url>
+  </issueManagement>
+  <developers>
+    <developer>
+      <id>mat007</id>
+      <name>Mathieu Champlon</name>
+      <email>mat007@sourceforge.net</email>
+      <roles>
+        <role>admin</role>
+        <role>developer</role>
+      </roles>
+      <timezone>9</timezone>
+    </developer>
+  </developers>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -141,6 +168,10 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>jdepend-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>javancss-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </reporting>
