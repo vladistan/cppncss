@@ -30,6 +30,8 @@
 
 package cppast;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
@@ -871,12 +873,12 @@ public class ParserTest extends TestCase
         parse( "char* str = \"\\x02\\x03\";" );
     }
 
-    public void testBackslashEndOfLineIsIgnored() throws ParseException
+    public void testBackslashAtEndOfLineIsIgnored() throws ParseException
     {
         parse( "int i\\\n; int j\\\r;" );
     }
 
-    public void testBackslashEndOfLineInStringIsIgnored() throws ParseException
+    public void testBackslashAtEndOfLineInStringIsIgnored() throws ParseException
     {
         parse( "char* str = \"abc\\\ndef\"; char* str2 = \"abc\\\rdef\"; char* str3 = \"abc\\\r\ndef\";" );
     }
@@ -894,16 +896,16 @@ public class ParserTest extends TestCase
     public void testTMP() throws IOException, ParseException
     {
         final Parser parser = new Parser( new StringReader( "" ) );
-        load( parser, "TMP.h" ).translation_unit();
-        load( parser, "TMP.cpp" ).translation_unit();
+        load( parser, "TMP.h" );
+        load( parser, "TMP.cpp" );
     }
 
-    private Parser load( final Parser parser, final String name ) throws IOException
+    private void load( final Parser parser, final String name ) throws IOException, ParseException
     {
         final URL resource = ParserTest.class.getClassLoader().getResource( name );
         if( resource == null )
             throw new IOException( "resource not found : " + name );
-        parser.ReInit( resource.openStream() );
-        return parser;
+        parser.ReInit( new BufferedReader( new FileReader( resource.getFile() ) ) );
+        parser.translation_unit();
     }
 }

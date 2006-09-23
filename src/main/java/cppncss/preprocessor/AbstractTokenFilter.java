@@ -31,8 +31,8 @@ package cppncss.preprocessor;
 import java.io.StringReader;
 import java.util.Stack;
 import java.util.Vector;
+import cppast.JavaCharStream;
 import cppast.ParserTokenManager;
-import cppast.SimpleCharStream;
 import cppast.Token;
 
 /**
@@ -68,7 +68,7 @@ public abstract class AbstractTokenFilter implements TokenFilter
     {
         if( name.length() == 0 )
             throw new IllegalArgumentException( "Empty macro/define name specified" );
-        final ParserTokenManager manager = new ParserTokenManager( new SimpleCharStream( new StringReader( name ) ) );
+        final ParserTokenManager manager = new ParserTokenManager( new JavaCharStream( new StringReader( name ) ) );
         final Token token = manager.getNextToken();
         if( token.kind != ParserTokenManager.ID )
             throw new IllegalArgumentException( "Illegal macro/define name : " + "'" + name + "'" );
@@ -81,7 +81,7 @@ public abstract class AbstractTokenFilter implements TokenFilter
     private Vector<Token> parse( final String value )
     {
         final Vector<Token> result = new Vector<Token>();
-        final ParserTokenManager manager = new ParserTokenManager( new SimpleCharStream( new StringReader( value ) ) );
+        final ParserTokenManager manager = new ParserTokenManager( new JavaCharStream( new StringReader( value ) ) );
         Token token = manager.getNextToken();
         while( token.kind != ParserTokenManager.EOF )
         {

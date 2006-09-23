@@ -31,8 +31,8 @@ package cppncss.preprocessor;
 import java.io.Reader;
 import java.util.Stack;
 import java.util.Vector;
+import cppast.JavaCharStream;
 import cppast.ParserTokenManager;
-import cppast.SimpleCharStream;
 import cppast.Token;
 
 /**
@@ -61,7 +61,7 @@ public final class PreProcessor extends ParserTokenManager implements TokenProvi
     public void reset( final Reader reader )
     {
         buffer.clear();
-        ReInit( new SimpleCharStream( reader ) );
+        ReInit( new JavaCharStream( reader ) );
     }
 
     /**
