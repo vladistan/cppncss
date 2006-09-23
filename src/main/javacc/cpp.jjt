@@ -24,6 +24,18 @@
  *
  */
 
+options
+{
+  STATIC = false;
+  MULTI = true;
+  NODE_DEFAULT_VOID = true;
+  NODE_USES_PARSER = true;
+  VISITOR = true;
+  NODE_PREFIX = "Ast";
+  NODE_PACKAGE = "cppast";
+  JAVA_UNICODE_ESCAPE = true;
+}
+
 PARSER_BEGIN(Parser)
 
 package cppast;

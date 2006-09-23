@@ -84,13 +84,7 @@
             <configuration>
               <sourceDirectory>src/main/javacc</sourceDirectory>
               <outputDirectory>src/main/java</outputDirectory>
-              <staticOption>false</staticOption>
-              <multi>true</multi>
               <nodePackage>cppast</nodePackage>
-              <nodeUsesParser>true</nodeUsesParser>
-              <visitor>true</visitor>
-              <nodePrefix>Ast</nodePrefix>
-              <nodeDefaultVoid>true</nodeDefaultVoid>
             </configuration>
           </execution>
           <execution>
@@ -101,7 +95,6 @@
             <configuration>
               <sourceDirectory>src/main/java/cppast</sourceDirectory>
               <outputDirectory>src/main/java</outputDirectory>
-              <isStatic>false</isStatic>
               <packageName>cppast</packageName>
             </configuration>
           </execution>
