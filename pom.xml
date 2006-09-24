@@ -1,10 +1,13 @@
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.sourceforge.cppncss</groupId>
   <artifactId>cppncss</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>CppNcss</name>
+  <inceptionYear>2006</inceptionYear>
   <url>http://${pom.artifactId}.sourceforge.net</url>
   <description>
     CppNcss computes NCSS (Non Commenting Source Statement) and CCN (Cyclomatic Complexity Number) for C++ source code.
@@ -65,7 +68,7 @@
   </dependencies>
   <pluginRepositories>
     <pluginRepository>
-      <id>CodeHaus</id>
+      <id>codehaus</id>
       <name>CodeHaus</name>
       <url>http://snapshots.maven.codehaus.org/maven2</url>
     </pluginRepository>
@@ -125,6 +128,23 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>summary</report>
+              <report>license</report>
+              <report>mailing-list</report>
+              <report>issue-tracking</report>
+              <report>scm</report>
+              <report>dependencies</report>
+              <report>project-team</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
       </plugin>
       <plugin>
@@ -138,10 +158,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jxr-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -163,8 +179,8 @@
         <artifactId>jdepend-maven-plugin</artifactId>
       </plugin>
       <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>javancss-maven-plugin</artifactId>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>javancss-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </reporting>

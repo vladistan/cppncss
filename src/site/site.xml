@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="CppNcss">
+  <skin>
+    <groupId>org.apache.maven.skins</groupId>
+    <artifactId>maven-stylus-skin</artifactId>
+  </skin>
+  <bannerLeft>
+    <name>CppNcss</name>
+    <href>http://cppncss.sourceforge.net/</href>
+  </bannerLeft>
+  <body>
+
+    <menu name="CppNcss">
+      <item name="Introduction" href="index.html"/>
+      <item name="Download" href="download.html"/>
+      <item name="Usage" href="usage.html"/>
+      <item name="FAQ" href="faq.html" />
+    </menu>
+
+    <menu name="Tutorial">
+    </menu>
+
+    <menu name="Samples">
+    </menu>
+
+    <menu name="Ant Task">
+    </menu>
+
+    ${reports}
+
+  </body>
+</project>
