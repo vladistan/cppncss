@@ -6,8 +6,9 @@
   </skin>
   <bannerLeft>
     <name>CppNcss</name>
-    <href>http://cppncss.sourceforge.net/</href>
+    <href>http://cppncss.sourceforge.net/./</href>
   </bannerLeft>
+
   <body>
 
     <menu name="CppNcss">
