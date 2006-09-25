@@ -42,7 +42,7 @@ import cppncss.counter.CounterObserver;
  */
 public final class Collector implements CounterObserver, FileObserver
 {
-    private final TreeSet<Measurement> result;
+    private final TreeSet<Measure> result;
     private final String index;
     private final int threshold;
     private String filename;
@@ -61,7 +61,7 @@ public final class Collector implements CounterObserver, FileObserver
             throw new IllegalArgumentException( "threshold is <= 0" );
         this.index = index;
         this.threshold = threshold;
-        this.result = new TreeSet<Measurement>();
+        this.result = new TreeSet<Measure>();
     }
 
     /**
@@ -77,15 +77,15 @@ public final class Collector implements CounterObserver, FileObserver
 
     private boolean update( final String item, final int line, final int count )
     {
-        for( Measurement measurement : result )
-            if( measurement.update( item, filename, line, count ) )
+        for( Measure measure : result )
+            if( measure.update( item, filename, line, count ) )
                 return true;
         return false;
     }
 
     private void insert( final String item, final int line, final int count )
     {
-        result.add( new Measurement( item, filename, line, count ) );
+        result.add( new Measure( item, filename, line, count ) );
         if( result.size() > threshold )
             result.remove( result.last() );
     }
@@ -95,10 +95,10 @@ public final class Collector implements CounterObserver, FileObserver
      *
      * @param visitor the visitor
      */
-    public void accept( final MeasurementVisitor visitor )
+    public void accept( final MeasureVisitor visitor )
     {
-        for( Measurement measurement : result )
-            measurement.accept( visitor );
+        for( Measure measure : result )
+            measure.accept( visitor );
     }
 
     /**

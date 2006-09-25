@@ -33,7 +33,7 @@ package cppncss;
  *
  * @author Mathieu Champlon
  */
-public interface MeasurementVisitor
+public interface MeasureVisitor
 {
     /**
      * Visit a measurement.

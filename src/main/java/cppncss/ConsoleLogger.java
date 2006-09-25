@@ -36,7 +36,7 @@ import java.util.Vector;
  *
  * @author Mathieu Champlon
  */
-public final class ConsoleLogger implements MeasurementVisitor
+public final class ConsoleLogger implements MeasureVisitor
 {
     private final Vector<String> labels;
     private int current;

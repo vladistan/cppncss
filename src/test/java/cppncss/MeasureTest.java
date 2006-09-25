@@ -33,32 +33,32 @@ import junit.framework.TestCase;
 /**
  * @author Mathieu Champlon
  */
-public class MeasurementTest extends TestCase
+public class MeasureTest extends TestCase
 {
-    public void testMeasurementComparedToItselfEqualsZero()
+    public void testMeasureComparedToItselfEqualsZero()
     {
-        final Measurement measurement = new Measurement( "item", "filename", 12, 42 );
-        assertEquals( 0, measurement.compareTo( measurement ) );
-        assertEquals( measurement, measurement );
+        final Measure measure = new Measure( "item", "filename", 12, 42 );
+        assertEquals( 0, measure.compareTo( measure ) );
+        assertEquals( measure, measure );
     }
 
-    public void testMeasurementsWithDifferentCountsComparedToOneAnotherEqualZero()
+    public void testMeasuresWithDifferentCountsComparedToOneAnotherEqualZero()
     {
-        final Measurement measurement1 = new Measurement( "item", "filename", 12, 42 );
-        final Measurement measurement2 = new Measurement( "item", "filename", 12, 17 );
-        assertEquals( 0, measurement1.compareTo( measurement2 ) );
-        assertEquals( 0, measurement2.compareTo( measurement1 ) );
-        assertFalse( measurement1.equals( measurement2 ) );
-        assertFalse( measurement2.equals( measurement1 ) );
+        final Measure measure1 = new Measure( "item", "filename", 12, 42 );
+        final Measure measure2 = new Measure( "item", "filename", 12, 17 );
+        assertEquals( 0, measure1.compareTo( measure2 ) );
+        assertEquals( 0, measure2.compareTo( measure1 ) );
+        assertFalse( measure1.equals( measure2 ) );
+        assertFalse( measure2.equals( measure1 ) );
     }
 
-    public void testDifferentsMeasurementsWithSameCountComparedToOneAnotherEqualOne()
+    public void testDifferentsMeasuresWithSameCountComparedToOneAnotherEqualOne()
     {
-        final Measurement measurement1 = new Measurement( "item 1", "filename 1", 12, 42 );
-        final Measurement measurement2 = new Measurement( "item 2", "filename 2", 17, 42 );
-        assertEquals( 1, measurement1.compareTo( measurement2 ) );
-        assertEquals( 1, measurement2.compareTo( measurement1 ) );
-        assertFalse( measurement1.equals( measurement2 ) );
-        assertFalse( measurement2.equals( measurement1 ) );
+        final Measure measure1 = new Measure( "item 1", "filename 1", 12, 42 );
+        final Measure measure2 = new Measure( "item 2", "filename 2", 17, 42 );
+        assertEquals( 1, measure1.compareTo( measure2 ) );
+        assertEquals( 1, measure2.compareTo( measure1 ) );
+        assertFalse( measure1.equals( measure2 ) );
+        assertFalse( measure2.equals( measure1 ) );
     }
 }

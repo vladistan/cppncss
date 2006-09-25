@@ -35,7 +35,7 @@ import java.util.Vector;
  *
  * @author Mathieu Champlon
  */
-public final class Measurement implements Comparable
+public final class Measure implements Comparable
 {
     private final String item;
     private final int line;
@@ -51,7 +51,7 @@ public final class Measurement implements Comparable
      * @param line the location of the item within the file
      * @param count the value of the measurement
      */
-    public Measurement( final String item, final String filename, final int line, final int count )
+    public Measure( final String item, final String filename, final int line, final int count )
     {
         if( item == null )
             throw new IllegalArgumentException( "argument 'item' is null" );
@@ -90,7 +90,7 @@ public final class Measurement implements Comparable
      *
      * @param visitor the visitor
      */
-    public void accept( final MeasurementVisitor visitor )
+    public void accept( final MeasureVisitor visitor )
     {
         visitor.visit( count, toString() );
         for( int index = 0; index < counts.size(); ++index )
@@ -112,10 +112,10 @@ public final class Measurement implements Comparable
      */
     public int compareTo( final Object object )
     {
-        final Measurement measurement = (Measurement)object;
-        if( matches( measurement.item, measurement.filename, measurement.line ) )
+        final Measure measure = (Measure)object;
+        if( matches( measure.item, measure.filename, measure.line ) )
             return 0;
-        final int delta = (measurement).count - count;
+        final int delta = (measure).count - count;
         if( delta == 0 )
             return 1;
         return delta;
