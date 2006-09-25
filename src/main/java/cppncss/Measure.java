@@ -31,7 +31,7 @@ package cppncss;
 import java.util.Vector;
 
 /**
- * Stores a result measurement.
+ * Stores a result measure.
  *
  * @author Mathieu Champlon
  */
@@ -44,12 +44,12 @@ public final class Measure implements Comparable
     private final String filename;
 
     /**
-     * Create a measurement.
+     * Create a measure.
      *
      * @param item the name of the measured item
      * @param filename the name of the file containing the item
      * @param line the location of the item within the file
-     * @param count the value of the measurement
+     * @param count the value of the measure
      */
     public Measure( final String item, final String filename, final int line, final int count )
     {
@@ -67,15 +67,15 @@ public final class Measure implements Comparable
     }
 
     /**
-     * Add a measurement value to the recorded values.
+     * Add a measure value to the recorded values.
      * <p>
-     * If the item name does not match the measurement the value is not recorded.
+     * If the item name does not match the measure the value is not recorded.
      *
      * @param item the item name
      * @param filename the file name of the item
      * @param line the location of the item
-     * @param count the measurement to record
-     * @return whether the measurement has been added or not
+     * @param count the measure to record
+     * @return whether the measure has been added or not
      */
     public boolean update( final String item, final String filename, final int line, final int count )
     {

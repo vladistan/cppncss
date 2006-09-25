@@ -32,11 +32,11 @@ import java.util.TreeSet;
 import cppncss.counter.CounterObserver;
 
 /**
- * Collects measurements.
+ * Collects measures.
  * <p>
- * The results are sorted according to the value of the first measurement.
+ * The results are sorted according to the value of the first measure.
  * <p>
- * The different measurements for a given item must be recorded one after another.
+ * The different measures for a given item must be recorded one after another.
  *
  * @author Mathieu Champlon
  */
@@ -48,10 +48,10 @@ public final class Collector implements CounterObserver, FileObserver
     private String filename;
 
     /**
-     * Create a collector indexed by a given measurement name.
+     * Create a collector indexed by a given measure name.
      *
-     * @param index the index measurement name
-     * @param threshold the number of measurements to keep
+     * @param index the index measure name
+     * @param threshold the number of measures to keep
      */
     public Collector( final String index, final int threshold )
     {

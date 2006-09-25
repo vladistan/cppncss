@@ -29,16 +29,16 @@
 package cppncss;
 
 /**
- * Defines a visitor for measurements.
+ * Defines a visitor for measures.
  *
  * @author Mathieu Champlon
  */
 public interface MeasureVisitor
 {
     /**
-     * Visit a measurement.
+     * Visit a measure.
      *
-     * @param count the result of the measurement
+     * @param count the result of the measure
      * @param item the name of the measured item
      */
     void visit( int count, String item );

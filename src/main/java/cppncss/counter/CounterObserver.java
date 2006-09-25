@@ -29,19 +29,19 @@
 package cppncss.counter;
 
 /**
- * Defines an observer for measurements.
+ * Defines an observer for measures.
  *
  * @author Mathieu Champlon
  */
 public interface CounterObserver
 {
     /**
-     * Notify about a measurement.
+     * Notify about a measure.
      *
-     * @param label the name of the measurement
+     * @param label the name of the measure
      * @param item the name of the item measured
      * @param line the location of the item
-     * @param count the value of the measurement
+     * @param count the value of the measure
      */
     void notify( String label, String item, int line, int count );
 }

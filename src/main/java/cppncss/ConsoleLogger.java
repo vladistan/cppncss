@@ -58,9 +58,9 @@ public final class ConsoleLogger implements MeasureVisitor
     }
 
     /**
-     * Register a measurement label.
+     * Register a measure label.
      *
-     * @param label the name of the measurement
+     * @param label the name of the measure
      */
     public void register( final String label )
     {

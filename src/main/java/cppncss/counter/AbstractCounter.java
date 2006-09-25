@@ -44,7 +44,7 @@ public class AbstractCounter extends AbstractVisitor implements Counter
     /**
      * Create an abstract counter.
      *
-     * @param label the name of the measurement
+     * @param label the name of the measure
      * @param observer a counter observer
      */
     public AbstractCounter( final String label, final CounterObserver observer )

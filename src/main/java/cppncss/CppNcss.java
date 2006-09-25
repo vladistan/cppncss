@@ -39,7 +39,7 @@ import cppncss.counter.FunctionVisitor;
 import cppncss.counter.NcssCounter;
 
 /**
- * Provides code measurement for C++.
+ * Provides code measure for C++.
  *
  * @author Mathieu Champlon
  */

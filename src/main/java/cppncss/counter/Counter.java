@@ -38,7 +38,7 @@ import cppast.ParserVisitor;
 public interface Counter extends ParserVisitor
 {
     /**
-     * Notify the end of a measurement.
+     * Notify the end of a measure.
      *
      * @param item the item measured
      * @param line the location of the item
