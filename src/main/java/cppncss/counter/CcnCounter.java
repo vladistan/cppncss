@@ -28,15 +28,14 @@
 
 package cppncss.counter;
 
-import cppast.AstAssignmentExpression;
 import cppast.AstCaseStatement;
+import cppast.AstConditionalExpression;
 import cppast.AstFunctionBody;
 import cppast.AstHandler;
 import cppast.AstIfStatement;
 import cppast.AstIterationStatement;
-import cppast.Parser;
-import cppast.SimpleNode;
-import cppast.Token;
+import cppast.AstLogicalAndExpression;
+import cppast.AstLogicalOrExpression;
 
 /**
  * Implements a CCN counter.
@@ -103,18 +102,27 @@ public final class CcnCounter extends AbstractCounter
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstAssignmentExpression node, final Object data )
+    public Object visit( final AstLogicalAndExpression node, final Object data )
     {
-        count( node, Parser.AND );
-        count( node, Parser.OR );
-        count( node, Parser.QUESTIONMARK );
-        return data;
+        increment();
+        return node.accept( this, data );
     }
 
-    private void count( final SimpleNode node, final int kind )
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstLogicalOrExpression node, final Object data )
     {
-        for( Token token = node.getFirstToken(); token != node.getLastToken().next; token = token.next )
-            if( token.kind == kind )
-                increment();
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstConditionalExpression node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
     }
 }

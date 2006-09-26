@@ -110,14 +110,6 @@ public class AbstractVisitor implements ParserVisitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstAssignmentExpression node, final Object data )
-    {
-        return node.accept( this, data );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public Object visit( final AstFunctionName node, final Object data )
     {
         return node.accept( this, data );
@@ -223,6 +215,46 @@ public class AbstractVisitor implements ParserVisitor
      * {@inheritDoc}
      */
     public Object visit( final AstDefaultStatement node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstConditionalExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstLogicalOrExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstLogicalAndExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstPrimaryExpression node, final Object data )
     {
         return node.accept( this, data );
     }
