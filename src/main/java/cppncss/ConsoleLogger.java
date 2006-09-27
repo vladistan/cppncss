@@ -36,7 +36,7 @@ import java.util.Vector;
  *
  * @author Mathieu Champlon
  */
-public final class ConsoleLogger implements MeasureVisitor
+public final class ConsoleLogger implements MeasureVisitor, Logger
 {
     private final Vector<String> labels;
     private int current;
@@ -58,9 +58,7 @@ public final class ConsoleLogger implements MeasureVisitor
     }
 
     /**
-     * Register a measure label.
-     *
-     * @param label the name of the measure
+     * {@inheritDoc}
      */
     public void register( final String label )
     {
@@ -70,7 +68,7 @@ public final class ConsoleLogger implements MeasureVisitor
     /**
      * {@inheritDoc}
      */
-    public void visit( final int count, final String function )
+    public void visit( final int count, final String item )
     {
         if( index == 0 )
             printHeaders( labels );
@@ -80,7 +78,7 @@ public final class ConsoleLogger implements MeasureVisitor
         ++current;
         current %= labels.size();
         if( current == 0 )
-            printFunction( function );
+            printItem( item );
     }
 
     private void printHeaders( final Vector<String> labels )
@@ -102,9 +100,24 @@ public final class ConsoleLogger implements MeasureVisitor
         stream.format( " %" + label.length() + "d", count );
     }
 
-    private void printFunction( final String function )
+    private void printItem( final String item )
     {
-        stream.format( " %s", function );
+        stream.format( " %s", item );
         stream.println();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void visit( final int average )
+    {
+        printAverage( labels.get( current ), average );
+        ++current;
+        current %= labels.size();
+    }
+
+    private void printAverage( final String label, final int average )
+    {
+        stream.println( "Average " + item + " " + label + average );
     }
 }

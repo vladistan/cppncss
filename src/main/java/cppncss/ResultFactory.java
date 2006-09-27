@@ -28,22 +28,23 @@
 
 package cppncss;
 
-import cppncss.counter.Counter;
-import cppncss.counter.CounterObserver;
+import cppast.VisitorComposite;
 
 /**
- * Defines a factory for counters.
+ * Defines a factory for results.
  *
  * @author Mathieu Champlon
  */
-public interface CounterFactory
+public interface ResultFactory
 {
     /**
-     * Create a counter.
+     * Create a collector.
+     * <p>
+     * Composites are handed in order to register any number of observers and visitors.
      *
-     * @param observer a counter observer
-     * @param logger a logger to register the counter label
-     * @return a new counter
+     * @param observer a composite of file observers
+     * @param visitor a composite of visitors
+     * @return a new collector
      */
-    Counter create( CounterObserver observer, Logger logger );
+    Result create( FileObserverComposite observer, VisitorComposite visitor );
 }

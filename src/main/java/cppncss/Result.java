@@ -28,31 +28,33 @@
 
 package cppncss;
 
-import cppast.VisitorComposite;
-
 /**
- * Defines a factory for collectors.
+ * Provides result generation encapsulation.
  *
  * @author Mathieu Champlon
  */
-public interface CollectorFactory
+public final class Result
 {
-    /**
-     * Create a collector.
-     * <p>
-     * Composites are handed in order to register any number of observers and visitors.
-     *
-     * @param observer a composite of file observers
-     * @param visitor a composite of visitors
-     * @return a new collector
-     * @throws Exception if an error occurs
-     */
-    Collector createCollector( FileObserverComposite observer, VisitorComposite visitor );
+    private final Collector collector;
+    private final MeasureVisitor visitor;
 
     /**
-     * Retrieve the label of the item create by the factory.
+     * Create a result.
      *
-     * @return the label of the item
+     * @param collector a collector
+     * @param visitor the associated visitor
      */
-    String getLabel();
+    public Result( final Collector collector, final MeasureVisitor visitor )
+    {
+        this.collector = collector;
+        this.visitor = visitor;
+    }
+
+    /**
+     * Visit the collector.
+     */
+    public void write()
+    {
+        collector.accept( visitor );
+    }
 }

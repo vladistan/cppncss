@@ -43,23 +43,19 @@ import cppncss.counter.CounterObserver;
 public final class Collector implements CounterObserver, FileObserver
 {
     private final TreeSet<Measure> result;
-    private final String index;
     private final int threshold;
+    private String index;
     private String filename;
 
     /**
      * Create a collector indexed by a given measure name.
      *
-     * @param index the index measure name
      * @param threshold the number of measures to keep
      */
-    public Collector( final String index, final int threshold )
+    public Collector( final int threshold )
     {
-        if( index == null )
-            throw new IllegalArgumentException( "argument 'index' is null" );
         if( threshold <= 0 )
             throw new IllegalArgumentException( "threshold is <= 0" );
-        this.index = index;
         this.threshold = threshold;
         this.result = new TreeSet<Measure>();
     }
@@ -69,6 +65,8 @@ public final class Collector implements CounterObserver, FileObserver
      */
     public void notify( final String label, final String item, final int line, final int count )
     {
+        if( index == null )
+            index = label;
         if( this.index.equals( label ) )
             insert( item, line, count );
         else

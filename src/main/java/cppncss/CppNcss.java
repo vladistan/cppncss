@@ -39,7 +39,7 @@ import cppncss.counter.FunctionVisitor;
 import cppncss.counter.NcssCounter;
 
 /**
- * Provides code measure for C++.
+ * Provides code measures for C++.
  *
  * @author Mathieu Champlon
  */
@@ -50,63 +50,47 @@ public final class CppNcss
     {
             new CounterFactory()
             {
-                public Counter createCounter( final CounterObserver observer )
+                public Counter create( final CounterObserver observer, final Logger logger )
                 {
+                    logger.register( "NCSS" );
                     return new NcssCounter( observer );
-                }
-
-                public String getLabel()
-                {
-                    return "NCSS";
                 }
             }, new CounterFactory()
             {
-                public Counter createCounter( final CounterObserver observer )
+                public Counter create( final CounterObserver observer, final Logger logger )
                 {
+                    logger.register( "CCN" );
                     return new CcnCounter( observer );
-                }
-
-                public String getLabel()
-                {
-                    return "CCN";
                 }
             }
     };
-    private static final String INDEX = COUNTER_FACTORIES[0].getLabel();
-    private static final CollectorFactory[] COLLECTOR_FACTORIES =
+    private static final ResultFactory[] COLLECTOR_FACTORIES =
     {
-            new CollectorFactory()
+            new ResultFactory()
             {
-                public Collector createCollector( final FileObserverComposite observer, final VisitorComposite visitor )
+                public Result create( final FileObserverComposite observer, final VisitorComposite visitor )
                 {
-                    final Collector collector = new Collector( INDEX, THRESHOLD );
+                    final Collector collector = new Collector( THRESHOLD );
                     observer.register( collector );
+                    final ConsoleLogger logger = new ConsoleLogger( "Function" );
                     for( CounterFactory factory : COUNTER_FACTORIES )
-                        visitor.register( new FunctionVisitor( factory.createCounter( collector ) ) );
-                    return collector;
+                        visitor.register( new FunctionVisitor( factory.create( collector, logger ) ) );
+                    return new Result( collector, logger );
                 }
-
-                public String getLabel()
-                {
-                    return "Function";
-                }
-            }, new CollectorFactory()
+            }, new ResultFactory()
             {
-                public Collector createCollector( final FileObserverComposite observer, final VisitorComposite visitor )
+                public Result create( final FileObserverComposite observer, final VisitorComposite visitor )
                 {
-                    final Collector collector = new Collector( INDEX, THRESHOLD );
+                    final Collector collector = new Collector( THRESHOLD );
+                    observer.register( collector );
+                    final ConsoleLogger logger = new ConsoleLogger( "File" );
                     for( CounterFactory factory : COUNTER_FACTORIES )
                     {
-                        final FileVisitor fv = new FileVisitor( factory.createCounter( collector ) );
+                        final FileVisitor fv = new FileVisitor( factory.create( collector, logger ) );
                         observer.register( fv );
                         visitor.register( fv );
                     }
-                    return collector;
-                }
-
-                public String getLabel()
-                {
-                    return "File";
+                    return new Result( collector, logger );
                 }
             }
     };
@@ -119,21 +103,13 @@ public final class CppNcss
     {
         final FileObserverComposite observer = new FileObserverComposite();
         final VisitorComposite visitor = new VisitorComposite();
-        final Vector<Collector> collectors = new Vector<Collector>();
-        for( CollectorFactory factory : COLLECTOR_FACTORIES )
-            collectors.add( factory.createCollector( observer, visitor ) );
+        final Vector<Result> results = new Vector<Result>();
+        for( ResultFactory factory : COLLECTOR_FACTORIES )
+            results.add( factory.create( observer, visitor ) );
         final Analyzer analyzer = createAnalyzer( args, observer );
         analyzer.accept( visitor );
-        for( int index = 0; index < collectors.size(); ++index )
-            collectors.elementAt( index ).accept( createLogger( COLLECTOR_FACTORIES[index].getLabel() ) );
-    }
-
-    private static ConsoleLogger createLogger( final String item )
-    {
-        final ConsoleLogger logger = new ConsoleLogger( item );
-        for( CounterFactory factory : COUNTER_FACTORIES )
-            logger.register( factory.getLabel() );
-        return logger;
+        for( Result result : results )
+            result.write();
     }
 
     private static Analyzer createAnalyzer( final String[] args, final FileObserver observer )

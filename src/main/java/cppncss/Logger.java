@@ -28,22 +28,15 @@
 
 package cppncss;
 
-import cppncss.counter.Counter;
-import cppncss.counter.CounterObserver;
-
 /**
- * Defines a factory for counters.
- *
  * @author Mathieu Champlon
  */
-public interface CounterFactory
+public interface Logger
 {
     /**
-     * Create a counter.
+     * Register a measure label.
      *
-     * @param observer a counter observer
-     * @param logger a logger to register the counter label
-     * @return a new counter
+     * @param label the name of the measure
      */
-    Counter create( CounterObserver observer, Logger logger );
+    void register( final String label );
 }

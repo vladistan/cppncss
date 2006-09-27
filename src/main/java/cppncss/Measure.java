@@ -55,6 +55,8 @@ public final class Measure implements Comparable
     {
         if( item == null )
             throw new IllegalArgumentException( "argument 'item' is null" );
+        if( filename == null )
+            throw new IllegalArgumentException( "argument 'filename' is null" );
         if( line < 0 )
             throw new IllegalArgumentException( "argument 'line' is < 0" );
         if( count < 0 )
@@ -102,7 +104,7 @@ public final class Measure implements Comparable
      */
     public String toString()
     {
-        if( filename == null )
+        if( filename.equals( item ) )
             return item;
         return item + " at " + filename + ":" + line;
     }
@@ -123,10 +125,6 @@ public final class Measure implements Comparable
 
     private boolean matches( final String item, final String filename, final int line )
     {
-        if( !this.item.equals( item ) || this.line != line )
-            return false;
-        if( this.filename == null )
-            return filename == null;
-        return this.filename.equals( filename );
+        return this.item.equals( item ) && this.line == line && this.filename.equals( filename );
     }
 }
