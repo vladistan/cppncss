@@ -246,7 +246,7 @@ public class AbstractVisitor implements ParserVisitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstExpression node, final Object data )
+    public Object visit( final AstPrimaryExpression node, final Object data )
     {
         return node.accept( this, data );
     }
@@ -254,7 +254,167 @@ public class AbstractVisitor implements ParserVisitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstPrimaryExpression node, final Object data )
+    public Object visit( final AstAssignmentExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstInclusiveOrExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstExclusiveOrExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstAndExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstEqualityExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstRelationalExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstShiftExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstAdditiveExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstMultiplicativeExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstPointerToMemberExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstCastExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstUnaryExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstPostfixExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstIdExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstNewExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstDeleteExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstFunctionCallExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstConstantExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstTypeIdExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstThrowExpression node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstClassDefinition node, final Object data )
     {
         return node.accept( this, data );
     }

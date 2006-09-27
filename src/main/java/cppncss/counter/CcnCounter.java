@@ -29,6 +29,7 @@
 package cppncss.counter;
 
 import cppast.AstCaseStatement;
+import cppast.AstClassDefinition;
 import cppast.AstConditionalExpression;
 import cppast.AstFunctionBody;
 import cppast.AstHandler;
@@ -124,5 +125,13 @@ public final class CcnCounter extends AbstractCounter
     {
         increment();
         return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstClassDefinition node, final Object data )
+    {
+        return data;
     }
 }

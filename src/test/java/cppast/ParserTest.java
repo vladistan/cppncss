@@ -240,8 +240,8 @@ public class ParserTest extends TestCase
 
     public void testTemplateFunctionCall() throws ParseException
     {
-        parse( "void MyFunction() { static_cast< char* >(); }" );
-        parse( "void MyFunction() { reinterpret_cast< int >( 2 ); }" );
+        parse( "void MyFunction() { process< char* >(); }" );
+        parse( "void MyFunction() { process< int >( 2 ); }" );
         parse( "void MyFunction() { stream.read( function< char* >( pData ) ); }" );
         parse( "void MyFunction() { process< 1 >(); }" );
         parse( "void MyFunction() { if( i < 0 && j > 0 ); }" );
@@ -566,7 +566,7 @@ public class ParserTest extends TestCase
         parse( "void MyFunction() { sizeof( pValue->m ); }" );
     }
 
-    public void testSizeOfFuncionCall() throws ParseException
+    public void testSizeOfFunctionCall() throws ParseException
     {
         parse( "void MyFunction() { sizeof( data.Method( 0 ) ); }" );
     }

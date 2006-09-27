@@ -117,11 +117,25 @@ public class CcnTest extends EasyMockTestCase
         parse( "void MyFunction() { i && j; }" );
     }
 
+    public void testDoubleAndExpressionIncrementsCcnByTwo() throws ParseException
+    {
+        observer.notify( "CCN", "MyFunction()", 1, 3 );
+        replay();
+        parse( "void MyFunction() { i && j && k; }" );
+    }
+
     public void testOrExpressionIncrementsCcnByOne() throws ParseException
     {
         observer.notify( "CCN", "MyFunction()", 1, 2 );
         replay();
         parse( "void MyFunction() { i || j; }" );
+    }
+
+    public void testDoubleOrExpressionIncrementsCcnByTwo() throws ParseException
+    {
+        observer.notify( "CCN", "MyFunction()", 1, 3 );
+        replay();
+        parse( "void MyFunction() { i || j || k; }" );
     }
 
     public void testConditionalExpressionIncrementsCcnByOne() throws ParseException
@@ -131,10 +145,25 @@ public class CcnTest extends EasyMockTestCase
         parse( "void MyFunction() { i ? j : 0; }" );
     }
 
+    public void testDoubleConditionalExpressionIncrementsCcnByTwo() throws ParseException
+    {
+        observer.notify( "CCN", "MyFunction()", 1, 3 );
+        replay();
+        parse( "void MyFunction() { i ? j : k ? 1 : 0; }" );
+    }
+
     public void testExpressionWithAndOrAndConditionalIncrementsCcnByThree() throws ParseException
     {
         observer.notify( "CCN", "MyFunction()", 1, 4 );
         replay();
         parse( "void MyFunction() { i ? (j && k) : (l || m); }" );
+    }
+
+    public void testCcnFromMethodOfClassDefinedOnStackDoesNotAddUp() throws ParseException
+    {
+        observer.notify( "CCN", "MyFunction()", 1, 1 );
+        observer.notify( "CCN", "MyClass::MyMethod()", 1, 2 );
+        replay();
+        parse( "void MyFunction() { class MyClass{ void MyMethod() { if(i); }; }; }" );
     }
 }

@@ -41,17 +41,33 @@ public class AstTest extends TestCase
         return new Parser( new StringReader( data ) ).translation_unit();
     }
 
+    private Node parseExpression( final String data ) throws ParseException
+    {
+        final Node root = parse( "void MyFunction() { " + data + "; }" );
+        final Node child = assertIsBranch( root, AstFunctionDefinition.class );
+        assertEquals( 3, child.jjtGetNumChildren() );
+        assertIsLeaf( child.jjtGetChild( 0 ), AstFunctionName.class );
+        assertIsLeaf( child.jjtGetChild( 1 ), AstFunctionParameters.class );
+        final Node body = child.jjtGetChild( 2 );
+        assertEquals( AstFunctionBody.class, body.getClass() );
+        assertEquals( 1, body.jjtGetNumChildren() );
+        final Node expression = body.jjtGetChild( 0 );
+        assertEquals( AstExpressionStatement.class, expression.getClass() );
+        assertEquals( 1, expression.jjtGetNumChildren() );
+        return expression.jjtGetChild( 0 );
+    }
+
     private void assertIsLeaf( final Node node, final Class c )
     {
         assertEquals( c, node.getClass() );
         assertEquals( 0, node.jjtGetNumChildren() );
     }
 
-    private Node assertIsBranch( final Node node, final Class c )
+    private Node assertIsBranch( final Node node, final Class to )
     {
         assertEquals( 1, node.jjtGetNumChildren() );
         final Node child = node.jjtGetChild( 0 );
-        assertTrue( child.getClass().equals( c ) );
+        assertEquals( to, child.getClass() );
         return child;
     }
 
@@ -64,26 +80,34 @@ public class AstTest extends TestCase
         assertIsLeaf( child.jjtGetChild( 2 ), AstFunctionBody.class );
     }
 
-    private void assertIsParameter( final Node parameter )
+    private void assertIsParameter( final Node node )
     {
-        assertEquals( AstParameter.class, parameter.getClass() );
-        assertEquals( 2, parameter.jjtGetNumChildren() );
-        assertIsLeaf( parameter.jjtGetChild( 0 ), AstParameterType.class );
-        assertIsLeaf( parameter.jjtGetChild( 1 ), AstFunctionParameterTypeQualifier.class );
+        assertEquals( AstParameter.class, node.getClass() );
+        assertEquals( 2, node.jjtGetNumChildren() );
+        assertIsLeaf( node.jjtGetChild( 0 ), AstParameterType.class );
+        assertIsLeaf( node.jjtGetChild( 1 ), AstFunctionParameterTypeQualifier.class );
     }
 
-    private void assertIsParameters( final Node parameters, final int number )
+    private void assertIsParameters( final Node node, final int number )
     {
-        assertEquals( AstFunctionParameters.class, parameters.getClass() );
-        assertEquals( number, parameters.jjtGetNumChildren() );
+        assertEquals( AstFunctionParameters.class, node.getClass() );
+        assertEquals( number, node.jjtGetNumChildren() );
         for( int i = 0; i < number; ++i )
-            assertIsParameter( parameters.jjtGetChild( i ) );
+            assertIsParameter( node.jjtGetChild( i ) );
     }
 
-    private void assertNoChildOf( final Node root, final Class c )
+    private void assertNoChildOf( final Node node, final Class c )
     {
-        for( int i = 0; i < root.jjtGetNumChildren(); ++i )
-            assertNotSame( c, root.jjtGetChild( i ) );
+        for( int i = 0; i < node.jjtGetNumChildren(); ++i )
+            assertNotSame( c, node.jjtGetChild( i ) );
+    }
+
+    private void assertIsExpression( final Node node, final Class type, int childs )
+    {
+        assertEquals( type, node.getClass() );
+        assertEquals( childs, node.jjtGetNumChildren() );
+        for( int i = 0; i < node.jjtGetNumChildren(); ++i )
+            assertIsLeaf( node.jjtGetChild( i ), AstIdExpression.class );
     }
 
     public void testFunctionDefinition() throws ParseException
@@ -121,13 +145,13 @@ public class AstTest extends TestCase
     public void testMethodDefinition() throws ParseException
     {
         final Node root = parse( "class MyClass { void MyMethod() {} };" );
-        assertIsFunctionDefinition( root, AstFunctionDefinition.class );
+        assertIsFunctionDefinition( assertIsBranch( root, AstClassDefinition.class ), AstFunctionDefinition.class );
     }
 
     public void testMethodDeclaration() throws ParseException
     {
         final Node root = parse( "class MyClass { void MyMethod(); };" );
-        assertNoChildOf( root, AstFunctionDefinition.class );
+        assertNoChildOf( assertIsBranch( root, AstClassDefinition.class ), AstFunctionDefinition.class );
     }
 
     public void testMethodSeparateDefinition() throws ParseException
@@ -139,13 +163,13 @@ public class AstTest extends TestCase
     public void testConstructorDefinition() throws ParseException
     {
         final Node root = parse( "class MyClass { MyClass() {} };" );
-        assertIsFunctionDefinition( root, AstConstructorDefinition.class );
+        assertIsFunctionDefinition( assertIsBranch( root, AstClassDefinition.class ), AstConstructorDefinition.class );
     }
 
     public void testConstructorDeclaration() throws ParseException
     {
         final Node root = parse( "class MyClass { MyClass(); };" );
-        assertNoChildOf( root, AstFunctionDefinition.class );
+        assertNoChildOf( assertIsBranch( root, AstClassDefinition.class ), AstFunctionDefinition.class );
     }
 
     public void testConstructorSeparateDefinition() throws ParseException
@@ -157,13 +181,13 @@ public class AstTest extends TestCase
     public void testDestructorDefinition() throws ParseException
     {
         final Node root = parse( "class MyClass { ~MyClass() {} };" );
-        assertIsFunctionDefinition( root, AstDestructorDefinition.class );
+        assertIsFunctionDefinition( assertIsBranch( root, AstClassDefinition.class ), AstDestructorDefinition.class );
     }
 
     public void testDestructorDeclaration() throws ParseException
     {
         final Node root = parse( "class MyClass { ~MyClass(); };" );
-        assertNoChildOf( root, AstFunctionDefinition.class );
+        assertNoChildOf( assertIsBranch( root, AstClassDefinition.class ), AstFunctionDefinition.class );
     }
 
     public void testDestructorSeparateDefinition() throws ParseException
@@ -175,7 +199,7 @@ public class AstTest extends TestCase
     public void testEqualityOperatorDefinition() throws ParseException
     {
         final Node root = parse( "class MyClass { bool operator==( const MyClass& ) {} };" );
-        final Node node = assertIsBranch( root, AstFunctionDefinition.class );
+        final Node node = assertIsBranch( assertIsBranch( root, AstClassDefinition.class ), AstFunctionDefinition.class );
         assertEquals( 3, node.jjtGetNumChildren() );
         assertIsLeaf( node.jjtGetChild( 0 ), AstFunctionName.class );
         assertIsParameters( node.jjtGetChild( 1 ), 1 );
@@ -184,8 +208,9 @@ public class AstTest extends TestCase
 
     public void testEqualityOperatorDeclaration() throws ParseException
     {
-        final Node root = parse( "class MyClass { bool operator==( const MyClass& ) {} };" );
-        assertNoChildOf( root, AstFunctionDefinition.class );
+        final Node root = parse( "class MyClass { bool operator==( const MyClass& ); };" );
+        final Node node = assertIsBranch( root, AstClassDefinition.class );
+        assertNoChildOf( node, AstFunctionDefinition.class ); // FIXME check FunctionDeclaration
     }
 
     public void testEqualityOperatorSeparateDefinition() throws ParseException
@@ -201,13 +226,14 @@ public class AstTest extends TestCase
     public void testConversionOperatorDefinition() throws ParseException
     {
         final Node root = parse( "class MyClass { operator const char*() const {} };" );
-        assertIsFunctionDefinition( root, AstFunctionDefinition.class );
+        assertIsFunctionDefinition( assertIsBranch( root, AstClassDefinition.class ), AstFunctionDefinition.class );
     }
 
     public void testConversionOperatorDeclaration() throws ParseException
     {
         final Node root = parse( "class MyClass { operator const char*() const; };" );
-        assertNoChildOf( root, AstFunctionDefinition.class );
+        final Node node = assertIsBranch( root, AstClassDefinition.class );
+        assertNoChildOf( node, AstFunctionDefinition.class );
     }
 
     public void testConversionOperatorSeparateDefinition() throws ParseException
@@ -216,40 +242,170 @@ public class AstTest extends TestCase
         assertIsFunctionDefinition( root, AstFunctionDefinition.class );
     }
 
+    public void testIdExpression() throws ParseException
+    {
+        assertIsLeaf( parseExpression( "i" ), AstIdExpression.class );
+        assertIsLeaf( parseExpression( "MyClass::i" ), AstIdExpression.class );
+    }
+
+    public void testConstantExpression() throws ParseException
+    {
+        assertIsLeaf( parseExpression( "42" ), AstConstantExpression.class );
+        assertIsLeaf( parseExpression( "\"abc\"" ), AstConstantExpression.class );
+        assertIsLeaf( parseExpression( "\"abc\" \"def\"" ), AstConstantExpression.class );
+    }
+
     public void testLogicalAndExpression() throws ParseException
     {
-        final Node root = parse( "int i = j && k;" );
-        assertEquals( 2, root.jjtGetNumChildren() );
-        // FIXME root.jjtGetChild( 0 ) is of type AstFunctionParameterTypeQualifier
-        final Node node = root.jjtGetChild( 1 );
-        assertEquals( AstLogicalAndExpression.class, node.getClass() );
-        assertEquals( 2, node.jjtGetNumChildren() );
-        assertIsLeaf( node.jjtGetChild( 0 ), AstPrimaryExpression.class );
-        assertIsLeaf( node.jjtGetChild( 1 ), AstPrimaryExpression.class );
+        assertIsExpression( parseExpression( "j && k" ), AstLogicalAndExpression.class, 2 );
     }
 
     public void testLogicalOrExpression() throws ParseException
     {
-        final Node root = parse( "int i = j || k;" );
-        assertEquals( 2, root.jjtGetNumChildren() );
-        // FIXME root.jjtGetChild( 0 ) is of type AstFunctionParameterTypeQualifier
-        final Node node = root.jjtGetChild( 1 );
-        assertEquals( AstLogicalOrExpression.class, node.getClass() );
-        assertEquals( 2, node.jjtGetNumChildren() );
-        assertIsLeaf( node.jjtGetChild( 0 ), AstPrimaryExpression.class );
-        assertIsLeaf( node.jjtGetChild( 1 ), AstPrimaryExpression.class );
+        assertIsExpression( parseExpression( "j || k" ), AstLogicalOrExpression.class, 2 );
     }
 
     public void testConditionalExpression() throws ParseException
     {
-        final Node root = parse( "int i = j ? k : 0;" );
-        assertEquals( 2, root.jjtGetNumChildren() );
-        // FIXME root.jjtGetChild( 0 ) is of type AstFunctionParameterTypeQualifier
-        final Node node = root.jjtGetChild( 1 );
-        assertEquals( AstConditionalExpression.class, node.getClass() );
-        assertEquals( 3, node.jjtGetNumChildren() );
-        assertIsLeaf( node.jjtGetChild( 0 ), AstPrimaryExpression.class );
-        assertIsLeaf( node.jjtGetChild( 1 ), AstPrimaryExpression.class );
-        assertIsLeaf( node.jjtGetChild( 2 ), AstPrimaryExpression.class );
+        assertIsExpression( parseExpression( "j ? k : l;" ), AstConditionalExpression.class, 3 );
+    }
+
+    public void testAssignmentExpression() throws ParseException
+    {
+        assertIsExpression( parseExpression( "j = k" ), AstAssignmentExpression.class, 2 );
+    }
+
+    public void testThrowExpression() throws ParseException
+    {
+        assertIsLeaf( parseExpression( "throw" ), AstThrowExpression.class );
+    }
+
+    public void testThrowExpressionWithException() throws ParseException
+    {
+        final Node root = parseExpression( "throw my_exception()" );
+        assertEquals( AstThrowExpression.class, root.getClass() );
+        assertIsBranch( root, AstIdExpression.class ); // FIXME IdExpression ?
+    }
+
+    public void testInclusiveOrExpression() throws ParseException
+    {
+        assertIsExpression( parseExpression( "i | j" ), AstInclusiveOrExpression.class, 2 );
+    }
+
+    public void testExclusiveOrExpression() throws ParseException
+    {
+        assertIsExpression( parseExpression( "i ^ j" ), AstExclusiveOrExpression.class, 2 );
+    }
+
+    public void testAndExpression() throws ParseException
+    {
+        assertIsExpression( parseExpression( "i & j" ), AstAndExpression.class, 2 );
+    }
+
+    public void testEqualityExpression() throws ParseException
+    {
+        assertIsExpression( parseExpression( "i == j" ), AstEqualityExpression.class, 2 );
+        assertIsExpression( parseExpression( "i != j" ), AstEqualityExpression.class, 2 );
+    }
+
+    public void testRelationalExpression() throws ParseException
+    {
+        assertIsExpression( parseExpression( "i < j" ), AstRelationalExpression.class, 2 );
+        assertIsExpression( parseExpression( "i > j" ), AstRelationalExpression.class, 2 );
+        assertIsExpression( parseExpression( "i <= j" ), AstRelationalExpression.class, 2 );
+        assertIsExpression( parseExpression( "i >= j" ), AstRelationalExpression.class, 2 );
+    }
+
+    public void testShiftExpression() throws ParseException
+    {
+        assertIsExpression( parseExpression( "i << j" ), AstShiftExpression.class, 2 );
+        assertIsExpression( parseExpression( "i >> j" ), AstShiftExpression.class, 2 );
+    }
+
+    public void testAdditiveExpression() throws ParseException
+    {
+        assertIsExpression( parseExpression( "i + j" ), AstAdditiveExpression.class, 2 );
+        assertIsExpression( parseExpression( "i - j" ), AstAdditiveExpression.class, 2 );
+    }
+
+    public void testMultiplicativeExpression() throws ParseException
+    {
+        assertIsExpression( parseExpression( "i * j" ), AstMultiplicativeExpression.class, 2 );
+        assertIsExpression( parseExpression( "i / j" ), AstMultiplicativeExpression.class, 2 );
+        assertIsExpression( parseExpression( "i % j" ), AstMultiplicativeExpression.class, 2 );
+    }
+
+    public void testPointerToMemberExpression() throws ParseException
+    {
+        assertIsExpression( parseExpression( "i .* j" ), AstPointerToMemberExpression.class, 2 );
+        assertIsExpression( parseExpression( "i ->* j" ), AstPointerToMemberExpression.class, 2 );
+    }
+
+    public void testCastExpression() throws ParseException
+    {
+        assertIsExpression( parseExpression( "(int) i" ), AstCastExpression.class, 1 );
+        assertIsExpression( parseExpression( "(MyType) i" ), AstCastExpression.class, 1 );
+    }
+
+    public void testUnaryExpression() throws ParseException
+    {
+        assertIsExpression( parseExpression( "++ i" ), AstUnaryExpression.class, 1 );
+        assertIsExpression( parseExpression( "-- i" ), AstUnaryExpression.class, 1 );
+        assertIsExpression( parseExpression( "& i" ), AstUnaryExpression.class, 1 );
+        assertIsExpression( parseExpression( "* i" ), AstUnaryExpression.class, 1 );
+        assertIsExpression( parseExpression( "+ i" ), AstUnaryExpression.class, 1 );
+        assertIsExpression( parseExpression( "- i" ), AstUnaryExpression.class, 1 );
+        assertIsExpression( parseExpression( "~ i" ), AstUnaryExpression.class, 1 );
+        assertIsExpression( parseExpression( "! i" ), AstUnaryExpression.class, 1 );
+        assertIsExpression( parseExpression( "sizeof i" ), AstUnaryExpression.class, 1 );
+        // FIXME assertIsLeaf because i considered as type_id()
+        assertIsLeaf( parseExpression( "sizeof( i )" ), AstUnaryExpression.class );
+    }
+
+    public void testFunctionCallExpression() throws ParseException // TODO
+    {
+        // assertIsExpression( parseExpression( "i()" ), AstFunctionCallExpression.class, 1 );
+    }
+
+    public void testPostfixExpression() throws ParseException // TODO
+    {
+        // assertIsExpression( parseExpression( "i ++" ), AstPostfixExpression.class, 1 );
+        // assertIsExpression( parseExpression( "i --" ), AstPostfixExpression.class, 1 );
+    }
+
+    public void testPrimaryExpression() throws ParseException
+    {
+        assertIsLeaf( parseExpression( "this" ), AstPrimaryExpression.class );
+        assertIsExpression( parseExpression( "( i )" ), AstPrimaryExpression.class, 1 );
+    }
+
+    public void testNewExpression() throws ParseException
+    {
+        assertIsLeaf( parseExpression( "::new MyType" ), AstNewExpression.class );
+        assertIsLeaf( parseExpression( "new MyType" ), AstNewExpression.class );
+        assertIsLeaf( parseExpression( "new MyType()" ), AstNewExpression.class );
+        assertIsExpression( parseExpression( "new MyType( i )" ), AstNewExpression.class, 1 );
+        assertIsExpression( parseExpression( "new (i) MyType" ), AstNewExpression.class, 1 );
+        assertIsExpression( parseExpression( "new MyType[i]" ), AstNewExpression.class, 1 );
+    }
+
+    public void testDeleteExpression() throws ParseException
+    {
+        assertIsExpression( parseExpression( "::delete i" ), AstDeleteExpression.class, 1 );
+        assertIsExpression( parseExpression( "delete i" ), AstDeleteExpression.class, 1 );
+        assertIsExpression( parseExpression( "delete[] i" ), AstDeleteExpression.class, 1 );
+    }
+
+    public void testTypeIdExpression() throws ParseException // FIXME consider as function call ? // TODO
+    {
+        assertIsLeaf( parseExpression( "typeid( int )" ), AstTypeIdExpression.class );
+        // assertIsExpression( parseExpression( "typeid( MyType& )" ), AstTypeIdExpression.class, 1 );
+        // assertIsExpression( parseExpression( "typeid( i )" ), AstTypeIdExpression.class, 1 );
+    }
+
+    public void testClassDefinition() throws ParseException
+    {
+        assertIsBranch( parse( "class {};" ), AstClassDefinition.class );
+        assertIsBranch( parse( "class MyClass {};" ), AstClassDefinition.class );
     }
 }

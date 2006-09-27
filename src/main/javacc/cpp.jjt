@@ -255,9 +255,9 @@ TOKEN :
 
 TOKEN :
 {
- < CHARACTER : ("L")? "'" ( (~["'","\\","\n","\r"]) | <_CHAR> ) "'" >
+  < CHARACTER : ("L")? "'" ( (~["'","\\","\n","\r"]) | <_CHAR> ) "'" >
 |
- < STRING : ("L")? "\"" ( (~["\"","\\","\n","\r"]) | <_CHAR> )* "\"" >
+  < STRING : ("L")? "\"" ( (~["\"","\\","\n","\r"]) | <_CHAR> )* "\"" >
 }
 
 TOKEN :
@@ -553,7 +553,7 @@ void class_specifier() :
 }
 {
    LOOKAHEAD(class_key() "{")
-    class_key() "{" [member_specification()] "}" // FIXME should probably open an empty scope
+    class_key() "{" [member_specification()] "}" #ClassDefinition // FIXME should probably open an empty scope
   |
    (
     name = class_head()
@@ -563,7 +563,7 @@ void class_specifier() :
       "{" { openScope( name ); }
       [member_specification()]
       "}" { closeScope(); }
-     )
+     ) #ClassDefinition
     ]
    )
 }
@@ -1024,19 +1024,19 @@ void exception_declaration() :
      "..."
 }
 
-void throw_expression() :
+void throw_expression() #ThrowExpression :
 {}
 {
     "throw" [LOOKAHEAD(assignment_expression()) assignment_expression()]
 }
 
-void expression() #Expression :
+void expression() :
 {}
 {
    assignment_expression() ("," assignment_expression())*
 }
 
-void assignment_expression() :
+void assignment_expression() #AssignmentExpression(>1) :
 {}
 {
     conditional_expression()
@@ -1076,7 +1076,7 @@ void conditional_expression() #ConditionalExpression(>1) :
 void logical_or_expression() #LogicalOrExpression(>1) :
 {}
 {
-   logical_and_expression() ("||" logical_and_expression())*
+   logical_and_expression() ["||" logical_or_expression()]
 }
 
 void logical_and_expression() #LogicalAndExpression(>1) :
@@ -1085,87 +1085,66 @@ void logical_and_expression() #LogicalAndExpression(>1) :
    inclusive_or_expression() ["&&" logical_and_expression()]
 }
 
-void inclusive_or_expression() :
+void inclusive_or_expression() #InclusiveOrExpression(>1) :
 {}
 {
-   exclusive_or_expression() ("|" exclusive_or_expression())*
+   exclusive_or_expression() ["|" inclusive_or_expression()]
 }
 
-void exclusive_or_expression() :
+void exclusive_or_expression() #ExclusiveOrExpression(>1) :
 {}
 {
-   and_expression() ("^" and_expression())*
+   and_expression() ["^" exclusive_or_expression()]
 }
 
-void and_expression() :
+void and_expression() #AndExpression(>1) :
 {}
 {
-   equality_expression() (LOOKAHEAD(2) "&" equality_expression())*
+   equality_expression() [LOOKAHEAD(2) "&" and_expression()]
 }
 
-void equality_expression() :
+void equality_expression() #EqualityExpression(>1) :
 {}
 {
-   relational_expression() (( "!=" | "==") relational_expression())*
+   relational_expression() [("!=" | "==") equality_expression()]
 }
 
-void relational_expression() :
+void relational_expression() #RelationalExpression(>1) :
 {}
 {
-   shift_expression()
-   (
-     LOOKAHEAD(2)
-     (
-         "<"
-       | ">"
-       | "<="
-       | ">="
-     )
-     shift_expression()
-   )*
+   shift_expression() [LOOKAHEAD(2) ("<" | ">" | "<=" | ">=") relational_expression()]
 }
 
-void shift_expression() :
+void shift_expression() #ShiftExpression(>1) :
 {}
 {
-    additive_expression()
-    (
-     (
-        "<<"
-      | ">>"
-     )
-     additive_expression()
-    )*
+    additive_expression() [ ("<<" | ">>") shift_expression()]
 }
 
-void additive_expression() :
+void additive_expression() #AdditiveExpression(>1) :
 {}
 {
-   multiplicative_expression()
-   (LOOKAHEAD(2) ( "+" | "-") multiplicative_expression())*
+   multiplicative_expression() [LOOKAHEAD(2) ("+" | "-") additive_expression()]
 }
 
-void multiplicative_expression() :
+void multiplicative_expression() #MultiplicativeExpression(>1) :
 {}
 {
-   pm_expression()
-   (LOOKAHEAD(2) ( "*" | "/" | "%") pm_expression())*
+   pm_expression() [LOOKAHEAD(2) ("*" | "/" | "%") multiplicative_expression()]
 }
 
-void pm_expression() :
+void pm_expression() #PointerToMemberExpression(>1) :
 {}
 {
-    cast_expression() (( ".*" | "->*" ) cast_expression())*
+    cast_expression() [(".*" | "->*" ) pm_expression()]
 }
 
 void cast_expression() :
 {}
 {
-    LOOKAHEAD("(" type_id() ")" cast_expression())
-     "(" type_id() ")" cast_expression()
+    LOOKAHEAD("(" type_id() ")" cast_expression()) ("(" type_id() ")" cast_expression()) #CastExpression
    |
-    LOOKAHEAD(builtin_type_specifier())
-     (builtin_type_specifier())+ "(" assignment_expression() ")"
+    LOOKAHEAD(builtin_type_specifier()) ((builtin_type_specifier())+ "(" assignment_expression() ")") #CastExpression
    |
      unary_expression()
 }
@@ -1173,34 +1152,129 @@ void cast_expression() :
 void unary_expression() :
 {}
 {
-     "++" cast_expression()
+     ("++" cast_expression()) #UnaryExpression
    |
-     "--" cast_expression()
+     ("--" cast_expression()) #UnaryExpression
    |
-     LOOKAHEAD(3)
-     unary_operator() cast_expression()
+     LOOKAHEAD(3) (unary_operator() cast_expression()) #UnaryExpression
    |
-     "sizeof"
      (
-       LOOKAHEAD("(" type_id() ")")
-       "(" type_id() ")"
-     |
-       unary_expression()
-     )
+      "sizeof"
+      (
+        LOOKAHEAD("(" type_id() ")") "(" type_id() ")"
+      |
+        unary_expression()
+      )
+     ) #UnaryExpression
    |
      postfix_expression()
 }
 
-void new_expression() :
+void unary_operator() :
+{}
+{    "&"
+   | "*"
+   | "+"
+   | "-"
+   | "~"
+   | "!"
+}
+
+void postfix_expression() #PostfixExpression(>1) : // FIXME review this
+{}
+{
+  LOOKAHEAD(primary_expression()) primary_expression()
+  (
+   LOOKAHEAD(2)
+   (
+     "[" expression() "]"
+    |
+     "(" [expression_list()] ")"
+    |
+     ("." | "->") [LOOKAHEAD("template") "template"] id_expression()
+    |
+     "++" #PostfixExpression // FIXME tmp
+    |
+     "--" #PostfixExpression // FIXME tmp
+   )
+  )*
+ |
+  (qualified_type() "(" [expression_list()] ")") #FunctionCallExpression
+}
+
+void id_expression() #IdExpression :
+{}
+{
+   [LOOKAHEAD(scope_override_lookahead()) scope_override()] unqualified_id() // FIXME should probably be <ID> instead of unqualified_id
+}
+
+void unqualified_id() :
+{}
+{
+    LOOKAHEAD(template_id()) template_id()
+   |
+    LOOKAHEAD("operator" operator()) operator_function_id()
+   |
+    conversion_function_id()
+   |
+    "~" <ID>
+   |
+    <ID>
+}
+
+void operator_function_id() :
+{}
+{
+   "operator" operator() [LOOKAHEAD(template_argument_list()) template_argument_list()]
+}
+
+void conversion_function_id() :
+{}
+{
+  "operator" declaration_specifiers() (LOOKAHEAD(ptr_operator()) ptr_operator())*
+}
+
+void template_id() :
+{}
+{
+  <ID> template_argument_list()
+}
+
+void primary_expression() :
+{}
+{
+    "this" #PrimaryExpression
+   |
+    (LOOKAHEAD(2) <STRING>)+ #ConstantExpression
+   |
+    ("(" expression() ")") #PrimaryExpression
+   |
+    LOOKAHEAD(["::"] "new") new_expression()
+   |
+    LOOKAHEAD(["::"] "delete") delete_expression()
+   |
+    (
+     "typeid" "("
+     (
+      LOOKAHEAD(type_id() ")") type_id() ")"
+     |
+      expression() ")"
+     )
+    ) #TypeIdExpression
+   |
+    id_expression()
+   |
+    constant() #ConstantExpression
+}
+
+void new_expression() #NewExpression :
 {}
 {
    ["::"] "new" [LOOKAHEAD(new_placement()) new_placement()]
    (
-       LOOKAHEAD("(" type_id() ")" )
-       "(" type_id() ")"
-      |
-       LOOKAHEAD(declaration_specifiers())
-        new_type_id()
+     LOOKAHEAD("(" type_id() ")" ) "(" type_id() ")" // TODO check what this is
+    |
+     new_type_id()
    )
    [LOOKAHEAD(new_initializer()) new_initializer()]
 }
@@ -1237,114 +1311,10 @@ void new_initializer() :
     "(" [expression_list()] ")"
 }
 
-void delete_expression() :
+void delete_expression() #DeleteExpression :
 {}
 {
     ["::"] "delete" ["[" "]"] cast_expression()
-}
-
-void unary_operator() :
-{}
-{    "&"
-   | "*"
-   | "+"
-   | "-"
-   | "~"
-   | "!"
-}
-
-void postfix_expression() :
-{}
-{
-   LOOKAHEAD(primary_expression())
-    primary_expression()
-    (
-     LOOKAHEAD(2)
-     (
-       "[" expression() "]"
-      |
-       "(" [expression_list()] ")"
-      |
-       ("." | "->") [LOOKAHEAD("template") "template"] id_expression()
-      |
-       "++"
-      |
-       "--"
-     )
-    )*
-   |
-    simple_type_specifier() "(" [expression_list()] ")"
-}
-
-void simple_type_specifier() :
-{}
-{
-    builtin_type_specifier()
-   |
-    qualified_type()
-}
-
-void id_expression() :
-{}
-{
-   [LOOKAHEAD(scope_override_lookahead()) scope_override()] unqualified_id()
-}
-
-void unqualified_id() :
-{}
-{
-    LOOKAHEAD(template_id()) template_id()
-   |
-    LOOKAHEAD("operator" operator()) operator_function_id()
-   |
-    conversion_function_id()
-   |
-    "~" <ID>
-   |
-    <ID>
-}
-
-void operator_function_id() :
-{}
-{
-   "operator" operator() [LOOKAHEAD(template_argument_list()) template_argument_list()]
-}
-
-void conversion_function_id() :
-{}
-{
-  "operator" declaration_specifiers() (LOOKAHEAD(ptr_operator()) ptr_operator())*
-}
-
-void template_id() :
-{}
-{
-  <ID> template_argument_list()
-}
-
-void primary_expression() #PrimaryExpression :
-{}
-{
-    "this"
-   |
-    (LOOKAHEAD(2) <STRING>)+
-   |
-    "(" expression() ")"
-   |
-    LOOKAHEAD(["::"] "new") new_expression()
-   |
-    LOOKAHEAD(["::"] "delete") delete_expression()
-   |
-    "typeid" "("
-    (
-     LOOKAHEAD(type_id() ")") type_id() ")"
-    |
-     expression() ")"
-    )
-   |
-    id_expression()
-   |
-    constant()
 }
 
 void expression_list() :
