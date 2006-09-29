@@ -51,19 +51,19 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
-      <scope>compile</scope>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.easymock</groupId>
       <artifactId>easymock</artifactId>
       <version>2.2</version>
-      <scope>compile</scope>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.easymock</groupId>
       <artifactId>easymockclassextension</artifactId>
       <version>2.2</version>
-      <scope>compile</scope>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <pluginRepositories>
@@ -125,13 +125,23 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
-          <archive>
-            <manifest>
-              <mainClass>cppncss.CppNcss</mainClass>
-            </manifest>
-          </archive>
+          <descriptors>
+            <descriptor>assembly.xml</descriptor>
+          </descriptors>
         </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>assembly</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
