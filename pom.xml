@@ -65,6 +65,12 @@
       <version>2.2</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.picocontainer</groupId>
+      <artifactId>picocontainer</artifactId>
+      <version>1.2</version>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
   <pluginRepositories>
     <pluginRepository>

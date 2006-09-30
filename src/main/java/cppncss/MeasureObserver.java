@@ -29,32 +29,17 @@
 package cppncss;
 
 /**
- * Provides result generation encapsulation.
+ * Defines a measure observer.
  *
  * @author Mathieu Champlon
  */
-public final class Result
+public interface MeasureObserver
 {
-    private final Collector collector;
-    private final MeasureVisitor visitor;
-
     /**
-     * Create a result.
+     * Notify of a measure.
      *
-     * @param collector a collector
-     * @param visitor the associated visitor
+     * @param count the result of the measure
+     * @param item the name of the measured item
      */
-    public Result( final Collector collector, final MeasureVisitor visitor )
-    {
-        this.collector = collector;
-        this.visitor = visitor;
-    }
-
-    /**
-     * Visit the collector.
-     */
-    public void write()
-    {
-        collector.accept( visitor );
-    }
+    void notify( int count, String item );
 }

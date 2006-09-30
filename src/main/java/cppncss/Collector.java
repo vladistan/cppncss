@@ -29,6 +29,7 @@
 package cppncss;
 
 import java.util.TreeSet;
+import org.picocontainer.Startable;
 import cppncss.counter.CounterObserver;
 
 /**
@@ -40,9 +41,10 @@ import cppncss.counter.CounterObserver;
  *
  * @author Mathieu Champlon
  */
-public final class Collector implements CounterObserver, FileObserver
+public final class Collector implements CounterObserver, FileObserver, Startable
 {
     private final TreeSet<Measure> result;
+    private final MeasureObserver observer;
     private final int threshold;
     private String index;
     private String filename;
@@ -50,12 +52,16 @@ public final class Collector implements CounterObserver, FileObserver
     /**
      * Create a collector indexed by a given measure name.
      *
+     * @param observer a measure observer to be notified of the results
      * @param threshold the number of measures to keep
      */
-    public Collector( final int threshold )
+    public Collector( final MeasureObserver observer, final int threshold )
     {
+        if( observer == null )
+            throw new IllegalArgumentException( "argument 'observer' is null" );
         if( threshold <= 0 )
             throw new IllegalArgumentException( "threshold is <= 0" );
+        this.observer = observer;
         this.threshold = threshold;
         this.result = new TreeSet<Measure>();
     }
@@ -89,21 +95,26 @@ public final class Collector implements CounterObserver, FileObserver
     }
 
     /**
-     * Accept a visitor.
-     *
-     * @param visitor the visitor
-     */
-    public void accept( final MeasureVisitor visitor )
-    {
-        for( Measure measure : result )
-            measure.accept( visitor );
-    }
-
-    /**
      * {@inheritDoc}
      */
     public void changed( final String filename )
     {
         this.filename = filename;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void start()
+    {
+        for( Measure measure : result )
+            measure.accept( observer );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void stop()
+    {
     }
 }

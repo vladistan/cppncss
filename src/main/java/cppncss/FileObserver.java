@@ -29,7 +29,7 @@
 package cppncss;
 
 /**
- * Provides a means to be notified about the file being processed.
+ * Provides a means to be notified about a file being processed.
  *
  * @author Mathieu Champlon
  */

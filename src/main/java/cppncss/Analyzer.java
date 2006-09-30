@@ -37,6 +37,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
+import org.picocontainer.Startable;
 import tools.Options;
 import cppast.ParseException;
 import cppast.Parser;
@@ -47,7 +48,7 @@ import cppncss.preprocessor.PreProcessor;
 /**
  * @author Mathieu Champlon
  */
-public final class Analyzer
+public final class Analyzer implements Startable
 {
     private static final String[] DECLARATIONS =
     {
@@ -68,6 +69,7 @@ public final class Analyzer
     private final FileObserver observer;
     private final EventHandler handler;
     private final Parser parser;
+    private final ParserVisitor visitor;
 
     /**
      * Create an analyzer.
@@ -75,19 +77,24 @@ public final class Analyzer
      * @param options the options
      * @param observer a file observer
      * @param handler an event handler
+     * @param visitor the abstract syntax tree visitor
      */
-    public Analyzer( final Options options, final FileObserver observer, final EventHandler handler )
+    public Analyzer( final Options options, final FileObserver observer, final EventHandler handler,
+            final ParserVisitor visitor )
     {
         if( observer == null )
             throw new IllegalArgumentException( "argument 'observer' is null" );
         if( handler == null )
             throw new IllegalArgumentException( "argument 'handler' is null" );
+        if( visitor == null )
+            throw new IllegalArgumentException( "argument 'visitor' is null" );
         recursive = options.hasOption( "r" );
         force = options.hasOption( "f" );
         this.manager = createManager( options );
         this.parser = new Parser( manager );
         this.observer = observer;
         this.handler = handler;
+        this.visitor = visitor;
         files = sort( resolve( options.getArgList() ) );
     }
 
@@ -163,17 +170,20 @@ public final class Analyzer
     }
 
     /**
-     * Parse the files and visit the abstract syntax trees.
-     * <p>
-     * Because of memory consumption the trees cannot be cached therefore this method must probably be called only once.
-     *
-     * @param visitor the visitor
+     * {@inheritDoc}
      */
-    public void accept( final ParserVisitor visitor )
+    public void start()
     {
         handler.started();
         final int parsed = process( visitor );
         handler.finished( parsed, files.size() );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void stop()
+    {
     }
 
     private int process( final ParserVisitor visitor )

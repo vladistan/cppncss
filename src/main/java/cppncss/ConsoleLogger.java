@@ -29,16 +29,15 @@
 package cppncss;
 
 import java.io.PrintStream;
-import java.util.Vector;
 
 /**
- * Implements a console logger.
+ * Implements a console measure logger.
  *
  * @author Mathieu Champlon
  */
-public final class ConsoleLogger implements MeasureVisitor, Logger
+public final class ConsoleLogger implements MeasureObserver
 {
-    private final Vector<String> labels;
+    private final String[] labels;
     private int current;
     private int index;
     private final String item;
@@ -47,11 +46,12 @@ public final class ConsoleLogger implements MeasureVisitor, Logger
     /**
      * Create a logger to the console.
      *
+     * @param labels the list of measure names
      * @param item the name of the measured item
      */
-    public ConsoleLogger( final String item )
+    public ConsoleLogger( final String[] labels, final String item )
     {
-        this.labels = new Vector<String>();
+        this.labels = labels.clone();
         this.current = 0;
         this.index = 0;
         this.item = item;
@@ -60,28 +60,20 @@ public final class ConsoleLogger implements MeasureVisitor, Logger
     /**
      * {@inheritDoc}
      */
-    public void register( final String label )
-    {
-        labels.add( label );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void visit( final int count, final String item )
+    public void notify( final int count, final String item )
     {
         if( index == 0 )
             printHeaders( labels );
         if( current == 0 )
             printIndex( ++index );
-        printMeasurement( labels.get( current ), count );
+        printMeasurement( labels[current], count );
         ++current;
-        current %= labels.size();
+        current %= labels.length;
         if( current == 0 )
             printItem( item );
     }
 
-    private void printHeaders( final Vector<String> labels )
+    private void printHeaders( final String[] labels )
     {
         stream.println();
         stream.print( "Nr. " );
@@ -105,19 +97,18 @@ public final class ConsoleLogger implements MeasureVisitor, Logger
         stream.format( " %s", item );
         stream.println();
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void visit( final int average )
-    {
-        printAverage( labels.get( current ), average );
-        ++current;
-        current %= labels.size();
-    }
-
-    private void printAverage( final String label, final int average )
-    {
-        stream.println( "Average " + item + " " + label + average );
-    }
+    // /**
+    // * {@inheritDoc}
+    // */
+    // public void visit( final int average )
+    // {
+    // printAverage( labels[current], average );
+    // ++current;
+    // current %= labels.length;
+    // }
+    //
+    // private void printAverage( final String label, final int average )
+    // {
+    // stream.println( "Average " + item + " " + label + average );
+    // }
 }

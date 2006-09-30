@@ -6,4 +6,5 @@
 
 <suppressions>
     <suppress checks=".*" files=".*.html"/>
+    <suppress checks="DesignForExtension" files="AbstractVisitor.java"/>
 </suppressions>

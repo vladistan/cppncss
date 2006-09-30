@@ -28,10 +28,11 @@
 
 package cppncss;
 
+import java.util.Collection;
 import java.util.Vector;
 
 /**
- * Provides a composite of file observers.
+ * Provides a composite for file observers.
  *
  * @author Mathieu Champlon
  */
@@ -40,13 +41,13 @@ public final class FileObserverComposite implements FileObserver
     private final Vector<FileObserver> observers = new Vector<FileObserver>();
 
     /**
-     * Register a component.
+     * Create a file observer composite.
      *
-     * @param observer the component to register
+     * @param observers a list of observers
      */
-    public void register( final FileObserver observer )
+    public FileObserverComposite( final Collection< ? extends FileObserver> observers )
     {
-        observers.add( observer );
+        this.observers.addAll( observers );
     }
 
     /**

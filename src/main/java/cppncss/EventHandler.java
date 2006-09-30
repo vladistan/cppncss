@@ -31,7 +31,7 @@ package cppncss;
 /**
  * @author Mathieu Champlon
  */
-public interface EventHandler extends FileObserver
+public interface EventHandler
 {
     /**
      * Notify a start event.
@@ -63,4 +63,11 @@ public interface EventHandler extends FileObserver
      * @param column the column offset
      */
     void display( String filename, int line, int column );
+
+    /**
+     * Specify the file being processed.
+     *
+     * @param filename the name of the fle
+     */
+    void changed( String filename );
 }

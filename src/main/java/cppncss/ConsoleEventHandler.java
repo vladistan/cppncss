@@ -31,6 +31,7 @@ package cppncss;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import tools.Options;
 
 /**
  * @author Mathieu Champlon
@@ -46,13 +47,12 @@ public final class ConsoleEventHandler implements EventHandler
     /**
      * Create a console event handler.
      *
-     * @param debug activate debug events
-     * @param verbose activate verbose events
+     * @param options program options
      */
-    public ConsoleEventHandler( final boolean debug, final boolean verbose )
+    public ConsoleEventHandler( final Options options )
     {
-        this.debug = debug;
-        this.verbose = verbose;
+        debug = options.hasOption( "d" );
+        verbose = debug || options.hasOption( "v" );
     }
 
     /**
