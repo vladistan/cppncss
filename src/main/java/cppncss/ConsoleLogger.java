@@ -35,7 +35,7 @@ import java.io.PrintStream;
  *
  * @author Mathieu Champlon
  */
-public final class ConsoleLogger implements MeasureObserver
+public final class ConsoleLogger implements MeasureObserver, AverageObserver
 {
     private final String[] labels;
     private int current;
@@ -97,18 +97,12 @@ public final class ConsoleLogger implements MeasureObserver
         stream.format( " %s", item );
         stream.println();
     }
-    // /**
-    // * {@inheritDoc}
-    // */
-    // public void visit( final int average )
-    // {
-    // printAverage( labels[current], average );
-    // ++current;
-    // current %= labels.length;
-    // }
-    //
-    // private void printAverage( final String label, final int average )
-    // {
-    // stream.println( "Average " + item + " " + label + average );
-    // }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void notify( final String label, final int average )
+    {
+        stream.println( "Average " + item + " " + label + ": " + average );
+    }
 }
