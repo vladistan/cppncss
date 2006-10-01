@@ -35,7 +35,7 @@ import java.io.PrintStream;
  *
  * @author Mathieu Champlon
  */
-public final class ConsoleLogger implements MeasureObserver, AverageObserver
+public final class ConsoleLogger implements MeasureObserver
 {
     private final String[] labels;
     private int current;
