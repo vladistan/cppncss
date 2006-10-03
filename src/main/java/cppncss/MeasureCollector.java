@@ -42,7 +42,7 @@ import cppncss.counter.CounterObserver;
  *
  * @author Mathieu Champlon
  */
-public final class Collector implements CounterObserver, FileObserver, Startable
+public final class MeasureCollector implements CounterObserver, FileObserver, Startable
 {
     private final TreeSet<Measure> result;
     private final MeasureObserver observer;
@@ -57,7 +57,7 @@ public final class Collector implements CounterObserver, FileObserver, Startable
      * @param observer a measure observer to be notified of the results
      * @param threshold the number of measures to keep
      */
-    public Collector( final MeasureObserver observer, final int threshold )
+    public MeasureCollector( final MeasureObserver observer, final int threshold )
     {
         if( observer == null )
             throw new IllegalArgumentException( "argument 'observer' is null" );

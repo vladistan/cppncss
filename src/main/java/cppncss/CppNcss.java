@@ -67,7 +67,7 @@ public final class CppNcss
     private static void registerCollector( final MutablePicoContainer parent, final String name, final Class visitorType )
     {
         final MutablePicoContainer local = new DefaultPicoContainer();
-        local.registerComponentImplementation( Collector.class, Collector.class, new Parameter[]
+        local.registerComponentImplementation( MeasureCollector.class, MeasureCollector.class, new Parameter[]
         {
                 new ComponentParameter(), new ConstantParameter( new Integer( THRESHOLD ) )
         } );
@@ -77,7 +77,7 @@ public final class CppNcss
         } );
         registerVisitor( parent, local, visitorType, NcssCounter.class );
         registerVisitor( parent, local, visitorType, CcnCounter.class );
-        final Object collector = local.getComponentInstance( Collector.class );
+        final Object collector = local.getComponentInstance( MeasureCollector.class );
         parent.registerComponentInstance( collector.toString(), collector );
     }
 
