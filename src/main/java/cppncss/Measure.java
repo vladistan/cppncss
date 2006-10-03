@@ -39,7 +39,6 @@ public final class Measure implements Comparable
 {
     private final String item;
     private final int line;
-    private final int count;
     private final Vector<Integer> counts;
     private final String filename;
 
@@ -59,13 +58,11 @@ public final class Measure implements Comparable
             throw new IllegalArgumentException( "argument 'filename' is null" );
         if( line < 0 )
             throw new IllegalArgumentException( "argument 'line' is < 0" );
-        if( count < 0 )
-            throw new IllegalArgumentException( "argument 'count' is < 0" );
         this.item = item;
         this.line = line;
         this.filename = filename;
-        this.count = count;
         counts = new Vector<Integer>();
+        counts.add( count );
     }
 
     /**
@@ -94,9 +91,8 @@ public final class Measure implements Comparable
      */
     public void accept( final MeasureObserver visitor )
     {
-        visitor.notify( toString(), count );
-        for( int index = 0; index < counts.size(); ++index )
-            visitor.notify( toString(), counts.get( index ) );
+        for( Integer count : counts )
+            visitor.notify( toString(), count );
     }
 
     /**
@@ -117,7 +113,7 @@ public final class Measure implements Comparable
         final Measure measure = (Measure)object;
         if( matches( measure.item, measure.filename, measure.line ) )
             return 0;
-        final int delta = (measure).count - count;
+        final int delta = (measure).counts.get( 0 ) - counts.get( 0 );
         if( delta == 0 )
             return 1;
         return delta;

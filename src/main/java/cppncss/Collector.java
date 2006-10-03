@@ -29,6 +29,7 @@
 package cppncss;
 
 import java.util.TreeSet;
+import java.util.Vector;
 import org.picocontainer.Startable;
 import cppncss.counter.CounterObserver;
 
@@ -48,6 +49,7 @@ public final class Collector implements CounterObserver, FileObserver, Startable
     private final int threshold;
     private String index;
     private String filename;
+    private final Vector<String> labels;
 
     /**
      * Create a collector indexed by a given measure name.
@@ -64,6 +66,7 @@ public final class Collector implements CounterObserver, FileObserver, Startable
         this.observer = observer;
         this.threshold = threshold;
         this.result = new TreeSet<Measure>();
+        this.labels = new Vector<String>();
     }
 
     /**
@@ -73,6 +76,8 @@ public final class Collector implements CounterObserver, FileObserver, Startable
     {
         if( index == null )
             index = label;
+        if( !labels.contains( label ) )
+            labels.add( label );
         if( this.index.equals( label ) )
             insert( item, line, count );
         else
@@ -107,6 +112,7 @@ public final class Collector implements CounterObserver, FileObserver, Startable
      */
     public void start()
     {
+        observer.notify( labels );
         for( Measure measure : result )
             measure.accept( observer );
     }

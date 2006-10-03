@@ -29,6 +29,7 @@
 package cppncss;
 
 import java.io.PrintStream;
+import java.util.List;
 
 /**
  * Implements a console measure logger.
@@ -37,21 +38,19 @@ import java.io.PrintStream;
  */
 public final class ConsoleLogger implements MeasureObserver
 {
-    private final String[] labels;
     private int current;
     private int index;
     private final String item;
     private final PrintStream stream = System.out;
+    private List<String> labels;
 
     /**
      * Create a logger to the console.
      *
-     * @param labels the list of measure names
      * @param item the name of the measured item
      */
-    public ConsoleLogger( final String[] labels, final String item )
+    public ConsoleLogger( final String item )
     {
-        this.labels = labels.clone();
         this.current = 0;
         this.index = 0;
         this.item = item;
@@ -60,20 +59,27 @@ public final class ConsoleLogger implements MeasureObserver
     /**
      * {@inheritDoc}
      */
+    public void notify( final List<String> labels )
+    {
+        this.labels = labels;
+        printHeaders( this.labels );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void notify( final String item, final int count )
     {
-        if( index == 0 )
-            printHeaders( labels );
         if( current == 0 )
             printIndex( ++index );
-        printMeasurement( labels[current], count );
+        printMeasurement( labels.get( current ), count );
         ++current;
-        current %= labels.length;
+        current %= labels.size();
         if( current == 0 )
             printItem( item );
     }
 
-    private void printHeaders( final String[] labels )
+    private void printHeaders( final List<String> labels )
     {
         stream.println();
         stream.print( "Nr. " );

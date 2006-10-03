@@ -28,6 +28,8 @@
 
 package cppncss;
 
+import java.util.List;
+
 /**
  * Defines a measure observer.
  *
@@ -36,7 +38,15 @@ package cppncss;
 public interface MeasureObserver
 {
     /**
+     * Notify of the labels of the measures.
+     *
+     * @param labels the list of the measures.
+     */
+    void notify( List<String> labels );
+
+    /**
      * Notify of a measure.
+     *
      * @param item the name of the measured item
      * @param count the result of the measure
      */

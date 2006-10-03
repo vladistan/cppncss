@@ -73,10 +73,7 @@ public final class CppNcss
         } );
         local.registerComponentImplementation( ConsoleLogger.class, ConsoleLogger.class, new Parameter[]
         {
-                new ConstantParameter( new String[]
-                {
-                        "NCSS", "CCN"
-                } ), new ConstantParameter( name )
+            new ConstantParameter( name )
         } );
         registerVisitor( parent, local, visitorType, NcssCounter.class );
         registerVisitor( parent, local, visitorType, CcnCounter.class );
