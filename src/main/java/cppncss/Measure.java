@@ -94,9 +94,9 @@ public final class Measure implements Comparable
      */
     public void accept( final MeasureObserver visitor )
     {
-        visitor.notify( count, toString() );
+        visitor.notify( toString(), count );
         for( int index = 0; index < counts.size(); ++index )
-            visitor.notify( counts.get( index ), toString() );
+            visitor.notify( toString(), counts.get( index ) );
     }
 
     /**

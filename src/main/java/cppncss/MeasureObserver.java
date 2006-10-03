@@ -37,9 +37,8 @@ public interface MeasureObserver
 {
     /**
      * Notify of a measure.
-     *
-     * @param count the result of the measure
      * @param item the name of the measured item
+     * @param count the result of the measure
      */
-    void notify( int count, String item );
+    void notify( String item, int count );
 }

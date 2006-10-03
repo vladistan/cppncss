@@ -60,7 +60,7 @@ public final class ConsoleLogger implements MeasureObserver
     /**
      * {@inheritDoc}
      */
-    public void notify( final int count, final String item )
+    public void notify( final String item, final int count )
     {
         if( index == 0 )
             printHeaders( labels );
@@ -96,13 +96,5 @@ public final class ConsoleLogger implements MeasureObserver
     {
         stream.format( " %s", item );
         stream.println();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void notify( final String label, final int average )
-    {
-        stream.println( "Average " + item + " " + label + ": " + average );
     }
 }
