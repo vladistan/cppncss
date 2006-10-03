@@ -34,10 +34,6 @@ import cppncss.counter.CounterObserver;
 
 /**
  * Collects averages of measures.
- * <p>
- * The results are sorted according to the value of the first measure.
- * <p>
- * The different measures for a given item must be recorded one after another.
  *
  * @author Mathieu Champlon
  */
