@@ -24,8 +24,6 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- * $Id: $
  */
 
 package cppncss;
@@ -37,27 +35,32 @@ package cppncss;
  */
 public final class Average
 {
-    private final AverageObserver observer;
     private final String label;
     private float average;
     private float count;
 
     /**
-     * @param label
-     * @param count
-     * @param observer
+     * Create an average.
+     *
+     * @param label the label of the measurement
+     * @param value the first value of the measurement
+     * @param observer an average observer
      */
-    public Average( final String label, final int count, final AverageObserver observer )
+    public Average( final String label, final int value, final AverageObserver observer )
     {
         this.label = label;
-        this.observer = observer;
-        this.average = count;
+        this.average = value;
         this.count = 1;
     }
 
     /**
-     * @param label
-     * @param value
+     * Add a value to the average and recompute it.
+     * <p>
+     * If the label does not match the label given at creation the measurement is ignored.
+     *
+     * @param label the label of the measurement
+     * @param value the value of the measurement
+     * @return whether the measurement has been accepted or not
      */
     public boolean update( final String label, final int value )
     {
@@ -69,9 +72,11 @@ public final class Average
     }
 
     /**
-     * @param observer
+     * Accept a visitor.
+     *
+     * @param observer an average observer
      */
-    public void start()
+    public void accept( final AverageObserver observer )
     {
         observer.notify( label, average );
     }

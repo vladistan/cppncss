@@ -33,7 +33,7 @@ import org.picocontainer.Startable;
 import cppncss.counter.CounterObserver;
 
 /**
- * Collects average of measures.
+ * Collects averages of measures.
  * <p>
  * The results are sorted according to the value of the first measure.
  * <p>
@@ -50,7 +50,6 @@ public final class AverageCollector implements CounterObserver, FileObserver, St
      * Create a collector indexed by a given measure name.
      *
      * @param observer a measure observer to be notified of the results
-     * @param threshold the number of measures to keep
      */
     public AverageCollector( final AverageObserver observer )
     {
@@ -69,7 +68,7 @@ public final class AverageCollector implements CounterObserver, FileObserver, St
             result.add( new Average( label, count, observer ) );
     }
 
-    private boolean update( String label, int count )
+    private boolean update( final String label, final int count )
     {
         for( Average average : result )
             if( average.update( label, count ) )
@@ -83,7 +82,7 @@ public final class AverageCollector implements CounterObserver, FileObserver, St
     public void start()
     {
         for( Average average : result )
-            average.start();
+            average.accept( observer );
     }
 
     /**
@@ -96,9 +95,7 @@ public final class AverageCollector implements CounterObserver, FileObserver, St
     /**
      * {@inheritDoc}
      */
-    public void changed( String filename )
+    public void changed( final String filename )
     {
-        // TODO Auto-generated method stub
-
     }
 }

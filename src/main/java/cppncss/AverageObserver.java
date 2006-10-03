@@ -24,16 +24,22 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- * $Id: $
  */
 
 package cppncss;
 
 /**
+ * Defines an observer of averages of measures.
+ *
  * @author Mathieu Champlon
  */
 public interface AverageObserver
 {
+    /**
+     * Notify of the average of measures.
+     *
+     * @param label the name of the measurement
+     * @param average the resulting value
+     */
     void notify( String label, float average );
 }

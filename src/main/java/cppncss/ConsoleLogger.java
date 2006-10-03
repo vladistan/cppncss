@@ -108,7 +108,7 @@ public final class ConsoleLogger implements MeasureObserver, AverageObserver
     /**
      * {@inheritDoc}
      */
-    public void notify( String label, float average )
+    public void notify( final String label, final float average )
     {
         stream.format( Locale.US, "Average %s %s: %.2f", item, label, average );
         stream.println();

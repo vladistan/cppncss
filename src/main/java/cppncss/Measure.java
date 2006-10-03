@@ -87,12 +87,12 @@ public final class Measure implements Comparable
     /**
      * Accept a visitor.
      *
-     * @param visitor the visitor
+     * @param observer a measure observer
      */
-    public void accept( final MeasureObserver visitor )
+    public void accept( final MeasureObserver observer )
     {
         for( Integer count : counts )
-            visitor.notify( toString(), count );
+            observer.notify( toString(), count );
     }
 
     /**
