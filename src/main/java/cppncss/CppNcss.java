@@ -64,7 +64,8 @@ public final class CppNcss
         parent.registerComponentInstance( visitor.toString(), visitor );
     }
 
-    private static void registerCollector( final MutablePicoContainer parent, final String name, final Class visitorType )
+    private static void registerMeasureCollector( final MutablePicoContainer parent, final String name,
+            final Class visitorType )
     {
         final MutablePicoContainer local = new DefaultPicoContainer();
         local.registerComponentImplementation( MeasureCollector.class, MeasureCollector.class, new Parameter[]
@@ -81,27 +82,45 @@ public final class CppNcss
         parent.registerComponentInstance( collector.toString(), collector );
     }
 
+    private static void registerAverageCollector( final MutablePicoContainer parent, final String name,
+            final Class visitorType )
+    {
+        final MutablePicoContainer local = new DefaultPicoContainer();
+        local.registerComponentImplementation( AverageCollector.class );
+        local.registerComponentImplementation( ConsoleLogger.class, ConsoleLogger.class, new Parameter[]
+        {
+            new ConstantParameter( name )
+        } );
+        registerVisitor( parent, local, visitorType, NcssCounter.class );
+        registerVisitor( parent, local, visitorType, CcnCounter.class );
+        final Object collector = local.getComponentInstance( AverageCollector.class );
+        parent.registerComponentInstance( collector.toString(), collector );
+    }
+
     public static void main( final String[] args )
     {
         final MutablePicoContainer parent = new DefaultPicoContainer();
-        registerCollector( parent, "Function", FunctionVisitor.class );
-        registerCollector( parent, "File", FileVisitor.class );
+        registerMeasureCollector( parent, "Function", FunctionVisitor.class );
+        registerAverageCollector( parent, "Function", FunctionVisitor.class );
+        registerMeasureCollector( parent, "File", FileVisitor.class );
+        registerAverageCollector( parent, "File", FileVisitor.class );
         final MutablePicoContainer main = new DefaultPicoContainer( parent );
         main.registerComponentImplementation( Options.class, Options.class, new Parameter[]
         {
             new ConstantParameter( args )
         } );
-        main.registerComponentImplementation( FileObserverComposite.class, FileObserverComposite.class, new Parameter[]
-        {
-            new ComponentParameter( FileObserver.class, false )
-        } );
         main.registerComponentImplementation( VisitorComposite.class, VisitorComposite.class, new Parameter[]
         {
             new ComponentParameter( ParserVisitor.class, false )
+        } );
+        main.registerComponentImplementation( FileObserverComposite.class, FileObserverComposite.class, new Parameter[]
+        {
+            new ComponentParameter( FileObserver.class, false )
         } );
         main.registerComponentImplementation( ConsoleEventHandler.class );
         main.registerComponentImplementation( Analyzer.class );
         main.addChildContainer( parent );
         main.start();
+        main.stop();
     }
 }

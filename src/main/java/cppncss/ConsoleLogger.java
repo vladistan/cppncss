@@ -30,13 +30,14 @@ package cppncss;
 
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Implements a console measure logger.
  *
  * @author Mathieu Champlon
  */
-public final class ConsoleLogger implements MeasureObserver
+public final class ConsoleLogger implements MeasureObserver, AverageObserver
 {
     private int current;
     private int index;
@@ -101,6 +102,15 @@ public final class ConsoleLogger implements MeasureObserver
     private void printItem( final String item )
     {
         stream.format( " %s", item );
+        stream.println();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void notify( String label, float average )
+    {
+        stream.format( Locale.US, "Average %s %s: %.2f", item, label, average );
         stream.println();
     }
 }

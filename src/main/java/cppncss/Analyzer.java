@@ -66,21 +66,21 @@ public final class Analyzer implements Startable
     private final boolean force;
     private final List<String> files;
     private final PreProcessor manager;
+    private final ParserVisitor visitor;
     private final FileObserver observer;
     private final EventHandler handler;
     private final Parser parser;
-    private final ParserVisitor visitor;
 
     /**
      * Create an analyzer.
      *
      * @param options the options
+     * @param visitor the abstract syntax tree visitor
      * @param observer a file observer
      * @param handler an event handler
-     * @param visitor the abstract syntax tree visitor
      */
-    public Analyzer( final Options options, final FileObserver observer, final EventHandler handler,
-            final ParserVisitor visitor )
+    public Analyzer( final Options options, final ParserVisitor visitor, final FileObserver observer,
+            final EventHandler handler )
     {
         if( observer == null )
             throw new IllegalArgumentException( "argument 'observer' is null" );
