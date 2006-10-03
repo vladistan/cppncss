@@ -61,7 +61,7 @@ public final class AverageCollector implements CounterObserver, FileObserver, St
     public void notify( final String label, final String item, final int line, final int count )
     {
         if( !update( label, count ) )
-            result.add( new Average( label, count, observer ) );
+            result.add( new Average( label, count ) );
     }
 
     private boolean update( final String label, final int count )

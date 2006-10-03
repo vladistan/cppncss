@@ -44,9 +44,8 @@ public final class Average
      *
      * @param label the label of the measurement
      * @param value the first value of the measurement
-     * @param observer an average observer
      */
-    public Average( final String label, final int value, final AverageObserver observer )
+    public Average( final String label, final int value )
     {
         this.label = label;
         this.average = value;
