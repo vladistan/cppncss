@@ -24,8 +24,6 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- * $Id: $
  */
 
 package cppncss;
@@ -40,12 +38,27 @@ public final class Sum
     private final String label;
     private long sum;
 
+    /**
+     * Create a sum.
+     *
+     * @param label the measurement label
+     * @param value the initial value of the sum
+     */
     public Sum( final String label, final int value )
     {
         this.label = label;
         this.sum = value;
     }
 
+    /**
+     * Add a value to the sum.
+     * <p>
+     * If the label does not match the label given at creation the measurement is ignored.
+     *
+     * @param label the label of the measurement
+     * @param value the value of the measurement
+     * @return whether the measurement has been accepted or not
+     */
     public boolean update( final String label, final int value )
     {
         if( !this.label.equals( label ) )

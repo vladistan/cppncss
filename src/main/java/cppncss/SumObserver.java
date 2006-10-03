@@ -35,5 +35,11 @@ package cppncss;
  */
 public interface SumObserver
 {
+    /**
+     * Notify of the sum of measures.
+     *
+     * @param label the name of the measurement
+     * @param sum the resulting value
+     */
     void notify( String label, long sum );
 }
