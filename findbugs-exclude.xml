@@ -2,7 +2,7 @@
   <Match class="cppast.ParseException" />
   <Match class="cppast.Parser" />
   <Match class="cppast.ParserTokenManager" />
-  <Match class="cppast.SimpleCharStream" />
+  <Match class="cppast.*CharStream" />
   <Match class="cppast.TokenMgrError" />
   <Match class="cppast.ParserConstants" />
   <Match class="cppast.ParserTreeConstants" />
