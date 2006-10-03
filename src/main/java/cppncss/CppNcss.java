@@ -97,6 +97,21 @@ public final class CppNcss
         parent.registerComponentInstance( collector.toString(), collector );
     }
 
+    private static void registerSumCollector( final MutablePicoContainer parent, final String name,
+            final Class visitorType )
+    {
+        final MutablePicoContainer local = new DefaultPicoContainer();
+        local.registerComponentImplementation( SumCollector.class );
+        local.registerComponentImplementation( ConsoleLogger.class, ConsoleLogger.class, new Parameter[]
+        {
+            new ConstantParameter( name )
+        } );
+        registerVisitor( parent, local, visitorType, NcssCounter.class );
+        registerVisitor( parent, local, visitorType, CcnCounter.class );
+        final Object collector = local.getComponentInstance( SumCollector.class );
+        parent.registerComponentInstance( collector.toString(), collector );
+    }
+
     public static void main( final String[] args )
     {
         final MutablePicoContainer parent = new DefaultPicoContainer();
@@ -104,6 +119,7 @@ public final class CppNcss
         registerAverageCollector( parent, "Function", FunctionVisitor.class );
         registerMeasureCollector( parent, "File", FileVisitor.class );
         registerAverageCollector( parent, "File", FileVisitor.class );
+        registerSumCollector( parent, "Program", FileVisitor.class );
         final MutablePicoContainer main = new DefaultPicoContainer( parent );
         main.registerComponentImplementation( Options.class, Options.class, new Parameter[]
         {

@@ -37,7 +37,7 @@ import java.util.Locale;
  *
  * @author Mathieu Champlon
  */
-public final class ConsoleLogger implements MeasureObserver, AverageObserver
+public final class ConsoleLogger implements MeasureObserver, AverageObserver, SumObserver
 {
     private int current;
     private int index;
@@ -112,5 +112,13 @@ public final class ConsoleLogger implements MeasureObserver, AverageObserver
     {
         stream.format( Locale.US, "Average %s %s: %.2f", item, label, average );
         stream.println();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void notify( final String label, final long sum )
+    {
+        stream.println( item + " " + label + ": " + sum );
     }
 }
