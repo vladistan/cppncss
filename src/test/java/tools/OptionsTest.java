@@ -76,6 +76,16 @@ public class OptionsTest extends TestCase
         assertEquals( "value", actual.get( 0 ) );
     }
 
+    public void testRetrieveOptionPropertyValueWithoutProperty()
+    {
+        final List actual = new Options( new String[]
+        {
+            "-option=value"
+        } ).getOptionPropertyValues( "option" );
+        assertEquals( 1, actual.size() );
+        assertEquals( "value", actual.get( 0 ) );
+    }
+
     public void testRetrieveSeveralOptionValues()
     {
         final List actual = new Options( new String[]

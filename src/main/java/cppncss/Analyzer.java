@@ -66,8 +66,9 @@ public final class Analyzer implements Startable
     };
     private final boolean recursive;
     private final boolean force;
+    private final String prefix;
     private final List<String> files;
-    private final PreProcessor manager;
+    private final PreProcessor processor;
     private final ParserVisitor visitor;
     private final FileObserver observer;
     private final EventHandler handler;
@@ -90,17 +91,26 @@ public final class Analyzer implements Startable
             throw new IllegalArgumentException( "argument 'handler' is null" );
         if( visitor == null )
             throw new IllegalArgumentException( "argument 'visitor' is null" );
-        recursive = options.hasOption( "r" );
-        force = options.hasOption( "f" );
-        this.manager = createManager( options );
-        this.parser = new Parser( manager );
+        this.recursive = options.hasOption( "r" );
+        this.force = options.hasOption( "f" );
+        this.prefix = getPrefix( options );
+        this.processor = createProcessor( options );
+        this.parser = new Parser( processor );
         this.observer = observer;
         this.handler = handler;
         this.visitor = visitor;
         files = sort( resolve( options.getArgList() ) );
     }
 
-    private PreProcessor createManager( final Options options )
+    private String getPrefix( final Options options )
+    {
+        final List<String> prefixes = options.getOptionPropertyValues( "prefix" );
+        if( prefixes.size() > 0 )
+            return prefixes.get( 0 );
+        return "";
+    }
+
+    private PreProcessor createProcessor( final Options options )
     {
         final PreProcessor processor = new PreProcessor();
         final List<String> defineNames = options.getOptionProperties( "D" );
@@ -193,14 +203,21 @@ public final class Analyzer implements Startable
         int parsed = 0;
         for( String filename : files )
         {
-            observer.changed( filename );
-            handler.changed( filename );
+            observer.changed( filter( filename ) );
+            handler.changed( filter( filename ) );
             if( process( visitor, filename ) )
                 ++parsed;
             else if( !force )
                 return parsed;
         }
         return parsed;
+    }
+
+    private String filter( final String filename )
+    {
+        if( filename.startsWith( prefix ) )
+            return filename.substring( prefix.length() );
+        return filename;
     }
 
     private boolean process( final ParserVisitor visitor, final String filename )
@@ -227,8 +244,8 @@ public final class Analyzer implements Startable
     private void parse( final ParserVisitor visitor, final String filename ) throws ParseException, IOException
     {
         final BufferedReader reader = new BufferedReader( new FileReader( filename ) );
-        manager.reset( reader );
-        parser.ReInit( manager );
+        processor.reset( reader );
+        parser.ReInit( processor );
         parser.translation_unit().jjtAccept( visitor, null );
         reader.close();
     }
