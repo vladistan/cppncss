@@ -78,7 +78,7 @@ BASEDIR=`cd "$BASEDIR" && pwd`
 cd "$BASEDIR"
 
 CLASSPATH="$BASEDIR"/etc:"$BASEDIR"/lib/*.jar
-EXTRA_JVM_ARGUMENTS=
+JAVA_OPTS=-Xms256m -Xmx512m
 
 # For Cygwin, switch paths to Windows format before running java
 if $cygwin; then
@@ -91,7 +91,6 @@ if $cygwin; then
 fi
 
 exec "$JAVACMD" $JAVA_OPTS \
-  $EXTRA_JVM_ARGUMENTS \
   -classpath $CLASSPATH \
   -Dapp.name="cppncss" \
   -Dapp.pid="$$" \

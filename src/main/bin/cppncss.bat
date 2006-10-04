@@ -63,13 +63,9 @@ goto setPaths
 set BASEDIR=%CD%
 
 set CLASSPATH="%BASEDIR%"\etc;"%BASEDIR%"\*.jar;
-set EXTRA_JVM_ARGUMENTS=
-goto endInit
+set JAVA_OPTS=-Xms256m -Xmx512m
 
-@REM Reaching here means variables are defined and arguments have been captured
-:endInit
-
-java %JAVA_OPTS% %EXTRA_JVM_ARGUMENTS% -classpath %CLASSPATH% -Dapp.name="cppncss" -Dbasedir="%BASEDIR%" cppncss.CppNcss %CMD_LINE_ARGS%
+java %JAVA_OPTS% -classpath %CLASSPATH% -Dapp.name="cppncss" -Dbasedir="%BASEDIR%" cppncss.CppNcss %CMD_LINE_ARGS%
 
 :error
 if "%OS%"=="Windows_NT" @endlocal
