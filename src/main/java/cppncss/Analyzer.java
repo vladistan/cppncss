@@ -62,7 +62,7 @@ public final class Analyzer implements Startable
     };
     private static final String[] SKIPPED =
     {
-            ".svn", "CVS"
+            ".svn", "CVS", "SCCS"
     };
     private final boolean recursive;
     private final boolean force;
