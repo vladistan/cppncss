@@ -46,17 +46,19 @@ import cppast.Token;
 import cppncss.preprocessor.PreProcessor;
 
 /**
+ * Builds and walks a forrest of abstract syntax trees from a set of given files.
+ *
  * @author Mathieu Champlon
  */
 public final class Analyzer implements Startable
 {
     private static final String[] DECLARATIONS =
     {
-            ".h", ".hpp"
+            ".h", ".hpp", ".inl"
     };
     private static final String[] DEFINITIONS =
     {
-            ".cpp", ".cxx", ".inl"
+            ".cpp", ".cxx", ".c++", ".c"
     };
     private static final String[] SKIPPED =
     {
