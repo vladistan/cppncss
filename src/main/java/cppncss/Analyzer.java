@@ -99,7 +99,7 @@ public final class Analyzer implements Startable
         this.observer = observer;
         this.handler = handler;
         this.visitor = visitor;
-        files = sort( resolve( options.getArgList() ) );
+        this.files = sort( resolve( options.getArgList() ) );
     }
 
     private String getPrefix( final Options options )
