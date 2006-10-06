@@ -360,7 +360,7 @@ void linkage_specification() :
    (
     "{" ( external_declaration() )* "}" [LOOKAHEAD(";") ";"]
    |
-    declaration()
+    external_declaration()
    )
 }
 

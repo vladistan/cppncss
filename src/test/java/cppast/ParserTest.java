@@ -893,6 +893,11 @@ public class ParserTest extends TestCase
         parse( "/* ’ € Œ */" );
     }
 
+    public void testExternFunctionDefinitionIsValid() throws ParseException
+    {
+        parse( "extern \"C\" void MyFunction() {}" );
+    }
+
     public void testTMP() throws IOException, ParseException
     {
         final Parser parser = new Parser( new StringReader( "" ) );
