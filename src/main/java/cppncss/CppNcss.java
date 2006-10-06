@@ -34,6 +34,7 @@ import org.picocontainer.defaults.ComponentParameter;
 import org.picocontainer.defaults.ConstantParameter;
 import org.picocontainer.defaults.DefaultPicoContainer;
 import tools.Options;
+import tools.Usage;
 import cppast.ParserVisitor;
 import cppast.VisitorComposite;
 import cppncss.counter.CcnCounter;
@@ -114,6 +115,8 @@ public final class CppNcss
 
     public static void main( final String[] args )
     {
+        if( !check( args ) )
+            return;
         final MutablePicoContainer parent = new DefaultPicoContainer();
         registerMeasureCollector( parent, "Function", FunctionVisitor.class );
         registerAverageCollector( parent, "Function", FunctionVisitor.class );
@@ -138,5 +141,26 @@ public final class CppNcss
         main.addChildContainer( parent );
         main.start();
         main.stop();
+    }
+
+    private static boolean check( final String[] args )
+    {
+        if( args.length > 0 )
+            return true;
+        usage();
+        return false;
+    }
+
+    private static void usage()
+    {
+        final Usage usage = new Usage( "cppncss" );
+        usage.addOption( "d", "print debugging information" );
+        usage.addOption( "v", "be extra verbose" );
+        usage.addOption( "f", "force processing upon error" );
+        usage.addOption( "r", "process directories recursively" );
+        usage.addOption( "D<symbol>=[<value>]", "replace define <symbol> with <value>" );
+        usage.addOption( "M<symbol>=[<value>]", "replace macro <symbol> with <value>" );
+        usage.addOption( "prefix=<path>", "remove <path> prefix when displaying file names" );
+        usage.display();
     }
 }
