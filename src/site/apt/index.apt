@@ -1,0 +1,27 @@
+  ------
+  Introduction
+  ------
+  Mathieu Champlon
+  ------
+  October 1st, 2006
+  ------
+
+Overview
+
+ CppNcss provides various code measurements by statically analyzing C++ source code.
+
+ For more information about CppNcss visit the following sections :
+
+  * {{{introduction.html}Introduction}}
+
+  * Measurements
+
+  * Examples
+
+ To learn how to apply CppNcss to your project :
+
+  * Installation
+
+  * Tutorial
+
+  * Reference

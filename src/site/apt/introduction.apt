@@ -1,0 +1,37 @@
+  ------
+  Introduction
+  ------
+  Mathieu Champlon
+  ------
+  October 6th, 2006
+  ------
+
+Introduction
+
+* Rationale
+
+ Java developers benefit from a lot of tools to analyze their code base in order to extract various useful information.\
+ Sadly such tools do not really exist for C++.\
+ CppNcss has been written in Java, partly because of this very lack of tools for managing C++ development.
+
+ CppNcss aims toward providing a counterpart to {{{http://www.kclee.de/clemens/java/javancss}JavaNCSS}}.\
+ The only tool for C++ which comes close seems to be {{{http://cccc.sourceforge.net}CCCC}} (C and C++ Code Counter), written in C++, however the project is now inactive.
+ 
+ The main purpose is therefore to compute a few selected measurements by statically analyzing source files.
+
+* Benefits
+
+ The benefits from using CppNcss mainly fall into two categories :
+
+  * when working on a project : trying to detect out-of-bounds entropy as soon as possible (for example a method body which is three pages long, a class containing one hundred methods, a dozen 'if' in a row etc..)
+ 
+  * on another project : quickly producing an overview of how a given project looks like inside (for example
+
+* Usability
+
+ Speed => no pre-processing = no include, no macros, no defines
+ Output format = text, xml + conversions
+
+* Future
+
+ Extract parser for more tools
