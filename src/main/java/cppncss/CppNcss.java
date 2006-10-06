@@ -145,7 +145,7 @@ public final class CppNcss
 
     private static boolean check( final String[] args )
     {
-        if( args.length > 0 )
+        if( args.length > 0 && !args[0].equals( "-h" ) )
             return true;
         usage();
         return false;
@@ -154,6 +154,7 @@ public final class CppNcss
     private static void usage()
     {
         final Usage usage = new Usage( "cppncss" );
+        usage.addOption( "h", "print this message" );
         usage.addOption( "d", "print debugging information" );
         usage.addOption( "v", "be extra verbose" );
         usage.addOption( "f", "force processing upon error" );
