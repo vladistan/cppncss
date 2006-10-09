@@ -62,7 +62,7 @@ public final class CppNcss
         registerCollector( parent, "Function", FunctionVisitor.class, AverageCollector.class );
         registerCollector( parent, "File", FileVisitor.class, MeasureCollector.class );
         registerCollector( parent, "File", FileVisitor.class, AverageCollector.class );
-        registerCollector( parent, "Program", FileVisitor.class, SumCollector.class );
+        registerCollector( parent, "Project", FileVisitor.class, SumCollector.class );
         final MutablePicoContainer main = new DefaultPicoContainer( parent );
         main.registerComponentImplementation( Options.class, Options.class, new Parameter[]
         {
