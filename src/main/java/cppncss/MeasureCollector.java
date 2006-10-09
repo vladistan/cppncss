@@ -44,9 +44,9 @@ import cppncss.counter.CounterObserver;
  */
 public final class MeasureCollector implements CounterObserver, FileObserver, Startable
 {
+    private static final int THRESHOLD = 30;
     private final TreeSet<Measure> result;
     private final MeasureObserver observer;
-    private final int threshold;
     private String index;
     private String filename;
     private final Vector<String> labels;
@@ -55,16 +55,12 @@ public final class MeasureCollector implements CounterObserver, FileObserver, St
      * Create a collector indexed by a given measure name.
      *
      * @param observer a measure observer to be notified of the results
-     * @param threshold the number of measures to keep
      */
-    public MeasureCollector( final MeasureObserver observer, final int threshold )
+    public MeasureCollector( final MeasureObserver observer )
     {
         if( observer == null )
             throw new IllegalArgumentException( "argument 'observer' is null" );
-        if( threshold <= 0 )
-            throw new IllegalArgumentException( "threshold is <= 0" );
         this.observer = observer;
-        this.threshold = threshold;
         this.result = new TreeSet<Measure>();
         this.labels = new Vector<String>();
     }
@@ -95,7 +91,7 @@ public final class MeasureCollector implements CounterObserver, FileObserver, St
     private void insert( final String item, final int line, final int count )
     {
         result.add( new Measure( item, filename, line, count ) );
-        if( result.size() > threshold )
+        if( result.size() > THRESHOLD )
             result.remove( result.last() );
     }
 
