@@ -3,25 +3,31 @@
   ------
   Mathieu Champlon
   ------
-  October 1st, 2006
-  ------
 
 Overview
 
- CppNcss provides various code measurements by statically analyzing C++ source code.
+ CppNcss provides various measurements by statically analyzing C++ source code.
 
- For more information about CppNcss visit the following sections :
+ The following features are available :
 
-  * {{{introduction.html}Introduction}}
+  * Non Commenting Source Statement (NCSS)
 
-  * {{{measurements.html}Measurements}}
+  * Cyclomatic Complexity Number (CCN)
 
-  * Examples
+  * number of files (declaration and implementation files)
 
- To learn how to apply CppNcss to your project :
+  * number of functions (and methods)
 
-  * Installation
+  * console input/output
 
-  * Tutorial
+ The following features are planned :
 
-  * Reference
+  * number of classes
+
+  * number of packages/modules
+
+  * XML output
+
+  * XSL filter for HTML output
+
+  * {{{http://ant.apache.org}Ant}} task
