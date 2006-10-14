@@ -8,7 +8,7 @@ Overview
 
  CppNcss provides various measurements by statically analyzing C++ source code.
 
- The following features are available :
+* Available features
 
   * Non Commenting Source Statement (NCSS)
 
@@ -20,7 +20,7 @@ Overview
 
   * console input/output
 
- The following features are planned :
+* Planned features
 
   * number of classes
 

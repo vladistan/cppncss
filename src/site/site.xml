@@ -22,8 +22,8 @@
     <menu name="CppNcss">
       <item name="Overview" href="index.html"/>
       <item name="Examples" href="examples.html"/>
-      <item name="Installation" href="installation.html"/>
       <item name="Download" href="http://sourceforge.net/project/showfiles.php?group_id=175984"/>
+      <item name="Installation" href="installation.html"/>
       <item name="Tutorial" href="tutorial.html"/>
     </menu>
 
