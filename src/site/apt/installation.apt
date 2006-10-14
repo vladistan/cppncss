@@ -20,7 +20,7 @@ Installation
 
 * Unix-based Operating Systems (Linux, Solaris and MacOS X)
 
- [[1]] Extract the distribution archive to the directory you wish to install CppNcss. These instructions assume you chose </usr/local/cppncss>
+ [[1]] Extract the distribution archive to the directory you wish to install CppNcss, for example </usr/local/cppncss>
 
  [[1]] Add the bin directory to your path, for example <export PATH=/usr/local/cppncss/bin:$PATH>
 

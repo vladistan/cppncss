@@ -6,15 +6,19 @@
 
 Example
 
- The following example has been created from analyzing {{{http://xml.apache.org/xerces-c}Apache Xerces 2.7.0}} source code.
+ The following example has been created from parsing {{{http://xml.apache.org/xerces-c}Apache Xerces 2.7.0}} source code.
 
-* Command line input
+* Input
+
+ Here is the command line input used to run the analyzis.
 
 +-------------------------------+
 cppncss -v -f -r xerces-c-src_2_7_0/src -prefix=xerces-c-src_2_7_0/src\ -DATL_NO_VTABLE -DXERCES_CPP_NAMESPACE_USE -DXERCES_CPP_NAMESPACE_BEGIN -DXERCES_CPP_NAMESPACE_END -DCDOM_EXPORT -DDEPRECATED_DOM_EXPORT -MDECLARE_NOT_AGGREGATABLE -MDECLARE_PROTECT_FINAL_CONSTRUCT -DXMLPARSER_EXPORT -DWINAPI -DSTDMETHODCALLTYPE -DXMLUTIL_EXPORT -MDECL_XSERIALIZABLE -MBEGIN_COM_MAP -MCOM_INTERFACE_ENTRY -MEND_COM_MAP -MDECLARE_WND_CLASS -DXERCES_CPP_NAMESPACE_QUALIFIER -MMESSAGE_HANDLER -MEND_MSG_MAP -MMakeXMLException -MBEGIN_CONNECTION_POINT_MAP -DSAX2_EXPORT -DSAX_EXPORT -DXerces_DLLVersionStr -DVALIDATORS_EXPORT -DPARSERS_EXPORT -DAPIENTRY -MTRY_CATCH_THROW -DU_CAPI -DU_EXPORT2 -MOBJECT_ENTRY -DCALLBACK -MIMPL_XSERIALIZABLE_TOCREATE -MIMPL_XSERIALIZABLE_NOCREATE -MBEGIN_OBJECT_MAP -MEND_OBJECT_MAP -DU_IMPORT -MCONNECTION_POINT_ENTRY -MEND_CONNECTION_POINT_MAP -MBEGIN_MSG_MAP -MSTDMETHOD="void STDMETHOD" -MCOM_INTERFACE_ENTRY_IMPL -MSTDMETHOD_="void _STDMETHOD" -MATLTRY -MTEST_THROW_ARG2 -MSORT_KEYSET_ONEKEY -M__volatile__ -D__asm__ -MREPORT_FACET_ERROR=; -MFROM_BASE_VALUE_SPACE=; -MREPORT_VALUE_ERROR=; -MTEST_THROW_ARG1=; -MGET_NEXT_KEYSET -MSORT_KEYSET_TWOKEYS
 +-------------------------------+
 
-* Resulting output
+* Output
+
+ The resulting output first starts with parsing error diagnosis.
 
 +-------------------------------+
 Skipping xerces-c-src_2_7_0/src\xercesc\util\Transcoders\Iconv400\utypes.h : Parse error (line 113, column 4)
@@ -84,6 +88,11 @@ Skipping xerces-c-src_2_7_0/src\xercesc\util\Transcoders\MacOSUnicodeConverter\M
 	else
         ^
 Successfully parsed 1050 / 1064 files in 16.156 s
++-------------------------------+
+
+ Next the resulting measurements are displayed.
+
++-------------------------------+
 
 Nr. NCSS CCN Function
   1  353 107 XPathScanner::scanExpression( const XMLCh* const, int, const int, ValueVectorOf< int >* const ) at xercesc\validators\schema\identity\XercesXPath.cpp:748
