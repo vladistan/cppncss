@@ -54,11 +54,11 @@ public final class Analyzer implements Startable
 {
     private static final String[] DECLARATIONS =
     {
-            ".h", ".hpp", ".inl"
+            ".h", ".hpp", ".hxx", ".h++", ".inl"
     };
     private static final String[] DEFINITIONS =
     {
-            ".cpp", ".cxx", ".c++", ".c"
+            ".cpp", ".cxx", ".c++", ".c", ".cc"
     };
     private static final String[] SKIPPED =
     {
@@ -160,7 +160,7 @@ public final class Analyzer implements Startable
     private boolean isFrom( final String string, final String[] strings )
     {
         for( int i = 0; i < strings.length; ++i )
-            if( string.endsWith( strings[i] ) )
+            if( string.toLowerCase().endsWith( strings[i] ) )
                 return true;
         return false;
     }
