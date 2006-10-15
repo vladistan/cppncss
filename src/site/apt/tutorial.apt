@@ -6,3 +6,155 @@
 
 Tutorial
 
+ The following tutorial describes step by step the procedure that usually takes only a few minutes of configuring CppNcss for a project.
+
+ It is based on the analysis of the {{{http://xml.apache.org/xerces-c}Apache Xerces 2.7.0}} source code.\
+ The complete input and output can be found in the {{{examples.html}Example}} section.
+
+* Usage
+
+ Help on the command line parameters can be obtained with the -h option (or without any argument) :
+
++------------------------------------------------------------------------------+
+$ cppncss -h
+cppncss: [options] [file [file2 [directory [directory2] ...]]]
+  -h                    print this message
+  -d                    print debugging information
+  -v                    be extra verbose
+  -f                    force processing upon error
+  -r                    process directories recursively
+  -D<symbol>=[<value>]  replace define <symbol> with <value>
+  -M<symbol>=[<value>]  replace macro <symbol> with <value>
+  -prefix=<path>        remove <path> prefix when displaying file names
++------------------------------------------------------------------------------+
+
+* Running
+
+ The first step is to try and parse the project code base using the -v option for verbosity and the -r option to process all files found recursively :
+
++------------------------------------------------------------------------------+
+$ cppncss -v -r xerces-c-src_2_7_0/src
++------------------------------------------------------------------------------+
+
+ This first run will probably result in a parse error, for example :
+
++------------------------------------------------------------------------------+
+Skipping xerces-c-src_2_7_0/src\xercesc\com\BindStatusCallback.h : Parse error (line 30, column 39)
+/////////////////////////////////////////////////////////////////////////////
+// BindStatCallback
+class ATL_NO_VTABLE CBindStatCallback :
+                                      ^
++------------------------------------------------------------------------------+
+
+ Most of the parsing errors are usually due to symbols related to defines and macros and handled by the preprocessor when compiling.\
+ However sometimes actual code errors can be detected.
+
+* Debugging
+
+ The -d option can be used in order to get more information about an error :
+
++------------------------------------------------------------------------------+
+$ cppncss -d -r xerces-c-src_2_7_0/src
+Parsing xerces-c-src_2_7_0/src\xercesc\com\BindStatusCallback.h
+cppast.ParseException: Encountered ":" at line 30, column 39.
+Was expecting one of:
+    "(" ...
+    ";" ...
+    "," ...
+    "=" ...
+    "<" ...
+    "::" ...
+    "[" ...
+
+        at cppast.Parser.generateParseException(Parser.java:11719)
+        at cppast.Parser.jj_consume_token(Parser.java:11590)
+        at cppast.Parser.declaration(Parser.java:826)
+        at cppast.Parser.external_declaration(Parser.java:161)
+        at cppast.Parser.translation_unit(Parser.java:86)
+        at cppncss.Analyzer.parse(Analyzer.java:249)
+        at cppncss.Analyzer.process(Analyzer.java:227)
+        at cppncss.Analyzer.process(Analyzer.java:208)
+        at cppncss.Analyzer.start(Analyzer.java:190)
+        at org.picocontainer.defaults.DefaultLifecycleStrategy.start(DefaultLifecycleStrategy.java:46)
+        at org.picocontainer.defaults.InstantiatingComponentAdapter.start(InstantiatingComponentAdapter.java:164)
+        at org.picocontainer.defaults.DecoratingComponentAdapter.start(DecoratingComponentAdapter.java:154)
+        at org.picocontainer.defaults.CachingComponentAdapter.start(CachingComponentAdapter.java:86)
+        at org.picocontainer.defaults.DefaultPicoContainer$OrderedComponentAdapterLifecycleManager.start(DefaultPicoContainer.java:663)
+        at org.picocontainer.defaults.DefaultPicoContainer.start(DefaultPicoContainer.java:464)
+        at cppncss.CppNcss.main(CppNcss.java:82)
+Skipping xerces-c-src_2_7_0/src\xercesc\com\BindStatusCallback.h : Parse error (line 30, column 39)
+/////////////////////////////////////////////////////////////////////////////
+// BindStatCallback
+class ATL_NO_VTABLE CBindStatCallback :
+                                      ^
++------------------------------------------------------------------------------+
+
+ Note that the debug option superseeds the verbosity option so -v is no longer required.
+
+* Defines and Macros
+
+ In order to configure the preprocessing the -D (for defines) and -M (for macros) options must be used.\
+ For example the previous parsing error can be suppressed by defining the symbol <ATL_NO_VTABLE> to nothing :
+
++------------------------------------------------------------------------------+
+$ cppncss -d -r xerces-c-src_2_7_0/src -DATL_NO_VTABLE
++------------------------------------------------------------------------------+
+
+ The difference between defines and macros is that macros have arguments between parenthesis.\
+ Most of the time macros can be accepted as function calls upon parsing, but not always.
+
+ The purpose of defines and macros is not to try and make an accurate code, actually macro parameters are even not expanded.\
+ For example if the source contains the following macro :
+
++------------------------------------------------------------------------------+
+MY_MACRO( "something", 12, false )
++------------------------------------------------------------------------------+
+
+ The only thing that matters is to replace it alltogether in order to obtain valid C++.\
+ Usually simply removing a defined symbol or a macro is the easiest solution, for example in this case -MMY_MACRO= is enough.
+
+ Sometimes however the symbol must be replaced by a piece of code in order to form valid C++, for example :
+
++------------------------------------------------------------------------------+
+$ cppncss -d -r xerces-c-src_2_7_0/src -MREPORT_FACET_ERROR=; -MSTDMETHOD="void STDMETHOD"
++------------------------------------------------------------------------------+
+
+ Again the most simple solution is usually the better.
+
+* Forcing
+
+ Some of the parse errors are unavoidable, be it because of the use of non-ANSI C++ or of complex #ifdef.\
+ Parsing can be forced to skip a file containing an error and to continue processing all the files using the -f option.
+
++------------------------------------------------------------------------------+
+$ cppncss -v -f -r xerces-c-src_2_7_0/src
++------------------------------------------------------------------------------+
+
+ Usually at this point it is better to turn debugging off because of the to much verbosity it provides.
+
+* Prefix
+
+ Once almost all parse errors have been fixed it is time to take a look at the output.\
+ One of the first think to note is that file names are displayed using the full path given on the command line :
+
++------------------------------------------------------------------------------+
+Nr. NCSS CCN File
+  1 4042 1531 xerces-c-src_2_7_0/src\xercesc\validators\schema\TraverseSchema.cpp
++------------------------------------------------------------------------------+
+
+ Formatting it involves using the -prefix option, for example :
+
++------------------------------------------------------------------------------+
+$ cppncss -v -f -r xerces-c-src_2_7_0/src -prefix=xerces-c-src_2_7_0/src\
++------------------------------------------------------------------------------+
+
+ Will remove the prefix given from all file names :
+
++------------------------------------------------------------------------------+
+Nr. NCSS CCN File
+  1 4042 1531 xercesc\validators\schema\TraverseSchema.cpp
++------------------------------------------------------------------------------+
+
+* Result
+
+ In order to understand what each measurement stands for, refer to the {{{reference.html}Reference}} section.
