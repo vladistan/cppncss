@@ -20,35 +20,44 @@ Reference
 | <<Type>>                  | <<Examples>>                        | <<Comment>>                                                                                                   |
 *---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
 | Namespace declaration     | namespace my_namespace \{           |                                                                                                               |
+|                           | namespace n = my_namespace::sub;    |                                                                                                               |
 *---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
-| Using declaration         | using namespace my_namespace;       |                                                                                                               |
+| Using declaration         | using namespace std;                |                                                                                                               |
+|                           | using std::vector;                  |                                                                                                               |
 *---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
 | Class declaration         | class MyClass \{                    |                                                                                                               |
 |                           | class MyClass : public BaseClass \{ |                                                                                                               |
 |                           | class MyClass;                      |                                                                                                               |
 *---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
-| Field declaration         | int a;                              |                                                                                                               |
-|                           | int a, b, c = 5, d = 6;             | No matter how many fields get actually declared through a comma separated list, only one statement is counted |
+| Field declaration         | int a;                              | No matter how many fields get actually declared through a comma separated list, only one statement is counted |
+|                           | int a, b, c = 5, d = 6;             |                                                                                                               |
 *---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
-| Method declaration        | void cry();                         |                                                                                                               |
-|                           | void gib() throws std::exception \{ |                                                                                                               |
+| Method declaration        | void method();                      |                                                                                                               |
+|                           | virtual void method() = 0;          |                                                                                                               |
+|                           | explicit MyClass( int i );          |                                                                                                               |
+|                           | virtual ~MyClass();                 |                                                                                                               |
 *---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
-| Constructor declaration   | MyClass() \{                        |                                                                                                               |
+| Method definition         | void method() \{                    |                                                                                                               |
+|                           | void method() throw() \{            |                                                                                                               |
+|                           | MyClass() \{                        |                                                                                                               |
+|                           | ~MyClass() \{                       |                                                                                                               |
+|                           | MyClass::MyClass() \{               |                                                                                                               |
+|                           | MyClass::~MyClass() \{              |                                                                                                               |
 *---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
 | Base class initialization | : Base_ABC( data )                  |                                                                                                               |
-|                           | , BaseClass( data )                 |                                                                                                               |
+|                           | , Base( data )                      |                                                                                                               |
 *---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
 | Field initialization      | : field_( 0 )                       |                                                                                                               |
 |                           | , data_( data )                     |                                                                                                               |
 *---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
-| Statement                 | i = 0;                              |                                                                                                               |
+| Statement                 | i = 0;                              | expression, if, else, while, do, for, switch, break, continue, return, throw, catch, goto                     |
 |                           | if( ok )                            |                                                                                                               |
 |                           | if( exit ) \{                       |                                                                                                               |
 |                           | if( 3 == 4 );                       |                                                                                                               |
 |                           | if( something() ) \{ ; }            |                                                                                                               |
-|                           | } else \{                           | expression, if, else, while, do, for, switch, break, continue, return, throw, catch, goto                     |
+|                           | } else \{                           |                                                                                                               |
 *---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
-| Label                     | label :                             |                                                                                                               |
+| Label                     | label :                             | In a switch statement or to be referenced by a goto statement                                                 |
 |                           | case 0 :                            |                                                                                                               |
 |                           | default :                           |                                                                                                               |
 *---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
