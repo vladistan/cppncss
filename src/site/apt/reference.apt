@@ -6,7 +6,7 @@
 
 Reference
 
- Sums and averages are self explanatory but some of the measurements are more complex.
+ Sums and averages are self explanatory but more complex measurements are detailed here.
 
 * Non Commenting Source Statement (NCSS)
 
@@ -14,74 +14,106 @@ Reference
 
  Roughly spoken, this measurement is approximately equivalent to counting ';' and '\{' characters in source files.
 
- Actually, the counter gets incremented by one for each of the following construct :
+ Actually, the counter gets incremented by one for each of the following constructs :
 
-*---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
-| <<Type>>                  | <<Examples>>                        | <<Comment>>                                                                                                   |
-*---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
-| Namespace declaration     | namespace my_namespace \{           |                                                                                                               |
-|                           | namespace n = my_namespace::sub;    |                                                                                                               |
-*---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
-| Using declaration         | using namespace std;                |                                                                                                               |
-|                           | using std::vector;                  |                                                                                                               |
-*---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
-| Class declaration         | class MyClass \{                    |                                                                                                               |
-|                           | class MyClass : public BaseClass \{ |                                                                                                               |
-|                           | class MyClass;                      |                                                                                                               |
-*---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
-| Field declaration         | int a;                              | No matter how many fields get actually declared through a comma separated list, only one statement is counted |
-|                           | int a, b, c = 5, d = 6;             |                                                                                                               |
-*---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
-| Method declaration        | void method();                      |                                                                                                               |
-|                           | virtual void method() = 0;          |                                                                                                               |
-|                           | explicit MyClass( int i );          |                                                                                                               |
-|                           | virtual ~MyClass();                 |                                                                                                               |
-*---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
-| Method definition         | void method() \{                    |                                                                                                               |
-|                           | void method() throw() \{            |                                                                                                               |
-|                           | MyClass() \{                        |                                                                                                               |
-|                           | ~MyClass() \{                       |                                                                                                               |
-|                           | MyClass::MyClass() \{               |                                                                                                               |
-|                           | MyClass::~MyClass() \{              |                                                                                                               |
-*---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
-| Base class initialization | : Base_ABC( data )                  |                                                                                                               |
-|                           | , Base( data )                      |                                                                                                               |
-*---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
-| Field initialization      | : field_( 0 )                       |                                                                                                               |
-|                           | , data_( data )                     |                                                                                                               |
-*---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
-| Statement                 | i = 0;                              | expression, if, else, while, do, for, switch, break, continue, return, throw, catch, goto                     |
-|                           | if( ok )                            |                                                                                                               |
-|                           | if( exit ) \{                       |                                                                                                               |
-|                           | if( 3 == 4 );                       |                                                                                                               |
-|                           | if( something() ) \{ ; }            |                                                                                                               |
-|                           | } else \{                           |                                                                                                               |
-*---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
-| Label                     | label :                             | In a switch statement or to be referenced by a goto statement                                                 |
-|                           | case 0 :                            |                                                                                                               |
-|                           | default :                           |                                                                                                               |
-*---------------------------+-------------------------------------+---------------------------------------------------------------------------------------------------------------+
- 
- Not counted are empty statements, empty blocks, semicolons after closing brackets or single semicolons. Of course, comments don't get counted too. Closing brackets also never get counted, the same applies to blocks in general.
+*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| <<Type>>                  | <<Examples>>                             | <<Comment>>                                                                                                      |
+*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| Namespace declaration     | namespace my_namespace \{                |                                                                                                                  |
+|                           | namespace n = my_namespace::sub;         |                                                                                                                  |
+*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| Type declaration          | class MyClass \{                         | class, struct, enum, typedef                                                                                     |
+|                           | class\ MyClass\ :\ public\ BaseClass\ \{ |                                                                                                                  |
+|                           | class MyClass;                           |                                                                                                                  |
+|                           | struct MyStruct \{                       |                                                                                                                  |
+|                           | enum MyEnum \{                           |                                                                                                                  |
+|                           | typedef int ID;                          |                                                                                                                  |
+*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| Using declaration         | using namespace std;                     |                                                                                                                  |
+|                           | using std::vector;                       |                                                                                                                  |
+*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| Variable declaration      | int a;                                   | No matter how many variables get actually declared through a comma separated list, only one statement is counted |
+|                           | int a, b, c = 5, d = 6;                  |                                                                                                                  |
+*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| Function declaration      | void method();                           | function, method, constructor, destructor                                                                        |
+|                           | virtual void method() = 0;               |                                                                                                                  |
+|                           | explicit MyClass( int i );               |                                                                                                                  |
+|                           | virtual ~MyClass();                      |                                                                                                                  |
+*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| Function definition       | void method() \{                         | function, method, constructor, destructor                                                                        |
+|                           | void method() throw() \{                 |                                                                                                                  |
+|                           | MyClass() \{                             |                                                                                                                  |
+|                           | ~MyClass() \{                            |                                                                                                                  |
+|                           | MyClass::MyClass() \{                    |                                                                                                                  |
+|                           | MyClass::~MyClass() \{                   |                                                                                                                  |
+*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| Base class initialization | : Base_ABC( data )                       |                                                                                                                  |
+|                           | , Base( data )                           |                                                                                                                  |
+*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| Field initialization      | : field_( 0 )                            |                                                                                                                  |
+|                           | , data_( data )                          |                                                                                                                  |
+*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| Statement                 | i = 0;                                   | expression, if, else, while, do, for, switch, break, continue, return, throw, catch, goto                        |
+|                           | if( ok )                                 |                                                                                                                  |
+|                           | if( exit ) \{                            |                                                                                                                  |
+|                           | if( 3 == 4 );                            |                                                                                                                  |
+|                           | if( something() ) \{ ; }                 |                                                                                                                  |
+|                           | } else \{                                |                                                                                                                  |
+*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| Label                     | label :                                  | In a switch statement or to be referenced by a goto statement                                                    |
+|                           | case 0 :                                 |                                                                                                                  |
+|                           | default :                                |                                                                                                                  |
+*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
+
+ Not counted are empty statements, empty blocks, semicolons after closing brackets or single semicolons.\
+ Of course, comments don't get counted too.\
+ Closing brackets also never get counted, the same applies to blocks in general.
 
 * Cyclomatic Complexity Number (CNN)
 
- CCN is also know as McCabe Metric. There exists a much hyped theory behind it based on graph theory, but it all comes down to simply counting 'if', 'for', 'while' statements etc. in a method. Whenever the control flow of a method splits, the "CCN counter" gets incremented by one.
+ CCN is also know as McCabe Metric.\
+ There exists a much hyped theory behind it based on graph theory, but it all comes down to simply counting <if>, <for>, <while>, etc.. statements in a method.\
+ Whenever the control flow of a method splits, the counter gets incremented by one.
 
- Each method has a minimum value of 1 per default. For each of the following Java keywords/statements this value gets incremented by one:
+ Each method has a minimum value of 1 per default. For each of the following constructs this value gets incremented by one:
 
-    * if
-    * for
-    * while
-    * case
-    * catch
-
- Also if the control flow of a method returns abortively the CCN value will be incremented by one:
-
-    * return
-    * throw
-
+*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| <<Type>>                  | <<Examples>>                             | <<Comment>>                                                                                                      |
+*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| If statement              | if( ok ) \{                              | <else> and <:> don't increment the counter                                                                       |
+|                           | if( exit ) \{                            |                                                                                                                  |
+|                           | if( 3 == 4 );                            |                                                                                                                  |
+|                           | if( something() ) \{ ; }                 |                                                                                                                  |
+|                           | i ? j                                    |                                                                                                                  |
+*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| Loop statement            | for( int i = 0; i \< n; ++i ) \{         |                                                                                                                  |
+|                           | while( ok ) \{                           |                                                                                                                  |
+*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| Case statement            | case 0:                                  | <default> doesn't increment the counter                                                                          |
+*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| Catch block               | catch \{                                 |                                                                                                                  |
+*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| Jump statement            | goto label;                              | An ordinary <return> at the end of function will not be counted                                                  |
+|                           | continue;                                |                                                                                                                  |
+|                           | break;                                   |                                                                                                                  |
+|                           | return 0;                                |                                                                                                                  |
+*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| Throw statement           | throw std::runtime_error();              |                                                                                                                  |
+*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| Logical Expression        | i && j                                   |                                                                                                                  |
+|                           | i \|\| j                                 |                                                                                                                  |
+*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
  
- An ordinary return at the end of method (no matter if it's a function or a procedure) will not be counted.
+ Note that a simple method with a <switch> statement and a huge block of <case> statements can have a surprisingly high CCN value (still it has the same value when converting a <switch> block to an equivalent sequence of <if> statements).
 
- Note that else, default, and finally don't increment the CCN value any further. On the other hand, a simple method with a switch statement and a huge block of case statements can have a surprisingly high CCN value (still it has the same value when converting a switch block to an equivalent sequence of if statements). 
+* References
+
+ * {{{http://www.kclee.de/clemens/java/javancss}JavaNCSS}}
+
+ * {{{http://c2.com/cgi/wiki?LinesOfCode}LinesOfCode}}
+
+ * {{{http://c2.com/cgi/wiki?CyclomaticComplexityMetric}CyclomaticComplexityMetric}}
+
+ * {{{http://en.wikipedia.org/wiki/Software_metric}Software_metric}}
+
+ * {{{http://cccc.sourceforge.net}C and C++ Code Counter}}
