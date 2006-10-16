@@ -56,6 +56,11 @@ public class NcssTest extends EasyMockTestCase
                 new FileVisitor( new NcssCounter( observer ) ), null );
     }
 
+    public void testEmptyContentHasNcssOfZero() throws ParseException
+    {
+        assertNcss( 0, "" );
+    }
+
     public void testFunctionWithEmptyBodyHasNcssValueOfOne() throws ParseException
     {
         assertNcss( 1, "void MyFunction() {}" );
