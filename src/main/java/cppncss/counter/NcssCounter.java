@@ -39,6 +39,8 @@ import cppast.AstIfStatement;
 import cppast.AstIterationStatement;
 import cppast.AstJumpStatement;
 import cppast.AstLabelStatement;
+import cppast.AstNamespaceAliasDefinition;
+import cppast.AstNamespaceDefinition;
 import cppast.AstSwitchStatement;
 
 /**
@@ -161,6 +163,24 @@ public final class NcssCounter extends AbstractCounter
      * {@inheritDoc}
      */
     public Object visit( final AstDefaultStatement node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstNamespaceDefinition node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstNamespaceAliasDefinition node, final Object data )
     {
         increment();
         return node.accept( this, data );

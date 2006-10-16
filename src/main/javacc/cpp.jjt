@@ -384,7 +384,7 @@ void using_declaration() :
     "using" qualified_type() ";"
 }
 
-void namespace_definition() :
+void namespace_definition() #NamespaceDefinition :
 {
    Token token;
    String name = "anonymous";
@@ -937,7 +937,7 @@ void block_declaration() :
     LOOKAHEAD("using") using_declaration()
 }
 
-void namespace_alias_definition() :
+void namespace_alias_definition() #NamespaceAliasDefinition :
 {}
 {
     "namespace" <ID> "=" qualified_type() ";"

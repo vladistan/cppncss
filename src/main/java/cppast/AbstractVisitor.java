@@ -418,4 +418,20 @@ public class AbstractVisitor implements ParserVisitor
     {
         return node.accept( this, data );
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstNamespaceDefinition node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstNamespaceAliasDefinition node, final Object data )
+    {
+        return node.accept( this, data );
+    }
 }

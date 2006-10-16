@@ -150,4 +150,19 @@ public class NcssTest extends EasyMockTestCase
     {
         assertNcss( 3, "void MyFunction() { switch( i ) { default : ; } }" );
     }
+
+    public void testNamespaceDefinitionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "namespace my_namespace {}" );
+    }
+
+    public void testAnonymousNamespaceDefinitionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "namespace {}" );
+    }
+
+    public void testNamespaceAliasDefinitionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "namespace nm = my_namespace::sub_namespace;" );
+    }
 }
