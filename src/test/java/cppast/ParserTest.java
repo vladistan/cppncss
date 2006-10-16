@@ -386,6 +386,11 @@ public class ParserTest extends TestCase
         parse( "void MyFunction() { using my_namespace::i; }" );
     }
 
+    public void testNamespaceAliasing() throws ParseException
+    {
+        parse( "namespace C = A::B;" );
+    }
+
     public void testConstructorDefinitionThrowSpecification() throws ParseException
     {
         parse( "class MyClass{}; MyClass::MyClass() throw() {}" );
