@@ -23,12 +23,21 @@ Reference
 |                           | namespace \{                             |                                                                                                                  |
 |                           | namespace n = my_namespace::sub;         |                                                                                                                  |
 *---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
-| Type declaration          | class MyClass \{                         | class, struct, enum, typedef                                                                                     |
-|                           | class\ MyClass\ :\ public\ BaseClass\ \{ |                                                                                                                  |
-|                           | class MyClass;                           |                                                                                                                  |
-|                           | struct MyStruct \{                       |                                                                                                                  |
-|                           | enum MyEnum \{                           |                                                                                                                  |
+| Type declaration          | class MyClass;                           | class, struct, union, enum, typedef                                                                              |
+|                           | struct MyStruct;                         |                                                                                                                  |
+|                           | union MyUnion;                           |                                                                                                                  |
+|                           | enum MyEnum;                             |                                                                                                                  |
 |                           | typedef int ID;                          |                                                                                                                  |
+*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| Type definition           | class MyClass \{                         | class, struct, union, enum                                                                                       |
+|                           | class\ MyClass\ :\ public\ BaseClass\ \{ |                                                                                                                  |
+|                           | class \{                                 |                                                                                                                  |
+|                           | union MyUnion \{                         |                                                                                                                  |
+|                           | union \{                                 |                                                                                                                  |
+|                           | struct MyStruct \{                       |                                                                                                                  |
+|                           | struct \{                                |                                                                                                                  |
+|                           | enum \{                                  |                                                                                                                  |
+|                           | enum MyEnum \{                           |                                                                                                                  |
 *---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
 | Using declaration         | using namespace std;                     |                                                                                                                  |
 |                           | using std::vector;                       |                                                                                                                  |

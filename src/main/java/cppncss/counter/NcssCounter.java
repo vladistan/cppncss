@@ -28,10 +28,13 @@
 
 package cppncss.counter;
 
+import cppast.AstClassDeclaration;
+import cppast.AstClassDefinition;
 import cppast.AstConstructorInitializer;
 import cppast.AstDeclarationStatement;
 import cppast.AstDefaultStatement;
 import cppast.AstElseStatement;
+import cppast.AstEnumSpecifier;
 import cppast.AstExpressionStatement;
 import cppast.AstFunctionBody;
 import cppast.AstHandler;
@@ -181,6 +184,33 @@ public final class NcssCounter extends AbstractCounter
      * {@inheritDoc}
      */
     public Object visit( final AstNamespaceAliasDefinition node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstClassDeclaration node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstClassDefinition node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstEnumSpecifier node, final Object data )
     {
         increment();
         return node.accept( this, data );

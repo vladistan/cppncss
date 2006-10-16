@@ -165,4 +165,39 @@ public class NcssTest extends EasyMockTestCase
     {
         assertNcss( 1, "namespace nm = my_namespace::sub_namespace;" );
     }
+
+    public void testClassDeclarationIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "class MyClass;" );
+    }
+
+    public void testClassDefinitionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "class MyClass {};" );
+    }
+
+    public void testStructDeclarationIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "struct MyStruct;" );
+    }
+
+    public void testStructDefinitionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "struct MyStruct {};" );
+    }
+
+    public void testUnionDeclarationIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "union MyUnion;" );
+    }
+
+    public void testUnionDefinitionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "union MyUnion {};" );
+    }
+
+    public void testEnumDeclarationIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "enum MyEnum;" );
+    }
 }

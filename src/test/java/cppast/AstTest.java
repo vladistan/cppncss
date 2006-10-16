@@ -408,4 +408,9 @@ public class AstTest extends TestCase
         assertIsBranch( parse( "class {};" ), AstClassDefinition.class );
         assertIsBranch( parse( "class MyClass {};" ), AstClassDefinition.class );
     }
+
+    public void testClassDeclaration() throws ParseException
+    {
+        assertIsBranch( parse( "class MyClass;" ), AstClassDeclaration.class );
+    }
 }

@@ -529,24 +529,6 @@ void initializer() :
     assignment_expression()
 }
 
-String class_head() :
-{
-   Token t;
-   String name = "";
-}
-{
-   class_key() [LOOKAHEAD(scope_override_lookahead()) name = scope_override()]
-   t = <ID> [LOOKAHEAD(template_argument_list()) template_argument_list()] // FIXME should probably include template arguments in name
-   [LOOKAHEAD(":") base_clause()]
-   { return name + t.image; }
-}
-
-void class_key() :
-{}
-{
-  "class" | "struct" | "union"
-}
-
 void class_specifier() :
 {
    String name;
@@ -565,7 +547,25 @@ void class_specifier() :
       "}" { closeScope(); }
      ) #ClassDefinition
     ]
-   )
+   ) #ClassDeclaration( jjtree.nodeArity() == 0 )
+}
+
+void class_key() :
+{}
+{
+  "class" | "struct" | "union"
+}
+
+String class_head() :
+{
+   Token t;
+   String name = "";
+}
+{
+   class_key() [LOOKAHEAD(scope_override_lookahead()) name = scope_override()]
+   t = <ID> [LOOKAHEAD(template_argument_list()) template_argument_list()] // FIXME should probably include template arguments in name
+   [LOOKAHEAD(":") base_clause()]
+   { return name + t.image; }
 }
 
 void base_clause() :
@@ -647,7 +647,7 @@ void pure_specifier():
   "=" <OCTALINT>
 }
 
-void enum_specifier() :
+void enum_specifier() #EnumSpecifier :
 {}
 {
    "enum"

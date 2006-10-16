@@ -434,4 +434,20 @@ public class AbstractVisitor implements ParserVisitor
     {
         return node.accept( this, data );
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstClassDeclaration node, final Object data )
+    {
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstEnumSpecifier node, final Object data )
+    {
+        return node.accept( this, data );
+    }
 }
