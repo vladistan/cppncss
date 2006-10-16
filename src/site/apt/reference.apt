@@ -14,7 +14,7 @@ Reference
 
  Roughly spoken, this measurement is approximately equivalent to counting ';' and '\{' characters in source files.
 
- Actually, the counter gets incremented by one for each of the following constructs :
+ Actually, the counter gets incremented by one for each of the following constructs:
 
 *---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
 | <<Type>>                  | <<Examples>>                             | <<Comment>>                                                                                                      |
@@ -66,7 +66,7 @@ Reference
 *---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
 
  Not counted are empty statements, empty blocks, semicolons after closing brackets or single semicolons.\
- Of course, comments don't get counted too.\
+ Of course, comments don't get counted.\
  Closing brackets also never get counted, the same applies to blocks in general.
 
 * Cyclomatic Complexity Number (CNN)
@@ -80,25 +80,19 @@ Reference
 *---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
 | <<Type>>                  | <<Examples>>                             | <<Comment>>                                                                                                      |
 *---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
-| If statement              | if( ok ) \{                              | <else> and <:> don't increment the counter                                                                       |
+| If statement              | if( ok )                                 | <switch>, <else> and <:> don't increment the counter                                                                       |
 |                           | if( exit ) \{                            |                                                                                                                  |
 |                           | if( 3 == 4 );                            |                                                                                                                  |
 |                           | if( something() ) \{ ; }                 |                                                                                                                  |
 |                           | i ? j                                    |                                                                                                                  |
 *---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
-| Loop statement            | for( int i = 0; i \< n; ++i ) \{         |                                                                                                                  |
+| Iteration statement       | for( int i = 0; i \< n; ++i ) \{         |                                                                                                                  |
 |                           | while( ok ) \{                           |                                                                                                                  |
+|                           | do \{                                    |                                                                                                                  |
 *---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
-| Case statement            | case 0:                                  | <default> doesn't increment the counter                                                                          |
+| Case label                | case 0:                                  | <default> doesn't increment the counter                                                                          |
 *---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
 | Catch block               | catch \{                                 |                                                                                                                  |
-*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
-| Jump statement            | goto label;                              | An ordinary <return> at the end of function will not be counted                                                  |
-|                           | continue;                                |                                                                                                                  |
-|                           | break;                                   |                                                                                                                  |
-|                           | return 0;                                |                                                                                                                  |
-*---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
-| Throw statement           | throw std::runtime_error();              |                                                                                                                  |
 *---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
 | Logical Expression        | i && j                                   |                                                                                                                  |
 |                           | i \|\| j                                 |                                                                                                                  |
