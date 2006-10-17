@@ -8,6 +8,9 @@ Overview
 
  CppNcss provides various measurements by statically analyzing C++ source code.
 
+ The results provided can be used to focus review and indicate opportunities for refactoring.\
+ Such a proactive approach to development will increase quality through design improvements, easier testing, and reduction of defects.
+
 * Available features
 
   * Non Commenting Source Statement (NCSS)
@@ -18,7 +21,7 @@ Overview
 
   * number of functions (and methods)
 
-  * console input/output
+  * command line driven
 
 * Planned features
 
@@ -28,6 +31,6 @@ Overview
 
   * XML output
 
-  * XSL filter for HTML output
+  * XSL stylesheets for HTML output
 
   * {{{http://ant.apache.org}Ant}} task
