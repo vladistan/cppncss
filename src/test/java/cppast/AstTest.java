@@ -407,10 +407,54 @@ public class AstTest extends TestCase
     {
         assertIsBranch( parse( "class {};" ), AstClassDefinition.class );
         assertIsBranch( parse( "class MyClass {};" ), AstClassDefinition.class );
+        assertIsBranch( parse( "struct {};" ), AstClassDefinition.class );
+        assertIsBranch( parse( "struct MyStruct {};" ), AstClassDefinition.class );
+        assertIsBranch( parse( "union {};" ), AstClassDefinition.class );
+        assertIsBranch( parse( "union MyUnion {};" ), AstClassDefinition.class );
+    }
+
+    public void testClassVariableDefinition() throws ParseException
+    {
+        final Node node = parse( "class MyClass {} c;" );
+        assertEquals( 2, node.jjtGetNumChildren() );
+        assertEquals( AstClassDefinition.class, node.jjtGetChild( 0 ).getClass() );
+        assertEquals( AstFunctionParameterTypeQualifier.class, node.jjtGetChild( 1 ).getClass() ); // FIXME review
+    }
+
+    public void testAnonymousClassVariableDefinition() throws ParseException
+    {
+        final Node node = parse( "class {} c;" );
+        assertEquals( 2, node.jjtGetNumChildren() );
+        assertEquals( AstClassDefinition.class, node.jjtGetChild( 0 ).getClass() );
+        assertEquals( AstFunctionParameterTypeQualifier.class, node.jjtGetChild( 1 ).getClass() ); // FIXME review
     }
 
     public void testClassDeclaration() throws ParseException
     {
         assertIsBranch( parse( "class MyClass;" ), AstClassDeclaration.class );
+        assertIsBranch( parse( "struct MyStruct;" ), AstClassDeclaration.class );
+        assertIsBranch( parse( "union MyUnion;" ), AstClassDeclaration.class );
+    }
+
+    public void testEnumDefinition() throws ParseException
+    {
+        assertIsBranch( parse( "enum {};" ), AstEnumSpecifier.class );
+        assertIsBranch( parse( "enum MyEnum {};" ), AstEnumSpecifier.class );
+    }
+
+    public void testEnumVariableDefinition() throws ParseException
+    {
+        final Node node = parse( "enum MyEnum {} e;" );
+        assertEquals( 2, node.jjtGetNumChildren() );
+        assertEquals( AstEnumSpecifier.class, node.jjtGetChild( 0 ).getClass() );
+        assertEquals( AstFunctionParameterTypeQualifier.class, node.jjtGetChild( 1 ).getClass() ); // FIXME review
+    }
+
+    public void testAnonymousEnumVariableDefinition() throws ParseException
+    {
+        final Node node = parse( "enum {} e;" );
+        assertEquals( 2, node.jjtGetNumChildren() );
+        assertEquals( AstEnumSpecifier.class, node.jjtGetChild( 0 ).getClass() );
+        assertEquals( AstFunctionParameterTypeQualifier.class, node.jjtGetChild( 1 ).getClass() ); // FIXME review
     }
 }

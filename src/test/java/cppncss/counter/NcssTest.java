@@ -176,6 +176,16 @@ public class NcssTest extends EasyMockTestCase
         assertNcss( 1, "class MyClass {};" );
     }
 
+    public void testClassVariableDefinitionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "class MyClass {} c;" );
+    }
+
+    public void testAnonymousClassVariableDefinitionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "class {} c;" );
+    }
+
     public void testStructDeclarationIncrementsNcssByOne() throws ParseException
     {
         assertNcss( 1, "struct MyStruct;" );
@@ -184,6 +194,16 @@ public class NcssTest extends EasyMockTestCase
     public void testStructDefinitionIncrementsNcssByOne() throws ParseException
     {
         assertNcss( 1, "struct MyStruct {};" );
+    }
+
+    public void testStructVariableDefinitionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "struct MyStruct {} s;" );
+    }
+
+    public void testAnonymousStructVariableDefinitionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "struct {} s;" );
     }
 
     public void testUnionDeclarationIncrementsNcssByOne() throws ParseException
@@ -196,8 +216,33 @@ public class NcssTest extends EasyMockTestCase
         assertNcss( 1, "union MyUnion {};" );
     }
 
+    public void testUnionVariableDefinitionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "union MyUnion {} u;" );
+    }
+
+    public void testAnonymousUnionVariableDefinitionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "union {} u;" );
+    }
+
     public void testEnumDeclarationIncrementsNcssByOne() throws ParseException
     {
         assertNcss( 1, "enum MyEnum;" );
+    }
+
+    public void testEnumDefinitionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "enum MyEnum {};" );
+    }
+
+    public void testEnumVariableDefinitionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "enum MyEnum {} e;" );
+    }
+
+    public void testAnonymousEnumVariableDefinitionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "enum {} e;" );
     }
 }
