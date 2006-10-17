@@ -755,4 +755,15 @@ public class AstTest extends TestCase
         tree.add( " Declaration" );
         assertEquals( tree.toString(), parse( "using namespace std::vector;" ) );
     }
+
+    public void testLabel() throws ParseException
+    {
+        tree.add( "TranslationUnit" );
+        tree.add( " FunctionDefinition" );
+        tree.add( "  FunctionName" );
+        tree.add( "  FunctionParameters" );
+        tree.add( "  FunctionBody" );
+        tree.add( "   LabelStatement" );
+        assertEquals( tree.toString(), parse( "void MyFunction() { label: ; }" ) );
+    }
 }

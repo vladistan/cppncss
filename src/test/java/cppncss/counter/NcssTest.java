@@ -285,4 +285,9 @@ public class NcssTest extends EasyMockTestCase
         assertNcss( 2, "MyClass::MyClass() : data_( 0 ) {}" );
         assertNcss( 3, "MyClass::MyClass() : data_( 0 ), counter_( 0 ) {}" );
     }
+
+    public void testLabelIncrementNcssByOne() throws ParseException
+    {
+        assertNcss( 2, "void MyFunction() { label: ; }" );
+    }
 }
