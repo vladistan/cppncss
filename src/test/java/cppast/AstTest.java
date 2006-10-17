@@ -39,6 +39,7 @@ import junit.framework.TestCase;
 public class AstTest extends TestCase
 {
     private Tree tree;
+    private Expression expression;
 
     private final class Tree
     {
@@ -53,6 +54,30 @@ public class AstTest extends TestCase
         public String toString()
         {
             return buffer.toString();
+        }
+    }
+
+    private final class Expression
+    {
+        private final Tree tree = new Tree();
+
+        public Expression()
+        {
+            tree.add( "TranslationUnit" );
+            tree.add( " FunctionDefinition" );
+            tree.add( "  FunctionName" );
+            tree.add( "  FunctionParameters" );
+            tree.add( "  FunctionBody" );
+        }
+
+        public void add( final String node )
+        {
+            tree.add( "   " + node );
+        }
+
+        public String toString()
+        {
+            return tree.toString();
         }
     }
 
@@ -79,18 +104,10 @@ public class AstTest extends TestCase
             dump( node.jjtGetChild( i ), writer, level + 1 );
     }
 
-    private void addExpressionPrefix()
-    {
-        tree.add( "TranslationUnit" );
-        tree.add( " FunctionDefinition" );
-        tree.add( "  FunctionName" );
-        tree.add( "  FunctionParameters" );
-        tree.add( "  FunctionBody" );
-    }
-
     protected void setUp()
     {
         tree = new Tree();
+        expression = new Expression();
     }
 
     public void testFunctionDefinition() throws ParseException
@@ -328,300 +345,271 @@ public class AstTest extends TestCase
 
     public void testIdExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    IdExpression" );
-        assertEquals( tree.toString(), parseExpression( "i" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " IdExpression" );
+        assertEquals( expression.toString(), parseExpression( "i" ) );
     }
 
     public void testScopedIdExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    IdExpression" );
-        assertEquals( tree.toString(), parseExpression( "MyClass::i" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " IdExpression" );
+        assertEquals( expression.toString(), parseExpression( "MyClass::i" ) );
     }
 
     public void testConstantExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    ConstantExpression" );
-        assertEquals( tree.toString(), parseExpression( "42" ) );
-        assertEquals( tree.toString(), parseExpression( "\"abc\"" ) );
-        assertEquals( tree.toString(), parseExpression( "\"abc\" \"def\"" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " ConstantExpression" );
+        assertEquals( expression.toString(), parseExpression( "42" ) );
+        assertEquals( expression.toString(), parseExpression( "\"abc\"" ) );
+        assertEquals( expression.toString(), parseExpression( "\"abc\" \"def\"" ) );
     }
 
     public void testLogicalAndExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    LogicalAndExpression" );
-        tree.add( "     IdExpression" );
-        tree.add( "     IdExpression" );
-        assertEquals( tree.toString(), parseExpression( "j && k" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " LogicalAndExpression" );
+        expression.add( "  IdExpression" );
+        expression.add( "  IdExpression" );
+        assertEquals( expression.toString(), parseExpression( "j && k" ) );
     }
 
     public void testLogicalOrExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    LogicalOrExpression" );
-        tree.add( "     IdExpression" );
-        tree.add( "     IdExpression" );
-        assertEquals( tree.toString(), parseExpression( "j || k" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " LogicalOrExpression" );
+        expression.add( "  IdExpression" );
+        expression.add( "  IdExpression" );
+        assertEquals( expression.toString(), parseExpression( "j || k" ) );
     }
 
     public void testConditionalExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    ConditionalExpression" );
-        tree.add( "     IdExpression" );
-        tree.add( "     IdExpression" );
-        tree.add( "     IdExpression" );
-        assertEquals( tree.toString(), parseExpression( "j ? k : l;" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " ConditionalExpression" );
+        expression.add( "  IdExpression" );
+        expression.add( "  IdExpression" );
+        expression.add( "  IdExpression" );
+        assertEquals( expression.toString(), parseExpression( "j ? k : l;" ) );
     }
 
     public void testAssignmentExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    AssignmentExpression" );
-        tree.add( "     IdExpression" );
-        tree.add( "     IdExpression" );
-        assertEquals( tree.toString(), parseExpression( "j = k" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " AssignmentExpression" );
+        expression.add( "  IdExpression" );
+        expression.add( "  IdExpression" );
+        assertEquals( expression.toString(), parseExpression( "j = k" ) );
     }
 
     public void testThrowExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    ThrowExpression" );
-        assertEquals( tree.toString(), parseExpression( "throw" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " ThrowExpression" );
+        assertEquals( expression.toString(), parseExpression( "throw" ) );
     }
 
     public void testThrowExpressionWithException() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    ThrowExpression" );
-        tree.add( "     IdExpression" ); // FIXME IdExpression ?
-        assertEquals( tree.toString(), parseExpression( "throw my_exception()" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " ThrowExpression" );
+        expression.add( "  IdExpression" ); // FIXME IdExpression ?
+        assertEquals( expression.toString(), parseExpression( "throw my_exception()" ) );
     }
 
     public void testInclusiveOrExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    InclusiveOrExpression" );
-        tree.add( "     IdExpression" );
-        tree.add( "     IdExpression" );
-        assertEquals( tree.toString(), parseExpression( "j | k" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " InclusiveOrExpression" );
+        expression.add( "  IdExpression" );
+        expression.add( "  IdExpression" );
+        assertEquals( expression.toString(), parseExpression( "j | k" ) );
     }
 
     public void testExclusiveOrExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    ExclusiveOrExpression" );
-        tree.add( "     IdExpression" );
-        tree.add( "     IdExpression" );
-        assertEquals( tree.toString(), parseExpression( "j ^ k" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " ExclusiveOrExpression" );
+        expression.add( "  IdExpression" );
+        expression.add( "  IdExpression" );
+        assertEquals( expression.toString(), parseExpression( "j ^ k" ) );
     }
 
     public void testAndExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    AndExpression" );
-        tree.add( "     IdExpression" );
-        tree.add( "     IdExpression" );
-        assertEquals( tree.toString(), parseExpression( "j & k" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " AndExpression" );
+        expression.add( "  IdExpression" );
+        expression.add( "  IdExpression" );
+        assertEquals( expression.toString(), parseExpression( "j & k" ) );
     }
 
     public void testEqualityExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    EqualityExpression" );
-        tree.add( "     IdExpression" );
-        tree.add( "     IdExpression" );
-        assertEquals( tree.toString(), parseExpression( "i == j" ) );
-        assertEquals( tree.toString(), parseExpression( "i != j" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " EqualityExpression" );
+        expression.add( "  IdExpression" );
+        expression.add( "  IdExpression" );
+        assertEquals( expression.toString(), parseExpression( "i == j" ) );
+        assertEquals( expression.toString(), parseExpression( "i != j" ) );
     }
 
     public void testRelationalExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    RelationalExpression" );
-        tree.add( "     IdExpression" );
-        tree.add( "     IdExpression" );
-        assertEquals( tree.toString(), parseExpression( "i < j" ) );
-        assertEquals( tree.toString(), parseExpression( "i > j" ) );
-        assertEquals( tree.toString(), parseExpression( "i <= j" ) );
-        assertEquals( tree.toString(), parseExpression( "i >= j" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " RelationalExpression" );
+        expression.add( "  IdExpression" );
+        expression.add( "  IdExpression" );
+        assertEquals( expression.toString(), parseExpression( "i < j" ) );
+        assertEquals( expression.toString(), parseExpression( "i > j" ) );
+        assertEquals( expression.toString(), parseExpression( "i <= j" ) );
+        assertEquals( expression.toString(), parseExpression( "i >= j" ) );
     }
 
     public void testShiftExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    ShiftExpression" );
-        tree.add( "     IdExpression" );
-        tree.add( "     IdExpression" );
-        assertEquals( tree.toString(), parseExpression( "i << j" ) );
-        assertEquals( tree.toString(), parseExpression( "i >> j" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " ShiftExpression" );
+        expression.add( "  IdExpression" );
+        expression.add( "  IdExpression" );
+        assertEquals( expression.toString(), parseExpression( "i << j" ) );
+        assertEquals( expression.toString(), parseExpression( "i >> j" ) );
     }
 
     public void testAdditiveExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    AdditiveExpression" );
-        tree.add( "     IdExpression" );
-        tree.add( "     IdExpression" );
-        assertEquals( tree.toString(), parseExpression( "i + j" ) );
-        assertEquals( tree.toString(), parseExpression( "i - j" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " AdditiveExpression" );
+        expression.add( "  IdExpression" );
+        expression.add( "  IdExpression" );
+        assertEquals( expression.toString(), parseExpression( "i + j" ) );
+        assertEquals( expression.toString(), parseExpression( "i - j" ) );
     }
 
     public void testMultiplicativeExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    MultiplicativeExpression" );
-        tree.add( "     IdExpression" );
-        tree.add( "     IdExpression" );
-        assertEquals( tree.toString(), parseExpression( "i * j" ) );
-        assertEquals( tree.toString(), parseExpression( "i / j" ) );
-        assertEquals( tree.toString(), parseExpression( "i % j" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " MultiplicativeExpression" );
+        expression.add( "  IdExpression" );
+        expression.add( "  IdExpression" );
+        assertEquals( expression.toString(), parseExpression( "i * j" ) );
+        assertEquals( expression.toString(), parseExpression( "i / j" ) );
+        assertEquals( expression.toString(), parseExpression( "i % j" ) );
     }
 
     public void testPointerToMemberExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    PointerToMemberExpression" );
-        tree.add( "     IdExpression" );
-        tree.add( "     IdExpression" );
-        assertEquals( tree.toString(), parseExpression( "i .* j" ) );
-        assertEquals( tree.toString(), parseExpression( "i ->* j" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " PointerToMemberExpression" );
+        expression.add( "  IdExpression" );
+        expression.add( "  IdExpression" );
+        assertEquals( expression.toString(), parseExpression( "i .* j" ) );
+        assertEquals( expression.toString(), parseExpression( "i ->* j" ) );
     }
 
     public void testCastExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    CastExpression" );
-        tree.add( "     IdExpression" );
-        assertEquals( tree.toString(), parseExpression( "(int) i" ) );
-        assertEquals( tree.toString(), parseExpression( "(MyType) i" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " CastExpression" );
+        expression.add( "  IdExpression" );
+        assertEquals( expression.toString(), parseExpression( "(int) i" ) );
+        assertEquals( expression.toString(), parseExpression( "(MyType) i" ) );
     }
 
     public void testUnaryExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    UnaryExpression" );
-        tree.add( "     IdExpression" );
-        assertEquals( tree.toString(), parseExpression( "++ i" ) );
-        assertEquals( tree.toString(), parseExpression( "-- i" ) );
-        assertEquals( tree.toString(), parseExpression( "& i" ) );
-        assertEquals( tree.toString(), parseExpression( "* i" ) );
-        assertEquals( tree.toString(), parseExpression( "+ i" ) );
-        assertEquals( tree.toString(), parseExpression( "- i" ) );
-        assertEquals( tree.toString(), parseExpression( "+ i" ) );
-        assertEquals( tree.toString(), parseExpression( "~ i" ) );
-        assertEquals( tree.toString(), parseExpression( "! i" ) );
-        assertEquals( tree.toString(), parseExpression( "sizeof i" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " UnaryExpression" );
+        expression.add( "  IdExpression" );
+        assertEquals( expression.toString(), parseExpression( "++ i" ) );
+        assertEquals( expression.toString(), parseExpression( "-- i" ) );
+        assertEquals( expression.toString(), parseExpression( "& i" ) );
+        assertEquals( expression.toString(), parseExpression( "* i" ) );
+        assertEquals( expression.toString(), parseExpression( "+ i" ) );
+        assertEquals( expression.toString(), parseExpression( "- i" ) );
+        assertEquals( expression.toString(), parseExpression( "+ i" ) );
+        assertEquals( expression.toString(), parseExpression( "~ i" ) );
+        assertEquals( expression.toString(), parseExpression( "! i" ) );
+        assertEquals( expression.toString(), parseExpression( "sizeof i" ) );
     }
 
     public void testUnarySizeofExpression() throws ParseException // FIXME should be regular unary expression
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    UnaryExpression" );
-        assertEquals( tree.toString(), parseExpression( "sizeof( i )" ) ); // FIXME i considered as type_id()
+        expression.add( "ExpressionStatement" );
+        expression.add( " UnaryExpression" );
+        assertEquals( expression.toString(), parseExpression( "sizeof( i )" ) ); // FIXME i considered as type_id()
     }
 
     public void testFunctionCallExpression() throws ParseException // TODO
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    IdExpression" ); // FIXME FunctionCallExpression ?
-        assertEquals( tree.toString(), parseExpression( "i()" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " IdExpression" ); // FIXME FunctionCallExpression ?
+        assertEquals( expression.toString(), parseExpression( "i()" ) );
     }
 
     public void testPostfixExpression() throws ParseException // TODO
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    PostfixExpression" );
-        tree.add( "     IdExpression" );
-        tree.add( "     PostfixExpression" ); // FIXME ?!
-        assertEquals( tree.toString(), parseExpression( "i ++" ) );
-        assertEquals( tree.toString(), parseExpression( "i --" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " PostfixExpression" );
+        expression.add( "  IdExpression" );
+        expression.add( "  PostfixExpression" ); // FIXME ?!
+        assertEquals( expression.toString(), parseExpression( "i ++" ) );
+        assertEquals( expression.toString(), parseExpression( "i --" ) );
     }
 
     public void testThisIsPrimaryExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    PrimaryExpression" );
-        assertEquals( tree.toString(), parseExpression( "this" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " PrimaryExpression" );
+        assertEquals( expression.toString(), parseExpression( "this" ) );
     }
 
     public void testParenthizedExpressionIsPrimaryExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    PrimaryExpression" );
-        tree.add( "     IdExpression" );
-        assertEquals( tree.toString(), parseExpression( "( i )" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " PrimaryExpression" );
+        expression.add( "  IdExpression" );
+        assertEquals( expression.toString(), parseExpression( "( i )" ) );
     }
 
     public void testNewExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    NewExpression" );
-        assertEquals( tree.toString(), parseExpression( "::new MyType" ) );
-        assertEquals( tree.toString(), parseExpression( "new MyType" ) );
-        assertEquals( tree.toString(), parseExpression( "new MyType()" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " NewExpression" );
+        assertEquals( expression.toString(), parseExpression( "::new MyType" ) );
+        assertEquals( expression.toString(), parseExpression( "new MyType" ) );
+        assertEquals( expression.toString(), parseExpression( "new MyType()" ) );
     }
 
     public void testComplexNewExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    NewExpression" );
-        tree.add( "     IdExpression" );
-        assertEquals( tree.toString(), parseExpression( "new MyType( i )" ) );
-        assertEquals( tree.toString(), parseExpression( "new (i) MyType" ) );
-        assertEquals( tree.toString(), parseExpression( "new MyType[i]" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " NewExpression" );
+        expression.add( "  IdExpression" );
+        assertEquals( expression.toString(), parseExpression( "new MyType( i )" ) );
+        assertEquals( expression.toString(), parseExpression( "new (i) MyType" ) );
+        assertEquals( expression.toString(), parseExpression( "new MyType[i]" ) );
     }
 
     public void testDeleteExpression() throws ParseException
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    DeleteExpression" );
-        tree.add( "     IdExpression" );
-        assertEquals( tree.toString(), parseExpression( "::delete i" ) );
-        assertEquals( tree.toString(), parseExpression( "delete i" ) );
-        assertEquals( tree.toString(), parseExpression( "delete[] i" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " DeleteExpression" );
+        expression.add( "  IdExpression" );
+        assertEquals( expression.toString(), parseExpression( "::delete i" ) );
+        assertEquals( expression.toString(), parseExpression( "delete i" ) );
+        assertEquals( expression.toString(), parseExpression( "delete[] i" ) );
     }
 
     public void testTypeIdExpression() throws ParseException // FIXME consider as function call ?
     {
-        addExpressionPrefix();
-        tree.add( "   ExpressionStatement" );
-        tree.add( "    TypeIdExpression" );
-        assertEquals( tree.toString(), parseExpression( "typeid( int )" ) );
-        assertEquals( tree.toString(), parseExpression( "typeid( i )" ) );
-        tree.add( "     FunctionParameterTypeQualifier" ); // FIXME FunctionParameterTypeQualifier
-        assertEquals( tree.toString(), parseExpression( "typeid( MyType& )" ) );
+        expression.add( "ExpressionStatement" );
+        expression.add( " TypeIdExpression" );
+        assertEquals( expression.toString(), parseExpression( "typeid( int )" ) );
+        assertEquals( expression.toString(), parseExpression( "typeid( i )" ) );
+        expression.add( "  FunctionParameterTypeQualifier" ); // FIXME FunctionParameterTypeQualifier
+        assertEquals( expression.toString(), parseExpression( "typeid( MyType& )" ) );
     }
 
     public void testClassDefinition() throws ParseException
