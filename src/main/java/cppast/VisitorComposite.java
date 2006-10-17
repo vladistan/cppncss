@@ -586,4 +586,54 @@ public final class VisitorComposite implements ParserVisitor
             visitor.visit( node, data );
         return data;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstDeclaration node, final Object data )
+    {
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
+        return data;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstMemberDeclaration node, final Object data )
+    {
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
+        return data;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstFunctionDeclaration node, final Object data )
+    {
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
+        return data;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstConstructorDeclaration node, final Object data )
+    {
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
+        return data;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstDestructorDeclaration node, final Object data )
+    {
+        for( ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
+        return data;
+    }
 }

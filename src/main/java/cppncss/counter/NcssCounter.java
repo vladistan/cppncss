@@ -28,21 +28,22 @@
 
 package cppncss.counter;
 
-import cppast.AstClassDeclaration;
-import cppast.AstClassDefinition;
+import cppast.AstConstructorDeclaration;
 import cppast.AstConstructorInitializer;
+import cppast.AstDeclaration;
 import cppast.AstDeclarationStatement;
 import cppast.AstDefaultStatement;
+import cppast.AstDestructorDeclaration;
 import cppast.AstElseStatement;
-import cppast.AstEnumSpecifier;
 import cppast.AstExpressionStatement;
 import cppast.AstFunctionBody;
+import cppast.AstFunctionDeclaration;
 import cppast.AstHandler;
 import cppast.AstIfStatement;
 import cppast.AstIterationStatement;
 import cppast.AstJumpStatement;
 import cppast.AstLabelStatement;
-import cppast.AstNamespaceAliasDefinition;
+import cppast.AstMemberDeclaration;
 import cppast.AstNamespaceDefinition;
 import cppast.AstSwitchStatement;
 
@@ -147,15 +148,6 @@ public final class NcssCounter extends AbstractCounter
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstHandler node, final Object data )
-    {
-        increment();
-        return node.accept( this, data );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public Object visit( final AstLabelStatement node, final Object data )
     {
         increment();
@@ -174,6 +166,15 @@ public final class NcssCounter extends AbstractCounter
     /**
      * {@inheritDoc}
      */
+    public Object visit( final AstHandler node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Object visit( final AstNamespaceDefinition node, final Object data )
     {
         increment();
@@ -183,7 +184,7 @@ public final class NcssCounter extends AbstractCounter
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstNamespaceAliasDefinition node, final Object data )
+    public Object visit( final AstDeclaration node, final Object data )
     {
         increment();
         return node.accept( this, data );
@@ -192,7 +193,7 @@ public final class NcssCounter extends AbstractCounter
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstClassDeclaration node, final Object data )
+    public Object visit( final AstMemberDeclaration node, final Object data )
     {
         increment();
         return node.accept( this, data );
@@ -201,7 +202,7 @@ public final class NcssCounter extends AbstractCounter
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstClassDefinition node, final Object data )
+    public Object visit( final AstFunctionDeclaration node, final Object data )
     {
         increment();
         return node.accept( this, data );
@@ -210,7 +211,16 @@ public final class NcssCounter extends AbstractCounter
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstEnumSpecifier node, final Object data )
+    public Object visit( final AstConstructorDeclaration node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstDestructorDeclaration node, final Object data )
     {
         increment();
         return node.accept( this, data );

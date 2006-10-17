@@ -47,6 +47,11 @@ public class ParserTest extends TestCase
         new Parser( new StringReader( data ) ).translation_unit();
     }
 
+    public void testSemiColumExternalDeclaration() throws ParseException
+    {
+        parse( ";" );
+    }
+
     public void testTypedefType() throws ParseException
     {
         parse( "typedef MyClass T_MyClass;" );
@@ -528,7 +533,7 @@ public class ParserTest extends TestCase
 
     public void testExplicitConstructorDefinition() throws ParseException
     {
-        parse( "class MyClass { explicit MyClass() : data_( 0 ) {}; };" );
+        parse( "class MyClass { explicit MyClass() : data_( 0 ) {} };" );
     }
 
     public void testPureVirtualDestructorDeclaration() throws ParseException
@@ -901,6 +906,11 @@ public class ParserTest extends TestCase
     public void testExternFunctionDefinitionIsValid() throws ParseException
     {
         parse( "extern \"C\" void MyFunction() {}" );
+    }
+
+    public void testSemiColonMemberDeclarationIsValid() throws ParseException
+    {
+        parse( "class MyClass{ ; };" );
     }
 
     public void testTMP() throws IOException, ParseException

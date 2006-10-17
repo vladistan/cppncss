@@ -61,7 +61,22 @@ public class NcssTest extends EasyMockTestCase
         assertNcss( 0, "" );
     }
 
-    public void testFunctionWithEmptyBodyHasNcssValueOfOne() throws ParseException
+    public void testSingleSemiColonHasNcssOfZero() throws ParseException
+    {
+        assertNcss( 0, ";" );
+    }
+
+    public void testDeclarationStatementHasNcssValueOfOne() throws ParseException
+    {
+        assertNcss( 1, "int i = 0;" );
+    }
+
+    public void testFunctionDeclarationHasNcssValueOfOne() throws ParseException
+    {
+        assertNcss( 1, "void MyFunction();" );
+    }
+
+    public void testFunctionDefinitionWithEmptyBodyHasNcssValueOfOne() throws ParseException
     {
         assertNcss( 1, "void MyFunction() {}" );
     }
@@ -71,12 +86,12 @@ public class NcssTest extends EasyMockTestCase
         assertNcss( 2, "MyClass::MyClass() : i() {}" );
     }
 
-    public void testSemiColumnDoesNotIncrementNcss() throws ParseException
+    public void testSemiColonDoesNotIncrementNcss() throws ParseException
     {
         assertNcss( 1, "void MyFunction() { ; }" );
     }
 
-    public void testDeclarationStatementIncrementsNcssByOne() throws ParseException
+    public void testDeclarationStatementWithinFunctionIncrementsNcssByOne() throws ParseException
     {
         assertNcss( 2, "void MyFunction() { int i = 0; }" );
     }
@@ -171,9 +186,59 @@ public class NcssTest extends EasyMockTestCase
         assertNcss( 1, "class MyClass;" );
     }
 
+    public void testClassDeclarationWithinFunctionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 2, "void MyFunction() { class MyClass; }" );
+    }
+
+    public void testClassDefinitionWithinFunctionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 2, "void MyFunction() { class MyClass {}; }" );
+    }
+
+    public void testClassDefinitionWithOneMethodDeclarationWithinFunctionIncrementsNcssByTwo() throws ParseException
+    {
+        assertNcss( 3, "void MyFunction() { class MyClass { void MyMethod(); }; }" );
+    }
+
+    public void testClassDefinitionWithOneVariableDeclarationWithinFunctionIncrementsNcssByTwo() throws ParseException
+    {
+        assertNcss( 3, "void MyFunction() { class MyClass { int i; }; }" );
+    }
+
     public void testClassDefinitionIncrementsNcssByOne() throws ParseException
     {
         assertNcss( 1, "class MyClass {};" );
+    }
+
+    public void testMemberVariableWithinClassDefinitionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 2, "class MyClass { int i; };" );
+    }
+
+    public void testMethodDeclarationWithinClassDefinitionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 2, "class MyClass { void MyMethod(); };" );
+    }
+
+    public void testConstructorDeclarationWithinClassDefinitionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 2, "class MyClass { MyClass(); };" );
+    }
+
+    public void testDestructorDeclarationWithinClassDefinitionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 2, "class MyClass { ~MyClass(); };" );
+    }
+
+    public void testMethodDefinitionWithinClassDefinitionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 2, "class MyClass { void MyMethod() {} };" );
+    }
+
+    public void testClassDefinitionWithinClassDefinitionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 2, "class MyClass { class MyInnerClass {}; };" );
     }
 
     public void testClassVariableDefinitionIncrementsNcssByOne() throws ParseException

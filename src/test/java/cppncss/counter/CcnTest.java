@@ -141,6 +141,6 @@ public class CcnTest extends EasyMockTestCase
         observer.notify( "CCN", "MyFunction()", 1, 1 );
         observer.notify( "CCN", "MyClass::MyMethod()", 1, 2 );
         replay();
-        parse( "void MyFunction() { class MyClass{ void MyMethod() { if(i); }; }; }" );
+        parse( "void MyFunction() { class MyClass{ void MyMethod() { if(i); } }; }" );
     }
 }

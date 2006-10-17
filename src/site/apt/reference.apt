@@ -24,6 +24,7 @@ Reference
 |                           | namespace n = my_namespace::sub;         |                                                                                                                  |
 *---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
 | Type declaration          | class MyClass;                           | class, struct, union, enum, typedef                                                                              |
+|                           | friend class MyClass;                    |                                                                                                                  |
 |                           | struct MyStruct;                         |                                                                                                                  |
 |                           | union MyUnion;                           |                                                                                                                  |
 |                           | enum MyEnum;                             |                                                                                                                  |

@@ -268,32 +268,27 @@ TOKEN :
 AstTranslationUnit translation_unit() #TranslationUnit :
 {}
 {
-   (external_declaration())* <EOF>
-   { closeScopes(); return jjtThis; }
+   (declaration())* <EOF> { closeScopes(); return jjtThis; }
 }
 
-void external_declaration() :
+void declaration() :
 {}
 {
-    LOOKAHEAD(block_declaration()) block_declaration()
+    LOOKAHEAD(block_declaration()) block_declaration() #Declaration
    |
     LOOKAHEAD(template_head()) template_declaration()
    |
-    LOOKAHEAD((type_modifiers())* [scope_override()] "operator")
-       conversion_function_decl_or_def()
+    LOOKAHEAD((type_modifiers())* [scope_override()] "operator") conversion_function_decl_or_def()
    |
-    LOOKAHEAD(dtor_ctor_decl_spec() dtor_declarator() "{")
-       dtor_definition()
+    LOOKAHEAD(dtor_ctor_decl_spec() dtor_declarator() "{") dtor_definition()
    |
-    LOOKAHEAD(dtor_ctor_decl_spec() function_declarator_lookahead())
-       ctor_definition()
+    LOOKAHEAD(dtor_ctor_decl_spec() function_declarator_lookahead()) ctor_definition()
    |
-    LOOKAHEAD(declaration_specifiers() function_declarator())
-       function_decl_or_def()
+    LOOKAHEAD(declaration_specifiers() function_declarator()) function_decl_or_def()
    |
     LOOKAHEAD("namespace") namespace_definition()
    |
-    declaration()
+    linkage_specification()
    |
     ";"
 }
@@ -302,13 +297,13 @@ void template_declaration() :
 {}
 {
 //   ["export"]
-   template_head() external_declaration()
+   template_head() declaration()
 }
 
 void function_decl_or_def() :
 {}
 {
-    LOOKAHEAD(function() ";") function() ";"
+    LOOKAHEAD(function() ";") (function() ";") #FunctionDeclaration
    |
     (function() compound_statement() #FunctionBody) #FunctionDefinition
 }
@@ -322,7 +317,7 @@ void function() :
 void conversion_function_decl_or_def() :
 {}
 {
-    LOOKAHEAD(conversion_function() ";") conversion_function() ";"
+    LOOKAHEAD(conversion_function() ";") (conversion_function() ";") #FunctionDeclaration
    |
     (conversion_function() compound_statement() #FunctionBody) #FunctionDefinition
 }
@@ -358,9 +353,9 @@ void linkage_specification() :
 {
    "extern" <STRING>
    (
-    "{" ( external_declaration() )* "}" [LOOKAHEAD(";") ";"]
+    "{" ( declaration() )* "}" [LOOKAHEAD(";") ";"]
    |
-    external_declaration()
+    declaration()
    )
 }
 
@@ -395,22 +390,14 @@ void namespace_definition() #NamespaceDefinition :
      LOOKAHEAD(2)
       [token = <ID> { name = token.image; }]
       "{" { openScope( name ); }
-      ( external_declaration() )*
+      ( declaration() )*
       "}" { closeScope(); }
      |
       <ID> "=" [LOOKAHEAD(scope_override_lookahead()) scope_override()] <ID> ";"
     )
 }
 
-void declaration() :
-{}
-{
-    LOOKAHEAD(2) declaration_specifiers() [init_declarator_list()] ";"
-   |
-    linkage_specification()
-}
-
-void declaration_specifiers() :
+void declaration_specifiers() : // TODO clean this
 {}
 {
    (LOOKAHEAD(type_modifiers()) type_modifiers())+
@@ -614,10 +601,10 @@ void member_declaration() :
        [LOOKAHEAD(template_head()) template_head()] dtor_definition()
    |
     LOOKAHEAD(dtor_ctor_decl_spec() "~")
-       dtor_ctor_decl_spec() simple_dtor_declarator() [pure_specifier()] ";"
+       (dtor_ctor_decl_spec() simple_dtor_declarator() [pure_specifier()] ";") #DestructorDeclaration
    |
     LOOKAHEAD([template_head()] dtor_ctor_decl_spec() function_declarator() ";")
-       [LOOKAHEAD(template_head()) template_head()] dtor_ctor_decl_spec() ctor_declarator() ";"
+       [LOOKAHEAD(template_head()) template_head()] (dtor_ctor_decl_spec() ctor_declarator() ";") #ConstructorDeclaration
    |
     LOOKAHEAD([template_head()] dtor_ctor_decl_spec() function_declarator_lookahead())
        [LOOKAHEAD(template_head()) template_head()] ctor_definition()
@@ -626,11 +613,11 @@ void member_declaration() :
        [LOOKAHEAD(template_head()) template_head()] function_decl_or_def()
    |
     LOOKAHEAD([template_head()] declaration_specifiers())
-       [LOOKAHEAD(template_head()) template_head()] declaration_specifiers() [member_declarator_list()] ";" // (friend) class forward declaration
+       [LOOKAHEAD(template_head()) template_head()] declaration_specifiers() [member_declarator_list()] ";" #MemberDeclaration
    |
     LOOKAHEAD("using") using_declaration()
-   |
-    qualified_id() ";" // TODO what is this for ?
+//   |
+//    qualified_id() ";" // TODO what is this for ?
    |
     ";"
 }
@@ -776,7 +763,7 @@ void dtor_declarator() :
 void simple_dtor_declarator() :
 {}
 {
-   "~" <ID> "(" ["void"] ")" [exception_spec()]
+   ("~" <ID>) #FunctionName "(" ["void"] ")" [exception_spec()]
 }
 
 void parameter_declaration_list() :
@@ -892,17 +879,12 @@ void statement_list() :
    (LOOKAHEAD(statement()) statement())+
 }
 
-void statement() :
+void statement() : // TODO #Statement ?
 {}
 {
-//    LOOKAHEAD(";") ";"
-//   |
-//    LOOKAHEAD(labeled_statement()) labeled_statement()
-//   |
-//    LOOKAHEAD(expression()) (expression() ";") #ExpressionStatement
-    LOOKAHEAD(2) labeled_statement()
+    LOOKAHEAD(labeled_statement()) labeled_statement()
    |
-    LOOKAHEAD([expression()] ";") [expression() #ExpressionStatement] ";"
+    LOOKAHEAD(expression() ";") expression() #ExpressionStatement ";" // FIXME ";" in lookahead ?
    |
     compound_statement()
    |
@@ -912,15 +894,11 @@ void statement() :
    |
     jump_statement()
    |
-    declaration_statement() #DeclarationStatement
+    block_declaration() #DeclarationStatement
    |
     try_block()
-}
-
-void declaration_statement() :
-{}
-{
-    block_declaration()
+   |
+    ";"
 }
 
 void block_declaration() :
@@ -937,16 +915,16 @@ void block_declaration() :
     LOOKAHEAD("using") using_declaration()
 }
 
+void simple_declaration() :
+{}
+{
+    declaration_specifiers() [init_declarator_list()] ";"
+}
+
 void namespace_alias_definition() #NamespaceAliasDefinition :
 {}
 {
     "namespace" <ID> "=" qualified_type() ";"
-}
-
-void simple_declaration() :
-{}
-{
-    [LOOKAHEAD(declaration_specifiers()) declaration_specifiers()] [init_declarator_list()] ";"
 }
 
 void labeled_statement() :
@@ -982,7 +960,7 @@ void iteration_statement() #IterationStatement :
    |
     "do" statement() "while" "(" condition() ")" ";"
    |
-    "for" "(" (LOOKAHEAD(declaration()) declaration() | [expression()] ";") [condition()] ";" [expression()] ")" statement()
+    "for" "(" (LOOKAHEAD(simple_declaration()) simple_declaration() | [expression()] ";") [condition()] ";" [expression()] ")" statement()
 }
 
 void condition() :
