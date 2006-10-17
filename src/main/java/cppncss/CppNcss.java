@@ -83,16 +83,6 @@ public final class CppNcss
         main.stop();
     }
 
-    private static void registerVisitor( final MutablePicoContainer parent, final MutablePicoContainer local,
-            final Class visitorType, final Class counterType )
-    {
-        final MutablePicoContainer inner = new DefaultPicoContainer( local );
-        inner.registerComponentImplementation( counterType );
-        inner.registerComponentImplementation( visitorType );
-        final Object visitor = inner.getComponentInstance( visitorType );
-        parent.registerComponentInstance( visitor.toString(), visitor );
-    }
-
     private static void registerCollector( final MutablePicoContainer parent, final String name,
             final Class visitorType, final Class collectorType )
     {
@@ -106,6 +96,16 @@ public final class CppNcss
         registerVisitor( parent, local, visitorType, CcnCounter.class );
         final Object collector = local.getComponentInstance( collectorType );
         parent.registerComponentInstance( collector.toString(), collector );
+    }
+
+    private static void registerVisitor( final MutablePicoContainer parent, final MutablePicoContainer local,
+            final Class visitorType, final Class counterType )
+    {
+        final MutablePicoContainer inner = new DefaultPicoContainer( local );
+        inner.registerComponentImplementation( counterType );
+        inner.registerComponentImplementation( visitorType );
+        final Object visitor = inner.getComponentInstance( visitorType );
+        parent.registerComponentInstance( visitor.toString(), visitor );
     }
 
     private static boolean check( final String[] args )
