@@ -734,6 +734,14 @@ public class AstTest extends TestCase
         assertEquals( tree.toString(), parse( "void MyFunction() { class MyClass { void MyMethod(); }; }" ) );
     }
 
+    public void testNamespaceDefinition() throws ParseException
+    {
+        tree.add( "TranslationUnit" );
+        tree.add( " NamespaceDefinition" );
+        assertEquals( tree.toString(), parse( "namespace std {}" ) );
+        assertEquals( tree.toString(), parse( "namespace {}" ) );
+    }
+
     public void testUsingNamespace() throws ParseException
     {
         tree.add( "TranslationUnit" );
