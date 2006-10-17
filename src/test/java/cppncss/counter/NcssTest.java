@@ -181,6 +181,16 @@ public class NcssTest extends EasyMockTestCase
         assertNcss( 1, "namespace nm = my_namespace::sub_namespace;" );
     }
 
+    public void testUsingNamespaceIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "using namespace std;" );
+    }
+
+    public void testUsingNamespaceTypeIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "using namespace std::vector;" );
+    }
+
     public void testClassDeclarationIncrementsNcssByOne() throws ParseException
     {
         assertNcss( 1, "class MyClass;" );
@@ -324,15 +334,5 @@ public class NcssTest extends EasyMockTestCase
     public void testTypedefWithinFunctionIncrementsNcssByOne() throws ParseException
     {
         assertNcss( 2, "void MyFunction() { typedef int id; }" );
-    }
-
-    public void testUsingNamespaceIncrementsNcssByOne() throws ParseException
-    {
-        assertNcss( 1, "using namespace std;" );
-    }
-
-    public void testUsingNamespaceTypeIncrementsNcssByOne() throws ParseException
-    {
-        assertNcss( 1, "using namespace std::vector;" );
     }
 }
