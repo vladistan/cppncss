@@ -112,16 +112,16 @@ public final class Analyzer implements Startable
 
     private PreProcessor createProcessor( final Options options )
     {
-        final PreProcessor processor = new PreProcessor();
+        final PreProcessor result = new PreProcessor();
         final List<String> defineNames = options.getOptionProperties( "D" );
         final List<String> defineValues = options.getOptionPropertyValues( "D" );
         for( int i = 0; i < defineNames.size(); ++i )
-            processor.addDefine( defineNames.get( i ), defineValues.get( i ) );
+            result.addDefine( defineNames.get( i ), defineValues.get( i ) );
         final List<String> macroNames = options.getOptionProperties( "M" );
         final List<String> macroValues = options.getOptionPropertyValues( "M" );
         for( int i = 0; i < macroNames.size(); ++i )
-            processor.addMacro( macroNames.get( i ), macroValues.get( i ) );
-        return processor;
+            result.addMacro( macroNames.get( i ), macroValues.get( i ) );
+        return result;
     }
 
     private List<String> resolve( final List<String> inputs )
