@@ -54,6 +54,8 @@ public class NcssTest extends EasyMockTestCase
         replay();
         new Parser( new StringReader( content ) ).translation_unit().jjtAccept(
                 new FileVisitor( new NcssCounter( observer ) ), null );
+        verify();
+        reset();
     }
 
     public void testEmptyContentHasNcssOfZero() throws ParseException
@@ -169,25 +171,13 @@ public class NcssTest extends EasyMockTestCase
     public void testNamespaceDefinitionIncrementsNcssByOne() throws ParseException
     {
         assertNcss( 1, "namespace my_namespace {}" );
-    }
-
-    public void testAnonymousNamespaceDefinitionIncrementsNcssByOne() throws ParseException
-    {
         assertNcss( 1, "namespace {}" );
-    }
-
-    public void testNamespaceAliasDefinitionIncrementsNcssByOne() throws ParseException
-    {
         assertNcss( 1, "namespace nm = my_namespace::sub_namespace;" );
     }
 
     public void testUsingNamespaceIncrementsNcssByOne() throws ParseException
     {
         assertNcss( 1, "using namespace std;" );
-    }
-
-    public void testUsingNamespaceTypeIncrementsNcssByOne() throws ParseException
-    {
         assertNcss( 1, "using namespace std::vector;" );
     }
 
@@ -254,85 +244,45 @@ public class NcssTest extends EasyMockTestCase
     public void testClassVariableDefinitionIncrementsNcssByOne() throws ParseException
     {
         assertNcss( 1, "class MyClass {} c;" );
-    }
-
-    public void testAnonymousClassVariableDefinitionIncrementsNcssByOne() throws ParseException
-    {
         assertNcss( 1, "class {} c;" );
     }
 
     public void testStructDeclarationIncrementsNcssByOne() throws ParseException
     {
         assertNcss( 1, "struct MyStruct;" );
-    }
-
-    public void testStructDefinitionIncrementsNcssByOne() throws ParseException
-    {
         assertNcss( 1, "struct MyStruct {};" );
-    }
-
-    public void testStructVariableDefinitionIncrementsNcssByOne() throws ParseException
-    {
         assertNcss( 1, "struct MyStruct {} s;" );
-    }
-
-    public void testAnonymousStructVariableDefinitionIncrementsNcssByOne() throws ParseException
-    {
         assertNcss( 1, "struct {} s;" );
     }
 
     public void testUnionDeclarationIncrementsNcssByOne() throws ParseException
     {
         assertNcss( 1, "union MyUnion;" );
-    }
-
-    public void testUnionDefinitionIncrementsNcssByOne() throws ParseException
-    {
         assertNcss( 1, "union MyUnion {};" );
-    }
-
-    public void testUnionVariableDefinitionIncrementsNcssByOne() throws ParseException
-    {
         assertNcss( 1, "union MyUnion {} u;" );
-    }
-
-    public void testAnonymousUnionVariableDefinitionIncrementsNcssByOne() throws ParseException
-    {
         assertNcss( 1, "union {} u;" );
     }
 
-    public void testEnumDeclarationIncrementsNcssByOne() throws ParseException
+    public void testEnumIncrementsNcssByOne() throws ParseException
     {
         assertNcss( 1, "enum MyEnum;" );
-    }
-
-    public void testEnumDefinitionIncrementsNcssByOne() throws ParseException
-    {
         assertNcss( 1, "enum MyEnum {};" );
-    }
-
-    public void testEnumVariableDefinitionIncrementsNcssByOne() throws ParseException
-    {
         assertNcss( 1, "enum MyEnum {} e;" );
-    }
-
-    public void testAnonymousEnumVariableDefinitionIncrementsNcssByOne() throws ParseException
-    {
         assertNcss( 1, "enum {} e;" );
     }
 
     public void testTypedefIncrementsNcssByOne() throws ParseException
     {
         assertNcss( 1, "typedef int id;" );
-    }
-
-    public void testTypedefOfClassDefinitionIncrementsNcssByOne() throws ParseException
-    {
         assertNcss( 1, "typedef class MyClass {} c;" );
+        assertNcss( 2, "void MyFunction() { typedef int id; }" );
     }
 
-    public void testTypedefWithinFunctionIncrementsNcssByOne() throws ParseException
+    public void testInitializerIncrementsNcssByOne() throws ParseException
     {
-        assertNcss( 2, "void MyFunction() { typedef int id; }" );
+        assertNcss( 2, "MyClass::MyClass() : Base_ABC() {}" );
+        assertNcss( 2, "MyClass::MyClass() : Base_ABC( this ) {}" );
+        assertNcss( 2, "MyClass::MyClass() : data_( 0 ) {}" );
+        assertNcss( 3, "MyClass::MyClass() : data_( 0 ), counter_( 0 ) {}" );
     }
 }
