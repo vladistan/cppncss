@@ -310,4 +310,19 @@ public class NcssTest extends EasyMockTestCase
     {
         assertNcss( 1, "enum {} e;" );
     }
+
+    public void testTypedefIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "typedef int id;" );
+    }
+
+    public void testTypedefOfClassDefinitionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "typedef class MyClass {} c;" );
+    }
+
+    public void testTypedefWithinFunctionIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 2, "void MyFunction() { typedef int id; }" );
+    }
 }

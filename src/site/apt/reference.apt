@@ -45,6 +45,7 @@ Reference
 *---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
 | Variable declaration      | int a;                                   | No matter how many variables get actually declared through a comma separated list, only one statement is counted |
 |                           | int a, b, c = 5, d = 6;                  |                                                                                                                  |
+|                           | char tab[12];                            |                                                                                                                  |
 *---------------------------+------------------------------------------+------------------------------------------------------------------------------------------------------------------+
 | Function declaration      | void method();                           | function, method, constructor, destructor                                                                        |
 |                           | virtual void method() = 0;               |                                                                                                                  |
