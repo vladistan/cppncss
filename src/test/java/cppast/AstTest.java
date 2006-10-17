@@ -719,7 +719,7 @@ public class AstTest extends TestCase
         assertEquals( tree.toString(), parse( "class MyClass { int i; };" ) );
     }
 
-    public void testtestClassDefinitionWithOneMethodDeclarationWithinFunction() throws ParseException
+    public void testClassDefinitionWithOneMethodDeclarationWithinFunction() throws ParseException
     {
         tree.add( "TranslationUnit" );
         tree.add( " FunctionDefinition" );
@@ -732,5 +732,19 @@ public class AstTest extends TestCase
         tree.add( "      FunctionName" );
         tree.add( "      FunctionParameters" );
         assertEquals( tree.toString(), parse( "void MyFunction() { class MyClass { void MyMethod(); }; }" ) );
+    }
+
+    public void testUsingNamespace() throws ParseException
+    {
+        tree.add( "TranslationUnit" );
+        tree.add( " Declaration" );
+        assertEquals( tree.toString(), parse( "using namespace std;" ) );
+    }
+
+    public void testUsingNamespaceType() throws ParseException
+    {
+        tree.add( "TranslationUnit" );
+        tree.add( " Declaration" );
+        assertEquals( tree.toString(), parse( "using namespace std::vector;" ) );
     }
 }

@@ -325,4 +325,14 @@ public class NcssTest extends EasyMockTestCase
     {
         assertNcss( 2, "void MyFunction() { typedef int id; }" );
     }
+
+    public void testUsingNamespaceIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "using namespace std;" );
+    }
+
+    public void testUsingNamespaceTypeIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 1, "using namespace std::vector;" );
+    }
 }
