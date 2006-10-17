@@ -930,11 +930,11 @@ void namespace_alias_definition() #NamespaceAliasDefinition :
 void labeled_statement() :
 {}
 {
-    <ID> ":" statement() #LabelStatement
+    (<ID> ":" statement()) #LabelStatement
    |
-    "case" constant_expression() ":" statement() #CaseStatement
+    ("case" constant_expression() ":" statement()) #CaseStatement
    |
-    "default" ":" statement() #DefaultStatement
+    ("default" ":" statement()) #DefaultStatement
 }
 
 void compound_statement() :
@@ -948,9 +948,9 @@ void compound_statement() :
 void selection_statement() :
 {}
 {
-    "if" "(" condition() ")" statement() [LOOKAHEAD("else") "else" statement() #ElseStatement] #IfStatement
+    ("if" "(" condition() ")" statement() [LOOKAHEAD("else") "else" statement() #ElseStatement]) #IfStatement
    |
-    "switch" "(" condition() ")" statement() #SwitchStatement
+    ("switch" "(" condition() ")" statement()) #SwitchStatement
 }
 
 void iteration_statement() #IterationStatement :

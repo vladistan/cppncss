@@ -28,6 +28,7 @@
 
 package cppncss.counter;
 
+import cppast.AstCaseStatement;
 import cppast.AstConstructorDeclaration;
 import cppast.AstConstructorInitializer;
 import cppast.AstDeclaration;
@@ -149,6 +150,15 @@ public final class NcssCounter extends AbstractCounter
      * {@inheritDoc}
      */
     public Object visit( final AstLabelStatement node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstCaseStatement node, final Object data )
     {
         increment();
         return node.accept( this, data );

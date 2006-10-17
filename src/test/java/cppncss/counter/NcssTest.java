@@ -131,6 +131,17 @@ public class NcssTest extends EasyMockTestCase
     public void testSwitchStatementIncrementsNcssByOne() throws ParseException
     {
         assertNcss( 2, "void MyFunction() { switch( i ); }" );
+        assertNcss( 2, "void MyFunction() { switch( i ) {} }" );
+    }
+
+    public void testCaseStatementIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 3, "void MyFunction() { switch( i ) { case 0 : ; } }" );
+    }
+
+    public void testDefaultStatementIncrementsNcssByOne() throws ParseException
+    {
+        assertNcss( 3, "void MyFunction() { switch( i ) { default : ; } }" );
     }
 
     public void testBreakStatementIncrementsNcssByOne() throws ParseException
@@ -161,11 +172,6 @@ public class NcssTest extends EasyMockTestCase
     public void testLabelIncrementsNcssByOne() throws ParseException
     {
         assertNcss( 2, "void MyFunction() { label: ; }" );
-    }
-
-    public void testDefaultStatementIncrementsNcssByOne() throws ParseException
-    {
-        assertNcss( 3, "void MyFunction() { switch( i ) { default : ; } }" );
     }
 
     public void testNamespaceDefinitionIncrementsNcssByOne() throws ParseException

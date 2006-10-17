@@ -744,14 +744,101 @@ public class AstTest extends TestCase
         assertEquals( tree.toString(), parse( "using namespace std::vector;" ) );
     }
 
-    public void testLabel() throws ParseException
+    public void testLabelStatement() throws ParseException
     {
-        tree.add( "TranslationUnit" );
-        tree.add( " FunctionDefinition" );
-        tree.add( "  FunctionName" );
-        tree.add( "  FunctionParameters" );
-        tree.add( "  FunctionBody" );
-        tree.add( "   LabelStatement" );
-        assertEquals( tree.toString(), parse( "void MyFunction() { label: ; }" ) );
+        expression.add( "LabelStatement" );
+        assertEquals( expression.toString(), parseExpression( "label:" ) );
+    }
+
+    public void testIfStatement() throws ParseException
+    {
+        expression.add( "IfStatement" );
+        expression.add( " ConstantExpression" );
+        assertEquals( expression.toString(), parseExpression( "if( true )" ) );
+    }
+
+    public void testIfElseStatement() throws ParseException
+    {
+        expression.add( "IfStatement" );
+        expression.add( " ConstantExpression" );
+        expression.add( " ElseStatement" );
+        assertEquals( expression.toString(), parseExpression( "if( true ) ; else" ) );
+    }
+
+    public void testWhileStatement() throws ParseException
+    {
+        expression.add( "IterationStatement" );
+        expression.add( " ConstantExpression" );
+        assertEquals( expression.toString(), parseExpression( "while( true )" ) );
+    }
+
+    public void testDoWhileStatement() throws ParseException
+    {
+        expression.add( "IterationStatement" );
+        expression.add( " ConstantExpression" );
+        assertEquals( expression.toString(), parseExpression( "do ; while( true )" ) );
+    }
+
+    public void testForStatement() throws ParseException
+    {
+        expression.add( "IterationStatement" );
+        expression.add( " FunctionParameterTypeQualifier" ); // FIXME ?!
+        // expression.add( " InitializationStatement" ); // FIXME ?!
+        expression.add( " ConstantExpression" );
+        expression.add( " RelationalExpression" );
+        expression.add( "  IdExpression" );
+        expression.add( "  ConstantExpression" );
+        expression.add( " UnaryExpression" );
+        expression.add( "  IdExpression" );
+        assertEquals( expression.toString(), parseExpression( "for( int i = 0; i < 2 ; ++i )" ) );
+    }
+
+    public void testSwitchStatement() throws ParseException
+    {
+        expression.add( "SwitchStatement" );
+        expression.add( " IdExpression" );
+        expression.add( " CaseStatement" );
+        expression.add( "  ConstantExpression" );
+        expression.add( "  JumpStatement" );
+        expression.add( " CaseStatement" );
+        expression.add( "  ConstantExpression" );
+        expression.add( "  DefaultStatement" ); // FIXME default child of previous case when no break ?
+        expression.add( "   JumpStatement" );
+        assertEquals( expression.toString(), parseExpression( "switch( i ) { case 0: break; case 1: default: break; }" ) );
+    }
+
+    public void testJumpStatement() throws ParseException // FIXME separate in 3 statements
+    {
+        expression.add( "JumpStatement" );
+        assertEquals( expression.toString(), parseExpression( "break" ) );
+        assertEquals( expression.toString(), parseExpression( "continue" ) );
+        assertEquals( expression.toString(), parseExpression( "return" ) );
+    }
+
+    public void testThrowStatement() throws ParseException
+    {
+        expression.add( "ExpressionStatement" );
+        expression.add( " ThrowExpression" );
+        assertEquals( expression.toString(), parseExpression( "throw" ) );
+        expression.add( "  IdExpression" );
+        assertEquals( expression.toString(), parseExpression( "throw exception()" ) );
+    }
+
+    public void testGotoStatement() throws ParseException
+    {
+        expression.add( "JumpStatement" );
+        // expression.add( " IdExpression" ); // FIXME ?!
+        assertEquals( expression.toString(), parseExpression( "goto label" ) );
+    }
+
+    public void testCatch() throws ParseException
+    {
+        // expression.add( "Try" ); // FIXME
+        expression.add( "Handler" ); // FIXME rename Handler to CatchBlock ?
+        expression.add( " Parameter" );
+        expression.add( "  ParameterType" );
+        expression.add( "  FunctionParameterTypeQualifier" );
+        expression.add( "Handler" ); // FIXME rename Handler to CatchBlock ?
+        assertEquals( expression.toString(), parseExpression( "try {} catch( exception& ) {} catch(...) {}" ) );
     }
 }
