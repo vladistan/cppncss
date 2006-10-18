@@ -51,7 +51,7 @@ public class Options
     }
 
     /**
-     * Retrieve a list of non-parsable remaining arguments.
+     * Retrieve a list of the non-parsable remaining arguments.
      *
      * @return a list of arguments
      */
