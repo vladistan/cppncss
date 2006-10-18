@@ -40,9 +40,7 @@
       <subscribe>https://lists.sourceforge.net/lists/listinfo/cppncss-user</subscribe>
       <unsubscribe>https://lists.sourceforge.net/lists/listinfo/cppncss-user</unsubscribe>
       <post>cppncss-user@lists.sourceforge.net</post>
-      <!--
-      <archive/>
-      -->
+      <archive>http://sourceforge.net/mailarchive/forum.php?forum=cppncss-user</archive>
     </mailingList>
   </mailingLists>
   <developers>
