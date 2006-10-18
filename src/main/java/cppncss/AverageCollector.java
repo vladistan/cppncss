@@ -43,9 +43,9 @@ public final class AverageCollector implements CounterObserver, FileObserver, St
     private final AverageObserver observer;
 
     /**
-     * Create a collector indexed by a given measure name.
+     * Create an average collector.
      *
-     * @param observer a measure observer to be notified of the results
+     * @param observer an observer to be notified of the results
      */
     public AverageCollector( final AverageObserver observer )
     {

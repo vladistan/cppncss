@@ -43,9 +43,9 @@ public final class SumCollector implements CounterObserver, FileObserver, Starta
     private final SumObserver observer;
 
     /**
-     * Create a collector indexed by a given measure name.
+     * Create a sum collector.
      *
-     * @param observer a measure observer to be notified of the results
+     * @param observer an observer to be notified of the results
      */
     public SumCollector( final SumObserver observer )
     {

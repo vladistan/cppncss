@@ -52,9 +52,9 @@ public final class MeasureCollector implements CounterObserver, FileObserver, St
     private final Vector<String> labels;
 
     /**
-     * Create a collector indexed by a given measure name.
+     * Create a measure collector.
      *
-     * @param observer a measure observer to be notified of the results
+     * @param observer an observer to be notified of the results
      */
     public MeasureCollector( final MeasureObserver observer )
     {
