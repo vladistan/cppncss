@@ -85,7 +85,8 @@ public final class ConsoleLogger implements MeasureObserver, AverageObserver, Su
         stream.println();
         stream.print( "Nr. " );
         for( String label : labels )
-            stream.print( label + " " );
+            if( !label.startsWith( item ) )
+                stream.print( label + " " );
         stream.println( item );
     }
 
@@ -96,7 +97,8 @@ public final class ConsoleLogger implements MeasureObserver, AverageObserver, Su
 
     private void printMeasurement( final String label, final int count )
     {
-        stream.format( " %" + label.length() + "d", count );
+        if( !label.startsWith( item ) )
+            stream.format( " %" + label.length() + "d", count );
     }
 
     private void printItem( final String item )
