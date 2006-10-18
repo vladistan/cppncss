@@ -10,7 +10,7 @@
   <inceptionYear>2006</inceptionYear>
   <url>http://${pom.artifactId}.sourceforge.net</url>
   <description>
-    CppNcss computes NCSS (Non Commenting Source Statement) and CCN (Cyclomatic Complexity Number) for C++ source code.
+    C++ source code measurements tool.
   </description>
   <licenses>
     <license>
@@ -34,6 +34,17 @@
     <system>sourceforge</system>
     <url>http://sourceforge.net/tracker/?group_id=175984</url>
   </issueManagement>
+  <mailingLists>
+    <mailingList>
+      <name>cppncss-user</name>
+      <subscribe>https://lists.sourceforge.net/lists/listinfo/cppncss-user</subscribe>
+      <unsubscribe>https://lists.sourceforge.net/lists/listinfo/cppncss-user</unsubscribe>
+      <post>cppncss-user@lists.sourceforge.net</post>
+      <!--
+      <archive/>
+      -->
+    </mailingList>
+  </mailingLists>
   <developers>
     <developer>
       <id>mat007</id>
