@@ -39,6 +39,7 @@ import cppast.ParserVisitor;
 import cppast.VisitorComposite;
 import cppncss.counter.CcnCounter;
 import cppncss.counter.FileVisitor;
+import cppncss.counter.FunctionCounter;
 import cppncss.counter.FunctionVisitor;
 import cppncss.counter.NcssCounter;
 
@@ -94,6 +95,7 @@ public final class CppNcss
         } );
         registerVisitor( parent, local, visitorType, NcssCounter.class );
         registerVisitor( parent, local, visitorType, CcnCounter.class );
+        registerVisitor( parent, local, visitorType, FunctionCounter.class );
         final Object collector = local.getComponentInstance( collectorType );
         parent.registerComponentInstance( collector.toString(), collector );
     }

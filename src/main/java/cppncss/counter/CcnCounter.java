@@ -48,7 +48,7 @@ public final class CcnCounter extends AbstractCounter
     /**
      * Create a CCN counter.
      *
-     * @param observer a function observer
+     * @param observer a counter observer
      */
     public CcnCounter( final CounterObserver observer )
     {

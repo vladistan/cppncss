@@ -58,7 +58,7 @@ public final class NcssCounter extends AbstractCounter
     /**
      * Create a NCSS counter.
      *
-     * @param observer a function observer
+     * @param observer a counter observer
      */
     public NcssCounter( final CounterObserver observer )
     {
