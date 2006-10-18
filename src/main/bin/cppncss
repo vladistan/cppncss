@@ -45,8 +45,6 @@ fi
 if $cygwin ; then
   [ -n "$JAVA_HOME" ] &&
     JAVA_HOME=`cygpath --unix "$JAVA_HOME"`
-  [ -n "$CLASSPATH" ] &&
-    CLASSPATH=`cygpath --path --unix "$CLASSPATH"`
 fi
 
 # If a specific java binary isn't specified search for the standard 'java' binary
@@ -77,8 +75,8 @@ BASEDIR=`cd "$BASEDIR" && pwd`
 # Change directory to the basedir
 cd "$BASEDIR"
 
-CLASSPATH="$BASEDIR"/lib/*.jar
-JAVA_OPTS=-Xms256m -Xmx512m
+CLASSPATH=`ls "$BASEDIR"/lib/cppncss-*.jar`:"$BASEDIR"/lib/picocontainer-1.2.jar
+JAVA_OPTS="-Xms256m -Xmx512m"
 
 # For Cygwin, switch paths to Windows format before running java
 if $cygwin; then
@@ -86,8 +84,6 @@ if $cygwin; then
     CLASSPATH=`cygpath --path --windows "$CLASSPATH"`
   [ -n "$JAVA_HOME" ] &&
     JAVA_HOME=`cygpath --path --windows "$JAVA_HOME"`
-  [ -n "$HOME" ] &&
-    HOME=`cygpath --path --windows "$HOME"`
 fi
 
 exec "$JAVACMD" $JAVA_OPTS -classpath $CLASSPATH cppncss.CppNcss "$@"

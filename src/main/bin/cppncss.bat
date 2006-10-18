@@ -62,7 +62,7 @@ goto setPaths
 :setPaths
 set BASEDIR=%CD%
 
-set CLASSPATH="%BASEDIR%"\lib\*.jar;
+for %%i in ("%BASEDIR%"\lib\cppncss-*.jar) do set CLASSPATH="%%i";"%BASEDIR%"\lib\picocontainer-1.2.jar
 set JAVA_OPTS=-Xms256m -Xmx512m
 
 java %JAVA_OPTS% -classpath %CLASSPATH% cppncss.CppNcss %CMD_LINE_ARGS%
