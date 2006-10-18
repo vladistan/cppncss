@@ -16,7 +16,7 @@ Installation
 
  [[1]] In the same dialog, make sure that <JAVA_HOME> is set to the location of your JDK, for example <C:\Program Files\Java\jdk1.5.0_05>
 
- [[1]] Run <cppncss -version> to verify that it is correctly installed
+ [[1]] Run <cppncss -h> to verify that it is correctly installed
 
 * Unix-based Operating Systems (Linux, Solaris and MacOS X)
 
@@ -26,4 +26,4 @@ Installation
 
  [[1]] Make sure that <JAVA_HOME> is set to the location of your JDK, for example <export JAVA_HOME=/usr/java/jdk1.5.0_05>
 
- [[1]] Run <cppncss -version> to verify that it is correctly installed
+ [[1]] Run <cppncss -h> to verify that it is correctly installed
