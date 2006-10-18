@@ -1,5 +1,5 @@
 @REM ----------------------------------------------------------------------------
-@REM Copyright 2001-2004 The Apache Software Foundation.
+@REM Copyright 2001-2006 The Apache Software Foundation.
 @REM 
 @REM Licensed under the Apache License, Version 2.0 (the "License");
 @REM you may not use this file except in compliance with the License.
@@ -62,10 +62,10 @@ goto setPaths
 :setPaths
 set BASEDIR=%CD%
 
-set CLASSPATH="%BASEDIR%"\etc;"%BASEDIR%"\*.jar;
+set CLASSPATH="%BASEDIR%"\lib\*.jar;
 set JAVA_OPTS=-Xms256m -Xmx512m
 
-java %JAVA_OPTS% -classpath %CLASSPATH% -Dapp.name="cppncss" -Dbasedir="%BASEDIR%" cppncss.CppNcss %CMD_LINE_ARGS%
+java %JAVA_OPTS% -classpath %CLASSPATH% cppncss.CppNcss %CMD_LINE_ARGS%
 
 :error
 if "%OS%"=="Windows_NT" @endlocal
