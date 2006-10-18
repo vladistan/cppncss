@@ -92,7 +92,7 @@ public final class Analyzer implements Startable
         if( visitor == null )
             throw new IllegalArgumentException( "argument 'visitor' is null" );
         this.recursive = options.hasOption( "r" );
-        this.force = options.hasOption( "f" );
+        this.force = options.hasOption( "k" );
         this.prefix = getPrefix( options );
         this.processor = createProcessor( options );
         this.parser = new Parser( processor );
@@ -104,7 +104,7 @@ public final class Analyzer implements Startable
 
     private String getPrefix( final Options options )
     {
-        final List<String> prefixes = options.getOptionPropertyValues( "prefix" );
+        final List<String> prefixes = options.getOptionPropertyValues( "p" );
         if( prefixes.size() > 0 )
             return prefixes.get( 0 );
         return "";

@@ -17,15 +17,21 @@ Tutorial
 
 +------------------------------------------------------------------------------+
 $ cppncss -h
-cppncss: [options] [file [file2 [directory [directory2] ...]]]
-  -h                    print this message
-  -d                    print debugging information
-  -v                    be extra verbose
-  -f                    force processing upon error
-  -r                    process directories recursively
-  -D<symbol>=[<value>]  replace define <symbol> with <value>
-  -M<symbol>=[<value>]  replace macro <symbol> with <value>
-  -prefix=<path>        remove <path> prefix when displaying file names
+
+Usage: cppncss [options] [file [file2 [directory [directory2] ...]]]
+
+Options:
+  -h                      print this message
+  -d                      print debugging information
+  -v                      be extra verbose
+  -k                      keep going on parsing errors
+  -r                      process directories recursively
+  -D<symbol>[=[<value>]]  replace define <symbol> with <value>
+  -M<symbol>[=[<value>]]  replace macro <symbol> with <value>
+  -p=<path>               remove <path> prefix when displaying file names
+
+See http://cppncss.sourceforge.net for more information.
+
 +------------------------------------------------------------------------------+
 
 * Running
@@ -124,10 +130,10 @@ $ cppncss -d -r xerces-c-src_2_7_0/src -MREPORT_FACET_ERROR=; -MSTDMETHOD="void 
 * Forcing
 
  Some of the parse errors are unavoidable, be it because of the use of non-ANSI C++ or of complex #ifdef.\
- Parsing can be forced to skip a file containing an error and to continue processing all the files using the -f option.
+ Parsing can be forced to skip files containing errors and to continue the processing using the -k option.
 
 +------------------------------------------------------------------------------+
-$ cppncss -v -f -r xerces-c-src_2_7_0/src
+$ cppncss -v -k -r xerces-c-src_2_7_0/src
 +------------------------------------------------------------------------------+
 
  Usually at this point it is better to turn debugging off because of the to much verbosity it provides.
@@ -142,13 +148,13 @@ Nr. NCSS CCN File
   1 4042 1531 xerces-c-src_2_7_0/src\xercesc\validators\schema\TraverseSchema.cpp
 +------------------------------------------------------------------------------+
 
- Formatting it involves using the -prefix option, for example :
+ Formatting it involves using the -p option, for example :
 
 +------------------------------------------------------------------------------+
-$ cppncss -v -f -r xerces-c-src_2_7_0/src -prefix=xerces-c-src_2_7_0/src\
+$ cppncss -v -k -r xerces-c-src_2_7_0/src -p=xerces-c-src_2_7_0/src\
 +------------------------------------------------------------------------------+
 
- Will remove the prefix given from all file names :
+ Will remove the given prefix from all file names, displaying instead :
 
 +------------------------------------------------------------------------------+
 Nr. NCSS CCN File
