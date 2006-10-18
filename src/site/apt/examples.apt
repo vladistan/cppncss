@@ -18,7 +18,7 @@ cppncss -v -f -r xerces-c-src_2_7_0/src -prefix=xerces-c-src_2_7_0/src\ -DATL_NO
 
 * Output
 
- The resulting output first starts with parsing error diagnosis.
+ The resulting output first starts with parsing errors diagnostic.
 
 +------------------------------------------------------------------------------+ 
 Skipping xerces-c-src_2_7_0/src\xercesc\util\Transcoders\Iconv400\utypes.h : Parse error (line 113, column 4)
