@@ -42,6 +42,7 @@ public final class Usage
     private static final int SECURITY_PADDING = 5;
     private static final int DEFAULT_PADDING = 2;
     private final String name;
+    private final String url;
     private final Vector<String> options;
     private final Vector<String> descriptions;
     private int padding;
@@ -50,10 +51,12 @@ public final class Usage
      * Create a usage helper.
      *
      * @param name the application name
+     * @param url the application site url
      */
-    public Usage( final String name )
+    public Usage( final String name, final String url )
     {
         this.name = name;
+        this.url = url;
         this.options = new Vector<String>();
         this.descriptions = new Vector<String>();
         this.padding = DEFAULT_PADDING;
@@ -77,7 +80,10 @@ public final class Usage
      */
     public void display()
     {
-        System.out.println( name + ": [options] [file [file2 [directory [directory2] ...]]]" );
+        System.out.println();
+        System.out.println( "Usage: " + name + " [options] [file [file2 [directory [directory2] ...]]]" );
+        System.out.println();
+        System.out.println("Options:");
         for( int index = 0; index < options.size(); ++index )
         {
             final String string = "  -" + options.get( index );
@@ -85,6 +91,8 @@ public final class Usage
             pad( string );
             System.out.println( descriptions.get( index ) );
         }
+        System.out.println();
+        System.out.println( "See " + url + " for more information." );
     }
 
     private void pad( final String string )

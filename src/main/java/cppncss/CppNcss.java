@@ -118,14 +118,14 @@ public final class CppNcss
 
     private static void usage()
     {
-        final Usage usage = new Usage( "cppncss" );
+        final Usage usage = new Usage( "cppncss", "http://cppncss.sourceforge.net" );
         usage.addOption( "h", "print this message" );
         usage.addOption( "d", "print debugging information" );
         usage.addOption( "v", "be extra verbose" );
         usage.addOption( "f", "force processing upon error" );
         usage.addOption( "r", "process directories recursively" );
-        usage.addOption( "D<symbol>=[<value>]", "replace define <symbol> with <value>" );
-        usage.addOption( "M<symbol>=[<value>]", "replace macro <symbol> with <value>" );
+        usage.addOption( "D<symbol>[=[<value>]]", "replace define <symbol> with <value>" );
+        usage.addOption( "M<symbol>[=[<value>]]", "replace macro <symbol> with <value>" );
         usage.addOption( "prefix=<path>", "remove <path> prefix when displaying file names" );
         usage.display();
     }
