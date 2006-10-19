@@ -913,6 +913,11 @@ public class ParserTest extends TestCase
         parse( "class MyClass{ ; };" );
     }
 
+    public void testTemplateClassDestructorCallOnPointer() throws ParseException
+    {
+        parse( "void MyFunction() { pPtr->~MyClass< MyType >(); }" );
+    }
+
     public void testTMP() throws IOException, ParseException
     {
         final Parser parser = new Parser( new StringReader( "" ) );

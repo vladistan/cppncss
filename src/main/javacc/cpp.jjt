@@ -1177,27 +1177,25 @@ void postfix_expression() #PostfixExpression(>1) : // FIXME review this
    )
   )*
  |
-  (qualified_type() "(" [expression_list()] ")") #FunctionCallExpression
+  (qualified_type() "(" [expression_list()] ")") #FunctionCallExpression // FIXME review FunctionCallExpression
 }
 
 void id_expression() #IdExpression :
 {}
 {
-   [LOOKAHEAD(scope_override_lookahead()) scope_override()] unqualified_id() // FIXME should probably be <ID> instead of unqualified_id
+   [LOOKAHEAD(scope_override_lookahead()) scope_override()] unqualified_id() // FIXME should probably be ["~"] <ID> (+ template) instead of unqualified_id
 }
 
 void unqualified_id() :
 {}
 {
-    LOOKAHEAD(template_id()) template_id()
+    LOOKAHEAD(["~"] template_id()) ["~"] template_id()
    |
     LOOKAHEAD("operator" operator()) operator_function_id()
    |
     conversion_function_id()
    |
-    "~" <ID>
-   |
-    <ID>
+    ["~"] <ID>
 }
 
 void operator_function_id() :
