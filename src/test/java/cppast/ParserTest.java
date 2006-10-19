@@ -915,7 +915,12 @@ public class ParserTest extends TestCase
 
     public void testTemplateClassDestructorCallOnPointer() throws ParseException
     {
-        parse( "void MyFunction() { pPtr->~MyClass< MyType >(); }" );
+        parse( "void MyFunction() { pData->~MyClass< MyType >(); }" );
+    }
+
+    public void testTemplateClassDestructorCallOnInstance() throws ParseException
+    {
+        parse( "void MyFunction() { data.~MyClass< MyType >(); }" );
     }
 
     public void testTMP() throws IOException, ParseException
