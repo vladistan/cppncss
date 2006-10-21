@@ -43,6 +43,7 @@ public final class Usage
     private static final int DEFAULT_PADDING = 2;
     private final String name;
     private final String url;
+    private final String version;
     private final Vector<String> options;
     private final Vector<String> descriptions;
     private int padding;
@@ -52,11 +53,13 @@ public final class Usage
      *
      * @param name the application name
      * @param url the application site url
+     * @param version the application version
      */
-    public Usage( final String name, final String url )
+    public Usage( final String name, final String url, String version )
     {
         this.name = name;
         this.url = url;
+        this.version = version;
         this.options = new Vector<String>();
         this.descriptions = new Vector<String>();
         this.padding = DEFAULT_PADDING;
@@ -82,8 +85,9 @@ public final class Usage
     {
         System.out.println();
         System.out.println( "Usage: " + name + " [options] [file [file2 [directory [directory2] ...]]]" );
+        System.out.println( "Version: " + version );
         System.out.println();
-        System.out.println("Options:");
+        System.out.println( "Options:" );
         for( int index = 0; index < options.size(); ++index )
         {
             final String string = "  -" + options.get( index );

@@ -120,7 +120,7 @@ public final class CppNcss
 
     private static void usage()
     {
-        final Usage usage = new Usage( "cppncss", "http://cppncss.sourceforge.net" );
+        final Usage usage = new Usage( "cppncss", "http://cppncss.sourceforge.net", "1.0.0" );
         usage.addOption( "h", "print this message" );
         usage.addOption( "d", "print debugging information" );
         usage.addOption( "v", "be extra verbose" );
