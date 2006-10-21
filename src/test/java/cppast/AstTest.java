@@ -83,11 +83,10 @@ public class AstTest extends TestCase
 
     private String parse( final String content ) throws ParseException
     {
-        final StringWriter w = new StringWriter();
-        PrintWriter writer = new PrintWriter( w );
+        final StringWriter writer = new StringWriter();
         final Node root = new Parser( new StringReader( content ) ).translation_unit();
-        dump( root, writer, 0 );
-        return w.toString();
+        dump( root, new PrintWriter( writer ), 0 );
+        return writer.toString();
     }
 
     private String parseExpression( final String expression ) throws ParseException
