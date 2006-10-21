@@ -842,9 +842,9 @@ public class AstTest extends TestCase
         expression.parse( "throw exception()" );
     }
 
-    public void testCatch() throws ParseException
+    public void testTryCatchBlocks() throws ParseException
     {
-        // expression.add( "Try" ); // FIXME
+        expression.add( "TryBlock" );
         expression.add( "Handler" ); // FIXME rename Handler to CatchBlock ?
         expression.add( " Parameter" );
         expression.add( "  ParameterType" );

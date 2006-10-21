@@ -896,7 +896,7 @@ void statement() : // TODO #Statement ?
    |
     block_declaration() #DeclarationStatement
    |
-    try_block()
+    try_block() (handler())+
    |
     ";"
 }
@@ -983,10 +983,10 @@ void jump_statement() :
     ("return" [expression()]) #ReturnStatement
 }
 
-void try_block() :
+void try_block() #TryBlock :
 {}
 {
-   "try" compound_statement() (handler())+
+   "try" compound_statement()
 }
 
 void handler() #Handler :
