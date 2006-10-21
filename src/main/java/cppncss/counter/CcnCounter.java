@@ -32,7 +32,7 @@ import cppast.AstCaseStatement;
 import cppast.AstClassDefinition;
 import cppast.AstConditionalExpression;
 import cppast.AstFunctionBody;
-import cppast.AstHandler;
+import cppast.AstCatchBlock;
 import cppast.AstIfStatement;
 import cppast.AstIterationStatement;
 import cppast.AstLogicalAndExpression;
@@ -94,7 +94,7 @@ public final class CcnCounter extends AbstractCounter
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstHandler node, final Object data )
+    public Object visit( final AstCatchBlock node, final Object data )
     {
         increment();
         return node.accept( this, data );

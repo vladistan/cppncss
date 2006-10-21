@@ -989,7 +989,7 @@ void try_block() #TryBlock :
    "try" compound_statement()
 }
 
-void handler() #Handler :
+void handler() #CatchBlock :
 {}
 {
    "catch" "(" exception_declaration() ")" compound_statement()

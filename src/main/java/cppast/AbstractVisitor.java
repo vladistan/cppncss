@@ -102,7 +102,7 @@ public class AbstractVisitor implements ParserVisitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstHandler node, final Object data )
+    public Object visit( final AstCatchBlock node, final Object data )
     {
         return node.accept( this, data );
     }

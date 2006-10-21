@@ -160,7 +160,7 @@ public final class VisitorComposite implements ParserVisitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstHandler node, final Object data )
+    public Object visit( final AstCatchBlock node, final Object data )
     {
         for( ParserVisitor visitor : visitors )
             visitor.visit( node, data );

@@ -42,7 +42,7 @@ import cppast.AstExpressionStatement;
 import cppast.AstFunctionBody;
 import cppast.AstFunctionDeclaration;
 import cppast.AstGotoStatement;
-import cppast.AstHandler;
+import cppast.AstCatchBlock;
 import cppast.AstIfStatement;
 import cppast.AstIterationStatement;
 import cppast.AstLabelStatement;
@@ -206,7 +206,7 @@ public final class NcssCounter extends AbstractCounter
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstHandler node, final Object data )
+    public Object visit( final AstCatchBlock node, final Object data )
     {
         increment();
         return node.accept( this, data );

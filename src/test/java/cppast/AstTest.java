@@ -845,11 +845,11 @@ public class AstTest extends TestCase
     public void testTryCatchBlocks() throws ParseException
     {
         expression.add( "TryBlock" );
-        expression.add( "Handler" ); // FIXME rename Handler to CatchBlock ?
+        expression.add( "CatchBlock" ); // FIXME should CatchBlock be child of TryBlock ?
         expression.add( " Parameter" );
         expression.add( "  ParameterType" );
         expression.add( "  FunctionParameterTypeQualifier" );
-        expression.add( "Handler" ); // FIXME rename Handler to CatchBlock ?
+        expression.add( "CatchBlock" );
         expression.parse( "try {} catch( exception& ) {} catch(...) {}" );
     }
 }
