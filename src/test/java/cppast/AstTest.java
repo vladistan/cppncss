@@ -51,9 +51,21 @@ public class AstTest extends TestCase
             writer.println( node );
         }
 
-        public String toString()
+        public void parse( final String content ) throws ParseException
         {
-            return buffer.toString();
+            final StringWriter writer = new StringWriter();
+            final Node root = new Parser( new StringReader( content ) ).translation_unit();
+            dump( root, new PrintWriter( writer ), 0 );
+            assertEquals( buffer.toString(), writer.toString() );
+        }
+
+        private void dump( final Node node, final PrintWriter writer, final int level )
+        {
+            for( int i = 0; i < level; ++i )
+                writer.append( ' ' );
+            writer.println( node.toString() );
+            for( int i = 0; i < node.jjtGetNumChildren(); ++i )
+                dump( node.jjtGetChild( i ), writer, level + 1 );
         }
     }
 
@@ -75,32 +87,10 @@ public class AstTest extends TestCase
             tree.add( "   " + node );
         }
 
-        public String toString()
+        public void parse( final String content ) throws ParseException
         {
-            return tree.toString();
+            tree.parse( "void f() { " + content + "; }" );
         }
-    }
-
-    private String parse( final String content ) throws ParseException
-    {
-        final StringWriter writer = new StringWriter();
-        final Node root = new Parser( new StringReader( content ) ).translation_unit();
-        dump( root, new PrintWriter( writer ), 0 );
-        return writer.toString();
-    }
-
-    private String parseExpression( final String expression ) throws ParseException
-    {
-        return parse( "void f() { " + expression + "; }" );
-    }
-
-    private void dump( final Node node, final PrintWriter writer, final int level )
-    {
-        for( int i = 0; i < level; ++i )
-            writer.append( ' ' );
-        writer.println( node.toString() );
-        for( int i = 0; i < node.jjtGetNumChildren(); ++i )
-            dump( node.jjtGetChild( i ), writer, level + 1 );
     }
 
     protected void setUp()
@@ -116,10 +106,10 @@ public class AstTest extends TestCase
         tree.add( "  FunctionName" );
         tree.add( "  FunctionParameters" );
         tree.add( "  FunctionBody" );
-        assertEquals( tree.toString(), parse( "void MyFunction() {}" ) );
+        tree.parse( "void MyFunction() {}" );
     }
 
-    public void testFunctionWithOneParameter() throws ParseException
+    public void testFunctionWithOneParameterDefinition() throws ParseException
     {
         tree.add( "TranslationUnit" );
         tree.add( " FunctionDefinition" );
@@ -129,10 +119,10 @@ public class AstTest extends TestCase
         tree.add( "    ParameterType" );
         tree.add( "    FunctionParameterTypeQualifier" ); // FIXME FunctionParameterTypeQualifier
         tree.add( "  FunctionBody" );
-        assertEquals( tree.toString(), parse( "void MyFunction( int i ) {}" ) );
+        tree.parse( "void MyFunction( int i ) {}" );
     }
 
-    public void testFunctionWithTwoParameters() throws ParseException
+    public void testFunctionWithTwoParametersDefinition() throws ParseException
     {
         tree.add( "TranslationUnit" );
         tree.add( " FunctionDefinition" );
@@ -145,10 +135,10 @@ public class AstTest extends TestCase
         tree.add( "    ParameterType" );
         tree.add( "    FunctionParameterTypeQualifier" ); // FIXME FunctionParameterTypeQualifier
         tree.add( "  FunctionBody" );
-        assertEquals( tree.toString(), parse( "void MyFunction( int i, const float& p ) {}" ) );
+        tree.parse( "void MyFunction( int i, const float& p ) {}" );
     }
 
-    public void testFunctionWithClassDefinition() throws ParseException
+    public void testFunctionWithInnerClassDefinition() throws ParseException
     {
         tree.add( "TranslationUnit" );
         tree.add( " FunctionDefinition" );
@@ -157,7 +147,7 @@ public class AstTest extends TestCase
         tree.add( "  FunctionBody" );
         tree.add( "   DeclarationStatement" );
         tree.add( "    ClassDefinition" );
-        assertEquals( tree.toString(), parse( "void MyFunction() { class MyClass {}; }" ) );
+        tree.parse( "void MyFunction() { class MyClass {}; }" );
     }
 
     public void testFunctionDeclaration() throws ParseException
@@ -166,7 +156,7 @@ public class AstTest extends TestCase
         tree.add( " Declaration" );
         tree.add( "  FunctionParameterTypeQualifier" );
         tree.add( "  FunctionParameters" );
-        assertEquals( tree.toString(), parse( "void MyFunction();" ) );
+        tree.parse( "void MyFunction();" );
     }
 
     public void testMethodDefinition() throws ParseException
@@ -178,7 +168,7 @@ public class AstTest extends TestCase
         tree.add( "    FunctionName" );
         tree.add( "    FunctionParameters" );
         tree.add( "    FunctionBody" );
-        assertEquals( tree.toString(), parse( "class MyClass { void MyMethod() {} };" ) );
+        tree.parse( "class MyClass { void MyMethod() {} };" );
     }
 
     public void testMethodDeclaration() throws ParseException
@@ -189,7 +179,7 @@ public class AstTest extends TestCase
         tree.add( "   FunctionDeclaration" );
         tree.add( "    FunctionName" );
         tree.add( "    FunctionParameters" );
-        assertEquals( tree.toString(), parse( "class MyClass { void MyMethod(); };" ) );
+        tree.parse( "class MyClass { void MyMethod(); };" );
     }
 
     public void testMethodSeparateDefinition() throws ParseException
@@ -199,7 +189,7 @@ public class AstTest extends TestCase
         tree.add( "  FunctionName" );
         tree.add( "  FunctionParameters" );
         tree.add( "  FunctionBody" );
-        assertEquals( tree.toString(), parse( "void MyClass::MyMethod() {}" ) );
+        tree.parse( "void MyClass::MyMethod() {}" );
     }
 
     public void testConstructorDefinition() throws ParseException
@@ -211,7 +201,7 @@ public class AstTest extends TestCase
         tree.add( "    FunctionName" );
         tree.add( "    FunctionParameters" );
         tree.add( "    FunctionBody" );
-        assertEquals( tree.toString(), parse( "class MyClass { MyClass() {} };" ) );
+        tree.parse( "class MyClass { MyClass() {} };" );
     }
 
     public void testConstructorDeclaration() throws ParseException
@@ -222,7 +212,7 @@ public class AstTest extends TestCase
         tree.add( "   ConstructorDeclaration" );
         tree.add( "    FunctionName" );
         tree.add( "    FunctionParameters" );
-        assertEquals( tree.toString(), parse( "class MyClass { MyClass(); };" ) );
+        tree.parse( "class MyClass { MyClass(); };" );
     }
 
     public void testConstructorSeparateDefinition() throws ParseException
@@ -232,7 +222,7 @@ public class AstTest extends TestCase
         tree.add( "  FunctionName" );
         tree.add( "  FunctionParameters" );
         tree.add( "  FunctionBody" );
-        assertEquals( tree.toString(), parse( "MyClass::MyClass() {}" ) );
+        tree.parse( "MyClass::MyClass() {}" );
     }
 
     public void testDestructorDefinition() throws ParseException
@@ -244,7 +234,7 @@ public class AstTest extends TestCase
         tree.add( "    FunctionName" );
         tree.add( "    FunctionParameters" );
         tree.add( "    FunctionBody" );
-        assertEquals( tree.toString(), parse( "class MyClass { ~MyClass() {} };" ) );
+        tree.parse( "class MyClass { ~MyClass() {} };" );
     }
 
     public void testDestructorDeclaration() throws ParseException
@@ -254,7 +244,7 @@ public class AstTest extends TestCase
         tree.add( "  ClassDefinition" );
         tree.add( "   DestructorDeclaration" );
         tree.add( "    FunctionName" );
-        assertEquals( tree.toString(), parse( "class MyClass { ~MyClass(); };" ) );
+        tree.parse( "class MyClass { ~MyClass(); };" );
     }
 
     public void testDestructorSeparateDefinition() throws ParseException
@@ -264,7 +254,7 @@ public class AstTest extends TestCase
         tree.add( "  FunctionName" );
         tree.add( "  FunctionParameters" );
         tree.add( "  FunctionBody" );
-        assertEquals( tree.toString(), parse( "MyClass::~MyClass() {}" ) );
+        tree.parse( "MyClass::~MyClass() {}" );
     }
 
     public void testEqualityOperatorDefinition() throws ParseException
@@ -279,7 +269,7 @@ public class AstTest extends TestCase
         tree.add( "      ParameterType" );
         tree.add( "      FunctionParameterTypeQualifier" ); // FIXME FunctionParameterTypeQualifier
         tree.add( "    FunctionBody" );
-        assertEquals( tree.toString(), parse( "class MyClass { bool operator==( const MyClass& ) {} };" ) );
+        tree.parse( "class MyClass { bool operator==( const MyClass& ) {} };" );
     }
 
     public void testEqualityOperatorDeclaration() throws ParseException
@@ -293,7 +283,7 @@ public class AstTest extends TestCase
         tree.add( "     Parameter" );
         tree.add( "      ParameterType" );
         tree.add( "      FunctionParameterTypeQualifier" ); // FIXME FunctionParameterTypeQualifier
-        assertEquals( tree.toString(), parse( "class MyClass { bool operator==( const MyClass& ); };" ) );
+        tree.parse( "class MyClass { bool operator==( const MyClass& ); };" );
     }
 
     public void testEqualityOperatorSeparateDefinition() throws ParseException
@@ -306,7 +296,7 @@ public class AstTest extends TestCase
         tree.add( "    ParameterType" );
         tree.add( "    FunctionParameterTypeQualifier" ); // FIXME FunctionParameterTypeQualifier
         tree.add( "  FunctionBody" );
-        assertEquals( tree.toString(), parse( "bool MyClass::operator==( const MyClass& ) {}" ) );
+        tree.parse( "bool MyClass::operator==( const MyClass& ) {}" );
     }
 
     public void testConversionOperatorDefinition() throws ParseException
@@ -318,7 +308,7 @@ public class AstTest extends TestCase
         tree.add( "    FunctionName" );
         tree.add( "    FunctionParameters" );
         tree.add( "    FunctionBody" );
-        assertEquals( tree.toString(), parse( "class MyClass { operator const char*() const {} };" ) );
+        tree.parse( "class MyClass { operator const char*() const {} };" );
     }
 
     public void testConversionOperatorDeclaration() throws ParseException
@@ -329,7 +319,7 @@ public class AstTest extends TestCase
         tree.add( "   FunctionDeclaration" );
         tree.add( "    FunctionName" );
         tree.add( "    FunctionParameters" );
-        assertEquals( tree.toString(), parse( "class MyClass { operator const char*() const; };" ) );
+        tree.parse( "class MyClass { operator const char*() const; };" );
     }
 
     public void testConversionOperatorSeparateDefinition() throws ParseException
@@ -339,30 +329,30 @@ public class AstTest extends TestCase
         tree.add( "  FunctionName" );
         tree.add( "  FunctionParameters" );
         tree.add( "  FunctionBody" );
-        assertEquals( tree.toString(), parse( "MyClass::operator const char*() const {}" ) );
+        tree.parse( "MyClass::operator const char*() const {}" );
     }
 
     public void testIdExpression() throws ParseException
     {
         expression.add( "ExpressionStatement" );
         expression.add( " IdExpression" );
-        assertEquals( expression.toString(), parseExpression( "i" ) );
+        expression.parse( "i" );
     }
 
     public void testScopedIdExpression() throws ParseException
     {
         expression.add( "ExpressionStatement" );
         expression.add( " IdExpression" );
-        assertEquals( expression.toString(), parseExpression( "MyClass::i" ) );
+        expression.parse( "MyClass::i" );
     }
 
     public void testConstantExpression() throws ParseException
     {
         expression.add( "ExpressionStatement" );
         expression.add( " ConstantExpression" );
-        assertEquals( expression.toString(), parseExpression( "42" ) );
-        assertEquals( expression.toString(), parseExpression( "\"abc\"" ) );
-        assertEquals( expression.toString(), parseExpression( "\"abc\" \"def\"" ) );
+        expression.parse( "42" );
+        expression.parse( "\"abc\"" );
+        expression.parse( "\"abc\" \"def\"" );
     }
 
     public void testLogicalAndExpression() throws ParseException
@@ -371,7 +361,7 @@ public class AstTest extends TestCase
         expression.add( " LogicalAndExpression" );
         expression.add( "  IdExpression" );
         expression.add( "  IdExpression" );
-        assertEquals( expression.toString(), parseExpression( "j && k" ) );
+        expression.parse( "j && k" );
     }
 
     public void testLogicalOrExpression() throws ParseException
@@ -380,7 +370,7 @@ public class AstTest extends TestCase
         expression.add( " LogicalOrExpression" );
         expression.add( "  IdExpression" );
         expression.add( "  IdExpression" );
-        assertEquals( expression.toString(), parseExpression( "j || k" ) );
+        expression.parse( "j || k" );
     }
 
     public void testConditionalExpression() throws ParseException
@@ -390,7 +380,7 @@ public class AstTest extends TestCase
         expression.add( "  IdExpression" );
         expression.add( "  IdExpression" );
         expression.add( "  IdExpression" );
-        assertEquals( expression.toString(), parseExpression( "j ? k : l;" ) );
+        expression.parse( "j ? k : l;" );
     }
 
     public void testAssignmentExpression() throws ParseException
@@ -399,14 +389,14 @@ public class AstTest extends TestCase
         expression.add( " AssignmentExpression" );
         expression.add( "  IdExpression" );
         expression.add( "  IdExpression" );
-        assertEquals( expression.toString(), parseExpression( "j = k" ) );
+        expression.parse( "j = k" );
     }
 
     public void testThrowExpression() throws ParseException
     {
         expression.add( "ExpressionStatement" );
         expression.add( " ThrowExpression" );
-        assertEquals( expression.toString(), parseExpression( "throw" ) );
+        expression.parse( "throw" );
     }
 
     public void testThrowExpressionWithException() throws ParseException
@@ -414,7 +404,7 @@ public class AstTest extends TestCase
         expression.add( "ExpressionStatement" );
         expression.add( " ThrowExpression" );
         expression.add( "  IdExpression" ); // FIXME IdExpression ?
-        assertEquals( expression.toString(), parseExpression( "throw my_exception()" ) );
+        expression.parse( "throw my_exception()" );
     }
 
     public void testInclusiveOrExpression() throws ParseException
@@ -423,7 +413,7 @@ public class AstTest extends TestCase
         expression.add( " InclusiveOrExpression" );
         expression.add( "  IdExpression" );
         expression.add( "  IdExpression" );
-        assertEquals( expression.toString(), parseExpression( "j | k" ) );
+        expression.parse( "j | k" );
     }
 
     public void testExclusiveOrExpression() throws ParseException
@@ -432,7 +422,7 @@ public class AstTest extends TestCase
         expression.add( " ExclusiveOrExpression" );
         expression.add( "  IdExpression" );
         expression.add( "  IdExpression" );
-        assertEquals( expression.toString(), parseExpression( "j ^ k" ) );
+        expression.parse( "j ^ k" );
     }
 
     public void testAndExpression() throws ParseException
@@ -441,7 +431,7 @@ public class AstTest extends TestCase
         expression.add( " AndExpression" );
         expression.add( "  IdExpression" );
         expression.add( "  IdExpression" );
-        assertEquals( expression.toString(), parseExpression( "j & k" ) );
+        expression.parse( "j & k" );
     }
 
     public void testEqualityExpression() throws ParseException
@@ -450,8 +440,8 @@ public class AstTest extends TestCase
         expression.add( " EqualityExpression" );
         expression.add( "  IdExpression" );
         expression.add( "  IdExpression" );
-        assertEquals( expression.toString(), parseExpression( "i == j" ) );
-        assertEquals( expression.toString(), parseExpression( "i != j" ) );
+        expression.parse( "i == j" );
+        expression.parse( "i != j" );
     }
 
     public void testRelationalExpression() throws ParseException
@@ -460,10 +450,10 @@ public class AstTest extends TestCase
         expression.add( " RelationalExpression" );
         expression.add( "  IdExpression" );
         expression.add( "  IdExpression" );
-        assertEquals( expression.toString(), parseExpression( "i < j" ) );
-        assertEquals( expression.toString(), parseExpression( "i > j" ) );
-        assertEquals( expression.toString(), parseExpression( "i <= j" ) );
-        assertEquals( expression.toString(), parseExpression( "i >= j" ) );
+        expression.parse( "i < j" );
+        expression.parse( "i > j" );
+        expression.parse( "i <= j" );
+        expression.parse( "i >= j" );
     }
 
     public void testShiftExpression() throws ParseException
@@ -472,8 +462,8 @@ public class AstTest extends TestCase
         expression.add( " ShiftExpression" );
         expression.add( "  IdExpression" );
         expression.add( "  IdExpression" );
-        assertEquals( expression.toString(), parseExpression( "i << j" ) );
-        assertEquals( expression.toString(), parseExpression( "i >> j" ) );
+        expression.parse( "i << j" );
+        expression.parse( "i >> j" );
     }
 
     public void testAdditiveExpression() throws ParseException
@@ -482,8 +472,8 @@ public class AstTest extends TestCase
         expression.add( " AdditiveExpression" );
         expression.add( "  IdExpression" );
         expression.add( "  IdExpression" );
-        assertEquals( expression.toString(), parseExpression( "i + j" ) );
-        assertEquals( expression.toString(), parseExpression( "i - j" ) );
+        expression.parse( "i + j" );
+        expression.parse( "i - j" );
     }
 
     public void testMultiplicativeExpression() throws ParseException
@@ -492,9 +482,9 @@ public class AstTest extends TestCase
         expression.add( " MultiplicativeExpression" );
         expression.add( "  IdExpression" );
         expression.add( "  IdExpression" );
-        assertEquals( expression.toString(), parseExpression( "i * j" ) );
-        assertEquals( expression.toString(), parseExpression( "i / j" ) );
-        assertEquals( expression.toString(), parseExpression( "i % j" ) );
+        expression.parse( "i * j" );
+        expression.parse( "i / j" );
+        expression.parse( "i % j" );
     }
 
     public void testPointerToMemberExpression() throws ParseException
@@ -503,8 +493,8 @@ public class AstTest extends TestCase
         expression.add( " PointerToMemberExpression" );
         expression.add( "  IdExpression" );
         expression.add( "  IdExpression" );
-        assertEquals( expression.toString(), parseExpression( "i .* j" ) );
-        assertEquals( expression.toString(), parseExpression( "i ->* j" ) );
+        expression.parse( "i .* j" );
+        expression.parse( "i ->* j" );
     }
 
     public void testCastExpression() throws ParseException
@@ -512,8 +502,8 @@ public class AstTest extends TestCase
         expression.add( "ExpressionStatement" );
         expression.add( " CastExpression" );
         expression.add( "  IdExpression" );
-        assertEquals( expression.toString(), parseExpression( "(int) i" ) );
-        assertEquals( expression.toString(), parseExpression( "(MyType) i" ) );
+        expression.parse( "(int) i" );
+        expression.parse( "(MyType) i" );
     }
 
     public void testUnaryExpression() throws ParseException
@@ -521,30 +511,30 @@ public class AstTest extends TestCase
         expression.add( "ExpressionStatement" );
         expression.add( " UnaryExpression" );
         expression.add( "  IdExpression" );
-        assertEquals( expression.toString(), parseExpression( "++ i" ) );
-        assertEquals( expression.toString(), parseExpression( "-- i" ) );
-        assertEquals( expression.toString(), parseExpression( "& i" ) );
-        assertEquals( expression.toString(), parseExpression( "* i" ) );
-        assertEquals( expression.toString(), parseExpression( "+ i" ) );
-        assertEquals( expression.toString(), parseExpression( "- i" ) );
-        assertEquals( expression.toString(), parseExpression( "+ i" ) );
-        assertEquals( expression.toString(), parseExpression( "~ i" ) );
-        assertEquals( expression.toString(), parseExpression( "! i" ) );
-        assertEquals( expression.toString(), parseExpression( "sizeof i" ) );
+        expression.parse( "++ i" );
+        expression.parse( "-- i" );
+        expression.parse( "& i" );
+        expression.parse( "* i" );
+        expression.parse( "+ i" );
+        expression.parse( "- i" );
+        expression.parse( "+ i" );
+        expression.parse( "~ i" );
+        expression.parse( "! i" );
+        expression.parse( "sizeof i" );
     }
 
     public void testUnarySizeofExpression() throws ParseException // FIXME should be regular unary expression
     {
         expression.add( "ExpressionStatement" );
         expression.add( " UnaryExpression" );
-        assertEquals( expression.toString(), parseExpression( "sizeof( i )" ) ); // FIXME i considered as type_id()
+        expression.parse( "sizeof( i )" ); // FIXME i considered as type_id()
     }
 
     public void testFunctionCallExpression() throws ParseException // TODO
     {
         expression.add( "ExpressionStatement" );
         expression.add( " IdExpression" ); // FIXME FunctionCallExpression ?
-        assertEquals( expression.toString(), parseExpression( "i()" ) );
+        expression.parse( "i()" );
     }
 
     public void testPostfixExpression() throws ParseException // TODO
@@ -553,15 +543,15 @@ public class AstTest extends TestCase
         expression.add( " PostfixExpression" );
         expression.add( "  IdExpression" );
         expression.add( "  PostfixExpression" ); // FIXME ?!
-        assertEquals( expression.toString(), parseExpression( "i ++" ) );
-        assertEquals( expression.toString(), parseExpression( "i --" ) );
+        expression.parse( "i ++" );
+        expression.parse( "i --" );
     }
 
     public void testThisIsPrimaryExpression() throws ParseException
     {
         expression.add( "ExpressionStatement" );
         expression.add( " PrimaryExpression" );
-        assertEquals( expression.toString(), parseExpression( "this" ) );
+        expression.parse( "this" );
     }
 
     public void testParenthizedExpressionIsPrimaryExpression() throws ParseException
@@ -569,16 +559,16 @@ public class AstTest extends TestCase
         expression.add( "ExpressionStatement" );
         expression.add( " PrimaryExpression" );
         expression.add( "  IdExpression" );
-        assertEquals( expression.toString(), parseExpression( "( i )" ) );
+        expression.parse( "( i )" );
     }
 
     public void testNewExpression() throws ParseException
     {
         expression.add( "ExpressionStatement" );
         expression.add( " NewExpression" );
-        assertEquals( expression.toString(), parseExpression( "::new MyType" ) );
-        assertEquals( expression.toString(), parseExpression( "new MyType" ) );
-        assertEquals( expression.toString(), parseExpression( "new MyType()" ) );
+        expression.parse( "::new MyType" );
+        expression.parse( "new MyType" );
+        expression.parse( "new MyType()" );
     }
 
     public void testComplexNewExpression() throws ParseException
@@ -586,9 +576,9 @@ public class AstTest extends TestCase
         expression.add( "ExpressionStatement" );
         expression.add( " NewExpression" );
         expression.add( "  IdExpression" );
-        assertEquals( expression.toString(), parseExpression( "new MyType( i )" ) );
-        assertEquals( expression.toString(), parseExpression( "new (i) MyType" ) );
-        assertEquals( expression.toString(), parseExpression( "new MyType[i]" ) );
+        expression.parse( "new MyType( i )" );
+        expression.parse( "new (i) MyType" );
+        expression.parse( "new MyType[i]" );
     }
 
     public void testDeleteExpression() throws ParseException
@@ -596,19 +586,19 @@ public class AstTest extends TestCase
         expression.add( "ExpressionStatement" );
         expression.add( " DeleteExpression" );
         expression.add( "  IdExpression" );
-        assertEquals( expression.toString(), parseExpression( "::delete i" ) );
-        assertEquals( expression.toString(), parseExpression( "delete i" ) );
-        assertEquals( expression.toString(), parseExpression( "delete[] i" ) );
+        expression.parse( "::delete i" );
+        expression.parse( "delete i" );
+        expression.parse( "delete[] i" );
     }
 
     public void testTypeIdExpression() throws ParseException // FIXME consider as function call ?
     {
         expression.add( "ExpressionStatement" );
         expression.add( " TypeIdExpression" );
-        assertEquals( expression.toString(), parseExpression( "typeid( int )" ) );
-        assertEquals( expression.toString(), parseExpression( "typeid( i )" ) );
+        expression.parse( "typeid( int )" );
+        expression.parse( "typeid( i )" );
         expression.add( "  FunctionParameterTypeQualifier" ); // FIXME FunctionParameterTypeQualifier
-        assertEquals( expression.toString(), parseExpression( "typeid( MyType& )" ) );
+        expression.parse( "typeid( MyType& )" );
     }
 
     public void testClassDefinition() throws ParseException
@@ -616,12 +606,12 @@ public class AstTest extends TestCase
         tree.add( "TranslationUnit" );
         tree.add( " Declaration" );
         tree.add( "  ClassDefinition" );
-        assertEquals( tree.toString(), parse( "class {};" ) );
-        assertEquals( tree.toString(), parse( "class MyClass {};" ) );
-        assertEquals( tree.toString(), parse( "struct {};" ) );
-        assertEquals( tree.toString(), parse( "struct MyStruct {};" ) );
-        assertEquals( tree.toString(), parse( "union {};" ) );
-        assertEquals( tree.toString(), parse( "union MyUnion {};" ) );
+        tree.parse( "class {};" );
+        tree.parse( "class MyClass {};" );
+        tree.parse( "struct {};" );
+        tree.parse( "struct MyStruct {};" );
+        tree.parse( "union {};" );
+        tree.parse( "union MyUnion {};" );
     }
 
     public void testClassDeclaration() throws ParseException
@@ -629,9 +619,9 @@ public class AstTest extends TestCase
         tree.add( "TranslationUnit" );
         tree.add( " Declaration" );
         tree.add( "  ClassDeclaration" );
-        assertEquals( tree.toString(), parse( "class MyClass;" ) );
-        assertEquals( tree.toString(), parse( "struct MyStruct;" ) );
-        assertEquals( tree.toString(), parse( "union MyUnion;" ) );
+        tree.parse( "class MyClass;" );
+        tree.parse( "struct MyStruct;" );
+        tree.parse( "union MyUnion;" );
     }
 
     public void testEnumDefinition() throws ParseException
@@ -639,8 +629,8 @@ public class AstTest extends TestCase
         tree.add( "TranslationUnit" );
         tree.add( " Declaration" );
         tree.add( "  EnumSpecifier" );
-        assertEquals( tree.toString(), parse( "enum {};" ) );
-        assertEquals( tree.toString(), parse( "enum MyEnum {};" ) );
+        tree.parse( "enum {};" );
+        tree.parse( "enum MyEnum {};" );
     }
 
     public void testClassVariableDefinition() throws ParseException
@@ -649,7 +639,7 @@ public class AstTest extends TestCase
         tree.add( " Declaration" );
         tree.add( "  ClassDefinition" );
         tree.add( "  FunctionParameterTypeQualifier" ); // FIXME FunctionParameterTypeQualifier
-        assertEquals( tree.toString(), parse( "class MyClass {} c;" ) );
+        tree.parse( "class MyClass {} c;" );
     }
 
     public void testAnonymousClassVariableDefinition() throws ParseException
@@ -658,7 +648,7 @@ public class AstTest extends TestCase
         tree.add( " Declaration" );
         tree.add( "  ClassDefinition" );
         tree.add( "  FunctionParameterTypeQualifier" ); // FIXME FunctionParameterTypeQualifier
-        assertEquals( tree.toString(), parse( "class {} c;" ) );
+        tree.parse( "class {} c;" );
     }
 
     public void testEnumVariableDefinition() throws ParseException
@@ -667,7 +657,7 @@ public class AstTest extends TestCase
         tree.add( " Declaration" );
         tree.add( "  EnumSpecifier" );
         tree.add( "  FunctionParameterTypeQualifier" ); // FIXME FunctionParameterTypeQualifier
-        assertEquals( tree.toString(), parse( "enum MyEnum {} e;" ) );
+        tree.parse( "enum MyEnum {} e;" );
     }
 
     public void testAnonymousEnumVariableDefinition() throws ParseException
@@ -676,7 +666,7 @@ public class AstTest extends TestCase
         tree.add( " Declaration" );
         tree.add( "  EnumSpecifier" );
         tree.add( "  FunctionParameterTypeQualifier" ); // FIXME FunctionParameterTypeQualifier
-        assertEquals( tree.toString(), parse( "enum {} e;" ) );
+        tree.parse( "enum {} e;" );
     }
 
     public void testVariableExternalDeclaration() throws ParseException
@@ -684,7 +674,7 @@ public class AstTest extends TestCase
         tree.add( "TranslationUnit" );
         tree.add( " Declaration" );
         tree.add( "  FunctionParameterTypeQualifier" ); // FIXME FunctionParameterTypeQualifier
-        assertEquals( tree.toString(), parse( "int i;" ) );
+        tree.parse( "int i;" );
     }
 
     public void testVariableExternalDeclarationAndInitialization() throws ParseException
@@ -693,7 +683,7 @@ public class AstTest extends TestCase
         tree.add( " Declaration" );
         tree.add( "  FunctionParameterTypeQualifier" ); // FIXME FunctionParameterTypeQualifier
         tree.add( "  ConstantExpression" );
-        assertEquals( tree.toString(), parse( "int i = 0;" ) );
+        tree.parse( "int i = 0;" );
     }
 
     public void testClassMemberVariableDeclaration() throws ParseException
@@ -703,7 +693,7 @@ public class AstTest extends TestCase
         tree.add( "  ClassDefinition" );
         tree.add( "   FunctionParameterTypeQualifier" ); // FIXME FunctionParameterTypeQualifier
         tree.add( "   MemberDeclaration" );
-        assertEquals( tree.toString(), parse( "class MyClass { int i; };" ) );
+        tree.parse( "class MyClass { int i; };" );
     }
 
     public void testClassDefinitionWithOneMethodDeclarationWithinFunction() throws ParseException
@@ -718,42 +708,42 @@ public class AstTest extends TestCase
         tree.add( "     FunctionDeclaration" );
         tree.add( "      FunctionName" );
         tree.add( "      FunctionParameters" );
-        assertEquals( tree.toString(), parse( "void MyFunction() { class MyClass { void MyMethod(); }; }" ) );
+        tree.parse( "void MyFunction() { class MyClass { void MyMethod(); }; }" );
     }
 
     public void testNamespaceDefinition() throws ParseException
     {
         tree.add( "TranslationUnit" );
         tree.add( " NamespaceDefinition" );
-        assertEquals( tree.toString(), parse( "namespace std {}" ) );
-        assertEquals( tree.toString(), parse( "namespace {}" ) );
+        tree.parse( "namespace std {}" );
+        tree.parse( "namespace {}" );
     }
 
     public void testUsingNamespace() throws ParseException
     {
         tree.add( "TranslationUnit" );
         tree.add( " Declaration" );
-        assertEquals( tree.toString(), parse( "using namespace std;" ) );
+        tree.parse( "using namespace std;" );
     }
 
     public void testUsingNamespaceType() throws ParseException
     {
         tree.add( "TranslationUnit" );
         tree.add( " Declaration" );
-        assertEquals( tree.toString(), parse( "using namespace std::vector;" ) );
+        tree.parse( "using namespace std::vector;" );
     }
 
     public void testLabelStatement() throws ParseException
     {
         expression.add( "LabelStatement" );
-        assertEquals( expression.toString(), parseExpression( "label:" ) );
+        expression.parse( "label:" );
     }
 
     public void testIfStatement() throws ParseException
     {
         expression.add( "IfStatement" );
         expression.add( " ConstantExpression" );
-        assertEquals( expression.toString(), parseExpression( "if( true )" ) );
+        expression.parse( "if( true )" );
     }
 
     public void testIfElseStatement() throws ParseException
@@ -761,21 +751,21 @@ public class AstTest extends TestCase
         expression.add( "IfStatement" );
         expression.add( " ConstantExpression" );
         expression.add( " ElseStatement" );
-        assertEquals( expression.toString(), parseExpression( "if( true ) ; else" ) );
+        expression.parse( "if( true ) ; else" );
     }
 
     public void testWhileStatement() throws ParseException
     {
         expression.add( "IterationStatement" );
         expression.add( " ConstantExpression" );
-        assertEquals( expression.toString(), parseExpression( "while( true )" ) );
+        expression.parse( "while( true )" );
     }
 
     public void testDoWhileStatement() throws ParseException
     {
         expression.add( "IterationStatement" );
         expression.add( " ConstantExpression" );
-        assertEquals( expression.toString(), parseExpression( "do ; while( true )" ) );
+        expression.parse( "do ; while( true )" );
     }
 
     public void testForStatement() throws ParseException
@@ -789,7 +779,7 @@ public class AstTest extends TestCase
         expression.add( "  ConstantExpression" );
         expression.add( " UnaryExpression" );
         expression.add( "  IdExpression" );
-        assertEquals( expression.toString(), parseExpression( "for( int i = 0; i < 2 ; ++i )" ) );
+        expression.parse( "for( int i = 0; i < 2 ; ++i )" );
     }
 
     public void testSwitchStatement() throws ParseException
@@ -803,31 +793,37 @@ public class AstTest extends TestCase
         expression.add( "  ConstantExpression" );
         expression.add( "  DefaultStatement" ); // FIXME default child of previous case when no break ?
         expression.add( "   JumpStatement" );
-        assertEquals( expression.toString(), parseExpression( "switch( i ) { case 0: break; case 1: default: break; }" ) );
+        expression.parse( "switch( i ) { case 0: break; case 1: default: break; }" );
     }
 
     public void testJumpStatement() throws ParseException // FIXME separate in 3 statements
     {
         expression.add( "JumpStatement" );
-        assertEquals( expression.toString(), parseExpression( "break" ) );
-        assertEquals( expression.toString(), parseExpression( "continue" ) );
-        assertEquals( expression.toString(), parseExpression( "return" ) );
+        expression.parse( "break" );
+        expression.parse( "continue" );
+        expression.parse( "return" );
     }
 
     public void testThrowStatement() throws ParseException
     {
         expression.add( "ExpressionStatement" );
         expression.add( " ThrowExpression" );
-        assertEquals( expression.toString(), parseExpression( "throw" ) );
+        expression.parse( "throw" );
+    }
+
+    public void testThrowStatementWithException() throws ParseException
+    {
+        expression.add( "ExpressionStatement" );
+        expression.add( " ThrowExpression" );
         expression.add( "  IdExpression" );
-        assertEquals( expression.toString(), parseExpression( "throw exception()" ) );
+        expression.parse( "throw exception()" );
     }
 
     public void testGotoStatement() throws ParseException
     {
         expression.add( "JumpStatement" );
         // expression.add( " IdExpression" ); // FIXME ?!
-        assertEquals( expression.toString(), parseExpression( "goto label" ) );
+        expression.parse( "goto label" );
     }
 
     public void testCatch() throws ParseException
@@ -838,6 +834,6 @@ public class AstTest extends TestCase
         expression.add( "  ParameterType" );
         expression.add( "  FunctionParameterTypeQualifier" );
         expression.add( "Handler" ); // FIXME rename Handler to CatchBlock ?
-        assertEquals( expression.toString(), parseExpression( "try {} catch( exception& ) {} catch(...) {}" ) );
+        expression.parse( "try {} catch( exception& ) {} catch(...) {}" );
     }
 }
