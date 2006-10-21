@@ -403,7 +403,7 @@ public class AstTest extends TestCase
     {
         expression.add( "ExpressionStatement" );
         expression.add( " ThrowExpression" );
-        expression.add( "  IdExpression" ); // FIXME IdExpression ?
+        expression.add( "  IdExpression" );
         expression.parse( "throw my_exception()" );
     }
 
@@ -788,20 +788,43 @@ public class AstTest extends TestCase
         expression.add( " IdExpression" );
         expression.add( " CaseStatement" );
         expression.add( "  ConstantExpression" );
-        expression.add( "  JumpStatement" );
+        expression.add( "  BreakStatement" );
         expression.add( " CaseStatement" );
         expression.add( "  ConstantExpression" );
         expression.add( "  DefaultStatement" ); // FIXME default child of previous case when no break ?
-        expression.add( "   JumpStatement" );
+        expression.add( "   BreakStatement" );
         expression.parse( "switch( i ) { case 0: break; case 1: default: break; }" );
     }
 
-    public void testJumpStatement() throws ParseException // FIXME separate in 3 statements
+    public void testGotoStatement() throws ParseException
     {
-        expression.add( "JumpStatement" );
+        expression.add( "GotoStatement" );
+        expression.parse( "goto label" );
+    }
+
+    public void testBreakStatement() throws ParseException
+    {
+        expression.add( "BreakStatement" );
         expression.parse( "break" );
+    }
+
+    public void testContinueStatement() throws ParseException
+    {
+        expression.add( "ContinueStatement" );
         expression.parse( "continue" );
+    }
+
+    public void testReturnStatement() throws ParseException
+    {
+        expression.add( "ReturnStatement" );
         expression.parse( "return" );
+    }
+
+    public void testReturnStatementWithExpression() throws ParseException
+    {
+        expression.add( "ReturnStatement" );
+        expression.add( " ConstantExpression" );
+        expression.parse( "return 12" );
     }
 
     public void testThrowStatement() throws ParseException
@@ -817,13 +840,6 @@ public class AstTest extends TestCase
         expression.add( " ThrowExpression" );
         expression.add( "  IdExpression" );
         expression.parse( "throw exception()" );
-    }
-
-    public void testGotoStatement() throws ParseException
-    {
-        expression.add( "JumpStatement" );
-        // expression.add( " IdExpression" ); // FIXME ?!
-        expression.parse( "goto label" );
     }
 
     public void testCatch() throws ParseException

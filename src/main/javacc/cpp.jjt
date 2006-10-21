@@ -884,7 +884,7 @@ void statement() : // TODO #Statement ?
 {
     LOOKAHEAD(labeled_statement()) labeled_statement()
    |
-    LOOKAHEAD(expression() ";") expression() #ExpressionStatement ";" // FIXME ";" in lookahead ?
+    LOOKAHEAD(expression() ";") (expression() ";") #ExpressionStatement // FIXME ";" in lookahead ?
    |
     compound_statement()
    |
@@ -892,7 +892,7 @@ void statement() : // TODO #Statement ?
    |
     iteration_statement()
    |
-    jump_statement()
+    jump_statement() ";"
    |
     block_declaration() #DeclarationStatement
    |
@@ -971,16 +971,16 @@ void condition() :
    declaration_specifiers() declarator() "=" assignment_expression()
 }
 
-void jump_statement() #JumpStatement :
+void jump_statement() :
 {}
 {
-    "goto" <ID> ";"
+    ("goto" <ID>) #GotoStatement
    |
-    "continue" ";"
+    ("continue") #ContinueStatement
    |
-    "break" ";"
+    ("break") #BreakStatement
    |
-    "return" [expression()] ";"
+    ("return" [expression()]) #ReturnStatement
 }
 
 void try_block() :
@@ -1207,7 +1207,7 @@ void operator_function_id() :
 void conversion_function_id() :
 {}
 {
-  "operator" declaration_specifiers() (LOOKAHEAD(ptr_operator()) ptr_operator())*
+   "operator" declaration_specifiers() (LOOKAHEAD(ptr_operator()) ptr_operator())*
 }
 
 void template_id() :

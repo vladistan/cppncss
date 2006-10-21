@@ -28,9 +28,11 @@
 
 package cppncss.counter;
 
+import cppast.AstBreakStatement;
 import cppast.AstCaseStatement;
 import cppast.AstConstructorDeclaration;
 import cppast.AstConstructorInitializer;
+import cppast.AstContinueStatement;
 import cppast.AstDeclaration;
 import cppast.AstDeclarationStatement;
 import cppast.AstDefaultStatement;
@@ -39,13 +41,14 @@ import cppast.AstElseStatement;
 import cppast.AstExpressionStatement;
 import cppast.AstFunctionBody;
 import cppast.AstFunctionDeclaration;
+import cppast.AstGotoStatement;
 import cppast.AstHandler;
 import cppast.AstIfStatement;
 import cppast.AstIterationStatement;
-import cppast.AstJumpStatement;
 import cppast.AstLabelStatement;
 import cppast.AstMemberDeclaration;
 import cppast.AstNamespaceDefinition;
+import cppast.AstReturnStatement;
 import cppast.AstSwitchStatement;
 
 /**
@@ -140,7 +143,34 @@ public final class NcssCounter extends AbstractCounter
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstJumpStatement node, final Object data ) // FIXME homogeneity
+    public Object visit( final AstGotoStatement node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstBreakStatement node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstContinueStatement node, final Object data )
+    {
+        increment();
+        return node.accept( this, data );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstReturnStatement node, final Object data )
     {
         increment();
         return node.accept( this, data );
