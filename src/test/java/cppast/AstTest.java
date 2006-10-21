@@ -597,7 +597,6 @@ public class AstTest extends TestCase
         expression.add( " TypeIdExpression" );
         expression.parse( "typeid( int )" );
         expression.parse( "typeid( i )" );
-        expression.add( "  FunctionParameterTypeQualifier" ); // FIXME FunctionParameterTypeQualifier
         expression.parse( "typeid( MyType& )" );
     }
 

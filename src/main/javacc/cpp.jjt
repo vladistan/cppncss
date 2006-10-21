@@ -779,7 +779,7 @@ void parameter_declaration() #Parameter :
    (
     LOOKAHEAD(declarator()) declarator()
    |
-    [abstract_declarator()]
+    [abstract_declarator()] #FunctionParameterTypeQualifier
    )
    ["=" assignment_expression()]
 }
@@ -821,7 +821,7 @@ void declarator_suffixes() :
     ("[" [constant_expression()] "]")+ #FunctionParameterTypeQualifier
 }
 
-void abstract_declarator() #FunctionParameterTypeQualifier :
+void abstract_declarator() :
 {}
 {
      ptr_operator() [abstract_declarator()]
