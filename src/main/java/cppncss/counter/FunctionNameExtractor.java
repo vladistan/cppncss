@@ -31,7 +31,7 @@ package cppncss.counter;
 import cppast.AbstractVisitor;
 import cppast.AstFunctionBody;
 import cppast.AstFunctionName;
-import cppast.AstFunctionParameterTypeQualifier;
+import cppast.AstParameterTypeQualifier;
 import cppast.AstFunctionParameters;
 import cppast.AstParameterType;
 import cppast.Parser;
@@ -129,7 +129,7 @@ public final class FunctionNameExtractor extends AbstractVisitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstFunctionParameterTypeQualifier node, final Object data )
+    public Object visit( final AstParameterTypeQualifier node, final Object data )
     {
         return data + build( node, new Filter()
         {

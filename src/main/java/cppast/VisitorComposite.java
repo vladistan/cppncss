@@ -200,7 +200,7 @@ public final class VisitorComposite implements ParserVisitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstFunctionParameterTypeQualifier node, final Object data )
+    public Object visit( final AstParameterTypeQualifier node, final Object data )
     {
         for( ParserVisitor visitor : visitors )
             visitor.visit( node, data );

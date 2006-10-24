@@ -787,7 +787,7 @@ void parameter_declaration() #Parameter :
    (
     LOOKAHEAD(declarator()) declarator()
    |
-    [abstract_declarator() #FunctionParameterTypeQualifier]
+    [abstract_declarator() #ParameterTypeQualifier]
    )
    ["=" assignment_expression()]
 }
@@ -801,7 +801,7 @@ void type_id() :
 void declarator() :
 {}
 {
-    [LOOKAHEAD(ptr_operator()) ptr_operator_seq() #FunctionParameterTypeQualifier] direct_declarator()
+    [LOOKAHEAD(ptr_operator()) ptr_operator_seq() #ParameterTypeQualifier] direct_declarator()
 }
 
 void ptr_operator_seq() :
@@ -816,7 +816,7 @@ void direct_declarator() :
    (
      qualified_id()
     |
-     "(" #FunctionParameterTypeQualifier declarator() ")" #FunctionParameterTypeQualifier
+     "(" #ParameterTypeQualifier declarator() ")" #ParameterTypeQualifier
    )
    [LOOKAHEAD(declarator_suffixes()) declarator_suffixes()]
 }
@@ -826,7 +826,7 @@ void declarator_suffixes() :
 {
     function_parameters() cv_qualifier_seq() [exception_spec()]
    |
-    ("[" [constant_expression()] "]")+ #FunctionParameterTypeQualifier
+    ("[" [constant_expression()] "]")+ #ParameterTypeQualifier
 }
 
 void abstract_declarator() :
