@@ -75,9 +75,12 @@ public class AstTest extends TestCase
             for( int i = 0; i < level; ++i )
                 writer.append( ' ' );
             writer.println( node.toString() );
-            final String value = expected.elementAt( position++ );
-            if( value != null )
-                assertEquals( value, dump( (SimpleNode)node ) );
+            if( position < expected.size() )
+            {
+                final String value = expected.elementAt( position++ );
+                if( value != null )
+                    assertEquals( value, dump( (SimpleNode)node ) );
+            }
             for( int i = 0; i < node.jjtGetNumChildren(); ++i )
                 dump( node.jjtGetChild( i ), writer, level + 1 );
         }
@@ -165,6 +168,46 @@ public class AstTest extends TestCase
         tree.add( "    ParameterTypeQualifier", "&" ); // FIXME ParameterTypeQualifier
         tree.add( "  FunctionBody" );
         tree.parse( "void MyFunction( int i, const float& p ) {}" );
+    }
+
+    public void testFunctionWithPointerParameterDefinition() throws ParseException
+    {
+        tree.add( "TranslationUnit" );
+        tree.add( " FunctionDefinition" );
+        tree.add( "  FunctionName" );
+        tree.add( "  FunctionParameters" );
+        tree.add( "   Parameter" );
+        tree.add( "    ParameterType", "float" );
+        tree.add( "    ParameterTypeQualifier", "*" ); // FIXME ParameterTypeQualifier
+        tree.add( "  FunctionBody" );
+        tree.parse( "void MyFunction( float* i ) {}" );
+    }
+
+    public void testFunctionWithPointerOnPointerParameterDefinition() throws ParseException
+    {
+        tree.add( "TranslationUnit" );
+        tree.add( " FunctionDefinition" );
+        tree.add( "  FunctionName" );
+        tree.add( "  FunctionParameters" );
+        tree.add( "   Parameter" );
+        tree.add( "    ParameterType", "float" );
+        tree.add( "    ParameterTypeQualifier", "* *" ); // FIXME ParameterTypeQualifier
+        tree.add( "  FunctionBody" );
+        tree.parse( "void MyFunction( float** i ) {}" );
+    }
+
+    public void testFunctionWithArrayParameterDefinition() throws ParseException
+    {
+        tree.add( "TranslationUnit" );
+        tree.add( " FunctionDefinition" );
+        tree.add( "  FunctionName" );
+        tree.add( "  FunctionParameters" );
+        tree.add( "   Parameter" );
+        tree.add( "    ParameterType", "float" );
+        tree.add( "    ParameterTypeQualifier", "[ 12 ]" ); // FIXME ParameterTypeQualifier
+        tree.add( "     ConstantExpression", "12" );
+        tree.add( "  FunctionBody" );
+        tree.parse( "void MyFunction( float i[12] ) {}" );
     }
 
     public void testFunctionWithInnerClassDefinition() throws ParseException
