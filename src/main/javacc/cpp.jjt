@@ -670,29 +670,31 @@ void ptr_operator() :
    |
     "*" cv_qualifier_seq()
    |
-    scope_override() "*" cv_qualifier_seq()
+    scope_override() "*" cv_qualifier_seq() // FIXME should probably handle pointer on member differently
 }
 
 void cv_qualifier_seq() :
 {}
 {
-   [ LOOKAHEAD(2) (
-     "const" [ LOOKAHEAD(2) "volatile" ]
-    |
-     "volatile" [ LOOKAHEAD(2) "const" ] )
+   [ LOOKAHEAD(2)
+    (
+      "const" [LOOKAHEAD("volatile") "volatile"]
+     |
+      "volatile" [LOOKAHEAD("const") "const"]
+    )
    ]
 }
 
 void function_declarator_lookahead() :
 {}
 {
-   (LOOKAHEAD(ptr_operator()) ptr_operator())* qualified_id() "("
+   [LOOKAHEAD(ptr_operator()) ptr_operator_seq()] qualified_id() "("
 }
 
 void function_declarator() :
 {}
 {
-   (LOOKAHEAD(ptr_operator()) ptr_operator())* function_direct_declarator()
+   [LOOKAHEAD(ptr_operator()) ptr_operator_seq()] function_direct_declarator()
 }
 
 void function_direct_declarator() :
@@ -785,7 +787,7 @@ void parameter_declaration() #Parameter :
    (
     LOOKAHEAD(declarator()) declarator()
    |
-    [abstract_declarator()] #FunctionParameterTypeQualifier
+    [abstract_declarator() #FunctionParameterTypeQualifier]
    )
    ["=" assignment_expression()]
 }
@@ -799,13 +801,13 @@ void type_id() :
 void declarator() :
 {}
 {
-    declarator_prefixes() direct_declarator()
+    [LOOKAHEAD(ptr_operator()) ptr_operator_seq() #FunctionParameterTypeQualifier] direct_declarator()
 }
 
-void declarator_prefixes() #FunctionParameterTypeQualifier :
+void ptr_operator_seq() :
 {}
 {
-   (LOOKAHEAD(ptr_operator()) ptr_operator())*
+  (LOOKAHEAD(ptr_operator()) ptr_operator())+
 }
 
 void direct_declarator() :
@@ -1213,7 +1215,7 @@ void operator_function_id() :
 void conversion_function_id() :
 {}
 {
-   "operator" declaration_specifiers() (LOOKAHEAD(ptr_operator()) ptr_operator())*
+   "operator" declaration_specifiers() [LOOKAHEAD(ptr_operator()) ptr_operator_seq()]
 }
 
 void template_id() :

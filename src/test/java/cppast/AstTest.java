@@ -148,7 +148,6 @@ public class AstTest extends TestCase
         tree.add( "  FunctionParameters" );
         tree.add( "   Parameter" );
         tree.add( "    ParameterType", "int" );
-        tree.add( "    FunctionParameterTypeQualifier", "" ); // FIXME FunctionParameterTypeQualifier
         tree.add( "  FunctionBody" );
         tree.parse( "void MyFunction( int i ) {}" );
     }
@@ -161,7 +160,6 @@ public class AstTest extends TestCase
         tree.add( "  FunctionParameters" );
         tree.add( "   Parameter" );
         tree.add( "    ParameterType", "int" );
-        tree.add( "    FunctionParameterTypeQualifier", "" ); // FIXME FunctionParameterTypeQualifier
         tree.add( "   Parameter" );
         tree.add( "    ParameterType", "const float" );
         tree.add( "    FunctionParameterTypeQualifier", "&" ); // FIXME FunctionParameterTypeQualifier
@@ -185,7 +183,6 @@ public class AstTest extends TestCase
     {
         tree.add( "TranslationUnit" );
         tree.add( " Declaration" );
-        tree.add( "  FunctionParameterTypeQualifier", "" ); // FIXME FunctionParameterTypeQualifier
         tree.add( "  FunctionParameters", "( )" );
         tree.parse( "void MyFunction();" );
     }
@@ -697,7 +694,6 @@ public class AstTest extends TestCase
         tree.add( "TranslationUnit" );
         tree.add( " Declaration" );
         tree.add( "  ClassDefinition" );
-        tree.add( "  FunctionParameterTypeQualifier", "" ); // FIXME FunctionParameterTypeQualifier
         tree.parse( "class MyClass {} c;" );
     }
 
@@ -706,7 +702,6 @@ public class AstTest extends TestCase
         tree.add( "TranslationUnit" );
         tree.add( " Declaration" );
         tree.add( "  ClassDefinition" );
-        tree.add( "  FunctionParameterTypeQualifier", "" ); // FIXME FunctionParameterTypeQualifier
         tree.parse( "class {} c;" );
     }
 
@@ -715,7 +710,6 @@ public class AstTest extends TestCase
         tree.add( "TranslationUnit" );
         tree.add( " Declaration" );
         tree.add( "  EnumSpecifier" );
-        tree.add( "  FunctionParameterTypeQualifier", "" ); // FIXME FunctionParameterTypeQualifier
         tree.parse( "enum MyEnum {} e;" );
     }
 
@@ -724,7 +718,6 @@ public class AstTest extends TestCase
         tree.add( "TranslationUnit" );
         tree.add( " Declaration" );
         tree.add( "  EnumSpecifier" );
-        tree.add( "  FunctionParameterTypeQualifier", "" ); // FIXME FunctionParameterTypeQualifier
         tree.parse( "enum {} e;" );
     }
 
@@ -732,7 +725,6 @@ public class AstTest extends TestCase
     {
         tree.add( "TranslationUnit" );
         tree.add( " Declaration" );
-        tree.add( "  FunctionParameterTypeQualifier", "" ); // FIXME FunctionParameterTypeQualifier
         tree.parse( "int i;" );
     }
 
@@ -740,7 +732,6 @@ public class AstTest extends TestCase
     {
         tree.add( "TranslationUnit" );
         tree.add( " Declaration" );
-        tree.add( "  FunctionParameterTypeQualifier", "" ); // FIXME FunctionParameterTypeQualifier
         tree.add( "  ConstantExpression", "0" );
         tree.parse( "int i = 0;" );
     }
@@ -751,7 +742,6 @@ public class AstTest extends TestCase
         tree.add( " Declaration" );
         tree.add( "  ClassDefinition" );
         tree.add( "   MemberDeclaration", "int i ;" );
-        tree.add( "    FunctionParameterTypeQualifier", "" ); // FIXME FunctionParameterTypeQualifier
         tree.parse( "class MyClass { int i; };" );
     }
 
@@ -830,7 +820,6 @@ public class AstTest extends TestCase
     public void testForStatement() throws ParseException
     {
         expression.add( "IterationStatement" );
-        expression.add( " FunctionParameterTypeQualifier", "" ); // FIXME ?!
         // expression.add( " InitializationStatement" ); // FIXME ?!
         expression.add( " ConstantExpression", "0" );
         expression.add( " RelationalExpression", "i < 2" );
