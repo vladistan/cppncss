@@ -613,7 +613,7 @@ void member_declaration() :
        [LOOKAHEAD(template_head()) template_head()] function_decl_or_def()
    |
     LOOKAHEAD([template_head()] declaration_specifiers())
-       [LOOKAHEAD(template_head()) template_head()] declaration_specifiers() [member_declarator_list()] ";" #MemberDeclaration
+       [LOOKAHEAD(template_head()) template_head()] (declaration_specifiers() [member_declarator_list()] ";") #MemberDeclaration
    |
     LOOKAHEAD("using") using_declaration()
 //   |
@@ -625,7 +625,13 @@ void member_declaration() :
 void member_declarator_list() :
 {}
 {
-   declarator() [("=" | ":") assignment_expression()] ("," declarator() [("=" | ":") assignment_expression()])*
+   member_declarator() ("," member_declarator())*
+}
+
+void member_declarator() :
+{}
+{
+   declarator() [("=" | ":") assignment_expression()]
 }
 
 void pure_specifier():
