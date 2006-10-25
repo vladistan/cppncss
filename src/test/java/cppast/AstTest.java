@@ -165,7 +165,7 @@ public class AstTest extends TestCase
         tree.add( "    ParameterType", "int" );
         tree.add( "   Parameter" );
         tree.add( "    ParameterType", "const float" );
-        tree.add( "    ParameterTypeQualifier", "&" ); // FIXME ParameterTypeQualifier
+        tree.add( "    ParameterTypeQualifier", "&" );
         tree.add( "  FunctionBody" );
         tree.parse( "void MyFunction( int i, const float& p ) {}" );
     }
@@ -199,7 +199,7 @@ public class AstTest extends TestCase
         tree.add( "  FunctionParameters" );
         tree.add( "   Parameter" );
         tree.add( "    ParameterType", "float" );
-        tree.add( "    ParameterTypeQualifier", "*" ); // FIXME ParameterTypeQualifier
+        tree.add( "    ParameterTypeQualifier", "*" );
         tree.parse( "void MyFunction( float* i );" );
     }
 
@@ -211,7 +211,7 @@ public class AstTest extends TestCase
         tree.add( "  FunctionParameters" );
         tree.add( "   Parameter" );
         tree.add( "    ParameterType", "float" );
-        tree.add( "    ParameterTypeQualifier", "* *" ); // FIXME ParameterTypeQualifier
+        tree.add( "    ParameterTypeQualifier", "* *" );
         tree.parse( "void MyFunction( float** i );" );
     }
 
@@ -354,7 +354,7 @@ public class AstTest extends TestCase
         tree.add( "    FunctionParameters" );
         tree.add( "     Parameter" );
         tree.add( "      ParameterType", "const MyClass" );
-        tree.add( "      ParameterTypeQualifier", "&" ); // FIXME ParameterTypeQualifier
+        tree.add( "      ParameterTypeQualifier", "&" );
         tree.add( "    FunctionBody", "{ }" );
         tree.parse( "class MyClass { bool operator==( const MyClass& ) {} };" );
     }
@@ -369,7 +369,7 @@ public class AstTest extends TestCase
         tree.add( "    FunctionParameters" );
         tree.add( "     Parameter" );
         tree.add( "      ParameterType", "const MyClass" );
-        tree.add( "      ParameterTypeQualifier", "&" ); // FIXME ParameterTypeQualifier
+        tree.add( "      ParameterTypeQualifier", "&" );
         tree.parse( "class MyClass { bool operator==( const MyClass& ); };" );
     }
 
@@ -381,7 +381,7 @@ public class AstTest extends TestCase
         tree.add( "  FunctionParameters" );
         tree.add( "   Parameter" );
         tree.add( "    ParameterType", "const MyClass" );
-        tree.add( "    ParameterTypeQualifier", "&" ); // FIXME ParameterTypeQualifier
+        tree.add( "    ParameterTypeQualifier", "&" );
         tree.add( "  FunctionBody" );
         tree.parse( "bool MyClass::operator==( const MyClass& ) {}" );
     }
@@ -954,7 +954,7 @@ public class AstTest extends TestCase
         expression.add( "CatchBlock" ); // FIXME should CatchBlock be child of TryBlock ?
         expression.add( " Parameter" );
         expression.add( "  ParameterType", "exception" );
-        expression.add( "  ParameterTypeQualifier", "&" ); // FIXME ParameterTypeQualifier
+        expression.add( "  ParameterTypeQualifier", "&" );
         expression.add( "CatchBlock" );
         expression.parse( "try {} catch( exception& ) {} catch(...) {}" );
     }
