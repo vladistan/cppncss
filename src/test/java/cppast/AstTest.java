@@ -185,8 +185,8 @@ public class AstTest extends TestCase
     public void testFunctionDeclaration() throws ParseException
     {
         tree.add( "TranslationUnit" );
-        tree.add( " Declaration" ); // FIXME FunctionDeclaration ?
-        // tree.add( " FunctionName" ); // FIXME
+        tree.add( " FunctionDeclaration" );
+        tree.add( "  FunctionName" );
         tree.add( "  FunctionParameters", "( )" );
         tree.parse( "void MyFunction();" );
     }
@@ -194,8 +194,8 @@ public class AstTest extends TestCase
     public void testFunctionWithPointerParameterDeclaration() throws ParseException
     {
         tree.add( "TranslationUnit" );
-        tree.add( " Declaration" );
-        // tree.add( " FunctionName" ); // FIXME
+        tree.add( " FunctionDeclaration" );
+        tree.add( "  FunctionName" );
         tree.add( "  FunctionParameters" );
         tree.add( "   Parameter" );
         tree.add( "    ParameterType", "float" );
@@ -206,8 +206,8 @@ public class AstTest extends TestCase
     public void testFunctionWithPointerOnPointerParameterDeclaration() throws ParseException
     {
         tree.add( "TranslationUnit" );
-        tree.add( " Declaration" );
-        // tree.add( " FunctionName" ); // FIXME
+        tree.add( " FunctionDeclaration" );
+        tree.add( "  FunctionName" );
         tree.add( "  FunctionParameters" );
         tree.add( "   Parameter" );
         tree.add( "    ParameterType", "float" );
@@ -218,8 +218,8 @@ public class AstTest extends TestCase
     public void testFunctionWithArrayParameterDeclaration() throws ParseException
     {
         tree.add( "TranslationUnit" );
-        tree.add( " Declaration" );
-        // tree.add( " FunctionName" ); // FIXME
+        tree.add( " FunctionDeclaration" );
+        tree.add( "  FunctionName" );
         tree.add( "  FunctionParameters" );
         tree.add( "   Parameter" );
         tree.add( "    ParameterType", "float" );
@@ -231,8 +231,8 @@ public class AstTest extends TestCase
     public void testFunctionWithPointerOnFunctionParameterDeclaration() throws ParseException
     {
         tree.add( "TranslationUnit" );
-        tree.add( " Declaration" );
-        // tree.add( " FunctionName" ); // FIXME
+        tree.add( " FunctionDeclaration" );
+        tree.add( "  FunctionName" );
         tree.add( "  FunctionParameters" );
         tree.add( "   Parameter" );
         tree.add( "    ParameterType", "void" );

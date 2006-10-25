@@ -274,8 +274,6 @@ AstTranslationUnit translation_unit() #TranslationUnit :
 void declaration() :
 {}
 {
-    LOOKAHEAD(block_declaration()) block_declaration() #Declaration
-   |
     LOOKAHEAD(template_head()) template_declaration()
    |
     LOOKAHEAD((type_modifiers())* [scope_override()] "operator") conversion_function_decl_or_def()
@@ -285,6 +283,8 @@ void declaration() :
     LOOKAHEAD(dtor_ctor_decl_spec() function_declarator_lookahead()) ctor_definition()
    |
     LOOKAHEAD(declaration_specifiers() function_declarator()) function_decl_or_def()
+   |
+    LOOKAHEAD(block_declaration()) block_declaration() #Declaration
    |
     LOOKAHEAD("namespace") namespace_definition()
    |
