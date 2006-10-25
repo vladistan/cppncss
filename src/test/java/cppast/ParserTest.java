@@ -923,6 +923,12 @@ public class ParserTest extends TestCase
         parse( "void MyFunction() { data.~MyClass< MyType >(); }" );
     }
 
+    public void testFunctionReturningPointerOnFunctionDefinition() throws ParseException
+    {
+        parse( "void (*MyFunction());" );
+//        parse( "void (*MyFunction())() {}" ); // FIXME TODO
+    }
+
     public void testTMP() throws IOException, ParseException
     {
         final Parser parser = new Parser( new StringReader( "" ) );

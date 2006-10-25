@@ -209,6 +209,12 @@ public class FunctionNameExtractorTest extends TestCase
                 extract( "void MyFunction( void (*F)( char, float ) ) {}" ) );
     }
 
+    public void testFunctionReturningPointerOnFunction() throws ParseException // FIXME TODO
+    {
+//        assertEquals( "MyFunction( int )",
+//                extract( "void (*MyFunction( int ))( char, float ) {}" ) );
+    }
+
     public void testParenthesisOperatorDefinition() throws ParseException
     {
         assertEquals( "MyClass::operator()( int )", extract( "void MyClass::operator()( int i ) {}" ) );

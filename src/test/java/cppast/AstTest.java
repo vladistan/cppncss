@@ -706,7 +706,7 @@ public class AstTest extends TestCase
         expression.parse( "delete[] i" );
     }
 
-    public void testTypeIdExpression() throws ParseException // FIXME consider as function call ?
+    public void testTypeIdExpression() throws ParseException
     {
         expression.add( "ExpressionStatement" );
         expression.add( " TypeIdExpression" );
