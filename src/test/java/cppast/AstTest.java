@@ -170,46 +170,6 @@ public class AstTest extends TestCase
         tree.parse( "void MyFunction( int i, const float& p ) {}" );
     }
 
-    public void testFunctionWithPointerParameterDefinition() throws ParseException
-    {
-        tree.add( "TranslationUnit" );
-        tree.add( " FunctionDefinition" );
-        tree.add( "  FunctionName" );
-        tree.add( "  FunctionParameters" );
-        tree.add( "   Parameter" );
-        tree.add( "    ParameterType", "float" );
-        tree.add( "    ParameterTypeQualifier", "*" ); // FIXME ParameterTypeQualifier
-        tree.add( "  FunctionBody" );
-        tree.parse( "void MyFunction( float* i ) {}" );
-    }
-
-    public void testFunctionWithPointerOnPointerParameterDefinition() throws ParseException
-    {
-        tree.add( "TranslationUnit" );
-        tree.add( " FunctionDefinition" );
-        tree.add( "  FunctionName" );
-        tree.add( "  FunctionParameters" );
-        tree.add( "   Parameter" );
-        tree.add( "    ParameterType", "float" );
-        tree.add( "    ParameterTypeQualifier", "* *" ); // FIXME ParameterTypeQualifier
-        tree.add( "  FunctionBody" );
-        tree.parse( "void MyFunction( float** i ) {}" );
-    }
-
-    public void testFunctionWithArrayParameterDefinition() throws ParseException
-    {
-        tree.add( "TranslationUnit" );
-        tree.add( " FunctionDefinition" );
-        tree.add( "  FunctionName" );
-        tree.add( "  FunctionParameters" );
-        tree.add( "   Parameter" );
-        tree.add( "    ParameterType", "float" );
-        tree.add( "    ParameterTypeQualifier", "[ 12 ]" ); // FIXME ParameterTypeQualifier
-        tree.add( "     ConstantExpression", "12" );
-        tree.add( "  FunctionBody" );
-        tree.parse( "void MyFunction( float i[12] ) {}" );
-    }
-
     public void testFunctionWithInnerClassDefinition() throws ParseException
     {
         tree.add( "TranslationUnit" );
@@ -225,9 +185,64 @@ public class AstTest extends TestCase
     public void testFunctionDeclaration() throws ParseException
     {
         tree.add( "TranslationUnit" );
-        tree.add( " Declaration" );
+        tree.add( " Declaration" ); // FIXME FunctionDeclaration ?
+        // tree.add( " FunctionName" ); // FIXME
         tree.add( "  FunctionParameters", "( )" );
         tree.parse( "void MyFunction();" );
+    }
+
+    public void testFunctionWithPointerParameterDeclaration() throws ParseException
+    {
+        tree.add( "TranslationUnit" );
+        tree.add( " Declaration" );
+        // tree.add( " FunctionName" ); // FIXME
+        tree.add( "  FunctionParameters" );
+        tree.add( "   Parameter" );
+        tree.add( "    ParameterType", "float" );
+        tree.add( "    ParameterTypeQualifier", "*" ); // FIXME ParameterTypeQualifier
+        tree.parse( "void MyFunction( float* i );" );
+    }
+
+    public void testFunctionWithPointerOnPointerParameterDeclaration() throws ParseException
+    {
+        tree.add( "TranslationUnit" );
+        tree.add( " Declaration" );
+        // tree.add( " FunctionName" ); // FIXME
+        tree.add( "  FunctionParameters" );
+        tree.add( "   Parameter" );
+        tree.add( "    ParameterType", "float" );
+        tree.add( "    ParameterTypeQualifier", "* *" ); // FIXME ParameterTypeQualifier
+        tree.parse( "void MyFunction( float** i );" );
+    }
+
+    public void testFunctionWithArrayParameterDeclaration() throws ParseException
+    {
+        tree.add( "TranslationUnit" );
+        tree.add( " Declaration" );
+        // tree.add( " FunctionName" ); // FIXME
+        tree.add( "  FunctionParameters" );
+        tree.add( "   Parameter" );
+        tree.add( "    ParameterType", "float" );
+        tree.add( "    ParameterTypeQualifier", "[ 12 ]" ); // FIXME ParameterTypeQualifier
+        tree.add( "     ConstantExpression", "12" );
+        tree.parse( "void MyFunction( float i[12] );" );
+    }
+
+    public void testFunctionWithPointerOnFunctionParameterDeclaration() throws ParseException
+    {
+        tree.add( "TranslationUnit" );
+        tree.add( " Declaration" );
+        // tree.add( " FunctionName" ); // FIXME
+        tree.add( "  FunctionParameters" );
+        tree.add( "   Parameter" );
+        tree.add( "    ParameterType", "void" );
+        tree.add( "    ParameterTypeQualifier", "(" ); // FIXME ParameterTypeQualifier
+        tree.add( "    ParameterTypeQualifier", "*" ); // FIXME ParameterTypeQualifier
+        tree.add( "    ParameterTypeQualifier", ")" ); // FIXME ParameterTypeQualifier
+        tree.add( "    FunctionParameters" );
+        tree.add( "     Parameter" );
+        tree.add( "      ParameterType", "int" );
+        tree.parse( "void MyMethod( void (*pFunction)( int ) );" );
     }
 
     public void testMethodDefinition() throws ParseException
