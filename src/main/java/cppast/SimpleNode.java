@@ -29,7 +29,7 @@
 package cppast;
 
 /**
- * Provides a custom JavaCC base node implementation.
+ * Provides a custom base node implementation.
  *
  * @author Mathieu Champlon
  */
@@ -37,22 +37,18 @@ public abstract class SimpleNode implements Node
 {
     private Node parent;
     private Node[] children = new Node[0];
-    private final int id;
-    private final Parser parser;
+    private final String name;
     private Token first, last;
     private Scope scope;
 
     /**
      * Create a node.
-     * <p>
-     * SHOULD NEVER BE CALLED !
      *
      * @param id the node identifier
      */
     public SimpleNode( final int id )
     {
-        throw new IllegalStateException(
-                "parsing without a parser should never happen : set JJTree option NODE_USES_PARSER to 'true'" );
+        this.name = ParserTreeConstants.jjtNodeName[id];
     }
 
     /**
@@ -63,8 +59,7 @@ public abstract class SimpleNode implements Node
      */
     public SimpleNode( final Parser parser, final int id )
     {
-        this.id = id;
-        this.parser = parser;
+        this( id );
     }
 
     /**
@@ -72,8 +67,6 @@ public abstract class SimpleNode implements Node
      */
     public final void jjtOpen()
     {
-        first = parser.getToken( 1 );
-        scope = parser.getCurrentScope();
     }
 
     /**
@@ -81,7 +74,28 @@ public abstract class SimpleNode implements Node
      */
     public final void jjtClose()
     {
-        last = parser.getToken( 0 );
+    }
+
+    /**
+     * Open the node scope.
+     *
+     * @param token the first token of the node
+     * @param scope the scope of the node
+     */
+    public final void openScope( final Token token, final Scope scope )
+    {
+        this.first = token;
+        this.scope = scope;
+    }
+
+    /**
+     * Close the node scope.
+     *
+     * @param token the last token of the node
+     */
+    public final void closeScope( final Token token )
+    {
+        last = token;
     }
 
     /**
@@ -181,6 +195,6 @@ public abstract class SimpleNode implements Node
      */
     public final String toString()
     {
-        return ParserTreeConstants.jjtNodeName[id];
+        return name;
     }
 }
