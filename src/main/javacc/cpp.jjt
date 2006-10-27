@@ -603,7 +603,7 @@ void member_declaration() :
     LOOKAHEAD(dtor_ctor_decl_spec() "~")
        (dtor_ctor_decl_spec() simple_dtor_declarator() [pure_specifier()] ";") #DestructorDeclaration
    |
-    LOOKAHEAD([template_head()] dtor_ctor_decl_spec() function_declarator() ";")
+    LOOKAHEAD([template_head()] dtor_ctor_decl_spec() function_direct_declarator() ";")
        [LOOKAHEAD(template_head()) template_head()] (dtor_ctor_decl_spec() ctor_declarator() ";") #ConstructorDeclaration
    |
     LOOKAHEAD([template_head()] dtor_ctor_decl_spec() function_declarator_lookahead())
@@ -700,7 +700,9 @@ void function_declarator() :
 void function_direct_declarator() :
 {}
 {
-   (qualified_id() #FunctionName) function_parameters() cv_qualifier_seq() [exception_spec()] [pure_specifier()]
+   "(" "*" qualified_id() #FunctionName function_parameters() ")" function_parameters() cv_qualifier_seq() [exception_spec()] [pure_specifier()] // FIXME should probably handle function returning pointer on function differently
+  |
+   qualified_id() #FunctionName function_parameters() cv_qualifier_seq() [exception_spec()] [pure_specifier()]
 }
 
 void dtor_ctor_decl_spec() :
@@ -712,22 +714,13 @@ void dtor_ctor_decl_spec() :
 void dtor_definition() #DestructorDefinition :
 {}
 {
-   dtor_ctor_decl_spec()
-   dtor_declarator()
-   [pure_specifier()]
-   compound_statement() #FunctionBody
+   dtor_ctor_decl_spec() dtor_declarator() [pure_specifier()] compound_statement() #FunctionBody
 }
 
 void ctor_definition() #ConstructorDefinition :
 {}
 {
-   dtor_ctor_decl_spec() ctor_declarator()
-   (
-// FIXME check why unnecessary
-//     ";"
-//    |
-     [ctor_initializer()] compound_statement() #FunctionBody
-   )
+   dtor_ctor_decl_spec() ctor_declarator() [ctor_initializer()] compound_statement() #FunctionBody
 }
 
 void ctor_declarator() :
@@ -842,9 +835,9 @@ void abstract_declarator() :
 void abstract_declarator_suffix() :
 {}
 {
-    "[" [constant_expression()] "]"
-   |
     function_parameters() cv_qualifier_seq() [exception_spec()]
+   |
+    "[" [constant_expression()] "]"
 }
 
 void template_head() :
