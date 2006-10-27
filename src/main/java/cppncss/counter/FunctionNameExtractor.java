@@ -155,12 +155,12 @@ public final class FunctionNameExtractor extends AbstractVisitor
         return data;
     }
 
-    private interface Filter
+    private interface Filter // FIXME to be moved into SimpleNode ?
     {
         String decorate( final Token token );
     }
 
-    private String build( final SimpleNode node, final Filter filter )
+    private String build( final SimpleNode node, final Filter filter ) // FIXME to be moved into SimpleNode ?
     {
         final StringBuffer buffer = new StringBuffer();
         for( Token token = node.getFirstToken(); token != node.getLastToken().next; token = token.next )
