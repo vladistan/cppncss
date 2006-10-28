@@ -287,7 +287,7 @@ void declaration() :
    |
     LOOKAHEAD(dtor_ctor_decl_spec() function_declarator_lookahead()) ctor_definition()
    |
-    LOOKAHEAD(declaration_specifiers() function_declarator()) function_decl_or_def()
+    LOOKAHEAD(function()) function_decl_or_def()
    |
     LOOKAHEAD(block_declaration()) block_declaration() #Declaration
    |
@@ -608,7 +608,7 @@ void member_declaration() :
     LOOKAHEAD(dtor_ctor_decl_spec() "~")
        (dtor_ctor_decl_spec() simple_dtor_declarator() [pure_specifier()] ";") #DestructorDeclaration
    |
-    LOOKAHEAD([template_head()] dtor_ctor_decl_spec() function_direct_declarator() ";")
+    LOOKAHEAD([template_head()] dtor_ctor_decl_spec() ctor_declarator() ";")
        [LOOKAHEAD(template_head()) template_head()] (dtor_ctor_decl_spec() ctor_declarator() ";") #ConstructorDeclaration
    |
     LOOKAHEAD([template_head()] dtor_ctor_decl_spec() function_declarator_lookahead())
@@ -681,7 +681,7 @@ void ptr_operator() :
 void cv_qualifier_seq() :
 {}
 {
-   [ LOOKAHEAD(2)
+   [LOOKAHEAD(2)
     (
       "const" [LOOKAHEAD("volatile") "volatile"]
      |
@@ -699,15 +699,19 @@ void function_declarator_lookahead() :
 void function_declarator() :
 {}
 {
-   [LOOKAHEAD(ptr_operator()) ptr_operator_seq()] function_direct_declarator()
+   [LOOKAHEAD(ptr_operator()) ptr_operator_seq()]
+   (
+     "(" "*" function_direct_declarator() (")" function_parameters()) #FunctionPointerPostfix // FIXME should probably handle function returning pointer on function differently
+    |
+     function_direct_declarator()
+   )
+   cv_qualifier_seq() [exception_spec()] [pure_specifier()]
 }
 
 void function_direct_declarator() :
 {}
 {
-   "(" "*" qualified_id() #FunctionName function_parameters() ")" function_parameters() cv_qualifier_seq() [exception_spec()] [pure_specifier()] // FIXME should probably handle function returning pointer on function differently
-  |
-   qualified_id() #FunctionName function_parameters() cv_qualifier_seq() [exception_spec()] [pure_specifier()]
+   qualified_id() #FunctionName function_parameters()
 }
 
 void dtor_ctor_decl_spec() :
