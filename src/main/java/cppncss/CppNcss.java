@@ -83,7 +83,7 @@ public final class CppNcss
         {
             new ComponentParameter( FileObserver.class, false )
         } );
-        main.registerComponentImplementation( ConsoleEventHandler.class );
+        main.registerComponentImplementation( EventOutput.class );
         main.registerComponentImplementation( Analyzer.class );
         main.addChildContainer( parent );
         main.start();
@@ -95,7 +95,7 @@ public final class CppNcss
     {
         final MutablePicoContainer local = new DefaultPicoContainer();
         local.registerComponentImplementation( collectorType );
-        local.registerComponentImplementation( ConsoleLogger.class, ConsoleLogger.class, new Parameter[]
+        local.registerComponentImplementation( AsciiResultOutput.class, AsciiResultOutput.class, new Parameter[]
         {
             new ConstantParameter( name )
         } );

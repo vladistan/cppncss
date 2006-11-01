@@ -28,7 +28,6 @@
 
 package cppncss;
 
-import java.io.PrintStream;
 import java.util.List;
 import java.util.Locale;
 import cppncss.measure.AverageObserver;
@@ -36,24 +35,23 @@ import cppncss.measure.MeasureObserver;
 import cppncss.measure.SumObserver;
 
 /**
- * Implements a console measure logger.
+ * Outputs ascii results to System.out.
  *
  * @author Mathieu Champlon
  */
-public final class ConsoleLogger implements MeasureObserver, AverageObserver, SumObserver
+public final class AsciiResultOutput implements MeasureObserver, AverageObserver, SumObserver
 {
     private int current;
     private int index;
     private final String item;
-    private final PrintStream stream = System.out;
     private List<String> labels;
 
     /**
-     * Create a logger to the console.
+     * Create an ascii result output.
      *
      * @param item the name of the measured item
      */
-    public ConsoleLogger( final String item )
+    public AsciiResultOutput( final String item )
     {
         this.current = 0;
         this.index = 0;
@@ -85,29 +83,29 @@ public final class ConsoleLogger implements MeasureObserver, AverageObserver, Su
 
     private void printHeaders( final List<String> labels )
     {
-        stream.println();
-        stream.print( "Nr. " );
+        System.out.println();
+        System.out.print( "Nr. " );
         for( String label : labels )
             if( !label.startsWith( item ) )
-                stream.print( label + " " );
-        stream.println( item );
+                System.out.print( label + " " );
+        System.out.println( item );
     }
 
     private void printIndex( final int index )
     {
-        stream.format( "%3d", index );
+        System.out.format( "%3d", index );
     }
 
     private void printMeasurement( final String label, final int count )
     {
         if( !label.startsWith( item ) )
-            stream.format( " %" + label.length() + "d", count );
+            System.out.format( " %" + label.length() + "d", count );
     }
 
     private void printItem( final String item )
     {
-        stream.format( " %s", item );
-        stream.println();
+        System.out.format( " %s", item );
+        System.out.println();
     }
 
     /**
@@ -117,8 +115,8 @@ public final class ConsoleLogger implements MeasureObserver, AverageObserver, Su
     {
         if( !label.startsWith( item ) )
         {
-            stream.format( Locale.US, "Average %s %s: %.2f", item, label, average );
-            stream.println();
+            System.out.format( Locale.US, "Average %s %s: %.2f", item, label, average );
+            System.out.println();
         }
     }
 
@@ -127,6 +125,6 @@ public final class ConsoleLogger implements MeasureObserver, AverageObserver, Su
      */
     public void notify( final String label, final long sum )
     {
-        stream.println( item + " " + label + ": " + sum );
+        System.out.println( item + " " + label + ": " + sum );
     }
 }

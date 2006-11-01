@@ -35,9 +35,11 @@ import cppncss.analyzer.EventHandler;
 import tools.Options;
 
 /**
+ * Logs all events to System.err.
+ *
  * @author Mathieu Champlon
  */
-public final class ConsoleEventHandler implements EventHandler
+public final class EventOutput implements EventHandler
 {
     private static final double MS_PER_S = 1000.0;
     private static final int ERROR_LINES_DISPLAYED = 3;
@@ -46,11 +48,11 @@ public final class ConsoleEventHandler implements EventHandler
     private long start;
 
     /**
-     * Create a console event handler.
+     * Create an event output.
      *
      * @param options program options
      */
-    public ConsoleEventHandler( final Options options )
+    public EventOutput( final Options options )
     {
         debug = options.hasOption( "d" );
         verbose = debug || options.hasOption( "v" );
@@ -71,7 +73,7 @@ public final class ConsoleEventHandler implements EventHandler
     {
         final long end = System.currentTimeMillis();
         final double time = (end - start) / MS_PER_S;
-        System.out.println( "Successfully parsed " + parsed + " / " + total + " files in " + time + " s" );
+        System.err.println( "Successfully parsed " + parsed + " / " + total + " files in " + time + " s" );
     }
 
     /**
@@ -82,7 +84,7 @@ public final class ConsoleEventHandler implements EventHandler
         if( debug )
             throwable.printStackTrace();
         if( verbose )
-            System.out.println( "Skipping " + filename + " : " + reason );
+            System.err.println( "Skipping " + filename + " : " + reason );
     }
 
     /**
@@ -107,8 +109,8 @@ public final class ConsoleEventHandler implements EventHandler
     private void displayCursor( final int column )
     {
         for( int i = 0; i < column - 1; ++i )
-            System.out.print( ' ' );
-        System.out.println( '^' );
+            System.err.print( ' ' );
+        System.err.println( '^' );
     }
 
     private void displayLocation( final int start, final int lines, final String filename ) throws IOException
@@ -117,7 +119,7 @@ public final class ConsoleEventHandler implements EventHandler
         for( int i = 0; i < start - lines; i++ )
             reader.readLine();
         for( int i = 0; i < lines; ++i )
-            System.out.println( reader.readLine() );
+            System.err.println( reader.readLine() );
         reader.close();
     }
 
@@ -127,6 +129,6 @@ public final class ConsoleEventHandler implements EventHandler
     public void changed( final String filename )
     {
         if( debug )
-            System.out.println( "Parsing " + filename );
+            System.err.println( "Parsing " + filename );
     }
 }
