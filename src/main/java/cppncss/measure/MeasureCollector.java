@@ -26,11 +26,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
+package cppncss.measure;
 
 import java.util.TreeSet;
 import java.util.Vector;
 import org.picocontainer.Startable;
+import cppncss.analyzer.FileObserver;
 import cppncss.counter.CounterObserver;
 
 /**

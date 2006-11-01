@@ -26,20 +26,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
+package cppncss.analyzer.preprocessor;
+
+import cppast.Token;
 
 /**
- * Defines an observer of averages of measures.
+ * Defines a token flow filter.
  *
  * @author Mathieu Champlon
  */
-public interface AverageObserver
+public interface TokenFilter
 {
     /**
-     * Notify of the average of measures.
+     * Test if the filter name matches a given name.
      *
-     * @param label the name of the measurement
-     * @param average the resulting value
+     * @param name the name to test
+     * @return whether the filter name matches or not
      */
-    void notify( String label, float average );
+    boolean matches( String name );
+
+    /**
+     * Trigger filtering based on a given token.
+     *
+     * @param token the head of the token flow
+     * @return whether the filter has been applied or not
+     */
+    boolean process( Token token );
 }

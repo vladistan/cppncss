@@ -26,36 +26,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
-
-import java.util.Collection;
-import java.util.Vector;
+package cppncss.analyzer;
 
 /**
- * Provides a composite for file observers.
+ * Provides a means to be notified about a file being processed.
  *
  * @author Mathieu Champlon
  */
-public final class FileObserverComposite implements FileObserver
+public interface FileObserver
 {
-    private final Vector<FileObserver> observers = new Vector<FileObserver>();
-
     /**
-     * Create a file observer composite.
+     * Specify the file being processed.
      *
-     * @param observers a list of observers
+     * @param filename the name of the fle
      */
-    public FileObserverComposite( final Collection< ? extends FileObserver> observers )
-    {
-        this.observers.addAll( observers );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void changed( final String filename )
-    {
-        for( FileObserver observer : observers )
-            observer.changed( filename );
-    }
+    void changed( String filename );
 }

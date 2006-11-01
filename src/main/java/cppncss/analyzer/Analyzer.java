@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
+package cppncss.analyzer;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -43,7 +43,7 @@ import cppast.ParseException;
 import cppast.Parser;
 import cppast.ParserVisitor;
 import cppast.Token;
-import cppncss.preprocessor.PreProcessor;
+import cppncss.analyzer.preprocessor.PreProcessor;
 
 /**
  * Builds and walks a forrest of abstract syntax trees from a set of given files.

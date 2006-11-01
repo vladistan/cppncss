@@ -26,57 +26,73 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
+package cppncss.sum;
+
+import java.util.Vector;
+import org.picocontainer.Startable;
+import cppncss.analyzer.FileObserver;
+import cppncss.counter.CounterObserver;
 
 /**
- * Computes the average of a series of values.
+ * Collects sums of measures.
  *
  * @author Mathieu Champlon
  */
-public final class Average
+public final class SumCollector implements CounterObserver, FileObserver, Startable
 {
-    private final String label;
-    private float average;
-    private float count;
+    private final Vector<Sum> result;
+    private final SumObserver observer;
 
     /**
-     * Create an average.
+     * Create a sum collector.
      *
-     * @param label the label of the measurement
-     * @param value the first value of the measurement
+     * @param observer an observer to be notified of the results
      */
-    public Average( final String label, final int value )
+    public SumCollector( final SumObserver observer )
     {
-        this.label = label;
-        this.average = value;
-        this.count = 1;
+        if( observer == null )
+            throw new IllegalArgumentException( "argument 'observer' is null" );
+        this.observer = observer;
+        this.result = new Vector<Sum>();
     }
 
     /**
-     * Add a value to the average and recompute it.
-     * <p>
-     * If the label does not match the label given at creation the measurement is ignored.
-     *
-     * @param label the label of the measurement
-     * @param value the value of the measurement
-     * @return whether the measurement has been accepted or not
+     * {@inheritDoc}
      */
-    public boolean update( final String label, final int value )
+    public void notify( final String label, final String item, final int line, final int count )
     {
-        if( !this.label.equals( label ) )
-            return false;
-        average = (average * count + value) / (count + 1);
-        ++count;
-        return true;
+        if( !update( label, count ) )
+            result.add( new Sum( label, count ) );
+    }
+
+    private boolean update( final String label, final int count )
+    {
+        for( Sum average : result )
+            if( average.update( label, count ) )
+                return true;
+        return false;
     }
 
     /**
-     * Accept a visitor.
-     *
-     * @param observer an average observer
+     * {@inheritDoc}
      */
-    public void accept( final AverageObserver observer )
+    public void start()
     {
-        observer.notify( label, average );
+        for( Sum average : result )
+            average.accept( observer );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void stop()
+    {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void changed( final String filename )
+    {
     }
 }

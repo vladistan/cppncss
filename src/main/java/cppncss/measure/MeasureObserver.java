@@ -26,72 +26,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
+package cppncss.measure;
 
-import java.util.Vector;
-import org.picocontainer.Startable;
-import cppncss.counter.CounterObserver;
+import java.util.List;
 
 /**
- * Collects sums of measures.
+ * Defines a measure observer.
  *
  * @author Mathieu Champlon
  */
-public final class SumCollector implements CounterObserver, FileObserver, Startable
+public interface MeasureObserver
 {
-    private final Vector<Sum> result;
-    private final SumObserver observer;
-
     /**
-     * Create a sum collector.
+     * Notify of the labels of the measures.
      *
-     * @param observer an observer to be notified of the results
+     * @param labels the list of the measures.
      */
-    public SumCollector( final SumObserver observer )
-    {
-        if( observer == null )
-            throw new IllegalArgumentException( "argument 'observer' is null" );
-        this.observer = observer;
-        this.result = new Vector<Sum>();
-    }
+    void notify( List<String> labels );
 
     /**
-     * {@inheritDoc}
+     * Notify of a measure.
+     *
+     * @param item the name of the measured item
+     * @param count the result of the measure
      */
-    public void notify( final String label, final String item, final int line, final int count )
-    {
-        if( !update( label, count ) )
-            result.add( new Sum( label, count ) );
-    }
-
-    private boolean update( final String label, final int count )
-    {
-        for( Sum average : result )
-            if( average.update( label, count ) )
-                return true;
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void start()
-    {
-        for( Sum average : result )
-            average.accept( observer );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void stop()
-    {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void changed( final String filename )
-    {
-    }
+    void notify( String item, int count );
 }

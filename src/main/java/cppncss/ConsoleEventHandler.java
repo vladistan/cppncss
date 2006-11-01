@@ -31,6 +31,7 @@ package cppncss;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import cppncss.analyzer.EventHandler;
 import tools.Options;
 
 /**

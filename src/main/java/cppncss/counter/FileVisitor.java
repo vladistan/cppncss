@@ -30,7 +30,7 @@ package cppncss.counter;
 
 import cppast.AbstractVisitor;
 import cppast.AstTranslationUnit;
-import cppncss.FileObserver;
+import cppncss.analyzer.FileObserver;
 
 /**
  * Implements a visitor for files.

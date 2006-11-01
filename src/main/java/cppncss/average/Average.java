@@ -26,20 +26,57 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
+package cppncss.average;
 
 /**
- * Defines an observer for sums of measures.
+ * Computes the average of a series of values.
  *
  * @author Mathieu Champlon
  */
-public interface SumObserver
+public final class Average
 {
+    private final String label;
+    private float average;
+    private float count;
+
     /**
-     * Notify of the sum of measures.
+     * Create an average.
      *
-     * @param label the name of the measurement
-     * @param sum the resulting value
+     * @param label the label of the measurement
+     * @param value the first value of the measurement
      */
-    void notify( String label, long sum );
+    public Average( final String label, final int value )
+    {
+        this.label = label;
+        this.average = value;
+        this.count = 1;
+    }
+
+    /**
+     * Add a value to the average and recompute it.
+     * <p>
+     * If the label does not match the label given at creation the measurement is ignored.
+     *
+     * @param label the label of the measurement
+     * @param value the value of the measurement
+     * @return whether the measurement has been accepted or not
+     */
+    public boolean update( final String label, final int value )
+    {
+        if( !this.label.equals( label ) )
+            return false;
+        average = (average * count + value) / (count + 1);
+        ++count;
+        return true;
+    }
+
+    /**
+     * Accept a visitor.
+     *
+     * @param observer an average observer
+     */
+    public void accept( final AverageObserver observer )
+    {
+        observer.notify( label, average );
+    }
 }

@@ -26,39 +26,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
-
-import junit.framework.TestCase;
+package cppncss.sum;
 
 /**
+ * Defines an observer for sums of measures.
+ *
  * @author Mathieu Champlon
  */
-public class MeasureTest extends TestCase
+public interface SumObserver
 {
-    public void testMeasureComparedToItselfEqualsZero()
-    {
-        final Measure measure = new Measure( "item", "filename", 12, 42 );
-        assertEquals( 0, measure.compareTo( measure ) );
-        assertEquals( measure, measure );
-    }
-
-    public void testMeasuresWithDifferentCountsComparedToOneAnotherEqualZero()
-    {
-        final Measure measure1 = new Measure( "item", "filename", 12, 42 );
-        final Measure measure2 = new Measure( "item", "filename", 12, 17 );
-        assertEquals( 0, measure1.compareTo( measure2 ) );
-        assertEquals( 0, measure2.compareTo( measure1 ) );
-        assertFalse( measure1.equals( measure2 ) );
-        assertFalse( measure2.equals( measure1 ) );
-    }
-
-    public void testDifferentsMeasuresWithSameCountComparedToOneAnotherEqualOne()
-    {
-        final Measure measure1 = new Measure( "item 1", "filename 1", 12, 42 );
-        final Measure measure2 = new Measure( "item 2", "filename 2", 17, 42 );
-        assertEquals( 1, measure1.compareTo( measure2 ) );
-        assertEquals( 1, measure2.compareTo( measure1 ) );
-        assertFalse( measure1.equals( measure2 ) );
-        assertFalse( measure2.equals( measure1 ) );
-    }
+    /**
+     * Notify of the sum of measures.
+     *
+     * @param label the name of the measurement
+     * @param sum the resulting value
+     */
+    void notify( String label, long sum );
 }

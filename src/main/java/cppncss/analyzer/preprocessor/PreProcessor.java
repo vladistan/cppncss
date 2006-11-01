@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss.preprocessor;
+package cppncss.analyzer.preprocessor;
 
 import java.io.Reader;
 import java.util.Stack;

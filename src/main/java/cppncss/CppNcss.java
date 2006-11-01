@@ -37,11 +37,17 @@ import tools.Options;
 import tools.Usage;
 import cppast.ParserVisitor;
 import cppast.VisitorComposite;
+import cppncss.analyzer.Analyzer;
+import cppncss.analyzer.FileObserver;
+import cppncss.analyzer.FileObserverComposite;
+import cppncss.average.AverageCollector;
 import cppncss.counter.CcnCounter;
 import cppncss.counter.FileVisitor;
 import cppncss.counter.FunctionCounter;
 import cppncss.counter.FunctionVisitor;
 import cppncss.counter.NcssCounter;
+import cppncss.measure.MeasureCollector;
+import cppncss.sum.SumCollector;
 
 /**
  * Provides code measures for C++.

@@ -26,21 +26,54 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss.preprocessor;
-
-import cppast.Token;
+package cppncss.sum;
 
 /**
- * Defines a token provider.
+ * Sums a series of values.
  *
  * @author Mathieu Champlon
  */
-public interface TokenProvider
+public final class Sum
 {
+    private final String label;
+    private long sum;
+
     /**
-     * Retrieve the next available token.
+     * Create a sum.
      *
-     * @return the next token
+     * @param label the measurement label
+     * @param value the initial value of the sum
      */
-    Token next();
+    public Sum( final String label, final int value )
+    {
+        this.label = label;
+        this.sum = value;
+    }
+
+    /**
+     * Add a value to the sum.
+     * <p>
+     * If the label does not match the label given at creation the measurement is ignored.
+     *
+     * @param label the label of the measurement
+     * @param value the value of the measurement
+     * @return whether the measurement has been accepted or not
+     */
+    public boolean update( final String label, final int value )
+    {
+        if( !this.label.equals( label ) )
+            return false;
+        sum += value;
+        return true;
+    }
+
+    /**
+     * Accept a visitor.
+     *
+     * @param observer an average observer
+     */
+    public void accept( final SumObserver observer )
+    {
+        observer.notify( label, sum );
+    }
 }

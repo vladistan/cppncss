@@ -26,54 +26,36 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
+package cppncss.analyzer;
+
+import java.util.Collection;
+import java.util.Vector;
 
 /**
- * Sums a series of values.
+ * Provides a composite for file observers.
  *
  * @author Mathieu Champlon
  */
-public final class Sum
+public final class FileObserverComposite implements FileObserver
 {
-    private final String label;
-    private long sum;
+    private final Vector<FileObserver> observers = new Vector<FileObserver>();
 
     /**
-     * Create a sum.
+     * Create a file observer composite.
      *
-     * @param label the measurement label
-     * @param value the initial value of the sum
+     * @param observers a list of observers
      */
-    public Sum( final String label, final int value )
+    public FileObserverComposite( final Collection< ? extends FileObserver> observers )
     {
-        this.label = label;
-        this.sum = value;
+        this.observers.addAll( observers );
     }
 
     /**
-     * Add a value to the sum.
-     * <p>
-     * If the label does not match the label given at creation the measurement is ignored.
-     *
-     * @param label the label of the measurement
-     * @param value the value of the measurement
-     * @return whether the measurement has been accepted or not
+     * {@inheritDoc}
      */
-    public boolean update( final String label, final int value )
+    public void changed( final String filename )
     {
-        if( !this.label.equals( label ) )
-            return false;
-        sum += value;
-        return true;
-    }
-
-    /**
-     * Accept a visitor.
-     *
-     * @param observer an average observer
-     */
-    public void accept( final SumObserver observer )
-    {
-        observer.notify( label, sum );
+        for( FileObserver observer : observers )
+            observer.changed( filename );
     }
 }

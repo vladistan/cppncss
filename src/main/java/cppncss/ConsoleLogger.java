@@ -31,6 +31,9 @@ package cppncss;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Locale;
+import cppncss.average.AverageObserver;
+import cppncss.measure.MeasureObserver;
+import cppncss.sum.SumObserver;
 
 /**
  * Implements a console measure logger.

@@ -26,48 +26,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
+package cppncss.analyzer.preprocessor;
+
+import cppast.Token;
 
 /**
+ * Defines a token provider.
+ *
  * @author Mathieu Champlon
  */
-public interface EventHandler
+public interface TokenProvider
 {
     /**
-     * Notify a start event.
-     */
-    void started();
-
-    /**
-     * Notify an end event.
+     * Retrieve the next available token.
      *
-     * @param parsed number of files parsed
-     * @param total total number of files
+     * @return the next token
      */
-    void finished( int parsed, int total );
-
-    /**
-     * Notify an error.
-     *
-     * @param filename the location of the error
-     * @param throwable the error
-     * @param reason the description of the error
-     */
-    void error( String filename, Throwable throwable, String reason );
-
-    /**
-     * Display a diagnostic.
-     *
-     * @param filename the file name
-     * @param line the line number
-     * @param column the column offset
-     */
-    void display( String filename, int line, int column );
-
-    /**
-     * Specify the file being processed.
-     *
-     * @param filename the name of the fle
-     */
-    void changed( String filename );
+    Token next();
 }

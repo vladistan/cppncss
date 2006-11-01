@@ -26,72 +26,40 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
+package cppncss.measure;
 
-import java.util.Vector;
-import org.picocontainer.Startable;
-import cppncss.counter.CounterObserver;
+import cppncss.measure.Measure;
+import junit.framework.TestCase;
 
 /**
- * Collects averages of measures.
- *
  * @author Mathieu Champlon
  */
-public final class AverageCollector implements CounterObserver, FileObserver, Startable
+public class MeasureTest extends TestCase
 {
-    private final Vector<Average> result;
-    private final AverageObserver observer;
-
-    /**
-     * Create an average collector.
-     *
-     * @param observer an observer to be notified of the results
-     */
-    public AverageCollector( final AverageObserver observer )
+    public void testMeasureComparedToItselfEqualsZero()
     {
-        if( observer == null )
-            throw new IllegalArgumentException( "argument 'observer' is null" );
-        this.observer = observer;
-        this.result = new Vector<Average>();
+        final Measure measure = new Measure( "item", "filename", 12, 42 );
+        assertEquals( 0, measure.compareTo( measure ) );
+        assertEquals( measure, measure );
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void notify( final String label, final String item, final int line, final int count )
+    public void testMeasuresWithDifferentCountsComparedToOneAnotherEqualZero()
     {
-        if( !update( label, count ) )
-            result.add( new Average( label, count ) );
+        final Measure measure1 = new Measure( "item", "filename", 12, 42 );
+        final Measure measure2 = new Measure( "item", "filename", 12, 17 );
+        assertEquals( 0, measure1.compareTo( measure2 ) );
+        assertEquals( 0, measure2.compareTo( measure1 ) );
+        assertFalse( measure1.equals( measure2 ) );
+        assertFalse( measure2.equals( measure1 ) );
     }
 
-    private boolean update( final String label, final int count )
+    public void testDifferentsMeasuresWithSameCountComparedToOneAnotherEqualOne()
     {
-        for( Average average : result )
-            if( average.update( label, count ) )
-                return true;
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void start()
-    {
-        for( Average average : result )
-            average.accept( observer );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void stop()
-    {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void changed( final String filename )
-    {
+        final Measure measure1 = new Measure( "item 1", "filename 1", 12, 42 );
+        final Measure measure2 = new Measure( "item 2", "filename 2", 17, 42 );
+        assertEquals( 1, measure1.compareTo( measure2 ) );
+        assertEquals( 1, measure2.compareTo( measure1 ) );
+        assertFalse( measure1.equals( measure2 ) );
+        assertFalse( measure2.equals( measure1 ) );
     }
 }

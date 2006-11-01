@@ -26,28 +26,35 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss.preprocessor;
+package cppncss.analyzer.preprocessor;
 
 import java.util.Stack;
+import cppast.ParserTokenManager;
 import cppast.Token;
 
 /**
- * Manages define pre-proprecessing.
+ * Manages macro pre-processing.
  *
  * @author Mathieu Champlon
  */
-public final class Define extends AbstractTokenFilter
+public final class Macro extends AbstractTokenFilter
 {
+    private final TokenProvider provider;
+
     /**
-     * Create a define definition.
+     * Create a macro.
      *
+     * @param provider the token provider to retrieve subsequent tokens
      * @param buffer the token stack where to output filtered tokens
      * @param name the define symbol
      * @param value the define value
      */
-    public Define( final Stack<Token> buffer, final String name, final String value )
+    public Macro( final TokenProvider provider, final Stack<Token> buffer, final String name, final String value )
     {
         super( buffer, name, value );
+        if( provider == null )
+            throw new IllegalArgumentException( "parameter 'provider' is null" );
+        this.provider = provider;
     }
 
     /**
@@ -57,9 +64,34 @@ public final class Define extends AbstractTokenFilter
     {
         if( matches( token.image ) )
         {
-            insert( token );
+            final Token next = provider.next();
+            if( next.kind == ParserTokenManager.LPARENTHESIS )
+                replace( token );
+            else
+                undo( token, next );
             return true;
         }
         return false;
+    }
+
+    private void replace( final Token token )
+    {
+        erase();
+        insert( token );
+    }
+
+    private void erase()
+    {
+        Token token = null;
+        int level = 1;
+        do
+        {
+            token = provider.next();
+            if( token.kind == ParserTokenManager.LPARENTHESIS )
+                ++level;
+            if( token.kind == ParserTokenManager.RPARENTHESIS )
+                --level;
+        }
+        while( level != 0 || token.kind != ParserTokenManager.RPARENTHESIS );
     }
 }
