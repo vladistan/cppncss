@@ -26,20 +26,73 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss.sum;
+package cppncss.measure;
+
+import java.util.Vector;
+import org.picocontainer.Startable;
+import cppncss.analyzer.FileObserver;
+import cppncss.counter.CounterObserver;
 
 /**
- * Defines an observer for sums of measures.
+ * Collects sums of measures.
  *
  * @author Mathieu Champlon
  */
-public interface SumObserver
+public final class SumCollector implements CounterObserver, FileObserver, Startable
 {
+    private final Vector<Sum> result;
+    private final SumObserver observer;
+
     /**
-     * Notify of the sum of measures.
+     * Create a sum collector.
      *
-     * @param label the name of the measurement
-     * @param sum the resulting value
+     * @param observer an observer to be notified of the results
      */
-    void notify( String label, long sum );
+    public SumCollector( final SumObserver observer )
+    {
+        if( observer == null )
+            throw new IllegalArgumentException( "argument 'observer' is null" );
+        this.observer = observer;
+        this.result = new Vector<Sum>();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void notify( final String label, final String item, final int line, final int count )
+    {
+        if( !update( label, count ) )
+            result.add( new Sum( label, count ) );
+    }
+
+    private boolean update( final String label, final int count )
+    {
+        for( Sum average : result )
+            if( average.update( label, count ) )
+                return true;
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void start()
+    {
+        for( Sum average : result )
+            average.accept( observer );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void stop()
+    {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void changed( final String filename )
+    {
+    }
 }

@@ -40,14 +40,14 @@ import cppast.VisitorComposite;
 import cppncss.analyzer.Analyzer;
 import cppncss.analyzer.FileObserver;
 import cppncss.analyzer.FileObserverComposite;
-import cppncss.average.AverageCollector;
 import cppncss.counter.CcnCounter;
 import cppncss.counter.FileVisitor;
 import cppncss.counter.FunctionCounter;
 import cppncss.counter.FunctionVisitor;
 import cppncss.counter.NcssCounter;
+import cppncss.measure.AverageCollector;
 import cppncss.measure.MeasureCollector;
-import cppncss.sum.SumCollector;
+import cppncss.measure.SumCollector;
 
 /**
  * Provides code measures for C++.

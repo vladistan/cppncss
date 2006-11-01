@@ -26,73 +26,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss.average;
-
-import java.util.Vector;
-import org.picocontainer.Startable;
-import cppncss.analyzer.FileObserver;
-import cppncss.counter.CounterObserver;
+package cppncss.measure;
 
 /**
- * Collects averages of measures.
+ * Defines an observer of averages of measures.
  *
  * @author Mathieu Champlon
  */
-public final class AverageCollector implements CounterObserver, FileObserver, Startable
+public interface AverageObserver
 {
-    private final Vector<Average> result;
-    private final AverageObserver observer;
-
     /**
-     * Create an average collector.
+     * Notify of the average of measures.
      *
-     * @param observer an observer to be notified of the results
+     * @param label the name of the measurement
+     * @param average the resulting value
      */
-    public AverageCollector( final AverageObserver observer )
-    {
-        if( observer == null )
-            throw new IllegalArgumentException( "argument 'observer' is null" );
-        this.observer = observer;
-        this.result = new Vector<Average>();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void notify( final String label, final String item, final int line, final int count )
-    {
-        if( !update( label, count ) )
-            result.add( new Average( label, count ) );
-    }
-
-    private boolean update( final String label, final int count )
-    {
-        for( Average average : result )
-            if( average.update( label, count ) )
-                return true;
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void start()
-    {
-        for( Average average : result )
-            average.accept( observer );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void stop()
-    {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void changed( final String filename )
-    {
-    }
+    void notify( String label, float average );
 }
