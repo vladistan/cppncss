@@ -67,6 +67,16 @@ public final class AsciiResultOutput implements MeasureObserver, AverageObserver
         printHeaders( this.labels );
     }
 
+    private void printHeaders( final List<String> labels )
+    {
+        System.out.println();
+        System.out.print( "Nr. " );
+        for( String label : labels )
+            if( !label.startsWith( item ) )
+                System.out.print( label + " " );
+        System.out.println( item );
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -79,16 +89,6 @@ public final class AsciiResultOutput implements MeasureObserver, AverageObserver
         current %= labels.size();
         if( current == 0 )
             printItem( item );
-    }
-
-    private void printHeaders( final List<String> labels )
-    {
-        System.out.println();
-        System.out.print( "Nr. " );
-        for( String label : labels )
-            if( !label.startsWith( item ) )
-                System.out.print( label + " " );
-        System.out.println( item );
     }
 
     private void printIndex( final int index )
