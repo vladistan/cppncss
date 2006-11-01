@@ -28,6 +28,7 @@
 
 package cppncss;
 
+import java.io.PrintStream;
 import java.util.List;
 import java.util.Locale;
 import cppncss.measure.AverageObserver;
@@ -35,7 +36,7 @@ import cppncss.measure.MeasureObserver;
 import cppncss.measure.SumObserver;
 
 /**
- * Outputs ascii results to System.out.
+ * Outputs ascii results.
  *
  * @author Mathieu Champlon
  */
@@ -44,18 +45,31 @@ public final class AsciiResultOutput implements MeasureObserver, AverageObserver
     private int current;
     private int index;
     private final String item;
+    private final PrintStream stream;
     private List<String> labels;
 
     /**
-     * Create an ascii result output.
+     * Create an ascii result output to System.out.
      *
      * @param item the name of the measured item
      */
     public AsciiResultOutput( final String item )
     {
+        this( System.out, item );
+    }
+
+    /**
+     * Create an ascii result output to a given stream.
+     *
+     * @param stream the output print stream
+     * @param item the name of the measured item
+     */
+    public AsciiResultOutput( final PrintStream stream, final String item )
+    {
         this.current = 0;
         this.index = 0;
         this.item = item;
+        this.stream = stream;
     }
 
     /**
@@ -69,12 +83,12 @@ public final class AsciiResultOutput implements MeasureObserver, AverageObserver
 
     private void printHeaders( final List<String> labels )
     {
-        System.out.println();
-        System.out.print( "Nr. " );
+        stream.println();
+        stream.print( "Nr. " );
         for( String label : labels )
             if( !label.startsWith( item ) )
-                System.out.print( label + " " );
-        System.out.println( item );
+                stream.print( label + " " );
+        stream.println( item );
     }
 
     /**
@@ -93,19 +107,19 @@ public final class AsciiResultOutput implements MeasureObserver, AverageObserver
 
     private void printIndex( final int index )
     {
-        System.out.format( "%3d", index );
+        stream.format( "%3d", index );
     }
 
     private void printMeasurement( final String label, final int count )
     {
         if( !label.startsWith( item ) )
-            System.out.format( " %" + label.length() + "d", count );
+            stream.format( " %" + label.length() + "d", count );
     }
 
     private void printItem( final String item )
     {
-        System.out.format( " %s", item );
-        System.out.println();
+        stream.format( " %s", item );
+        stream.println();
     }
 
     /**
@@ -115,8 +129,8 @@ public final class AsciiResultOutput implements MeasureObserver, AverageObserver
     {
         if( !label.startsWith( item ) )
         {
-            System.out.format( Locale.US, "Average %s %s: %.2f", item, label, average );
-            System.out.println();
+            stream.format( Locale.US, "Average %s %s: %.2f", item, label, average );
+            stream.println();
         }
     }
 
@@ -125,6 +139,6 @@ public final class AsciiResultOutput implements MeasureObserver, AverageObserver
      */
     public void notify( final String label, final long sum )
     {
-        System.out.println( item + " " + label + ": " + sum );
+        stream.println( item + " " + label + ": " + sum );
     }
 }
