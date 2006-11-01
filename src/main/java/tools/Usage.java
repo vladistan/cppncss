@@ -24,8 +24,6 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- * $Id: $
  */
 
 package tools;
@@ -55,7 +53,7 @@ public final class Usage
      * @param url the application site url
      * @param version the application version
      */
-    public Usage( final String name, final String url, String version )
+    public Usage( final String name, final String url, final String version )
     {
         this.name = name;
         this.url = url;
