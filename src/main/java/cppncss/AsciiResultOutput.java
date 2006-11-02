@@ -44,7 +44,7 @@ public final class AsciiResultOutput implements MeasureObserver, AverageObserver
 {
     private int current;
     private int index;
-    private final String item;
+    private final String type;
     private final PrintStream stream;
     private List<String> labels;
 
@@ -62,13 +62,13 @@ public final class AsciiResultOutput implements MeasureObserver, AverageObserver
      * Create an ascii result output to a given stream.
      *
      * @param stream the output print stream
-     * @param item the name of the measured item
+     * @param type the name of the type of measured item
      */
-    public AsciiResultOutput( final PrintStream stream, final String item )
+    public AsciiResultOutput( final PrintStream stream, final String type )
     {
         this.current = 0;
         this.index = 0;
-        this.item = item;
+        this.type = type;
         this.stream = stream;
     }
 
@@ -86,9 +86,9 @@ public final class AsciiResultOutput implements MeasureObserver, AverageObserver
         stream.println();
         stream.print( "Nr. " );
         for( String label : labels )
-            if( !label.startsWith( item ) )
+            if( !label.startsWith( type ) )
                 stream.print( label + " " );
-        stream.println( item );
+        stream.println( type );
     }
 
     /**
@@ -112,7 +112,7 @@ public final class AsciiResultOutput implements MeasureObserver, AverageObserver
 
     private void printMeasurement( final String label, final int count )
     {
-        if( !label.startsWith( item ) )
+        if( !label.startsWith( type ) )
             stream.format( " %" + label.length() + "d", count );
     }
 
@@ -127,9 +127,9 @@ public final class AsciiResultOutput implements MeasureObserver, AverageObserver
      */
     public void notify( final String label, final float average )
     {
-        if( !label.startsWith( item ) )
+        if( !label.startsWith( type ) )
         {
-            stream.format( Locale.US, "Average %s %s: %.2f", item, label, average );
+            stream.format( Locale.US, "Average %s %s: %.2f", type, label, average );
             stream.println();
         }
     }
@@ -139,6 +139,6 @@ public final class AsciiResultOutput implements MeasureObserver, AverageObserver
      */
     public void notify( final String label, final long sum )
     {
-        stream.println( item + " " + label + ": " + sum );
+        stream.println( type + " " + label + ": " + sum );
     }
 }

@@ -47,7 +47,7 @@ public class AsciiResultOutputTest extends EasyMockTestCase
     protected void setUp() throws Exception
     {
         stream = new ByteArrayOutputStream();
-        output = new AsciiResultOutput( new PrintStream( stream ), "item" );
+        output = new AsciiResultOutput( new PrintStream( stream ), "type" );
     }
 
     private Vector<String> makeLabels()
@@ -61,7 +61,7 @@ public class AsciiResultOutputTest extends EasyMockTestCase
     public void testNotifyLabelsOutputsFormattedHeader()
     {
         output.notify( makeLabels() );
-        assertEquals( LINE_SEPARATOR + "Nr. label 1 label 2 item" + LINE_SEPARATOR, stream.toString() );
+        assertEquals( LINE_SEPARATOR + "Nr. label 1 label 2 type" + LINE_SEPARATOR, stream.toString() );
     }
 
     public void testNotifyAllMeasurementsOutputsCountsAndItem()
@@ -82,7 +82,7 @@ public class AsciiResultOutputTest extends EasyMockTestCase
         output.notify( makeLabels() );
         stream.reset();
         output.notify( "label", 12l );
-        assertEquals( "item label: 12" + LINE_SEPARATOR, stream.toString() );
+        assertEquals( "type label: 12" + LINE_SEPARATOR, stream.toString() );
     }
 
     public void testNotifyAverageOutputsCountsAndLabel()
@@ -90,6 +90,6 @@ public class AsciiResultOutputTest extends EasyMockTestCase
         output.notify( makeLabels() );
         stream.reset();
         output.notify( "label", 12f );
-        assertEquals( "Average item label: 12.00" + LINE_SEPARATOR, stream.toString() );
+        assertEquals( "Average type label: 12.00" + LINE_SEPARATOR, stream.toString() );
     }
 }
