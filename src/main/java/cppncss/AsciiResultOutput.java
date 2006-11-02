@@ -51,11 +51,11 @@ public final class AsciiResultOutput implements MeasureObserver, AverageObserver
     /**
      * Create an ascii result output to System.out.
      *
-     * @param item the name of the measured item
+     * @param type the name of the measured item
      */
-    public AsciiResultOutput( final String item )
+    public AsciiResultOutput( final String type )
     {
-        this( System.out, item );
+        this( System.out, type );
     }
 
     /**
