@@ -38,6 +38,13 @@ import cppast.Parser;
  */
 public class CcnTest extends EasyMockTestCase
 {
+    /**
+     * Tested object.
+     */
+    private CcnCounter counter;
+    /**
+     * Mock objects.
+     */
     private CounterObserver observer;
 
     /**
@@ -46,24 +53,25 @@ public class CcnTest extends EasyMockTestCase
     protected void setUp()
     {
         observer = createMock( CounterObserver.class );
-    }
-
-    private void parse( final String data ) throws ParseException
-    {
-        new Parser( new StringReader( data ) ).translation_unit().jjtAccept(
-                new FunctionVisitor( new CcnCounter( observer ) ), null );
+        counter = new CcnCounter( observer );
     }
 
     private void assertCcn( final int expected, final String content ) throws ParseException
     {
-        observer.notify( "CCN", "MyFunction()", 1, expected );
+        observer.notify( "CCN", "my item", 42, expected );
         replay();
-        parse( content );
+        new Parser( new StringReader( content ) ).translation_unit().jjtAccept( counter, null );
+        counter.flush( "my item", 42 );
     }
 
     public void testFunctionWithEmptyBodyHasCcnValueOfOne() throws ParseException
     {
         assertCcn( 1, "void MyFunction() {}" );
+    }
+
+    public void testTwoFunctionsWithEmptyBodyHaveCcnValueOfTwo() throws ParseException
+    {
+        assertCcn( 2, "void MyFunction() {} void MyOtherFunction() {}" );
     }
 
     public void testIfStatementIncrementsCcnByOne() throws ParseException
@@ -136,11 +144,8 @@ public class CcnTest extends EasyMockTestCase
         assertCcn( 4, "void MyFunction() { i ? (j && k) : (l || m); }" );
     }
 
-    public void testCcnFromMethodOfClassDefinedOnStackDoesNotAddUp() throws ParseException
+    public void testCcnFromMethodOfClassDefinedOnStackAddsUp() throws ParseException
     {
-        observer.notify( "CCN", "MyFunction()", 1, 1 );
-        observer.notify( "CCN", "MyClass::MyMethod()", 1, 2 );
-        replay();
-        parse( "void MyFunction() { class MyClass{ void MyMethod() { if(i); } }; }" );
+        assertCcn( 3, "void MyFunction() { class MyClass{ void MyMethod() { if(i); } }; }" );
     }
 }

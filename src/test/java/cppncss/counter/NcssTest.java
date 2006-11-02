@@ -38,6 +38,13 @@ import cppast.Parser;
  */
 public class NcssTest extends EasyMockTestCase
 {
+    /**
+     * Tested object.
+     */
+    private NcssCounter counter;
+    /**
+     * Mock objects.
+     */
     private CounterObserver observer;
 
     /**
@@ -46,14 +53,15 @@ public class NcssTest extends EasyMockTestCase
     protected void setUp()
     {
         observer = createMock( CounterObserver.class );
+        counter = new NcssCounter( observer );
     }
 
     private void assertNcss( final int expected, final String content ) throws ParseException
     {
-        observer.notify( "NCSS", null, 1, expected );
+        observer.notify( "NCSS", "my item", 42, expected );
         replay();
-        new Parser( new StringReader( content ) ).translation_unit().jjtAccept(
-                new FileVisitor( new NcssCounter( observer ) ), null );
+        new Parser( new StringReader( content ) ).translation_unit().jjtAccept( counter, null );
+        counter.flush( "my item", 42 );
         verify();
         reset();
     }
