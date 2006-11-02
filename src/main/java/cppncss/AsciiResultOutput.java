@@ -42,11 +42,11 @@ import cppncss.measure.SumObserver;
  */
 public final class AsciiResultOutput implements MeasureObserver, AverageObserver, SumObserver
 {
+    private final PrintStream stream;
+    private final String type;
+    private List<String> labels;
     private int current;
     private int index;
-    private final String type;
-    private final PrintStream stream;
-    private List<String> labels;
 
     /**
      * Create an ascii result output to System.out.
@@ -66,10 +66,10 @@ public final class AsciiResultOutput implements MeasureObserver, AverageObserver
      */
     public AsciiResultOutput( final PrintStream stream, final String type )
     {
+        this.stream = stream;
+        this.type = type;
         this.current = 0;
         this.index = 0;
-        this.type = type;
-        this.stream = stream;
     }
 
     /**
