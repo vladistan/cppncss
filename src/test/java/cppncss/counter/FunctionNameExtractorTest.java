@@ -33,6 +33,7 @@ package cppncss.counter;
 import java.io.StringReader;
 import junit.framework.TestCase;
 import cppast.AstTranslationUnit;
+import cppast.Node;
 import cppast.ParseException;
 import cppast.Parser;
 
@@ -43,8 +44,8 @@ public class FunctionNameExtractorTest extends TestCase
 {
     private String extract( final String data ) throws ParseException
     {
-        final AstTranslationUnit node = new Parser( new StringReader( data ) ).translation_unit();
-        return (String)new FunctionNameExtractor().visit( node, null );
+        final Node node = new Parser( new StringReader( data ) ).translation_unit();
+        return (String)node.jjtAccept( new FunctionNameExtractor(), null );
     }
 
     public void testNotFunctionReturnsNull() throws ParseException
@@ -217,5 +218,15 @@ public class FunctionNameExtractorTest extends TestCase
     public void testParenthesisOperatorDefinition() throws ParseException
     {
         assertEquals( "MyClass::operator()( int )", extract( "void MyClass::operator()( int i ) {}" ) );
+    }
+
+    public void testMethodOfClassDefinedInFunction() throws ParseException
+    {
+        final String content = "void MyFunction() { class MyClass{ void MyMethod(); }; }";
+        final AstTranslationUnit root = new Parser( new StringReader( content ) ).translation_unit();
+        final Node node = root.jjtGetChild( 0 ).jjtGetChild( 2 ).jjtGetChild( 0 );
+        final String actual = (String)node.jjtAccept( new FunctionNameExtractor(), null );
+        // final String actual = (String)new FunctionNameExtractor().visit( node, null );
+        assertEquals( "MyFunction()::MyClass::MyMethod()", actual );
     }
 }

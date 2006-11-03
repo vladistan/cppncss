@@ -47,7 +47,7 @@ public class AsciiResultOutputTest extends EasyMockTestCase
     protected void setUp() throws Exception
     {
         stream = new ByteArrayOutputStream();
-        output = new AsciiResultOutput( new PrintStream( stream ), "type" );
+        output = new AsciiResultOutput( new PrintStream( stream ) );
     }
 
     private Vector<String> makeLabels()
@@ -60,36 +60,36 @@ public class AsciiResultOutputTest extends EasyMockTestCase
 
     public void testNotifyLabelsOutputsFormattedHeader()
     {
-        output.notify( makeLabels() );
+        output.notify( "type", makeLabels() );
         assertEquals( LINE_SEPARATOR + "Nr. label 1 label 2 type" + LINE_SEPARATOR, stream.toString() );
     }
 
     public void testNotifyAllMeasurementsOutputsCountsAndItem()
     {
-        output.notify( makeLabels() );
+        output.notify( "type", makeLabels() );
         stream.reset();
-        output.notify( "item", 12 );
-        output.notify( "item", 42 );
+        output.notify( "type", "item", 12 );
+        output.notify( "type", "item", 42 );
         assertEquals( "  1      12      42 item" + LINE_SEPARATOR, stream.toString() );
         stream.reset();
-        output.notify( "another item", 7 );
-        output.notify( "another item", 51 );
+        output.notify( "type", "another item", 7 );
+        output.notify( "type", "another item", 51 );
         assertEquals( "  2       7      51 another item" + LINE_SEPARATOR, stream.toString() );
     }
 
     public void testNotifySumOutputsCountsAndLabel()
     {
-        output.notify( makeLabels() );
+        output.notify( "type", makeLabels() );
         stream.reset();
-        output.notify( "label", 12l );
+        output.notify( "type", "label", 12l );
         assertEquals( "type label: 12" + LINE_SEPARATOR, stream.toString() );
     }
 
     public void testNotifyAverageOutputsCountsAndLabel()
     {
-        output.notify( makeLabels() );
+        output.notify( "type", makeLabels() );
         stream.reset();
-        output.notify( "label", 12f );
+        output.notify( "type", "label", 12f );
         assertEquals( "Average type label: 12.00" + LINE_SEPARATOR, stream.toString() );
     }
 }

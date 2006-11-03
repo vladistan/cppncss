@@ -31,31 +31,25 @@ package cppncss;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Locale;
-import cppncss.measure.AverageObserver;
-import cppncss.measure.MeasureObserver;
-import cppncss.measure.SumObserver;
 
 /**
- * Outputs ascii results.
+ * Implements a text result output.
  *
  * @author Mathieu Champlon
  */
-public final class AsciiResultOutput implements MeasureObserver, AverageObserver, SumObserver
+public final class AsciiResultOutput implements ResultOutput
 {
     private final PrintStream stream;
-    private final String type;
     private List<String> labels;
     private int current;
     private int index;
 
     /**
      * Create an ascii result output to System.out.
-     *
-     * @param type the name of the measured item
      */
-    public AsciiResultOutput( final String type )
+    public AsciiResultOutput()
     {
-        this( System.out, type );
+        this( System.out );
     }
 
     /**
@@ -64,10 +58,9 @@ public final class AsciiResultOutput implements MeasureObserver, AverageObserver
      * @param stream the output print stream
      * @param type the name of the type of measured item
      */
-    public AsciiResultOutput( final PrintStream stream, final String type )
+    public AsciiResultOutput( final PrintStream stream )
     {
         this.stream = stream;
-        this.type = type;
         this.current = 0;
         this.index = 0;
     }
@@ -75,13 +68,13 @@ public final class AsciiResultOutput implements MeasureObserver, AverageObserver
     /**
      * {@inheritDoc}
      */
-    public void notify( final List<String> labels )
+    public void notify( final String type, final List<String> labels )
     {
         this.labels = labels;
-        printHeaders( this.labels );
+        printHeaders( type, labels );
     }
 
-    private void printHeaders( final List<String> labels )
+    private void printHeaders( final String type, final List<String> labels )
     {
         stream.println();
         stream.print( "Nr. " );
@@ -94,11 +87,11 @@ public final class AsciiResultOutput implements MeasureObserver, AverageObserver
     /**
      * {@inheritDoc}
      */
-    public void notify( final String item, final int count )
+    public void notify( final String type, final String item, final int count )
     {
         if( current == 0 )
             printIndex( ++index );
-        printMeasurement( labels.get( current ), count );
+        printMeasurement( type, labels.get( current ), count );
         ++current;
         current %= labels.size();
         if( current == 0 )
@@ -110,7 +103,7 @@ public final class AsciiResultOutput implements MeasureObserver, AverageObserver
         stream.format( "%3d", index );
     }
 
-    private void printMeasurement( final String label, final int count )
+    private void printMeasurement( final String type, final String label, final int count )
     {
         if( !label.startsWith( type ) )
             stream.format( " %" + label.length() + "d", count );
@@ -125,7 +118,7 @@ public final class AsciiResultOutput implements MeasureObserver, AverageObserver
     /**
      * {@inheritDoc}
      */
-    public void notify( final String label, final float average )
+    public void notify( final String type, final String label, final float average )
     {
         if( !label.startsWith( type ) )
         {
@@ -137,7 +130,7 @@ public final class AsciiResultOutput implements MeasureObserver, AverageObserver
     /**
      * {@inheritDoc}
      */
-    public void notify( final String label, final long sum )
+    public void notify( final String type, final String label, final long sum )
     {
         stream.println( type + " " + label + ": " + sum );
     }

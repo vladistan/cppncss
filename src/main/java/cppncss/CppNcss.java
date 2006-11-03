@@ -65,16 +65,17 @@ public final class CppNcss
         if( !check( args ) )
             return;
         final MutablePicoContainer parent = new DefaultPicoContainer();
+        parent.registerComponentImplementation( Options.class, Options.class, new Parameter[]
+        {
+            new ConstantParameter( args )
+        } );
+        parent.registerComponentImplementation( ResultOutput.class, AsciiResultOutput.class );
         registerCollector( parent, "Function", FunctionVisitor.class, MeasureCollector.class );
         registerCollector( parent, "Function", FunctionVisitor.class, AverageCollector.class );
         registerCollector( parent, "File", FileVisitor.class, MeasureCollector.class );
         registerCollector( parent, "File", FileVisitor.class, AverageCollector.class );
         registerCollector( parent, "Project", FileVisitor.class, SumCollector.class );
         final MutablePicoContainer main = new DefaultPicoContainer( parent );
-        main.registerComponentImplementation( Options.class, Options.class, new Parameter[]
-        {
-            new ConstantParameter( args )
-        } );
         main.registerComponentImplementation( VisitorComposite.class, VisitorComposite.class, new Parameter[]
         {
             new ComponentParameter( ParserVisitor.class, false )
@@ -93,11 +94,11 @@ public final class CppNcss
     private static void registerCollector( final MutablePicoContainer parent, final String name,
             final Class visitorType, final Class collectorType )
     {
-        final MutablePicoContainer local = new DefaultPicoContainer();
+        final MutablePicoContainer local = new DefaultPicoContainer( parent );
         local.registerComponentImplementation( collectorType );
-        local.registerComponentImplementation( AsciiResultOutput.class, AsciiResultOutput.class, new Parameter[]
+        local.registerComponentImplementation( ResultOutputAdapter.class, ResultOutputAdapter.class, new Parameter[]
         {
-            new ConstantParameter( name )
+                new ConstantParameter( name ), new ComponentParameter( ResultOutput.class )
         } );
         registerVisitor( parent, local, visitorType, NcssCounter.class );
         registerVisitor( parent, local, visitorType, CcnCounter.class );

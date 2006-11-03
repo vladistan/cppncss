@@ -5,7 +5,7 @@
   <groupId>net.sourceforge.cppncss</groupId>
   <artifactId>cppncss</artifactId>
   <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.1-SNAPSHOT</version>
   <name>CppNcss</name>
   <inceptionYear>2006</inceptionYear>
   <url>http://${pom.artifactId}.sourceforge.net</url>
@@ -80,6 +80,18 @@
       <version>1.2</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <version>1.6.1</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>jaxen</groupId>
+      <artifactId>jaxen</artifactId>
+      <version>1.1-beta-11</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <pluginRepositories>
     <pluginRepository>
@@ -137,6 +149,32 @@
           </execution>
         </executions>
       </plugin>
+      <!--
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>appassembler-maven-plugin</artifactId>
+        <configuration>
+          <repositoryLayout>flat</repositoryLayout>
+          <repositoryName>lib</repositoryName>
+          <installArtifacts>false</installArtifacts>
+          <extraJvmArguments>-Xms256m -Xmx512m</extraJvmArguments>
+          <programs>
+            <program>
+              <mainClass>cppncss.CppNcss</mainClass>
+              <name>cppncss</name>
+            </program>
+          </programs>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>assemble</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
