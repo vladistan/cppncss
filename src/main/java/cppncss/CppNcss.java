@@ -69,7 +69,11 @@ public final class CppNcss
         {
             new ConstantParameter( args )
         } );
-        parent.registerComponentImplementation( ResultOutput.class, AsciiResultOutput.class );
+        final Options options = (Options)parent.getComponentInstance( Options.class );
+        if( options.hasOption( "x" ) )
+            parent.registerComponentImplementation( ResultOutput.class, XmlResultOutput.class );
+        else
+            parent.registerComponentImplementation( ResultOutput.class, AsciiResultOutput.class );
         registerCollector( parent, "Function", FunctionVisitor.class, MeasureCollector.class );
         registerCollector( parent, "Function", FunctionVisitor.class, AverageCollector.class );
         registerCollector( parent, "File", FileVisitor.class, MeasureCollector.class );
@@ -133,6 +137,7 @@ public final class CppNcss
         usage.addOption( "v", "be extra verbose" );
         usage.addOption( "k", "keep going on parsing errors" );
         usage.addOption( "r", "process directories recursively" );
+        usage.addOption( "x", "output result as xml" );
         usage.addOption( "D<symbol>[=[<value>]]", "replace define <symbol> with <value>" );
         usage.addOption( "M<symbol>[=[<value>]]", "replace macro <symbol> with <value>" );
         usage.addOption( "p=<path>", "remove <path> prefix when displaying file names" );
