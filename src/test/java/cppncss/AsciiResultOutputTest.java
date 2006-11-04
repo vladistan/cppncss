@@ -53,15 +53,21 @@ public class AsciiResultOutputTest extends EasyMockTestCase
     private Vector<String> makeLabels()
     {
         final Vector<String> labels = new Vector<String>();
-        labels.add( "label 1" );
-        labels.add( "label 2" );
+        labels.add( "first label" );
+        labels.add( "second label" );
         return labels;
     }
 
     public void testNotifyLabelsOutputsFormattedHeader()
     {
         output.notify( "type", makeLabels() );
-        assertEquals( LINE_SEPARATOR + "Nr. label 1 label 2 type" + LINE_SEPARATOR, stream.toString() );
+        assertEquals( LINE_SEPARATOR + "Nr. first label second label type" + LINE_SEPARATOR, stream.toString() );
+    }
+
+    public void testTypeNameBeingTheBeginningOfLabelIsFilteredromOutput()
+    {
+        output.notify( "first", makeLabels() );
+        assertEquals( LINE_SEPARATOR + "Nr. second label first" + LINE_SEPARATOR, stream.toString() );
     }
 
     public void testNotifyAllMeasurementsOutputsCountsAndItem()
@@ -70,11 +76,20 @@ public class AsciiResultOutputTest extends EasyMockTestCase
         stream.reset();
         output.notify( "type", "item", 12 );
         output.notify( "type", "item", 42 );
-        assertEquals( "  1      12      42 item" + LINE_SEPARATOR, stream.toString() );
+        assertEquals( "  1          12           42 item" + LINE_SEPARATOR, stream.toString() );
         stream.reset();
         output.notify( "type", "another item", 7 );
         output.notify( "type", "another item", 51 );
-        assertEquals( "  2       7      51 another item" + LINE_SEPARATOR, stream.toString() );
+        assertEquals( "  2           7           51 another item" + LINE_SEPARATOR, stream.toString() );
+    }
+
+    public void testMeasurementTypeNameBeingTheBeginningOfLabelIsFilteredromOutput()
+    {
+        output.notify( "type", makeLabels() );
+        stream.reset();
+        output.notify( "first", "item", 12 );
+        output.notify( "type", "item", 42 );
+        assertEquals( "  1           42 item" + LINE_SEPARATOR, stream.toString() );
     }
 
     public void testNotifySumOutputsCountsAndLabel()
@@ -91,5 +106,13 @@ public class AsciiResultOutputTest extends EasyMockTestCase
         stream.reset();
         output.notify( "type", "label", 12f );
         assertEquals( "Average type label: 12.00" + LINE_SEPARATOR, stream.toString() );
+    }
+
+    public void testAverageTypeNameBeingTheBeginningOfLabelIsFilteredromOutput()
+    {
+        output.notify( "type", makeLabels() );
+        stream.reset();
+        output.notify( "lab", "label", 12f );
+        assertEquals( "", stream.toString() );
     }
 }
