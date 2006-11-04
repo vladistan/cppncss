@@ -64,7 +64,7 @@ public class AsciiResultOutputTest extends EasyMockTestCase
         assertEquals( LINE_SEPARATOR + "Nr. first label second label type" + LINE_SEPARATOR, stream.toString() );
     }
 
-    public void testTypeNameBeingTheBeginningOfLabelIsFilteredromOutput()
+    public void testTypeNameBeingTheBeginningOfLabelIsSkipped()
     {
         output.notify( "first", makeLabels() );
         assertEquals( LINE_SEPARATOR + "Nr. second label first" + LINE_SEPARATOR, stream.toString() );
@@ -83,7 +83,7 @@ public class AsciiResultOutputTest extends EasyMockTestCase
         assertEquals( "  2           7           51 another item" + LINE_SEPARATOR, stream.toString() );
     }
 
-    public void testMeasurementTypeNameBeingTheBeginningOfLabelIsFilteredromOutput()
+    public void testMeasurementTypeNameBeingTheBeginningOfLabelIsSkipped()
     {
         output.notify( "type", makeLabels() );
         stream.reset();
@@ -108,7 +108,7 @@ public class AsciiResultOutputTest extends EasyMockTestCase
         assertEquals( "Average type label: 12.00" + LINE_SEPARATOR, stream.toString() );
     }
 
-    public void testAverageTypeNameBeingTheBeginningOfLabelIsFilteredromOutput()
+    public void testAverageTypeNameBeingTheBeginningOfLabelIsSkipped()
     {
         output.notify( "type", makeLabels() );
         stream.reset();

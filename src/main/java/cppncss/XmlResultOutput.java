@@ -49,7 +49,7 @@ public final class XmlResultOutput implements ResultOutput, Startable
     private final PrintStream stream;
     private int current;
     private int index;
-    private int max;
+    private List<String> labels;
     private final Element root;
     private Element node;
 
@@ -71,7 +71,6 @@ public final class XmlResultOutput implements ResultOutput, Startable
         this.stream = stream;
         this.current = 0;
         this.index = 0;
-        this.max = 0;
         final Document document = DocumentHelper.createDocument();
         this.node = document.addElement( "cppncss" );
         this.root = node;
@@ -84,17 +83,18 @@ public final class XmlResultOutput implements ResultOutput, Startable
     {
         node = root.addElement( "measure" );
         node.addAttribute( "type", type );
-        max = labels.size();
-        printHeaders( labels );
+        this.labels = labels;
+        printHeaders( type, labels );
     }
 
-    private void printHeaders( final List<String> labels )
+    private void printHeaders( final String type, final List<String> labels )
     {
         node = node.addElement( "labels" );
         node.addElement( "label" ).addText( "Nr." );
         for( String label : labels )
-            node.addElement( "label" ).addText( label );
-        node = node.getParent();
+            if( !label.startsWith( type ) )
+                node.addElement( "label" ).addText( label );
+        printItem();
     }
 
     /**
@@ -103,17 +103,30 @@ public final class XmlResultOutput implements ResultOutput, Startable
     public void notify( final String type, final String item, final int count )
     {
         if( current == 0 )
-        {
-            ++index;
-            node = node.addElement( "item" );
-            node.addAttribute( "name", item );
-            node.addElement( "value" ).addText( new Integer( index ).toString() );
-        }
-        node.addElement( "value" ).addText( new Integer( count ).toString() );
+            printIndex( item, ++index );
+        printMeasurement( type, labels.get( current ), count );
         ++current;
-        current %= max;
+        current %= labels.size();
         if( current == 0 )
-            node = node.getParent();
+            printItem();
+    }
+
+    private void printItem()
+    {
+        node = node.getParent();
+    }
+
+    private void printMeasurement( final String type, final String label, final int count )
+    {
+        if( !label.startsWith( type ) )
+            node.addElement( "value" ).addText( new Integer( count ).toString() );
+    }
+
+    private void printIndex( final String item, final int index )
+    {
+        node = node.addElement( "item" );
+        node.addAttribute( "name", item );
+        node.addElement( "value" ).addText( new Integer( index ).toString() );
     }
 
     /**
@@ -121,8 +134,9 @@ public final class XmlResultOutput implements ResultOutput, Startable
      */
     public void notify( final String type, final String label, final float average )
     {
-        node.addElement( "average" ).addAttribute( "label", label ).addAttribute( "value",
-                new Float( average ).toString() );
+        if( !label.startsWith( type ) )
+            node.addElement( "average" ).addAttribute( "label", label ).addAttribute( "value",
+                    new Float( average ).toString() );
         // stream.format( Locale.US, " <average label=\"%s\" value=\"%.2f\"/>", label, average );
     }
 

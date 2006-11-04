@@ -55,22 +55,21 @@ public class XmlResultOutputTest extends EasyMockTestCase
         output = new XmlResultOutput( new PrintStream( stream ) );
     }
 
-    private Vector<String> makeLabels()
-    {
-        final Vector<String> labels = new Vector<String>();
-        labels.add( "label 1" );
-        labels.add( "label 2" );
-        return labels;
-    }
-
     private Document parse( final String content ) throws DocumentException
     {
         return new SAXReader().read( new StringReader( content ) );
     }
 
+    private Vector<String> makeLabels()
+    {
+        final Vector<String> labels = new Vector<String>();
+        labels.add( "first label" );
+        labels.add( "second label" );
+        return labels;
+    }
+
     public void testNoNotificationGeneratesEmptyRootElement() throws DocumentException
     {
-        output.start();
         output.stop();
         final Document document = parse( stream.toString() );
         assertNotNull( document.selectSingleNode( "/cppncss" ) );
@@ -85,8 +84,20 @@ public class XmlResultOutputTest extends EasyMockTestCase
         final List labels = document.selectNodes( "/cppncss/measure/labels/label" );
         assertEquals( 3, labels.size() );
         assertEquals( "Nr.", ((Node)labels.get( 0 )).getText() );
-        assertEquals( "label 1", ((Node)labels.get( 1 )).getText() );
-        assertEquals( "label 2", ((Node)labels.get( 2 )).getText() );
+        assertEquals( "first label", ((Node)labels.get( 1 )).getText() );
+        assertEquals( "second label", ((Node)labels.get( 2 )).getText() );
+    }
+
+    public void testTypeNameBeingTheBeginningOfLabelIsSkipped() throws DocumentException
+    {
+        output.notify( "first", makeLabels() );
+        output.stop();
+        final Document document = parse( stream.toString() );
+        assertNotNull( document.selectSingleNode( "/cppncss/measure/labels" ) );
+        final List labels = document.selectNodes( "/cppncss/measure/labels/label" );
+        assertEquals( 2, labels.size() );
+        assertEquals( "Nr.", ((Node)labels.get( 0 )).getText() );
+        assertEquals( "second label", ((Node)labels.get( 1 )).getText() );
     }
 
     public void testItemNotificationsGenerateItemElement() throws DocumentException
@@ -105,6 +116,21 @@ public class XmlResultOutputTest extends EasyMockTestCase
         assertEquals( "45", ((Node)values.get( 2 )).getText() );
     }
 
+    public void testMeasurementTypeNameBeingTheBeginningOfLabelIsSkipped() throws DocumentException
+    {
+        output.notify( "type", makeLabels() );
+        output.notify( "first", "item", 12 );
+        output.notify( "type", "item", 42 );
+        output.stop();
+        final Document document = parse( stream.toString() );
+        assertEquals( "type", document.selectSingleNode( "/cppncss/measure/@type" ).getText() );
+        assertNotNull( document.selectSingleNode( "/cppncss/measure/item" ) );
+        final List values = document.selectNodes( "/cppncss/measure/item/value" );
+        assertEquals( 2, values.size() );
+        assertEquals( "1", ((Node)values.get( 0 )).getText() );
+        assertEquals( "42", ((Node)values.get( 1 )).getText() );
+    }
+
     public void testAverageNotificationGeneratesAverageElement() throws DocumentException
     {
         output.notify( "type", makeLabels() );
@@ -113,6 +139,15 @@ public class XmlResultOutputTest extends EasyMockTestCase
         final Document document = parse( stream.toString() );
         assertEquals( "my label", document.selectSingleNode( "/cppncss/measure/average/@label" ).getText() );
         assertEquals( "12.41782", document.selectSingleNode( "/cppncss/measure/average/@value" ).getText() );
+    }
+
+    public void testAverageTypeNameBeingTheBeginningOfLabelIsSkipped() throws DocumentException
+    {
+        output.notify( "type", makeLabels() );
+        output.notify( "lab", "label", 12f );
+        output.stop();
+        final Document document = parse( stream.toString() );
+        assertNull( document.selectSingleNode( "/cppncss/measure/average" ) );
     }
 
     public void testSumNotificationGeneratesSumElement() throws DocumentException
