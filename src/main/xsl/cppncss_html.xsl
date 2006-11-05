@@ -28,10 +28,10 @@
       <xsl:for-each select="measure">
 
         <h1><xsl:value-of select="@type"/>s</h1>
-        <p>Top 30
+        <h2>Top 30
         <xsl:call-template name='to-lower'>
             <xsl:with-param name='string' select='@type'/>
-        </xsl:call-template>s containing the most NCSS.</p>
+        </xsl:call-template>s containing the most NCSS</h2>
         <table class="bodyTable">
           <tr class="a">
             <xsl:for-each select="labels/label">
@@ -50,7 +50,7 @@
           </xsl:for-each>
         </table>
 
-        <p>Averages</p>
+        <h2>Averages</h2>
         <table class="bodyTable">
           <xsl:for-each select="average">
           <tr>
