@@ -23,15 +23,6 @@
           <td><xsl:value-of select="@value"/></td>
         </tr>
         </xsl:for-each>
-        <xsl:for-each select="measure/average">
-        <tr>
-          <xsl:call-template name="alternated-row"/>
-          <th>Average <xsl:value-of select="@label"/> per <xsl:call-template name='to-lower'>
-            <xsl:with-param name='string' select='../@type'/>
-        </xsl:call-template></th>
-          <td><xsl:value-of select="@value"/></td>
-        </tr>
-        </xsl:for-each>
       </table>
 
       <xsl:for-each select="measure">
@@ -55,6 +46,17 @@
             <td><xsl:value-of select="."/></td>
             </xsl:for-each>
             <td><xsl:value-of select="@name"/></td>
+          </tr>
+          </xsl:for-each>
+        </table>
+
+        <p>Averages</p>
+        <table class="bodyTable">
+          <xsl:for-each select="average">
+          <tr>
+            <xsl:call-template name="alternated-row"/>
+            <th>Average <xsl:value-of select="@label"/></th>
+            <td><xsl:value-of select="@value"/></td>
           </tr>
           </xsl:for-each>
         </table>
