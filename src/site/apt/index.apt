@@ -6,7 +6,7 @@
 
 Overview
 
- CppNcss provides various measurements by statically analyzing C++ source code, mainly aiming at evaluating maintainability.
+ CppNcss provides various measurements (also known as metrics) by statically analyzing C++ source code, mainly aiming at evaluating maintainability.
 
  The results provided can be used to focus review and indicate opportunities for refactoring.\
  Such a proactive approach to development will increase quality through design improvements, easier testing, and reduction of defects.
@@ -23,14 +23,14 @@ Overview
 
   * command line driven
 
+  * XML output
+
+  * XSL stylesheets for HTML output
+
 * Planned features
 
   * number of classes
 
   * number of packages/modules
-
-  * XML output
-
-  * XSL stylesheets for HTML output
 
   * {{{http://ant.apache.org}Ant}} task
