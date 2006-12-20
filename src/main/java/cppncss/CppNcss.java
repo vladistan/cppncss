@@ -28,6 +28,9 @@
 
 package cppncss;
 
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.Parameter;
 import org.picocontainer.defaults.ComponentParameter;
@@ -70,6 +73,16 @@ public final class CppNcss
             new ConstantParameter( args )
         } );
         final Options options = (Options)parent.getComponentInstance( Options.class );
+        if( !options.hasOption( "f" ) )
+            parent.registerComponentInstance( System.out.toString(), System.out );
+        else
+        {
+            parent.registerComponentImplementation( PrintStream.class, PrintStream.class );
+            parent.registerComponentImplementation( OutputStream.class, FileOutputStream.class, new Parameter[]
+            {
+                new ConstantParameter( options.getOptionPropertyValues( "f" ).get( 0 ) )
+            } );
+        }
         if( options.hasOption( "x" ) )
             parent.registerComponentImplementation( ResultOutput.class, XmlResultOutput.class );
         else
@@ -138,6 +151,7 @@ public final class CppNcss
         usage.addOption( "k", "keep going on parsing errors" );
         usage.addOption( "r", "process directories recursively" );
         usage.addOption( "x", "output result as xml" );
+        usage.addOption( "f=<file>", "output result to the given file" );
         usage.addOption( "D<symbol>[=[<value>]]", "replace define <symbol> with <value>" );
         usage.addOption( "M<symbol>[=[<value>]]", "replace macro <symbol> with <value>" );
         usage.addOption( "p=<path>", "remove <path> prefix when displaying file names" );

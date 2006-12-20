@@ -44,6 +44,18 @@ public class OptionsTest extends TestCase
         {
             "-option"
         } ).hasOption( "option" ) );
+        assertTrue( new Options( new String[]
+        {
+            "-optionvalue"
+        } ).hasOption( "option" ) );
+        assertTrue( new Options( new String[]
+        {
+            "-option=value"
+        } ).hasOption( "option" ) );
+        assertTrue( new Options( new String[]
+        {
+            "-optionproperty=value"
+        } ).hasOption( "option" ) );
     }
 
     public void testRetrieveOptionValue()

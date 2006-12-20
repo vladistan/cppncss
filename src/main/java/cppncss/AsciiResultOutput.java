@@ -45,14 +45,6 @@ public final class AsciiResultOutput implements ResultOutput
     private int index;
 
     /**
-     * Create an ascii result output to System.out.
-     */
-    public AsciiResultOutput()
-    {
-        this( System.out );
-    }
-
-    /**
      * Create an ascii result output to a given stream.
      *
      * @param stream the output print stream

@@ -54,14 +54,6 @@ public final class XmlResultOutput implements ResultOutput, Startable
     private Element node;
 
     /**
-     * Create an xml result output to System.out.
-     */
-    public XmlResultOutput()
-    {
-        this( System.out );
-    }
-
-    /**
      * Create an xml result output.
      *
      * @param stream the stream to write to

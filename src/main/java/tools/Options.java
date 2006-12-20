@@ -73,7 +73,7 @@ public class Options
     public final boolean hasOption( final String name )
     {
         for( int i = 0; i < args.length; ++i )
-            if( args[i].equals( '-' + name ) )
+            if( args[i].startsWith( '-' + name ) )
                 return true;
         return false;
     }
