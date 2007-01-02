@@ -67,6 +67,11 @@ public final class CppNcss
     {
         if( !check( args ) )
             return;
+        run( args, EventOutput.class );
+    }
+
+    public static void run( final String[] args, Class logger )
+    {
         final MutablePicoContainer parent = new DefaultPicoContainer();
         parent.registerComponentImplementation( Options.class, Options.class, new Parameter[]
         {
@@ -101,7 +106,7 @@ public final class CppNcss
         {
             new ComponentParameter( FileObserver.class, false )
         } );
-        main.registerComponentImplementation( EventOutput.class );
+        main.registerComponentImplementation( logger );
         main.registerComponentImplementation( Analyzer.class );
         main.addChildContainer( parent );
         main.start();

@@ -29,10 +29,10 @@
 package cppncss;
 
 import java.io.File;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
-import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.AntlibDefinition;
 import org.apache.tools.ant.types.FileSet;
 
@@ -41,7 +41,7 @@ import org.apache.tools.ant.types.FileSet;
  */
 public final class CppNcssTask extends AntlibDefinition
 {
-    private final Vector filesets = new Vector();
+    private final List<FileSet> filesets = new ArrayList<FileSet>();
     private String prefix;
     private String filename;
 
@@ -80,25 +80,25 @@ public final class CppNcssTask extends AntlibDefinition
     {
         if( filename == null )
             throw new BuildException( "Missing 'tofile' attribute to specify output file name" );
-        CppNcss.main( buildArgs() );
+        CppNcss.run( buildArgs(), AntLogger.class );
     }
 
     private String[] buildArgs()
     {
-        final Vector args = new Vector();
+        final List<String> args = new ArrayList<String>();
         args.add( "-x" );
         args.add( "-f=" + filename );
         if( prefix != null )
             args.add( "-p=" + prefix );
         for( int j = 0; j < filesets.size(); ++j )
         {
-            final FileSet set = (FileSet)filesets.elementAt( j );
+            final FileSet set = filesets.get( j );
             final DirectoryScanner scanner = set.getDirectoryScanner( getProject() );
             final String directory = format( scanner.getBasedir().toString() );
             final String[] files = scanner.getIncludedFiles();
             for( int i = 0; i < files.length; ++i )
                 args.add( directory + files[i] );
         }
-        return (String[])args.toArray( new String[args.size()] );
+        return args.toArray( new String[args.size()] );
     }
 }
