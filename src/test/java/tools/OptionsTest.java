@@ -58,6 +58,16 @@ public class OptionsTest extends TestCase
         } ).hasOption( "option" ) );
     }
 
+    public void testHasOptionIsFalseWhenOptionNotEnabled()
+    {
+        assertFalse( new Options( new String[]
+        {} ).hasOption( "option" ) );
+        assertFalse( new Options( new String[]
+        {
+            "opt"
+        } ).hasOption( "option" ) );
+    }
+
     public void testRetrieveOptionValue()
     {
         final List actual = new Options( new String[]

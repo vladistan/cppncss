@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Vector;
 
 /**
- * Implemens a simple program options handler.
+ * Implements a simple program options handler.
  *
  * @author Mathieu Champlon
  */
@@ -80,7 +80,7 @@ public class Options
 
     private boolean isOption( final String arg, final String name )
     {
-        return arg.length() > name.length() + 1 && arg.startsWith( '-' + name );
+        return arg.startsWith( '-' + name );
     }
 
     /**
