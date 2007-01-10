@@ -42,6 +42,8 @@ import org.apache.tools.ant.types.FileSet;
 public final class CppNcssTask extends AntlibDefinition
 {
     private final List<FileSet> filesets = new ArrayList<FileSet>();
+    private final List<Define> defines = new ArrayList<Define>();
+    private final List<Macro> macros = new ArrayList<Macro>();
     private String prefix;
     private String filename;
 
@@ -73,6 +75,22 @@ public final class CppNcssTask extends AntlibDefinition
         return result;
     }
 
+    public void addConfiguredDefine( final Define define )
+    {
+        if( define.getName() == null )
+            throw new BuildException( "Missing required 'name' for define" );
+        defines.add( define );
+    }
+
+    public void addConfiguredMacro( final Macro macro )
+    {
+        if( macro.getName() == null )
+            throw new BuildException( "Missing required 'name' for macro" );
+        if( macro.getValue() == null )
+            throw new BuildException( "Missing required 'value' for macro" );
+        macros.add( macro );
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -90,15 +108,43 @@ public final class CppNcssTask extends AntlibDefinition
         args.add( "-f=" + filename );
         if( prefix != null )
             args.add( "-p=" + prefix );
-        for( int j = 0; j < filesets.size(); ++j )
+        for( FileSet fileset : filesets )
         {
-            final FileSet set = filesets.get( j );
-            final DirectoryScanner scanner = set.getDirectoryScanner( getProject() );
+            final DirectoryScanner scanner = fileset.getDirectoryScanner( getProject() );
             final String directory = format( scanner.getBasedir().toString() );
-            final String[] files = scanner.getIncludedFiles();
-            for( int i = 0; i < files.length; ++i )
-                args.add( directory + files[i] );
+            for( String file : scanner.getIncludedFiles() )
+                args.add( directory + file );
         }
         return args.toArray( new String[args.size()] );
+    }
+
+    public static class Define
+    {
+        private String name;
+
+        public final void setName( final String name )
+        {
+            this.name = name;
+        }
+
+        public final String getName()
+        {
+            return name;
+        }
+    }
+
+    public final static class Macro extends Define
+    {
+        private String value;
+
+        public void setValue( final String value )
+        {
+            this.value = value;
+        }
+
+        public String getValue()
+        {
+            return value;
+        }
     }
 }
