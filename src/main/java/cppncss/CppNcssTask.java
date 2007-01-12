@@ -102,7 +102,7 @@ public final class CppNcssTask extends AntlibDefinition
             throw new BuildException( "Missing 'tofile' attribute to specify output file name" );
         try
         {
-            new CppNcss( new Options( buildArgs() ), new AntLogger( getProject() ) ).run();
+            new CppNcss( new Options( buildArgs() ), new AntLogger( this ) ).run();
         }
         catch( FileNotFoundException e )
         {
