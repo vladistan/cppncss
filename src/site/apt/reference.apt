@@ -81,7 +81,7 @@ Reference
  Of course, comments don't get counted.\
  Closing brackets also never get counted, the same applies to blocks in general.
 
-* Cyclomatic Complexity Number (CNN)
+* Cyclomatic Complexity Number (CCN)
 
  CCN is also know as McCabe Metric.\
  There exists a much hyped theory behind it based on graph theory, but it all comes down to simply counting <if>, <for>, <while>, etc.. statements in a method.\
