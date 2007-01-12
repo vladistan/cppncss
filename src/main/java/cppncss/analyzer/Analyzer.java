@@ -37,7 +37,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
-import org.picocontainer.Startable;
 import tools.Options;
 import cppast.ParseException;
 import cppast.Parser;
@@ -50,7 +49,10 @@ import cppncss.analyzer.preprocessor.PreProcessor;
  *
  * @author Mathieu Champlon
  */
-public final class Analyzer implements Startable
+/**
+ * @author Mathieu Champlon
+ */
+public final class Analyzer
 {
     private static final String[] DECLARATIONS =
     {
@@ -182,20 +184,13 @@ public final class Analyzer implements Startable
     }
 
     /**
-     * {@inheritDoc}
+     * Run the analyzis.
      */
-    public void start()
+    public void run()
     {
         handler.started();
         final int parsed = process( visitor );
         handler.finished( parsed, files.size() );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void stop()
-    {
     }
 
     private int process( final ParserVisitor visitor )

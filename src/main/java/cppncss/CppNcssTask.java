@@ -29,12 +29,14 @@
 package cppncss;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.taskdefs.AntlibDefinition;
 import org.apache.tools.ant.types.FileSet;
+import tools.Options;
 
 /**
  * @author Mathieu Champlon
@@ -98,7 +100,14 @@ public final class CppNcssTask extends AntlibDefinition
     {
         if( filename == null )
             throw new BuildException( "Missing 'tofile' attribute to specify output file name" );
-        CppNcss.run( buildArgs(), AntLogger.class );
+        try
+        {
+            new CppNcss( new Options( buildArgs() ), new AntLogger( getProject() ) ).run();
+        }
+        catch( FileNotFoundException e )
+        {
+            throw new BuildException( e );
+        }
     }
 
     private String[] buildArgs()

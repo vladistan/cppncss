@@ -26,45 +26,16 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss.analyzer;
-
-import java.util.List;
-import java.util.ArrayList;
+package tools;
 
 /**
- * Provides a composite for file observers.
+ * Defines a startable and stopable component.
  *
  * @author Mathieu Champlon
  */
-public final class FileObserverComposite implements FileObserver
+public interface Component
 {
-    private final List<FileObserver> observers = new ArrayList<FileObserver>();
+    void start();
 
-    /**
-     * Create a file observer composite.
-     *
-     * @param observers a list of observers
-     */
-    public FileObserverComposite()
-    {
-    }
-
-    /**
-     * Add a file observer to the composite.
-     *
-     * @param observer the observer to add
-     */
-    public void register( FileObserver observer )
-    {
-        observers.add( observer );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void changed( final String filename )
-    {
-        for( FileObserver observer : observers )
-            observer.changed( filename );
-    }
+    void stop();
 }

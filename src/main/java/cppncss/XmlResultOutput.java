@@ -37,14 +37,14 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
-import org.picocontainer.Startable;
+import tools.Component;
 
 /**
  * Implements an xml result output.
  *
  * @author Mathieu Champlon
  */
-public final class XmlResultOutput implements ResultOutput, Startable
+public final class XmlResultOutput implements ResultOutput, Component
 {
     private final PrintStream stream;
     private int current;
@@ -128,7 +128,7 @@ public final class XmlResultOutput implements ResultOutput, Startable
     {
         if( !label.startsWith( type ) )
             node.addElement( "average" ).addAttribute( "label", label ).addAttribute( "value",
-                    new Float( average ).toString() );
+                    new Float( average ).toString() ); // FIXME format 2 decimals
         // stream.format( Locale.US, " <average label=\"%s\" value=\"%.2f\"/>", label, average );
     }
 

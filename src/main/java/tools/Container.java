@@ -26,45 +26,35 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss.analyzer;
+package tools;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Provides a composite for file observers.
+ * Implements a very simple container able to start and stop registered components.
  *
  * @author Mathieu Champlon
  */
-public final class FileObserverComposite implements FileObserver
+public final class Container
 {
-    private final List<FileObserver> observers = new ArrayList<FileObserver>();
+    private List<Component> components = new ArrayList<Component>();
 
-    /**
-     * Create a file observer composite.
-     *
-     * @param observers a list of observers
-     */
-    public FileObserverComposite()
+    public <T extends Component> T register( final T component )
     {
+        components.add( component );
+        return component;
     }
 
-    /**
-     * Add a file observer to the composite.
-     *
-     * @param observer the observer to add
-     */
-    public void register( FileObserver observer )
+    public void start()
     {
-        observers.add( observer );
+        for( Component component : components )
+            component.start();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void changed( final String filename )
+    public void stop()
     {
-        for( FileObserver observer : observers )
-            observer.changed( filename );
+        for( int index = components.size() - 1; index >= 0; --index )
+            components.get( index ).stop();
     }
 }

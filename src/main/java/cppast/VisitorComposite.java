@@ -28,8 +28,8 @@
 
 package cppast;
 
-import java.util.Collection;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Provides a composite for parser visitors.
@@ -38,29 +38,21 @@ import java.util.Vector;
  */
 public final class VisitorComposite implements ParserVisitor
 {
-    private final Vector<ParserVisitor> visitors = new Vector<ParserVisitor>();
+    private final List<ParserVisitor> visitors = new ArrayList<ParserVisitor>();
 
     /**
      * Create a visitor composite.
      *
      * @param visitors visitors to initialy register
      */
-    public VisitorComposite( final Collection< ? extends ParserVisitor> visitors )
-    {
-        this.visitors.addAll( visitors );
-    }
-
-    /**
-     * Create a visitor composite.
-     */
     public VisitorComposite()
     {
     }
 
     /**
-     * Add a visitor.
+     * Add a visitor to the composite.
      *
-     * @param visitor the visitor
+     * @param visitor the visitor to add
      */
     public void register( final ParserVisitor visitor )
     {

@@ -24,47 +24,19 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * $Id: $
  */
 
-package cppncss.analyzer;
+package cppncss.measure;
 
-import java.util.List;
-import java.util.ArrayList;
+import tools.Component;
+import cppncss.analyzer.FileObserver;
+import cppncss.counter.CounterObserver;
 
 /**
- * Provides a composite for file observers.
- *
  * @author Mathieu Champlon
  */
-public final class FileObserverComposite implements FileObserver
+public interface Collector extends CounterObserver, FileObserver, Component
 {
-    private final List<FileObserver> observers = new ArrayList<FileObserver>();
-
-    /**
-     * Create a file observer composite.
-     *
-     * @param observers a list of observers
-     */
-    public FileObserverComposite()
-    {
-    }
-
-    /**
-     * Add a file observer to the composite.
-     *
-     * @param observer the observer to add
-     */
-    public void register( FileObserver observer )
-    {
-        observers.add( observer );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void changed( final String filename )
-    {
-        for( FileObserver observer : observers )
-            observer.changed( filename );
-    }
 }

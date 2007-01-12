@@ -29,16 +29,13 @@
 package cppncss.measure;
 
 import java.util.Vector;
-import org.picocontainer.Startable;
-import cppncss.analyzer.FileObserver;
-import cppncss.counter.CounterObserver;
 
 /**
  * Collects sums of measures.
  *
  * @author Mathieu Champlon
  */
-public final class SumCollector implements CounterObserver, FileObserver, Startable
+public final class SumCollector implements Collector
 {
     private final Vector<Sum> result;
     private final SumObserver observer;

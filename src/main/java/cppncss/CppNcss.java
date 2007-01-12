@@ -28,27 +28,22 @@
 
 package cppncss;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.Parameter;
-import org.picocontainer.defaults.ComponentParameter;
-import org.picocontainer.defaults.ConstantParameter;
-import org.picocontainer.defaults.DefaultPicoContainer;
+import tools.Container;
 import tools.Options;
 import tools.Usage;
-import cppast.ParserVisitor;
 import cppast.VisitorComposite;
 import cppncss.analyzer.Analyzer;
-import cppncss.analyzer.FileObserver;
+import cppncss.analyzer.EventHandler;
 import cppncss.analyzer.FileObserverComposite;
 import cppncss.counter.CcnCounter;
-import cppncss.counter.FileVisitor;
 import cppncss.counter.FunctionCounter;
 import cppncss.counter.FunctionVisitor;
 import cppncss.counter.NcssCounter;
 import cppncss.measure.AverageCollector;
+import cppncss.measure.Collector;
 import cppncss.measure.MeasureCollector;
 import cppncss.measure.SumCollector;
 
@@ -59,84 +54,70 @@ import cppncss.measure.SumCollector;
  */
 public final class CppNcss
 {
-    private CppNcss()
+    private final Container container = new Container();
+    private final Analyzer analyzer;
+
+    /**
+     * Create a CppNcss instance.
+     *
+     * @param options the options
+     * @param handler the log handler
+     * @throws FileNotFoundException when the log file fails
+     */
+    public CppNcss( final Options options, final EventHandler handler ) throws FileNotFoundException
     {
+        final ResultOutput output = createOutput( options );
+        final FileObserverComposite observers = new FileObserverComposite();
+        final VisitorComposite visitors = new VisitorComposite();
+        register( new MeasureCollector( new ResultOutputAdapter( "Function", output ) ), visitors, observers );
+        register( new AverageCollector( new ResultOutputAdapter( "Function", output ) ), visitors, observers );
+        register( new MeasureCollector( new ResultOutputAdapter( "File", output ) ), visitors, observers );
+        register( new AverageCollector( new ResultOutputAdapter( "File", output ) ), visitors, observers );
+        register( new SumCollector( new ResultOutputAdapter( "Project", output ) ), visitors, observers );
+        analyzer = new Analyzer( options, visitors, observers, handler );
     }
 
-    public static void main( final String[] args )
+    /**
+     * Run the analyzis.
+     */
+    public void run()
+    {
+        analyzer.run();
+        container.start();
+        container.stop();
+    }
+
+    private void register( final Collector collector, final VisitorComposite visitors,
+            final FileObserverComposite observers )
+    {
+        container.register( collector );
+        observers.register( collector );
+        visitors.register( new FunctionVisitor( new NcssCounter( collector ) ) );
+        visitors.register( new FunctionVisitor( new CcnCounter( collector ) ) );
+        visitors.register( new FunctionVisitor( new FunctionCounter( collector ) ) );
+    }
+
+    private ResultOutput createOutput( final Options options ) throws FileNotFoundException
+    {
+        final PrintStream stream = createStream( options );
+        if( !options.hasOption( "x" ) )
+            return new AsciiResultOutput( stream );
+        return container.register( new XmlResultOutput( stream ) );
+    }
+
+    private PrintStream createStream( final Options options ) throws FileNotFoundException
+    {
+        if( options.hasOption( "f" ) )
+            return new PrintStream( new FileOutputStream( options.getOptionPropertyValues( "f" ).get( 0 ) ) );
+        return System.out;
+    }
+
+    public static void main( final String[] args ) throws FileNotFoundException
     {
         if( !check( args ) )
             return;
-        run( args, EventOutput.class );
-    }
-
-    public static void run( final String[] args, Class logger )
-    {
-        final MutablePicoContainer parent = new DefaultPicoContainer();
-        parent.registerComponentImplementation( Options.class, Options.class, new Parameter[]
-        {
-            new ConstantParameter( args )
-        } );
-        final Options options = (Options)parent.getComponentInstance( Options.class );
-        if( !options.hasOption( "f" ) )
-            parent.registerComponentInstance( System.out.toString(), System.out );
-        else
-        {
-            parent.registerComponentImplementation( PrintStream.class, PrintStream.class );
-            parent.registerComponentImplementation( OutputStream.class, FileOutputStream.class, new Parameter[]
-            {
-                new ConstantParameter( options.getOptionPropertyValues( "f" ).get( 0 ) )
-            } );
-        }
-        if( options.hasOption( "x" ) )
-            parent.registerComponentImplementation( ResultOutput.class, XmlResultOutput.class );
-        else
-            parent.registerComponentImplementation( ResultOutput.class, AsciiResultOutput.class );
-        registerCollector( parent, "Function", FunctionVisitor.class, MeasureCollector.class );
-        registerCollector( parent, "Function", FunctionVisitor.class, AverageCollector.class );
-        registerCollector( parent, "File", FileVisitor.class, MeasureCollector.class );
-        registerCollector( parent, "File", FileVisitor.class, AverageCollector.class );
-        registerCollector( parent, "Project", FileVisitor.class, SumCollector.class );
-        final MutablePicoContainer main = new DefaultPicoContainer( parent );
-        main.registerComponentImplementation( VisitorComposite.class, VisitorComposite.class, new Parameter[]
-        {
-            new ComponentParameter( ParserVisitor.class, false )
-        } );
-        main.registerComponentImplementation( FileObserverComposite.class, FileObserverComposite.class, new Parameter[]
-        {
-            new ComponentParameter( FileObserver.class, false )
-        } );
-        main.registerComponentImplementation( logger );
-        main.registerComponentImplementation( Analyzer.class );
-        main.addChildContainer( parent );
-        main.start();
-        main.stop();
-    }
-
-    private static void registerCollector( final MutablePicoContainer parent, final String name,
-            final Class visitorType, final Class collectorType )
-    {
-        final MutablePicoContainer local = new DefaultPicoContainer( parent );
-        local.registerComponentImplementation( collectorType );
-        local.registerComponentImplementation( ResultOutputAdapter.class, ResultOutputAdapter.class, new Parameter[]
-        {
-                new ConstantParameter( name ), new ComponentParameter( ResultOutput.class )
-        } );
-        registerVisitor( parent, local, visitorType, NcssCounter.class );
-        registerVisitor( parent, local, visitorType, CcnCounter.class );
-        registerVisitor( parent, local, visitorType, FunctionCounter.class );
-        final Object collector = local.getComponentInstance( collectorType );
-        parent.registerComponentInstance( collector.toString(), collector );
-    }
-
-    private static void registerVisitor( final MutablePicoContainer parent, final MutablePicoContainer local,
-            final Class visitorType, final Class counterType )
-    {
-        final MutablePicoContainer inner = new DefaultPicoContainer( local );
-        inner.registerComponentImplementation( counterType );
-        inner.registerComponentImplementation( visitorType );
-        final Object visitor = inner.getComponentInstance( visitorType );
-        parent.registerComponentInstance( visitor.toString(), visitor );
+        final Options options = new Options( args );
+        new CppNcss( options, new EventOutput( options ) ).run();
     }
 
     private static boolean check( final String[] args )
@@ -149,7 +130,7 @@ public final class CppNcss
 
     private static void usage()
     {
-        final Usage usage = new Usage( "cppncss", "http://cppncss.sourceforge.net", "1.0.1" );
+        final Usage usage = new Usage( "cppncss", "http://cppncss.sourceforge.net", "1.0.2" );
         usage.addOption( "h", "print this message" );
         usage.addOption( "d", "print debugging information" );
         usage.addOption( "v", "be extra verbose" );

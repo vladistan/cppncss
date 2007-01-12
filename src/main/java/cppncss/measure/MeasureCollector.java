@@ -30,9 +30,6 @@ package cppncss.measure;
 
 import java.util.TreeSet;
 import java.util.Vector;
-import org.picocontainer.Startable;
-import cppncss.analyzer.FileObserver;
-import cppncss.counter.CounterObserver;
 
 /**
  * Collects measures.
@@ -43,7 +40,7 @@ import cppncss.counter.CounterObserver;
  *
  * @author Mathieu Champlon
  */
-public final class MeasureCollector implements CounterObserver, FileObserver, Startable
+public final class MeasureCollector implements Collector
 {
     private static final int THRESHOLD = 30;
     private final TreeSet<Measure> result;

@@ -29,16 +29,13 @@
 package cppncss.measure;
 
 import java.util.Vector;
-import org.picocontainer.Startable;
-import cppncss.analyzer.FileObserver;
-import cppncss.counter.CounterObserver;
 
 /**
  * Collects averages of measures.
  *
  * @author Mathieu Champlon
  */
-public final class AverageCollector implements CounterObserver, FileObserver, Startable
+public final class AverageCollector implements Collector
 {
     private final Vector<Average> result;
     private final AverageObserver observer;
