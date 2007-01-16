@@ -54,17 +54,11 @@ public final class SymbolTable
      */
     public void openScope( final String name )
     {
-        final Scope scope = findScope( name );
-        if( scope != null )
-            current = scope;
-    }
-
-    private Scope findScope( final String name )
-    {
         final Scope scope = current.getScope( name );
         if( scope != null )
-            return scope;
-        return current.createScope( name );
+            current = scope;
+        else
+            current = current.createScope( name );
     }
 
     /**
