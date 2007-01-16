@@ -29,6 +29,7 @@
 package cppncss;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -40,7 +41,7 @@ import java.util.Locale;
 public final class AsciiResultOutput implements ResultOutput
 {
     private final PrintStream stream;
-    private List<String> labels;
+    private final List<String> labels = new ArrayList<String>();
     private int current;
     private int index;
 
@@ -48,13 +49,10 @@ public final class AsciiResultOutput implements ResultOutput
      * Create an ascii result output to a given stream.
      *
      * @param stream the output print stream
-     * @param type the name of the type of measured item
      */
     public AsciiResultOutput( final PrintStream stream )
     {
         this.stream = stream;
-        this.current = 0;
-        this.index = 0;
     }
 
     /**
@@ -62,7 +60,10 @@ public final class AsciiResultOutput implements ResultOutput
      */
     public void notify( final String type, final List<String> labels )
     {
-        this.labels = labels;
+        this.labels.clear();
+        this.labels.addAll( labels );
+        this.current = 0;
+        this.index = 0;
         printHeaders( type, labels );
     }
 

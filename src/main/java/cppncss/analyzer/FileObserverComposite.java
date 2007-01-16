@@ -41,20 +41,11 @@ public final class FileObserverComposite implements FileObserver
     private final List<FileObserver> observers = new ArrayList<FileObserver>();
 
     /**
-     * Create a file observer composite.
-     *
-     * @param observers a list of observers
-     */
-    public FileObserverComposite()
-    {
-    }
-
-    /**
      * Add a file observer to the composite.
      *
      * @param observer the observer to add
      */
-    public void register( FileObserver observer )
+    public void register( final FileObserver observer )
     {
         observers.add( observer );
     }

@@ -205,7 +205,7 @@ public final class CppNcssTask extends AntlibDefinition
      *
      * @author Mathieu Champlon
      */
-    public final static class Macro extends Define
+    public static final class Macro extends Define
     {
         private String value;
 

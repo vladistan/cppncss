@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Vector;
 import tools.Options;
 import cppast.ParseException;
@@ -64,7 +65,17 @@ public final class Analyzer
     };
     private static final String[] SKIPPED =
     {
-            ".svn", "CVS", "SCCS"
+            ".svn", "CVS", "RCS", "SCCS"
+    };
+    private static final FilenameFilter FILES_FILTER = new FilenameFilter()
+    {
+        public boolean accept( final File directory, final String name )
+        {
+            for( String value : SKIPPED )
+                if( value.equals( name ) )
+                    return false;
+            return true;
+        }
     };
     private final boolean recursive;
     private final boolean force;
@@ -144,13 +155,7 @@ public final class Analyzer
         }
         else if( processDirectory )
         {
-            final String[] content = file.list( new FilenameFilter()
-            {
-                public boolean accept( final File dir, final String name )
-                {
-                    return !isFrom( name, SKIPPED );
-                }
-            } );
+            final String[] content = file.list( FILES_FILTER );
             for( int i = 0; i < content.length; ++i )
             {
                 final String filename = string + File.separatorChar + content[i];
@@ -162,7 +167,7 @@ public final class Analyzer
     private boolean isFrom( final String string, final String[] strings )
     {
         for( int i = 0; i < strings.length; ++i )
-            if( string.toLowerCase().endsWith( strings[i] ) )
+            if( string.toLowerCase( Locale.getDefault() ).endsWith( strings[i] ) )
                 return true;
         return false;
     }

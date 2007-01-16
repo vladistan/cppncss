@@ -46,6 +46,64 @@ import cppast.Token;
  */
 public final class FunctionNameExtractor extends AbstractVisitor
 {
+    private static final Filter FUNCTION_NAME_FILTER = new Filter()
+    {
+        public String decorate( final Token token )
+        {
+            final String value = token.image;
+            switch( token.kind )
+            {
+                case Parser.SCOPE :
+                case Parser.TILDE :
+                    return value;
+            }
+            switch( token.next.kind )
+            {
+                case Parser.SCOPE :
+                case Parser.LPARENTHESIS :
+                case Parser.RPARENTHESIS :
+                case Parser.AMPERSAND :
+                case Parser.STAR :
+                case Parser.LESSTHAN :
+                case Parser.COMMA :
+                    return value;
+            }
+            return value + " ";
+        }
+    };
+    private static final Filter PARAMETER_TYPE_FILTER = new Filter()
+    {
+        public String decorate( final Token token )
+        {
+            final String value = token.image;
+            switch( token.kind )
+            {
+                case Parser.CONST :
+                case Parser.SIGNED :
+                case Parser.UNSIGNED :
+                case Parser.LESSTHAN :
+                case Parser.COMMA :
+                    return value + " ";
+                case Parser.GREATERTHAN :
+                    return " " + value;
+            }
+            return value;
+        }
+    };
+    private static final Filter PARAMETER_TYPE_QUALIFIER_FILTER = new Filter()
+    {
+        public String decorate( final Token token )
+        {
+            final String value = token.image;
+            switch( token.kind )
+            {
+                case Parser.CONST :
+                case Parser.LPARENTHESIS :
+                    return " " + value;
+            }
+            return value;
+        }
+    };
     private boolean isFirstParameter;
 
     /**
@@ -53,31 +111,7 @@ public final class FunctionNameExtractor extends AbstractVisitor
      */
     public Object visit( final AstFunctionName node, final Object data )
     {
-        return node.resolve( build( node, new Filter()
-        {
-            public String decorate( final Token token )
-            {
-                final String value = token.image;
-                switch( token.kind )
-                {
-                    case Parser.SCOPE :
-                    case Parser.TILDE :
-                        return value;
-                }
-                switch( token.next.kind )
-                {
-                    case Parser.SCOPE :
-                    case Parser.LPARENTHESIS :
-                    case Parser.RPARENTHESIS :
-                    case Parser.AMPERSAND :
-                    case Parser.STAR :
-                    case Parser.LESSTHAN :
-                    case Parser.COMMA :
-                        return value;
-                }
-                return value + " ";
-            }
-        } ) );
+        return node.resolve( build( node, FUNCTION_NAME_FILTER ) );
     }
 
     /**
@@ -102,25 +136,7 @@ public final class FunctionNameExtractor extends AbstractVisitor
      */
     public Object visit( final AstParameterType node, final Object data )
     {
-        final String result = " " + build( node, new Filter()
-        {
-            public String decorate( final Token token )
-            {
-                final String value = token.image;
-                switch( token.kind )
-                {
-                    case Parser.CONST :
-                    case Parser.SIGNED :
-                    case Parser.UNSIGNED :
-                    case Parser.LESSTHAN :
-                    case Parser.COMMA :
-                        return value + " ";
-                    case Parser.GREATERTHAN :
-                        return " " + value;
-                }
-                return value;
-            }
-        } );
+        final String result = " " + build( node, PARAMETER_TYPE_FILTER );
         if( !isFirstParameter )
             return data + "," + result;
         isFirstParameter = false;
@@ -132,20 +148,7 @@ public final class FunctionNameExtractor extends AbstractVisitor
      */
     public Object visit( final AstParameterTypeQualifier node, final Object data )
     {
-        return data + build( node, new Filter()
-        {
-            public String decorate( final Token token )
-            {
-                final String value = token.image;
-                switch( token.kind )
-                {
-                    case Parser.CONST :
-                    case Parser.LPARENTHESIS :
-                        return " " + value;
-                }
-                return value;
-            }
-        } );
+        return data + build( node, PARAMETER_TYPE_QUALIFIER_FILTER );
     }
 
     /**

@@ -24,8 +24,6 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- * $Id: $
  */
 
 package cppncss.measure;
@@ -35,6 +33,8 @@ import cppncss.analyzer.FileObserver;
 import cppncss.counter.CounterObserver;
 
 /**
+ * Adapts observers to a single interface.
+ *
  * @author Mathieu Champlon
  */
 public interface Collector extends CounterObserver, FileObserver, Component

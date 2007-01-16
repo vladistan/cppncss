@@ -41,15 +41,6 @@ public final class VisitorComposite implements ParserVisitor
     private final List<ParserVisitor> visitors = new ArrayList<ParserVisitor>();
 
     /**
-     * Create a visitor composite.
-     *
-     * @param visitors visitors to initialy register
-     */
-    public VisitorComposite()
-    {
-    }
-
-    /**
      * Add a visitor to the composite.
      *
      * @param visitor the visitor to add

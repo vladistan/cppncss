@@ -7,4 +7,5 @@
   <Match class="cppast.TokenMgrError" />
   <Match class="cppast.ParserConstants" />
   <Match class="cppast.ParserTreeConstants" />
+  <Match class="cppast.JJTParserState" />
 </FindBugsFilter>

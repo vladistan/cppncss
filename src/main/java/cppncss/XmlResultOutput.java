@@ -31,8 +31,8 @@ package cppncss;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
-import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
@@ -47,10 +47,10 @@ import tools.Component;
 public final class XmlResultOutput implements ResultOutput, Component
 {
     private final PrintStream stream;
+    private final List<String> labels = new ArrayList<String>();
+    private final Element root;
     private int current;
     private int index;
-    private List<String> labels;
-    private final Element root;
     private Element node;
 
     /**
@@ -61,10 +61,7 @@ public final class XmlResultOutput implements ResultOutput, Component
     public XmlResultOutput( final PrintStream stream )
     {
         this.stream = stream;
-        this.current = 0;
-        this.index = 0;
-        final Document document = DocumentHelper.createDocument();
-        this.node = document.addElement( "cppncss" );
+        this.node = DocumentHelper.createDocument().addElement( "cppncss" );
         this.root = node;
     }
 
@@ -73,14 +70,17 @@ public final class XmlResultOutput implements ResultOutput, Component
      */
     public void notify( final String type, final List<String> labels )
     {
-        node = root.addElement( "measure" );
-        node.addAttribute( "type", type );
-        this.labels = labels;
+        this.labels.clear();
+        this.labels.addAll( labels );
+        this.current = 0;
+        this.index = 0;
         printHeaders( type, labels );
     }
 
     private void printHeaders( final String type, final List<String> labels )
     {
+        node = root.addElement( "measure" );
+        node.addAttribute( "type", type );
         node = node.addElement( "labels" );
         node.addElement( "label" ).addText( "Nr." );
         for( String label : labels )
@@ -111,14 +111,14 @@ public final class XmlResultOutput implements ResultOutput, Component
     private void printMeasurement( final String type, final String label, final int count )
     {
         if( !label.startsWith( type ) )
-            node.addElement( "value" ).addText( new Integer( count ).toString() );
+            node.addElement( "value" ).addText( Integer.toString( count ) );
     }
 
     private void printIndex( final String item, final int index )
     {
         node = node.addElement( "item" );
         node.addAttribute( "name", item );
-        node.addElement( "value" ).addText( new Integer( index ).toString() );
+        node.addElement( "value" ).addText( Integer.toString( index ) );
     }
 
     /**
@@ -127,8 +127,8 @@ public final class XmlResultOutput implements ResultOutput, Component
     public void notify( final String type, final String label, final float average )
     {
         if( !label.startsWith( type ) )
-            node.addElement( "average" ).addAttribute( "label", label ).addAttribute( "value",
-                    new Float( average ).toString() ); // FIXME format 2 decimals
+            node.addElement( "average" ).addAttribute( "label", label )
+                    .addAttribute( "value", Float.toString( average ) ); // FIXME format 2 decimals
         // stream.format( Locale.US, " <average label=\"%s\" value=\"%.2f\"/>", label, average );
     }
 
@@ -137,7 +137,7 @@ public final class XmlResultOutput implements ResultOutput, Component
      */
     public void notify( final String type, final String label, final long sum )
     {
-        node.addElement( "sum" ).addAttribute( "label", label ).addAttribute( "value", new Long( sum ).toString() );
+        node.addElement( "sum" ).addAttribute( "label", label ).addAttribute( "value", Long.toString( sum ) );
     }
 
     /**
