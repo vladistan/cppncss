@@ -39,6 +39,8 @@ import org.apache.tools.ant.types.FileSet;
 import tools.Options;
 
 /**
+ * Provides an Apache Ant task implementation for CppNcss.
+ *
  * @author Mathieu Champlon
  */
 public final class CppNcssTask extends AntlibDefinition
@@ -48,6 +50,7 @@ public final class CppNcssTask extends AntlibDefinition
     private final List<Macro> macros = new ArrayList<Macro>();
     private String prefix;
     private String filename;
+    private boolean keepGoing = false;
 
     /**
      * Add a set of source files.
@@ -59,14 +62,40 @@ public final class CppNcssTask extends AntlibDefinition
         filesets.add( fileset );
     }
 
+    /**
+     * Defines a prefix.
+     * <p>
+     * Not required.
+     *
+     * @param prefix the prefix
+     */
     public void setPrefix( final String prefix )
     {
         this.prefix = format( prefix );
     }
 
+    /**
+     * Sets the name of the output file.
+     * <p>
+     * Required.
+     *
+     * @param filename the file name
+     */
     public void setToFile( final String filename )
     {
         this.filename = filename;
+    }
+
+    /**
+     * Set whether the analyzis should stop upon error or not.
+     * <p>
+     * Not required. Default is false.
+     *
+     * @param keepGoing if the analyzis should keep going upon error
+     */
+    public void setKeepGoing( final boolean keepGoing )
+    {
+        this.keepGoing = keepGoing;
     }
 
     private String format( final String path )
@@ -77,6 +106,11 @@ public final class CppNcssTask extends AntlibDefinition
         return result;
     }
 
+    /**
+     * Add a define definition.
+     *
+     * @param define the define
+     */
     public void addConfiguredDefine( final Define define )
     {
         if( define.getName() == null )
@@ -84,6 +118,11 @@ public final class CppNcssTask extends AntlibDefinition
         defines.add( define );
     }
 
+    /**
+     * Add a macro definition.
+     *
+     * @param macro the macro
+     */
     public void addConfiguredMacro( final Macro macro )
     {
         if( macro.getName() == null )
@@ -115,6 +154,8 @@ public final class CppNcssTask extends AntlibDefinition
         final List<String> args = new ArrayList<String>();
         args.add( "-x" );
         args.add( "-f=" + filename );
+        if( keepGoing )
+            args.add( "-k" );
         if( prefix != null )
             args.add( "-p=" + prefix );
         for( FileSet fileset : filesets )
@@ -127,30 +168,64 @@ public final class CppNcssTask extends AntlibDefinition
         return args.toArray( new String[args.size()] );
     }
 
+    /**
+     * Provides a define definition.
+     *
+     * @author Mathieu Champlon
+     */
     public static class Define
     {
         private String name;
 
+        /**
+         * Sets the name.
+         * <p>
+         * Required.
+         *
+         * @param name the name
+         */
         public final void setName( final String name )
         {
             this.name = name;
         }
 
+        /**
+         * Retrieve the name.
+         *
+         * @return the name
+         */
         public final String getName()
         {
             return name;
         }
     }
 
+    /**
+     * Provides a macro definition.
+     *
+     * @author Mathieu Champlon
+     */
     public final static class Macro extends Define
     {
         private String value;
 
+        /**
+         * Sets the macro value.
+         * <p>
+         * Required.
+         *
+         * @param value the value
+         */
         public void setValue( final String value )
         {
             this.value = value;
         }
 
+        /**
+         * Retrieve the value.
+         *
+         * @return the value
+         */
         public String getValue()
         {
             return value;
