@@ -24,88 +24,82 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY  WAY  OUT OF  THE  USE OF  THIS  SOFTWARE, EVEN  IF  ADVISED OF  THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * $Id: $
  */
 
 package cppncss;
 
-import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
- * Implements a text result output.
+ * Captures behaviours common to all result outputs.
  *
  * @author Mathieu Champlon
  */
-public final class AsciiResultOutput extends AbstractResultOutput
+public abstract class AbstractResultOutput implements ResultOutput
 {
-    private final PrintStream stream;
+    private final List<String> labels = new ArrayList<String>();
+    private int current;
+    private int index;
 
     /**
-     * Create an ascii result output to a given stream.
-     *
-     * @param stream the output print stream
+     * {@inheritDoc}
      */
-    public AsciiResultOutput( final PrintStream stream )
+    public void notify( final String type, final List<String> labels )
     {
-        this.stream = stream;
+        this.labels.clear();
+        this.labels.addAll( labels );
+        this.current = 0;
+        this.index = 0;
+        printHeaders( type, labels );
     }
 
     /**
      * {@inheritDoc}
      */
-    protected void printHeaders( final String type, final List<String> labels )
+    public void notify( final String type, final String item, final int count )
     {
-        stream.println();
-        stream.print( "Nr. " );
-        for( String label : labels )
-            if( !label.startsWith( type ) )
-                stream.print( label + " " );
-        stream.println( type );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected void printIndex( final String item, final int index )
-    {
-        stream.format( "%3d", index );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected void printMeasurement( final String label, final int count )
-    {
-        stream.format( " %" + label.length() + "d", count );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected void printItem( final String item )
-    {
-        stream.format( " %s", item );
-        stream.println();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void notify( final String type, final String label, final float average )
-    {
+        if( current == 0 )
+            printIndex( item, ++index );
+        final String label = labels.get( current );
         if( !label.startsWith( type ) )
-        {
-            stream.format( Locale.US, "Average %s %s: %.2f", type, label, average );
-            stream.println();
-        }
+            printMeasurement( label, count );
+        ++current;
+        current %= labels.size();
+        if( current == 0 )
+            printItem( item );
     }
 
     /**
-     * {@inheritDoc}
+     * Print measurements headers.
+     *
+     * @param type the type of the measurement
+     * @param labels a list of all measurement names
      */
-    public void notify( final String type, final String label, final long sum )
-    {
-        stream.println( type + " " + label + ": " + sum );
-    }
+    protected abstract void printHeaders( String type, List<String> labels );
+
+    /**
+     * Print the index of an item.
+     *
+     * @param item the name of the item
+     * @param index the index
+     */
+    protected abstract void printIndex( String item, int index );
+
+    /**
+     * Print an item.
+     *
+     * @param item the name of the item
+     */
+    protected abstract void printItem( String item );
+
+    /**
+     * Print a measurement.
+     *
+     * @param label the name of the measurement
+     * @param count the result value of the measurement
+     */
+    protected abstract void printMeasurement( String label, int count );
 }

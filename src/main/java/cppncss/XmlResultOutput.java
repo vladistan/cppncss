@@ -31,7 +31,6 @@ package cppncss;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -44,13 +43,10 @@ import tools.Component;
  *
  * @author Mathieu Champlon
  */
-public final class XmlResultOutput implements ResultOutput, Component
+public final class XmlResultOutput extends AbstractResultOutput implements Component
 {
     private final PrintStream stream;
-    private final List<String> labels = new ArrayList<String>();
     private final Element root;
-    private int current;
-    private int index;
     private Element node;
 
     /**
@@ -68,16 +64,7 @@ public final class XmlResultOutput implements ResultOutput, Component
     /**
      * {@inheritDoc}
      */
-    public void notify( final String type, final List<String> labels )
-    {
-        this.labels.clear();
-        this.labels.addAll( labels );
-        this.current = 0;
-        this.index = 0;
-        printHeaders( type, labels );
-    }
-
-    private void printHeaders( final String type, final List<String> labels )
+    protected void printHeaders( final String type, final List<String> labels )
     {
         node = root.addElement( "measure" );
         node.addAttribute( "type", type );
@@ -86,35 +73,29 @@ public final class XmlResultOutput implements ResultOutput, Component
         for( String label : labels )
             if( !label.startsWith( type ) )
                 node.addElement( "label" ).addText( label );
-        printItem();
+        node = node.getParent();
     }
 
     /**
      * {@inheritDoc}
      */
-    public void notify( final String type, final String item, final int count )
-    {
-        if( current == 0 )
-            printIndex( item, ++index );
-        printMeasurement( type, labels.get( current ), count );
-        ++current;
-        current %= labels.size();
-        if( current == 0 )
-            printItem();
-    }
-
-    private void printItem()
+    protected void printItem( final String item )
     {
         node = node.getParent();
     }
 
-    private void printMeasurement( final String type, final String label, final int count )
+    /**
+     * {@inheritDoc}
+     */
+    protected void printMeasurement( final String label, final int count )
     {
-        if( !label.startsWith( type ) )
-            node.addElement( "value" ).addText( Integer.toString( count ) );
+        node.addElement( "value" ).addText( Integer.toString( count ) );
     }
 
-    private void printIndex( final String item, final int index )
+    /**
+     * {@inheritDoc}
+     */
+    protected void printIndex( final String item, final int index )
     {
         node = node.addElement( "item" );
         node.addAttribute( "name", item );
