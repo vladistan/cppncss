@@ -47,7 +47,7 @@ public abstract class AbstractResultOutput implements ResultOutput
     /**
      * {@inheritDoc}
      */
-    public void notify( final String type, final List<String> labels )
+    public final void notify( final String type, final List<String> labels )
     {
         this.labels.clear();
         this.labels.addAll( labels );
@@ -59,7 +59,7 @@ public abstract class AbstractResultOutput implements ResultOutput
     /**
      * {@inheritDoc}
      */
-    public void notify( final String type, final String item, final int count )
+    public final void notify( final String type, final String item, final int count )
     {
         if( current == 0 )
             printIndex( item, ++index );
