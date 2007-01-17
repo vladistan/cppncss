@@ -40,6 +40,8 @@ import cppncss.analyzer.Analyzer;
 import cppncss.analyzer.EventHandler;
 import cppncss.analyzer.FileObserverComposite;
 import cppncss.counter.CcnCounter;
+import cppncss.counter.Counter;
+import cppncss.counter.FileVisitor;
 import cppncss.counter.FunctionCounter;
 import cppncss.counter.FunctionVisitor;
 import cppncss.counter.NcssCounter;
@@ -55,9 +57,38 @@ import cppncss.measure.SumCollector;
  */
 public final class CppNcss
 {
+    private final FileObserverComposite observers = new FileObserverComposite();
+    private final VisitorComposite visitors = new VisitorComposite();
     private final List<Collector> collectors = new ArrayList<Collector>();
     private final ResultOutput output;
     private final Analyzer analyzer;
+
+    /**
+     * Implements a factory to create visitors from a given counter.
+     *
+     * @author Mathieu Champlon
+     */
+    private interface VisitorFactory
+    {
+        void register( Counter counter );
+    }
+
+    private final VisitorFactory functionVisitorFactory = new VisitorFactory()
+    {
+        public void register( final Counter counter )
+        {
+            visitors.register( new FunctionVisitor( counter ) );
+        }
+    };
+    private final VisitorFactory fileVisitorFactory = new VisitorFactory()
+    {
+        public void register( final Counter counter )
+        {
+            final FileVisitor visitor = new FileVisitor( counter );
+            observers.register( visitor );
+            visitors.register( visitor );
+        }
+    };
 
     /**
      * Create a CppNcss instance.
@@ -69,14 +100,21 @@ public final class CppNcss
     public CppNcss( final Options options, final EventHandler handler ) throws FileNotFoundException
     {
         output = createOutput( options );
-        final FileObserverComposite observers = new FileObserverComposite();
-        final VisitorComposite visitors = new VisitorComposite();
-        register( new MeasureCollector( new ResultOutputAdapter( "Function", output ) ), visitors, observers );
-        register( new AverageCollector( new ResultOutputAdapter( "Function", output ) ), visitors, observers );
-        register( new MeasureCollector( new ResultOutputAdapter( "File", output ) ), visitors, observers );
-        register( new AverageCollector( new ResultOutputAdapter( "File", output ) ), visitors, observers );
-        register( new SumCollector( new ResultOutputAdapter( "Project", output ) ), visitors, observers );
         analyzer = new Analyzer( options, visitors, observers, handler );
+        register( new MeasureCollector( new ResultOutputAdapter( "Function", output ) ), functionVisitorFactory );
+        register( new AverageCollector( new ResultOutputAdapter( "Function", output ) ), functionVisitorFactory );
+        register( new MeasureCollector( new ResultOutputAdapter( "File", output ) ), fileVisitorFactory );
+        register( new AverageCollector( new ResultOutputAdapter( "File", output ) ), fileVisitorFactory );
+        register( new SumCollector( new ResultOutputAdapter( "Project", output ) ), fileVisitorFactory );
+    }
+
+    private void register( final Collector collector, final VisitorFactory factory )
+    {
+        collectors.add( collector );
+        observers.register( collector );
+        factory.register( new NcssCounter( collector ) );
+        factory.register( new CcnCounter( collector ) );
+        factory.register( new FunctionCounter( collector ) );
     }
 
     /**
@@ -88,16 +126,6 @@ public final class CppNcss
         for( Collector collector : collectors )
             collector.flush();
         output.flush();
-    }
-
-    private void register( final Collector collector, final VisitorComposite visitors,
-            final FileObserverComposite observers )
-    {
-        collectors.add( collector );
-        observers.register( collector );
-        visitors.register( new FunctionVisitor( new NcssCounter( collector ) ) );
-        visitors.register( new FunctionVisitor( new CcnCounter( collector ) ) );
-        visitors.register( new FunctionVisitor( new FunctionCounter( collector ) ) );
     }
 
     private ResultOutput createOutput( final Options options ) throws FileNotFoundException
@@ -115,6 +143,12 @@ public final class CppNcss
         return System.out;
     }
 
+    /**
+     * Run the application.
+     *
+     * @param args the arguments
+     * @throws FileNotFoundException when the log file fails
+     */
     public static void main( final String[] args ) throws FileNotFoundException
     {
         if( !check( args ) )
