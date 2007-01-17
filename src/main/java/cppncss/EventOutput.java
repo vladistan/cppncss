@@ -116,11 +116,17 @@ public final class EventOutput implements EventHandler
     private void displayLocation( final int start, final int lines, final String filename ) throws IOException
     {
         final BufferedReader reader = new BufferedReader( new FileReader( filename ) );
-        for( int i = 0; i < start - lines; i++ )
-            reader.readLine();
-        for( int i = 0; i < lines; ++i )
-            System.err.println( reader.readLine() );
-        reader.close();
+        try
+        {
+            for( int i = 0; i < start - lines; i++ )
+                reader.readLine();
+            for( int i = 0; i < lines; ++i )
+                System.err.println( reader.readLine() );
+        }
+        finally
+        {
+            reader.close();
+        }
     }
 
     /**

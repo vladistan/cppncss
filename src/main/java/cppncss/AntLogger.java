@@ -112,11 +112,17 @@ public final class AntLogger implements EventHandler
     private void displayLocation( final int start, final int lines, final String filename ) throws IOException
     {
         final BufferedReader reader = new BufferedReader( new FileReader( filename ) );
-        for( int i = 0; i < start - lines; i++ )
-            reader.readLine();
-        for( int i = 0; i < lines; ++i )
-            project.log( reader.readLine(), Project.MSG_VERBOSE );
-        reader.close();
+        try
+        {
+            for( int i = 0; i < start - lines; i++ )
+                reader.readLine();
+            for( int i = 0; i < lines; ++i )
+                project.log( reader.readLine(), Project.MSG_VERBOSE );
+        }
+        finally
+        {
+            reader.close();
+        }
     }
 
     /**
