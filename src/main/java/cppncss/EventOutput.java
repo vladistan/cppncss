@@ -82,7 +82,7 @@ public final class EventOutput implements EventHandler
     public void error( final String filename, final Throwable throwable, final String reason )
     {
         if( debug )
-            throwable.printStackTrace();
+            System.err.println( throwable.getMessage() );
         if( verbose )
             System.err.println( "Skipping " + filename + " : " + reason );
     }
