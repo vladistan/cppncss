@@ -103,17 +103,10 @@ public final class MeasureCollector implements Collector
     /**
      * {@inheritDoc}
      */
-    public void start()
+    public void flush()
     {
         observer.notify( labels );
         for( Measure measure : result )
             measure.accept( observer );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void stop()
-    {
     }
 }

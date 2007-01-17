@@ -31,7 +31,8 @@ package cppncss;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import tools.Container;
+import java.util.ArrayList;
+import java.util.List;
 import tools.Options;
 import tools.Usage;
 import cppast.VisitorComposite;
@@ -54,7 +55,8 @@ import cppncss.measure.SumCollector;
  */
 public final class CppNcss
 {
-    private final Container container = new Container();
+    private final List<Collector> collectors = new ArrayList<Collector>();
+    private final ResultOutput output;
     private final Analyzer analyzer;
 
     /**
@@ -66,7 +68,7 @@ public final class CppNcss
      */
     public CppNcss( final Options options, final EventHandler handler ) throws FileNotFoundException
     {
-        final ResultOutput output = createOutput( options );
+        output = createOutput( options );
         final FileObserverComposite observers = new FileObserverComposite();
         final VisitorComposite visitors = new VisitorComposite();
         register( new MeasureCollector( new ResultOutputAdapter( "Function", output ) ), visitors, observers );
@@ -83,14 +85,15 @@ public final class CppNcss
     public void run()
     {
         analyzer.run();
-        container.start();
-        container.stop();
+        for( Collector collector : collectors )
+            collector.flush();
+        output.flush();
     }
 
     private void register( final Collector collector, final VisitorComposite visitors,
             final FileObserverComposite observers )
     {
-        container.register( collector );
+        collectors.add( collector );
         observers.register( collector );
         visitors.register( new FunctionVisitor( new NcssCounter( collector ) ) );
         visitors.register( new FunctionVisitor( new CcnCounter( collector ) ) );
@@ -102,7 +105,7 @@ public final class CppNcss
         final PrintStream stream = createStream( options );
         if( !options.hasOption( "x" ) )
             return new AsciiResultOutput( stream );
-        return container.register( new XmlResultOutput( stream ) );
+        return new XmlResultOutput( stream );
     }
 
     private PrintStream createStream( final Options options ) throws FileNotFoundException

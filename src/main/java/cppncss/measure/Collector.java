@@ -28,7 +28,6 @@
 
 package cppncss.measure;
 
-import tools.Component;
 import cppncss.analyzer.FileObserver;
 import cppncss.counter.CounterObserver;
 
@@ -37,6 +36,10 @@ import cppncss.counter.CounterObserver;
  *
  * @author Mathieu Champlon
  */
-public interface Collector extends CounterObserver, FileObserver, Component
+public interface Collector extends CounterObserver, FileObserver
 {
+    /**
+     * Output computed measurements.
+     */
+    void flush();
 }

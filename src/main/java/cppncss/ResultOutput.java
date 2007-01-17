@@ -71,4 +71,9 @@ public interface ResultOutput
      * @param sum the result
      */
     void notify( final String type, final String item, final long sum );
+
+    /**
+     * Notify about the end of the result flow.
+     */
+    void flush();
 }

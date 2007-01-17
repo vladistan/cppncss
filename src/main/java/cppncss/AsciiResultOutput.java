@@ -108,4 +108,11 @@ public final class AsciiResultOutput extends AbstractResultOutput
     {
         stream.println( type + " " + label + ": " + sum );
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void flush()
+    {
+    }
 }

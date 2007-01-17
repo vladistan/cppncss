@@ -70,7 +70,7 @@ public class XmlResultOutputTest extends EasyMockTestCase
 
     public void testNoNotificationGeneratesEmptyRootElement() throws DocumentException
     {
-        output.stop();
+        output.flush();
         final Document document = parse( stream.toString() );
         assertNotNull( document.selectSingleNode( "/cppncss" ) );
     }
@@ -78,7 +78,7 @@ public class XmlResultOutputTest extends EasyMockTestCase
     public void testLabelsNotificationGeneratesLabelsElement() throws DocumentException
     {
         output.notify( "type", makeLabels() );
-        output.stop();
+        output.flush();
         final Document document = parse( stream.toString() );
         assertNotNull( document.selectSingleNode( "/cppncss/measure/labels" ) );
         final List labels = document.selectNodes( "/cppncss/measure/labels/label" );
@@ -91,7 +91,7 @@ public class XmlResultOutputTest extends EasyMockTestCase
     public void testTypeNameBeingTheBeginningOfLabelIsSkipped() throws DocumentException
     {
         output.notify( "first", makeLabels() );
-        output.stop();
+        output.flush();
         final Document document = parse( stream.toString() );
         assertNotNull( document.selectSingleNode( "/cppncss/measure/labels" ) );
         final List labels = document.selectNodes( "/cppncss/measure/labels/label" );
@@ -105,7 +105,7 @@ public class XmlResultOutputTest extends EasyMockTestCase
         output.notify( "type", makeLabels() );
         output.notify( "type", "my item", 123 );
         output.notify( "type", "my item", 45 );
-        output.stop();
+        output.flush();
         final Document document = parse( stream.toString() );
         assertEquals( "type", document.selectSingleNode( "/cppncss/measure/@type" ).getText() );
         assertNotNull( document.selectSingleNode( "/cppncss/measure/item" ) );
@@ -121,7 +121,7 @@ public class XmlResultOutputTest extends EasyMockTestCase
         output.notify( "type", makeLabels() );
         output.notify( "first", "item", 12 );
         output.notify( "type", "item", 42 );
-        output.stop();
+        output.flush();
         final Document document = parse( stream.toString() );
         assertEquals( "type", document.selectSingleNode( "/cppncss/measure/@type" ).getText() );
         assertNotNull( document.selectSingleNode( "/cppncss/measure/item" ) );
@@ -135,7 +135,7 @@ public class XmlResultOutputTest extends EasyMockTestCase
     {
         output.notify( "type", makeLabels() );
         output.notify( "type", "my label", 12.41782F );
-        output.stop();
+        output.flush();
         final Document document = parse( stream.toString() );
         assertEquals( "my label", document.selectSingleNode( "/cppncss/measure/average/@label" ).getText() );
         assertEquals( "12.41782", document.selectSingleNode( "/cppncss/measure/average/@value" ).getText() );
@@ -145,7 +145,7 @@ public class XmlResultOutputTest extends EasyMockTestCase
     {
         output.notify( "type", makeLabels() );
         output.notify( "lab", "label", 12f );
-        output.stop();
+        output.flush();
         final Document document = parse( stream.toString() );
         assertNull( document.selectSingleNode( "/cppncss/measure/average" ) );
     }
@@ -154,7 +154,7 @@ public class XmlResultOutputTest extends EasyMockTestCase
     {
         output.notify( "type", makeLabels() );
         output.notify( "type", "my label", 1242L );
-        output.stop();
+        output.flush();
         final Document document = parse( stream.toString() );
         assertEquals( "my label", document.selectSingleNode( "/cppncss/measure/sum/@label" ).getText() );
         assertEquals( "1242", document.selectSingleNode( "/cppncss/measure/sum/@value" ).getText() );

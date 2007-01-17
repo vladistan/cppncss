@@ -73,17 +73,10 @@ public final class SumCollector implements Collector
     /**
      * {@inheritDoc}
      */
-    public void start()
+    public void flush()
     {
         for( Sum average : result )
             average.accept( observer );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void stop()
-    {
     }
 
     /**

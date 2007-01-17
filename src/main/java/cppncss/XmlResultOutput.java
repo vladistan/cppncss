@@ -36,14 +36,13 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
-import tools.Component;
 
 /**
  * Implements an xml result output.
  *
  * @author Mathieu Champlon
  */
-public final class XmlResultOutput extends AbstractResultOutput implements Component
+public final class XmlResultOutput extends AbstractResultOutput
 {
     private final PrintStream stream;
     private final Element root;
@@ -124,14 +123,7 @@ public final class XmlResultOutput extends AbstractResultOutput implements Compo
     /**
      * {@inheritDoc}
      */
-    public void start()
-    {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void stop()
+    public void flush()
     {
         try
         {
