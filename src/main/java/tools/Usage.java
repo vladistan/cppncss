@@ -28,7 +28,8 @@
 
 package tools;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Provides a means to format an application usage.
@@ -39,11 +40,11 @@ public final class Usage
 {
     private static final int SECURITY_PADDING = 5;
     private static final int DEFAULT_PADDING = 2;
+    private final List<String> options = new ArrayList<String>();
+    private final List<String> descriptions = new ArrayList<String>();
     private final String name;
     private final String url;
     private final String version;
-    private final Vector<String> options;
-    private final Vector<String> descriptions;
     private int padding;
 
     /**
@@ -58,8 +59,6 @@ public final class Usage
         this.name = name;
         this.url = url;
         this.version = version;
-        this.options = new Vector<String>();
-        this.descriptions = new Vector<String>();
         this.padding = DEFAULT_PADDING;
     }
 

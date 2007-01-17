@@ -28,8 +28,8 @@
 
 package tools;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * Implements a simple program options handler.
@@ -57,7 +57,7 @@ public class Options
      */
     public final List<String> getArgList()
     {
-        final Vector<String> result = new Vector<String>();
+        final List<String> result = new ArrayList<String>();
         for( int i = 0; i < args.length; ++i )
             if( !args[i].startsWith( "-" ) )
                 result.add( args[i] );
@@ -93,7 +93,7 @@ public class Options
      */
     public final List<String> getOptionValues( final String name )
     {
-        final Vector<String> result = new Vector<String>();
+        final List<String> result = new ArrayList<String>();
         for( int i = 0; i < args.length; ++i )
             if( isOption( args[i], name ) )
                 result.add( args[i].substring( 1 + name.length() ) );
@@ -110,7 +110,7 @@ public class Options
      */
     public final List<String> getOptionProperties( final String name )
     {
-        final Vector<String> result = new Vector<String>();
+        final List<String> result = new ArrayList<String>();
         for( int i = 0; i < args.length; ++i )
             if( isOption( args[i], name ) )
             {
@@ -133,7 +133,7 @@ public class Options
      */
     public final List<String> getOptionPropertyValues( final String name )
     {
-        final Vector<String> result = new Vector<String>();
+        final List<String> result = new ArrayList<String>();
         for( int i = 0; i < args.length; ++i )
             if( isOption( args[i], name ) )
             {

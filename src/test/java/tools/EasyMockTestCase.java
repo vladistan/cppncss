@@ -28,7 +28,8 @@
 
 package tools;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import junit.framework.TestCase;
 import org.easymock.classextension.EasyMock;
 
@@ -56,20 +57,11 @@ public class EasyMockTestCase extends TestCase
     /**
      * The mock objects.
      */
-    private final Vector<Object> mocks;
+    private final List<Object> mocks = new ArrayList<Object>();
     /**
      * Whether a forced replay is needed before verifying all controls.
      */
-    private boolean mustForceReplay;
-
-    /**
-     * Create an easy mock test case.
-     */
-    public EasyMockTestCase()
-    {
-        mocks = new Vector<Object>();
-        mustForceReplay = true;
-    }
+    private boolean mustForceReplay = true;
 
     /**
      * {@inheritDoc}

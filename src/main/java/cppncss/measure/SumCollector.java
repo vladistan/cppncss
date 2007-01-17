@@ -28,7 +28,8 @@
 
 package cppncss.measure;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Collects sums of measures.
@@ -37,7 +38,7 @@ import java.util.Vector;
  */
 public final class SumCollector implements Collector
 {
-    private final Vector<Sum> result;
+    private final List<Sum> result = new ArrayList<Sum>();
     private final SumObserver observer;
 
     /**
@@ -50,7 +51,6 @@ public final class SumCollector implements Collector
         if( observer == null )
             throw new IllegalArgumentException( "argument 'observer' is null" );
         this.observer = observer;
-        this.result = new Vector<Sum>();
     }
 
     /**

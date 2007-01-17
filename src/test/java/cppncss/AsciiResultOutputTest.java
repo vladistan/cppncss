@@ -32,7 +32,8 @@ package cppncss;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import tools.EasyMockTestCase;
 
 /**
@@ -50,9 +51,9 @@ public class AsciiResultOutputTest extends EasyMockTestCase
         output = new AsciiResultOutput( new PrintStream( stream ) );
     }
 
-    private Vector<String> makeLabels()
+    private List<String> makeLabels()
     {
-        final Vector<String> labels = new Vector<String>();
+        final List<String> labels = new ArrayList<String>();
         labels.add( "first label" );
         labels.add( "second label" );
         return labels;

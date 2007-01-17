@@ -28,7 +28,8 @@
 
 package cppncss.measure;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Collects averages of measures.
@@ -37,7 +38,7 @@ import java.util.Vector;
  */
 public final class AverageCollector implements Collector
 {
-    private final Vector<Average> result;
+    private final List<Average> result = new ArrayList<Average>();;
     private final AverageObserver observer;
 
     /**
@@ -50,7 +51,6 @@ public final class AverageCollector implements Collector
         if( observer == null )
             throw new IllegalArgumentException( "argument 'observer' is null" );
         this.observer = observer;
-        this.result = new Vector<Average>();
     }
 
     /**

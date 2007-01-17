@@ -1,14 +1,14 @@
 
 package tools;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
 import junit.framework.TestCase;
 import junit.framework.TestResult;
 
 /**
  * Test case for EasyMockTestCase.
- * 
+ *
  * @author Mathieu Champlon
  * @version $Revision: 1064 $ $Date: 2005-08-27 03:11:01 +0900 (sam., 27 août 2005) $
  */
@@ -31,7 +31,7 @@ public class EasyMockTestCaseTest extends TestCase
 
     public void testCreateMockFromClassProvidesNonNullObject()
     {
-        assertNotNull( test.createMock( Vector.class ) );
+        assertNotNull( test.createMock( ArrayList.class ) );
     }
 
     public void testCreateMockAndRunTestPasses()

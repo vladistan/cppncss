@@ -28,7 +28,8 @@
 
 package cppncss.measure;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Stores a result measure.
@@ -39,7 +40,7 @@ public final class Measure implements Comparable
 {
     private final String item;
     private final int line;
-    private final Vector<Integer> counts;
+    private final List<Integer> counts = new ArrayList<Integer>();;
     private final String filename;
 
     /**
@@ -61,8 +62,7 @@ public final class Measure implements Comparable
         this.item = item;
         this.line = line;
         this.filename = filename;
-        counts = new Vector<Integer>();
-        counts.add( count );
+        this.counts.add( count );
     }
 
     /**

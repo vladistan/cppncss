@@ -28,8 +28,8 @@
 
 package cppncss.analyzer;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Provides a composite for file observers.

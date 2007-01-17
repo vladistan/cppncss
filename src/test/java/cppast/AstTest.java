@@ -31,7 +31,8 @@ package cppast;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import junit.framework.TestCase;
 
 /**
@@ -46,7 +47,7 @@ public class AstTest extends TestCase
     {
         private final StringWriter buffer = new StringWriter();
         private final PrintWriter writer = new PrintWriter( buffer );
-        private final Vector<String> expected = new Vector<String>();
+        private final List<String> expected = new ArrayList<String>();
         private int position = 0;
 
         public void add( final String node )
@@ -77,7 +78,7 @@ public class AstTest extends TestCase
             writer.println( node.toString() );
             if( position < expected.size() )
             {
-                final String value = expected.elementAt( position++ );
+                final String value = expected.get( position++ );
                 if( value != null )
                     assertEquals( value, dump( (SimpleNode)node ) );
             }

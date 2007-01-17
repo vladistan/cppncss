@@ -28,8 +28,9 @@
 
 package cppncss.measure;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeSet;
-import java.util.Vector;
 
 /**
  * Collects measures.
@@ -43,11 +44,11 @@ import java.util.Vector;
 public final class MeasureCollector implements Collector
 {
     private static final int THRESHOLD = 30;
-    private final TreeSet<Measure> result;
+    private final TreeSet<Measure> result = new TreeSet<Measure>();
+    private final List<String> labels = new ArrayList<String>();
     private final MeasureObserver observer;
     private String index;
     private String filename;
-    private final Vector<String> labels;
 
     /**
      * Create a measure collector.
@@ -59,8 +60,6 @@ public final class MeasureCollector implements Collector
         if( observer == null )
             throw new IllegalArgumentException( "argument 'observer' is null" );
         this.observer = observer;
-        this.result = new TreeSet<Measure>();
-        this.labels = new Vector<String>();
     }
 
     /**

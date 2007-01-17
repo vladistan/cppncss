@@ -29,8 +29,9 @@
 package cppncss.analyzer.preprocessor;
 
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
-import java.util.Vector;
 import cppast.JavaCharStream;
 import cppast.ParserTokenManager;
 import cppast.Token;
@@ -43,7 +44,7 @@ import cppast.Token;
 public abstract class AbstractTokenFilter implements TokenFilter
 {
     private final Stack<Token> buffer;
-    private final Vector<Token> tokens;
+    private final List<Token> tokens;
     private final String name;
 
     /**
@@ -78,9 +79,9 @@ public abstract class AbstractTokenFilter implements TokenFilter
         return name;
     }
 
-    private Vector<Token> parse( final String value )
+    private List<Token> parse( final String value )
     {
-        final Vector<Token> result = new Vector<Token>();
+        final List<Token> result = new ArrayList<Token>();
         final ParserTokenManager manager = new ParserTokenManager( new JavaCharStream( new StringReader( value ) ) );
         Token token = manager.getNextToken();
         while( token.kind != ParserTokenManager.EOF )

@@ -33,11 +33,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Vector;
 import tools.Options;
 import cppast.ParseException;
 import cppast.Parser;
@@ -139,13 +139,13 @@ public final class Analyzer
 
     private List<String> resolve( final List<String> inputs )
     {
-        final Vector<String> result = new Vector<String>();
+        final List<String> result = new ArrayList<String>();
         for( String input : inputs )
             resolve( result, input, true );
         return result;
     }
 
-    private void resolve( final Vector<String> result, final String string, final boolean processDirectory )
+    private void resolve( final List<String> result, final String string, final boolean processDirectory )
     {
         final File file = new File( string );
         if( !file.isDirectory() )

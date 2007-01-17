@@ -33,8 +33,8 @@ package cppncss;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Node;
@@ -60,9 +60,9 @@ public class XmlResultOutputTest extends EasyMockTestCase
         return new SAXReader().read( new StringReader( content ) );
     }
 
-    private Vector<String> makeLabels()
+    private List<String> makeLabels()
     {
-        final Vector<String> labels = new Vector<String>();
+        final List<String> labels = new ArrayList<String>();
         labels.add( "first label" );
         labels.add( "second label" );
         return labels;
