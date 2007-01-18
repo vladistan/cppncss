@@ -154,7 +154,7 @@ public final class CppNcss
         if( !check( args ) )
             return;
         final Options options = new Options( args );
-        new CppNcss( options, new EventOutput( options ) ).run();
+        new CppNcss( options, new ConsoleLogger( options ) ).run();
     }
 
     private static boolean check( final String[] args )

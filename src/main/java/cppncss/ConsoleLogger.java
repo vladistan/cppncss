@@ -26,50 +26,57 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss.analyzer;
+package cppncss;
+
+import tools.Options;
 
 /**
- * Defines events associated to analyzis.
+ * Logs all events to System.err.
  *
  * @author Mathieu Champlon
  */
-public interface EventHandler
+public final class ConsoleLogger extends AbstractLogger
 {
-    /**
-     * Notify a start event.
-     */
-    void started();
+    private final boolean debug;
+    private final boolean verbose;
 
     /**
-     * Notify an end event.
+     * Create an event output.
      *
-     * @param parsed number of files parsed
-     * @param total total number of files
+     * @param options program options
      */
-    void finished( int parsed, int total );
+    public ConsoleLogger( final Options options )
+    {
+        debug = options.hasOption( "d" );
+        verbose = debug || options.hasOption( "v" );
+    }
 
     /**
-     * Notify an error.
-     *
-     * @param filename the location of the error
-     * @param throwable the error
-     * @param reason the description of the error
+     * {@inheritDoc}
      */
-    void error( String filename, Throwable throwable, String reason );
+    public void error( final String filename, final Throwable throwable, final String reason )
+    {
+        if( debug )
+            System.err.println( throwable.getMessage() );
+        if( verbose )
+            System.err.println( "Skipping " + filename + " : " + reason );
+    }
 
     /**
-     * Display a diagnostic.
-     *
-     * @param filename the file name
-     * @param line the line number
-     * @param column the column offset
+     * {@inheritDoc}
      */
-    void display( String filename, int line, int column );
+    public void changed( final String filename )
+    {
+        if( debug )
+            System.err.println( "Parsing " + filename );
+    }
 
     /**
-     * Specify the file being processed.
-     *
-     * @param filename the name of the fle
+     * {@inheritDoc}
      */
-    void changed( String filename );
+    protected void log( final String message )
+    {
+        if( verbose )
+            System.err.println( message );
+    }
 }
