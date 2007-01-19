@@ -13,7 +13,7 @@ Example
  Here is the command line input used to run the analyzis.
 
 +------------------------------------------------------------------------------+
-cppncss -v -k -r xerces-c-src_2_7_0/src -p=xerces-c-src_2_7_0/src\ -DATL_NO_VTABLE -DXERCES_CPP_NAMESPACE_USE -DXERCES_CPP_NAMESPACE_BEGIN -DXERCES_CPP_NAMESPACE_END -DCDOM_EXPORT -DDEPRECATED_DOM_EXPORT -MDECLARE_NOT_AGGREGATABLE -MDECLARE_PROTECT_FINAL_CONSTRUCT -DXMLPARSER_EXPORT -DWINAPI -DSTDMETHODCALLTYPE -DXMLUTIL_EXPORT -MDECL_XSERIALIZABLE -MBEGIN_COM_MAP -MCOM_INTERFACE_ENTRY -MEND_COM_MAP -MDECLARE_WND_CLASS -DXERCES_CPP_NAMESPACE_QUALIFIER -MMESSAGE_HANDLER -MEND_MSG_MAP -MMakeXMLException -MBEGIN_CONNECTION_POINT_MAP -DSAX2_EXPORT -DSAX_EXPORT -DXerces_DLLVersionStr -DVALIDATORS_EXPORT -DPARSERS_EXPORT -DAPIENTRY -MTRY_CATCH_THROW -DU_CAPI -DU_EXPORT2 -MOBJECT_ENTRY -DCALLBACK -MIMPL_XSERIALIZABLE_TOCREATE -MIMPL_XSERIALIZABLE_NOCREATE -MBEGIN_OBJECT_MAP -MEND_OBJECT_MAP -DU_IMPORT -MCONNECTION_POINT_ENTRY -MEND_CONNECTION_POINT_MAP -MBEGIN_MSG_MAP -MSTDMETHOD="void STDMETHOD" -MCOM_INTERFACE_ENTRY_IMPL -MSTDMETHOD_="void _STDMETHOD" -MATLTRY -MTEST_THROW_ARG2 -MSORT_KEYSET_ONEKEY -M__volatile__ -D__asm__ -MREPORT_FACET_ERROR=; -MFROM_BASE_VALUE_SPACE=; -MREPORT_VALUE_ERROR=; -MTEST_THROW_ARG1=; -MGET_NEXT_KEYSET -MSORT_KEYSET_TWOKEYS
+cppncss -v -k -r xerces-c-src_2_7_0/src -DATL_NO_VTABLE -DXERCES_CPP_NAMESPACE_USE -DXERCES_CPP_NAMESPACE_BEGIN -DXERCES_CPP_NAMESPACE_END -DCDOM_EXPORT -DDEPRECATED_DOM_EXPORT -MDECLARE_NOT_AGGREGATABLE -MDECLARE_PROTECT_FINAL_CONSTRUCT -DXMLPARSER_EXPORT -DWINAPI -DSTDMETHODCALLTYPE -DXMLUTIL_EXPORT -MDECL_XSERIALIZABLE -MBEGIN_COM_MAP -MCOM_INTERFACE_ENTRY -MEND_COM_MAP -MDECLARE_WND_CLASS -DXERCES_CPP_NAMESPACE_QUALIFIER -MMESSAGE_HANDLER -MEND_MSG_MAP -MMakeXMLException -MBEGIN_CONNECTION_POINT_MAP -DSAX2_EXPORT -DSAX_EXPORT -DXerces_DLLVersionStr -DVALIDATORS_EXPORT -DPARSERS_EXPORT -DAPIENTRY -MTRY_CATCH_THROW -DU_CAPI -DU_EXPORT2 -MOBJECT_ENTRY -DCALLBACK -MIMPL_XSERIALIZABLE_TOCREATE -MIMPL_XSERIALIZABLE_NOCREATE -MBEGIN_OBJECT_MAP -MEND_OBJECT_MAP -DU_IMPORT -MCONNECTION_POINT_ENTRY -MEND_CONNECTION_POINT_MAP -MBEGIN_MSG_MAP -MSTDMETHOD="void STDMETHOD" -MCOM_INTERFACE_ENTRY_IMPL -MSTDMETHOD_="void _STDMETHOD" -MATLTRY -MTEST_THROW_ARG2 -MSORT_KEYSET_ONEKEY -M__volatile__ -D__asm__ -MREPORT_FACET_ERROR=; -MFROM_BASE_VALUE_SPACE=; -MREPORT_VALUE_ERROR=; -MTEST_THROW_ARG1=; -MGET_NEXT_KEYSET -MSORT_KEYSET_TWOKEYS
 +------------------------------------------------------------------------------+ 
 
 * Output
@@ -25,11 +25,6 @@ Skipping xerces-c-src_2_7_0/src\xercesc\util\Transcoders\Iconv400\utypes.h : Par
 enum UErrorCode1 {
 #else
 enum UErrorCode {
-^
-Skipping xerces-c-src_2_7_0/src\xercesc\com\xml4com.cpp : Parse error (line 170, column 1)
-extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
-{
 ^
 Skipping xerces-c-src_2_7_0/src\xercesc\util\MsgLoaders\MsgFile\MsgLoader.cpp : Parse error (line 114, column 26)
 {
@@ -83,84 +78,85 @@ Skipping xerces-c-src_2_7_0/src\xercesc\util\Transcoders\IconvFBSD\IconvFBSDTran
     : IconvFBSDCD(), fUnicodeCP(0)
     ^
 Skipping xerces-c-src_2_7_0/src\xercesc\util\Transcoders\MacOSUnicodeConverter\MacOSUnicodeConverter.cpp : Parse error (line 178, column 12)
-	}
+        }
 #else
-	else
+        else
         ^
-Successfully parsed 1050 / 1064 files in 16.156 s
+Successfully parsed 1051 / 1064 files in 16.281 s
 +------------------------------------------------------------------------------+ 
 
  Next the resulting measurements are displayed.
 
 +------------------------------------------------------------------------------+ 
-
 Nr. NCSS CCN Function
-  1  353 107 XPathScanner::scanExpression( const XMLCh* const, int, const int, ValueVectorOf< int >* const ) at xercesc\validators\schema\identity\XercesXPath.cpp:748
+  1  376 107 XPathScanner::scanExpression( const XMLCh* const, int, const int, ValueVectorOf< int >* const ) at xercesc\validators\schema\identity\XercesXPath.cpp:748
   2  295 134 IGXMLScanner::buildAttList( const RefVectorOf< KVStringPair >&, const unsigned int, XMLElementDecl*, RefVectorOf< XMLAttr >& ) at xercesc\internal\IGXMLScanner2.cpp:73
   3  274 130 IGXMLScanner::scanStartTagNS( bool& ) at xercesc\internal\IGXMLScanner.cpp:2111
   4  262 109 SGXMLScanner::buildAttList( const RefVectorOf< KVStringPair >&, const unsigned int, XMLElementDecl*, RefVectorOf< XMLAttr >& ) at xercesc\internal\SGXMLScanner.cpp:2088
   5  245 107 SGXMLScanner::scanStartTag( bool& ) at xercesc\internal\SGXMLScanner.cpp:1063
-  6  227  62 wrapNode( IXMLDOMDocument*, DOMNode*, REFIID, LPVOID* ) at xercesc\com\XMLDOMUtil.cpp:242
-  7  215  81 DOMWriterImpl::processNode( const DOMNode* const, int ) at xercesc\dom\impl\DOMWriterImpl.cpp:642
-  8  187  71 DGXMLScanner::scanStartTag( bool& ) at xercesc\internal\DGXMLScanner.cpp:1059
-  9  182  71 IGXMLScanner::scanStartTag( bool& ) at xercesc\internal\IGXMLScanner.cpp:1539
- 10  182  97 TraverseSchema::traverseAttributeDecl( const DOMElement* const, ComplexTypeInfo* const, const bool ) at xercesc\validators\schema\TraverseSchema.cpp:2148
- 11  179  63 WFXMLScanner::scanStartTagNS( bool& ) at xercesc\internal\WFXMLScanner.cpp:1089
- 12  174   6 GeneralAttributeCheck::initCharFlagTable() at xercesc\validators\schema\GeneralAttributeCheck.cpp:600
- 13  171  55 CXMLDOMDocument::load( VARIANT, VARIANT_BOOL* ) at xercesc\com\XMLDOMDocument.cpp:884
- 14  171  83 XSValue::validateStrings( const XMLCh* const, DataType, Status&, XMLVersion, MemoryManager* const ) at xercesc\framework\psvi\XSValue.cpp:792
- 15  164  34 UnixHTTPURLInputStream::UnixHTTPURLInputStream( const XMLURL&, const XMLNetHTTPInfo* ) at xercesc\util\NetAccessors\Socket\UnixHTTPURLInputStream.cpp:81
- 16  158  55 TraverseSchema::traverseSimpleContentDecl( const XMLCh* const, const XMLCh* const, const DOMElement* const, ComplexTypeInfo* const, Janitor< XSAnnotation >* const ) at xercesc\validators\schema\TraverseSchema.cpp:3425
- 17  148  42 CXMLHttpRequest::send( VARIANT ) at xercesc\com\XMLHTTPRequest.cpp:302
- 18  147   5 DatatypeValidatorFactory::expandRegistryToFullSchemaSet() at xercesc\validators\datatype\DatatypeValidatorFactory.cpp:194
- 19  145  59 CXMLHttpRequest::SendThread( void* ) at xercesc\com\XMLHTTPRequest.cpp:512
- 20  144  59 TraverseSchema::traverseByRestriction( const DOMElement* const, const DOMElement* const, const XMLCh* const, const XMLCh* const, const int, Janitor< XSAnnotation >* const ) at xercesc\validators\schema\TraverseSchema.cpp:2997
- 21  140  40 BinHTTPURLInputStream::BinHTTPURLInputStream( const XMLURL&, const XMLNetHTTPInfo* ) at xercesc\util\NetAccessors\WinSock\BinHTTPURLInputStream.cpp:223
- 22  138  46 AbstractDOMParser::startElement( const XMLElementDecl&, const unsigned int, const XMLCh* const, const RefVectorOf< XMLAttr >&, const unsigned int, const bool, const bool ) at xercesc\parsers\AbstractDOMParser.cpp:906
- 23  137  44 DFAContentModel::buildDFA( ContentSpecNode* const ) at xercesc\validators\common\DFAContentModel.cpp:341
- 24  132  49 XercesXPath::parseExpression( XMLStringPool* const, NamespaceScope* const ) at xercesc\validators\schema\identity\XercesXPath.cpp:381
- 25  124  56 XMLUri::initialize( const XMLUri* const, const XMLCh* const ) at xercesc\util\XMLUri.cpp:399
- 26  123   4 Uniconv390TransService::initTransService() at xercesc\util\Transcoders\Uniconv390\Uniconv390TransService.cpp:508
- 27  122  60 Path390::_parse_rest() at xercesc\util\Platforms\OS390\Path390.cpp:224
- 28  120  36 IGXMLScanner::scanDocTypeDecl() at xercesc\internal\IGXMLScanner.cpp:1226
- 29  119  36 DGXMLScanner::scanDocTypeDecl() at xercesc\internal\DGXMLScanner.cpp:749
- 30  119  53 RegxParser::processNext() at xercesc\util\regx\RegxParser.cpp:133
-Average Function NCSS: 8.27
+  6  239  62 wrapNode( IXMLDOMDocument*, DOMNode*, REFIID, LPVOID* ) at xercesc\com\XMLDOMUtil.cpp:242
+  7  226  81 DOMWriterImpl::processNode( const DOMNode* const, int ) at xercesc\dom\impl\DOMWriterImpl.cpp:642
+  8  190  83 XSValue::validateStrings( const XMLCh* const, DataType, Status&, XMLVersion, MemoryManager* const ) at xercesc\framework\psvi\XSValue.cpp:792
+  9  187  71 DGXMLScanner::scanStartTag( bool& ) at xercesc\internal\DGXMLScanner.cpp:1059
+ 10  182  71 IGXMLScanner::scanStartTag( bool& ) at xercesc\internal\IGXMLScanner.cpp:1539
+ 11  182  97 TraverseSchema::traverseAttributeDecl( const DOMElement* const, ComplexTypeInfo* const, const bool ) at xercesc\validators\schema\TraverseSchema.cpp:2148
+ 12  179  63 WFXMLScanner::scanStartTagNS( bool& ) at xercesc\internal\WFXMLScanner.cpp:1089
+ 13  174   6 GeneralAttributeCheck::initCharFlagTable() at xercesc\validators\schema\GeneralAttributeCheck.cpp:600
+ 14  173  55 CXMLDOMDocument::load( VARIANT, VARIANT_BOOL* ) at xercesc\com\XMLDOMDocument.cpp:884
+ 15  167  34 UnixHTTPURLInputStream::UnixHTTPURLInputStream( const XMLURL&, const XMLNetHTTPInfo* ) at xercesc\util\NetAccessors\Socket\UnixHTTPURLInputStream.cpp:81
+ 16  158  46 AbstractDOMParser::startElement( const XMLElementDecl&, const unsigned int, const XMLCh* const, const RefVectorOf< XMLAttr >&, const unsigned int, const bool, const bool ) at xercesc\parsers\AbstractDOMParser.cpp:906
+ 17  158  55 TraverseSchema::traverseSimpleContentDecl( const XMLCh* const, const XMLCh* const, const DOMElement* const, ComplexTypeInfo* const, Janitor< XSAnnotation >* const ) at xercesc\validators\schema\TraverseSchema.cpp:3425
+ 18  150  42 CXMLHttpRequest::send( VARIANT ) at xercesc\com\XMLHTTPRequest.cpp:302
+ 19  147   5 DatatypeValidatorFactory::expandRegistryToFullSchemaSet() at xercesc\validators\datatype\DatatypeValidatorFactory.cpp:194
+ 20  146  49 XercesXPath::parseExpression( XMLStringPool* const, NamespaceScope* const ) at xercesc\validators\schema\identity\XercesXPath.cpp:381
+ 21  145  59 CXMLHttpRequest::SendThread( void* ) at xercesc\com\XMLHTTPRequest.cpp:512
+ 22  144  59 TraverseSchema::traverseByRestriction( const DOMElement* const, const DOMElement* const, const XMLCh* const, const XMLCh* const, const int, Janitor< XSAnnotation >* const ) at xercesc\validators\schema\TraverseSchema.cpp:2997
+ 23  143  40 BinHTTPURLInputStream::BinHTTPURLInputStream( const XMLURL&, const XMLNetHTTPInfo* ) at xercesc\util\NetAccessors\WinSock\BinHTTPURLInputStream.cpp:223
+ 24  140  53 RegxParser::processNext() at xercesc\util\regx\RegxParser.cpp:133
+ 25  137  44 DFAContentModel::buildDFA( ContentSpecNode* const ) at xercesc\validators\common\DFAContentModel.cpp:341
+ 26  128  42 XSValue::getActValNumerics( const XMLCh* const, DataType, Status&, MemoryManager* const ) at xercesc\framework\psvi\XSValue.cpp:1311
+ 27  128  60 Path390::_parse_rest() at xercesc\util\Platforms\OS390\Path390.cpp:224
+ 28  126  31 DatatypeValidator::loadDV( XSerializeEngine& ) at xercesc\validators\datatype\DatatypeValidator.cpp:372
+ 29  124  56 XMLUri::initialize( const XMLUri* const, const XMLCh* const ) at xercesc\util\XMLUri.cpp:399
+ 30  123   4 Uniconv390TransService::initTransService() at xercesc\util\Transcoders\Uniconv390\Uniconv390TransService.cpp:508
+Average Function NCSS: 8.40
 Average Function CCN: 3.20
 
-Nr. NCSS CCN File
-  1 4042 1531 xercesc\validators\schema\TraverseSchema.cpp
-  2 1851 704 xercesc\internal\SGXMLScanner.cpp
-  3 1387 504 xercesc\validators\DTD\DTDScanner.cpp
-  4 1306 557 xercesc\internal\IGXMLScanner2.cpp
-  5 1218 447 xercesc\internal\IGXMLScanner.cpp
-  6 1142 435 xercesc\internal\DGXMLScanner.cpp
-  7  996 456 xercesc\dom\impl\DOMRangeImpl.cpp
-  8  995 455 xercesc\util\XMLUri.cpp
-  9  956 302 xercesc\internal\XMLScanner.cpp
- 10  924 297 xercesc\com\XMLDOMDocument.cpp
- 11  818 260 xercesc\internal\XTemplateSerializer.cpp
- 12  809 339 xercesc\util\XMLString.cpp
- 13  799 335 xercesc\dom\deprecated\RangeImpl.cpp
- 14  799 256 xercesc\parsers\AbstractDOMParser.cpp
- 15  791 357 xercesc\validators\schema\SchemaValidator.cpp
- 16  789 276 xercesc\internal\WFXMLScanner.cpp
- 17  787 372 xercesc\framework\psvi\XSValue.cpp
- 18  781 338 xercesc\util\regx\RegularExpression.cpp
- 19  718 243 xercesc\util\XMLDateTime.cpp
- 20  716 238 xercesc\validators\schema\identity\XercesXPath.cpp
- 21  703 220 xercesc\com\XMLHTTPRequest.cpp
- 22  701 323 xercesc\util\regx\RegxParser.cpp
- 23  699 241 xercesc\util\Transcoders\IconvGNU\IconvGNUTransService.cpp
- 24  668 279 xercesc\dom\impl\DOMDocumentImpl.cpp
- 25  659 255 xercesc\parsers\SAX2XMLReaderImpl.cpp
- 26  634 204 xercesc\dom\deprecated\DOMParser.cpp
- 27  588 179 xercesc\util\XMLURL.cpp
- 28  583 234 xercesc\internal\XMLReader.cpp
- 29  566 138 xercesc\util\Transcoders\Uniconv390\Uniconv390TransService.cpp
- 30  512 197 xercesc\dom\impl\DOMWriterImpl.cpp
-Average File NCSS: 66.62
-Average File CCN: 25.12
-Program NCSS: 69951
-Program CCN: 26377
+Nr. NCSS CCN Functions File
+  1 4058 1531       101 xercesc\validators\schema\TraverseSchema.cpp
+  2 1864 704        43 xercesc\internal\SGXMLScanner.cpp
+  3 1387 504        33 xercesc\validators\DTD\DTDScanner.cpp
+  4 1307 557        23 xercesc\internal\IGXMLScanner2.cpp
+  5 1230 447        24 xercesc\internal\IGXMLScanner.cpp
+  6 1154 435        27 xercesc\internal\DGXMLScanner.cpp
+  7 1022 455        42 xercesc\util\XMLUri.cpp
+  8 1014 456        63 xercesc\dom\impl\DOMRangeImpl.cpp
+  9  964 302        45 xercesc\internal\XMLScanner.cpp
+ 10  963 372        24 xercesc\framework\psvi\XSValue.cpp
+ 11  936 297        44 xercesc\com\XMLDOMDocument.cpp
+ 12  876 338        47 xercesc\util\regx\RegularExpression.cpp
+ 13  843 260        67 xercesc\internal\XTemplateSerializer.cpp
+ 14  834 256        97 xercesc\parsers\AbstractDOMParser.cpp
+ 15  833 357        30 xercesc\validators\schema\SchemaValidator.cpp
+ 16  817 335        62 xercesc\dom\deprecated\RangeImpl.cpp
+ 17  812 323        41 xercesc\util\regx\RegxParser.cpp
+ 18  812 339        88 xercesc\util\XMLString.cpp
+ 19  801 276        24 xercesc\internal\WFXMLScanner.cpp
+ 20  755 238        37 xercesc\validators\schema\identity\XercesXPath.cpp
+ 21  744 243        49 xercesc\util\XMLDateTime.cpp
+ 22  708 241        40 xercesc\util\Transcoders\IconvGNU\IconvGNUTransService.cpp
+ 23  705 220        25 xercesc\com\XMLHTTPRequest.cpp
+ 24  684 279       114 xercesc\dom\impl\DOMDocumentImpl.cpp
+ 25  662 255        79 xercesc\parsers\SAX2XMLReaderImpl.cpp
+ 26  647 204        90 xercesc\dom\deprecated\DOMParser.cpp
+ 27  604 179        30 xercesc\util\XMLURL.cpp
+ 28  589 234        25 xercesc\internal\XMLReader.cpp
+ 29  570 138        30 xercesc\util\Transcoders\Uniconv390\Uniconv390TransService.cpp
+ 30  566 197        30 xercesc\dom\impl\DOMWriterImpl.cpp
+Average File NCSS: 81.49
+Average File CCN: 25.80
+Average File Functions: 8.06
+Project NCSS: 85648
+Project CCN: 27113
+Project Functions: 8469
 +------------------------------------------------------------------------------+ 

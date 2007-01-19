@@ -19,6 +19,7 @@ Tutorial
 $ cppncss -h
 
 Usage: cppncss [options] [file [file2 [directory [directory2] ...]]]
+Version: 1.0.2
 
 Options:
   -h                      print this message
@@ -26,12 +27,13 @@ Options:
   -v                      be extra verbose
   -k                      keep going on parsing errors
   -r                      process directories recursively
+  -x                      output result as xml
+  -f=<file>               output result to the given file
   -D<symbol>[=[<value>]]  replace define <symbol> with <value>
   -M<symbol>[=[<value>]]  replace macro <symbol> with <value>
   -p=<path>               remove <path> prefix when displaying file names
 
 See http://cppncss.sourceforge.net for more information.
-
 +------------------------------------------------------------------------------+
 
 * Running
@@ -72,22 +74,6 @@ Was expecting one of:
     "::" ...
     "[" ...
 
-        at cppast.Parser.generateParseException(Parser.java:11719)
-        at cppast.Parser.jj_consume_token(Parser.java:11590)
-        at cppast.Parser.declaration(Parser.java:826)
-        at cppast.Parser.external_declaration(Parser.java:161)
-        at cppast.Parser.translation_unit(Parser.java:86)
-        at cppncss.Analyzer.parse(Analyzer.java:249)
-        at cppncss.Analyzer.process(Analyzer.java:227)
-        at cppncss.Analyzer.process(Analyzer.java:208)
-        at cppncss.Analyzer.start(Analyzer.java:190)
-        at org.picocontainer.defaults.DefaultLifecycleStrategy.start(DefaultLifecycleStrategy.java:46)
-        at org.picocontainer.defaults.InstantiatingComponentAdapter.start(InstantiatingComponentAdapter.java:164)
-        at org.picocontainer.defaults.DecoratingComponentAdapter.start(DecoratingComponentAdapter.java:154)
-        at org.picocontainer.defaults.CachingComponentAdapter.start(CachingComponentAdapter.java:86)
-        at org.picocontainer.defaults.DefaultPicoContainer$OrderedComponentAdapterLifecycleManager.start(DefaultPicoContainer.java:663)
-        at org.picocontainer.defaults.DefaultPicoContainer.start(DefaultPicoContainer.java:464)
-        at cppncss.CppNcss.main(CppNcss.java:82)
 Skipping xerces-c-src_2_7_0/src\xercesc\com\BindStatusCallback.h : Parse error (line 30, column 39)
 /////////////////////////////////////////////////////////////////////////////
 // BindStatCallback

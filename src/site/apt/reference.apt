@@ -10,8 +10,6 @@ Reference
 
 * Non Commenting Source Statement (NCSS)
 
-** Counting
-
  Roughly spoken, this measurement is approximately equivalent to counting ';' and '\{' characters in source files.
 
  Actually, the counter gets incremented by one for each of the following constructs:
@@ -83,9 +81,8 @@ Reference
 
 * Cyclomatic Complexity Number (CCN)
 
- CCN is also know as McCabe Metric.\
- There exists a much hyped theory behind it based on graph theory, but it all comes down to simply counting <if>, <for>, <while>, etc.. statements in a method.\
- Whenever the control flow of a method splits, the counter gets incremented by one.
+ CCN is also known as McCabe Metric.\
+ Whenever the control flow of a method splits, the counter gets incremented by one : basically it falls down to counting the <if>, <for>, <while>, etc.. statements in a method
 
  Each method has a minimum value of 1 per default. For each of the following constructs this value gets incremented by one:
 

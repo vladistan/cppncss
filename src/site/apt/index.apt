@@ -27,10 +27,10 @@ Overview
 
   * XSL stylesheets for HTML output
 
+  * {{{http://ant.apache.org}Ant}} task
+
 * Planned features
 
   * number of classes
 
   * number of packages/modules
-
-  * {{{http://ant.apache.org}Ant}} task
