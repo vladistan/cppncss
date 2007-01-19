@@ -1,0 +1,88 @@
+  ------
+  Ant Task
+  ------
+  Mathieu Champlon
+  ------
+
+CppNcss
+
+* Description
+
+ This task integrates CppNcss into an {{{http://ant.apache.org}Apache Ant}} build process.\
+ It generates an xml report to a file which in turn can be transformed to an html page with the {{{http://ant.apache.org/manual/CoreTasks/style.html}XSLT}} task.
+
+ In order to use the task it must be defined with a {{{http://ant.apache.org/manual/CoreTasks/taskdef.html}Taskdef}}.
+
++------------------------------------------------------------------------------+
+<taskdef name="cppncss" classname="cppncss.CppNcssTask">
+  <classpath>
+    <pathelement location="cppncss-1.0.2-SNAPSHOT.jar"/>
+    <pathelement location="dom4j-1.6.1.jar"/>
+  </classpath>
+</taskdef>
++------------------------------------------------------------------------------+
+
+* Parameters
+
+*------------------------------------+---------------------------------------------------------------------------------------------+--------------+
+| <<Attribute>>                      | <<Description>>                                                                             | <<Required>> |
+*------------------------------------+---------------------------------------------------------------------------------------------+--------------+
+| tofile                             | the name of the output file                                                                 | Yes          |
+*------------------------------------+---------------------------------------------------------------------------------------------+--------------+
+| prefix                             | the prefix to remove from pathes                                                            | No           |
+*------------------------------------+---------------------------------------------------------------------------------------------+--------------+
+| keepgoing                          | whether the parsing must keep going instead of stopping upon the first error, default to no | No           |
+*------------------------------------+---------------------------------------------------------------------------------------------+--------------+
+
+* Parameters specified as nested elements
+
+ * fileset
+
+   Use filesets to specify the source files to parse.
+
+ * define
+
+   Use defines to suppress define symbols from input while parsing.
+
+  * Parameters
+
+*------------------------------------+------------------------------------------------+--------------+
+| <<Attribute>>                      | <<Description>>                                | <<Required>> |
+*------------------------------------+------------------------------------------------+--------------+
+| name                               | the symbol to replace                          | Yes          |
+*------------------------------------+------------------------------------------------+--------------+
+| value                              | the value of the replacement, default to empty | No           |
+*------------------------------------+------------------------------------------------+--------------+
+
+ * macro
+
+   Use macros to suppress macro expressions from input while parsing.
+
+  * Parameters
+
+*------------------------------------+------------------------------------------------+--------------+
+| <<Attribute>>                      | <<Description>>                                | <<Required>> |
+*------------------------------------+------------------------------------------------+--------------+
+| name                               | the symbol to replace                          | Yes          |
+*------------------------------------+------------------------------------------------+--------------+
+| value                              | the value of the replacement, default to empty | No           |
+*------------------------------------+------------------------------------------------+--------------+
+
+* Examples
+
++------------------------------------------------------------------------------+
+<cppncss tofile="cppncss.xml">
+  <fileset dir="src"/>
+  <define name="WINAPI"/>
+  <macro name="BEGIN_COM_MAP"/>
+  <macro name="END_COM_MAP"/>
+</cppncss>
++------------------------------------------------------------------------------+
+ analyzes all files found recursively under the src directory, with one define and two macro symbols to suppress.
+
++------------------------------------------------------------------------------+
+<xslt>
+ ...
+</xslt>
++------------------------------------------------------------------------------+
+ TODO
