@@ -127,8 +127,6 @@ public final class CppNcssTask extends AntlibDefinition
     {
         if( macro.getName() == null )
             throw new BuildException( "Missing required 'name' for macro" );
-        if( macro.getValue() == null )
-            throw new BuildException( "Missing required 'value' for macro" );
         macros.add( macro );
     }
 
@@ -158,6 +156,10 @@ public final class CppNcssTask extends AntlibDefinition
             args.add( "-k" );
         if( prefix != null )
             args.add( "-p=" + prefix );
+        for( Macro macro : macros )
+            args.add( macro.toArg() );
+        for( Define define : defines )
+            args.add( define.toArg() );
         for( FileSet fileset : filesets )
         {
             final DirectoryScanner scanner = fileset.getDirectoryScanner( getProject() );
@@ -169,13 +171,25 @@ public final class CppNcssTask extends AntlibDefinition
     }
 
     /**
-     * Provides a define definition.
+     * Provides a symbol definition.
      *
      * @author Mathieu Champlon
      */
-    public static class Define
+    private static class Symbol
     {
         private String name;
+        private String value;
+        private final String prefix;
+
+        /**
+         * Create a symbol.
+         *
+         * @param prefix the command line option prefix
+         */
+        protected Symbol( final String prefix )
+        {
+            this.prefix = prefix;
+        }
 
         /**
          * Sets the name.
@@ -198,16 +212,6 @@ public final class CppNcssTask extends AntlibDefinition
         {
             return name;
         }
-    }
-
-    /**
-     * Provides a macro definition.
-     *
-     * @author Mathieu Champlon
-     */
-    public static final class Macro extends Define
-    {
-        private String value;
 
         /**
          * Sets the macro value.
@@ -216,7 +220,7 @@ public final class CppNcssTask extends AntlibDefinition
          *
          * @param value the value
          */
-        public void setValue( final String value )
+        public final void setValue( final String value )
         {
             this.value = value;
         }
@@ -226,9 +230,51 @@ public final class CppNcssTask extends AntlibDefinition
          *
          * @return the value
          */
-        public String getValue()
+        public final String getValue()
         {
             return value;
+        }
+
+        /**
+         * Create the corresponding command line argument.
+         */
+        public final String toArg()
+        {
+            if( value == null )
+                return "-" + prefix + name;
+            return "-" + prefix + name + '=' + value;
+        }
+    }
+
+    /**
+     * Provides a define definition.
+     *
+     * @author Mathieu Champlon
+     */
+    public static final class Define extends Symbol
+    {
+        /**
+         * Create a define symbol.
+         */
+        public Define()
+        {
+            super( "D" );
+        }
+    }
+
+    /**
+     * Provides a macro definition.
+     *
+     * @author Mathieu Champlon
+     */
+    public static final class Macro extends Symbol
+    {
+        /**
+         * Create a macro symbol.
+         */
+        public Macro()
+        {
+            super( "M" );
         }
     }
 }
