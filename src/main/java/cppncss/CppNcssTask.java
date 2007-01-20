@@ -46,11 +46,10 @@ import tools.Options;
 public final class CppNcssTask extends AntlibDefinition
 {
     private final List<FileSet> filesets = new ArrayList<FileSet>();
-    private final List<Define> defines = new ArrayList<Define>();
-    private final List<Macro> macros = new ArrayList<Macro>();
-    private String prefix;
-    private String filename;
+    private final List<Symbol> symbols = new ArrayList<Symbol>();
     private boolean keepGoing = false;
+    private String filename;
+    private String prefix;
 
     /**
      * Add a set of source files.
@@ -115,7 +114,7 @@ public final class CppNcssTask extends AntlibDefinition
     {
         if( define.getName() == null )
             throw new BuildException( "Missing required 'name' for define" );
-        defines.add( define );
+        symbols.add( define );
     }
 
     /**
@@ -127,7 +126,7 @@ public final class CppNcssTask extends AntlibDefinition
     {
         if( macro.getName() == null )
             throw new BuildException( "Missing required 'name' for macro" );
-        macros.add( macro );
+        symbols.add( macro );
     }
 
     /**
@@ -156,10 +155,8 @@ public final class CppNcssTask extends AntlibDefinition
             args.add( "-k" );
         if( prefix != null )
             args.add( "-p=" + prefix );
-        for( Macro macro : macros )
-            args.add( macro.toArg() );
-        for( Define define : defines )
-            args.add( define.toArg() );
+        for( Symbol symbol : symbols )
+            args.add( symbol.toArg() );
         for( FileSet fileset : filesets )
         {
             final DirectoryScanner scanner = fileset.getDirectoryScanner( getProject() );
