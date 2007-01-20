@@ -16,7 +16,7 @@ CppNcss
 +------------------------------------------------------------------------------+
 <taskdef name="cppncss" classname="cppncss.CppNcssTask">
   <classpath>
-    <pathelement location="cppncss-1.0.2-SNAPSHOT.jar"/>
+    <pathelement location="cppncss-1.0.2.jar"/>
     <pathelement location="dom4j-1.6.1.jar"/>
   </classpath>
 </taskdef>
