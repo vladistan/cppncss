@@ -220,6 +220,11 @@ public class FunctionNameExtractorTest extends TestCase
         assertEquals( "MyClass::operator()( int )", extract( "void MyClass::operator()( int i ) {}" ) );
     }
 
+    public void testFunctionInAnonymousNamespace() throws ParseException
+    {
+        assertEquals( "`anonymous-namespace'::MyFunction()", extract( "namespace { void MyFunction(); }" ) );
+    }
+
     public void testMethodOfClassDefinedInFunction() throws ParseException
     {
         final String content = "void MyFunction() { class MyClass{ void MyMethod(); }; }";
@@ -227,6 +232,16 @@ public class FunctionNameExtractorTest extends TestCase
         final Node node = root.jjtGetChild( 0 ).jjtGetChild( 2 ).jjtGetChild( 0 );
         final String actual = (String)node.jjtAccept( new FunctionNameExtractor(), null );
         // final String actual = (String)new FunctionNameExtractor().visit( node, null );
-        assertEquals( "MyFunction()::MyClass::MyMethod()", actual );
+        assertEquals( "MyFunction::MyClass::MyMethod()", actual );
+    }
+
+    public void testMethodOfClassDefinedLocally() throws ParseException
+    {
+        final String content = "void MyFunction() { { class MyClass{ void MyMethod(); }; } }";
+        final AstTranslationUnit root = new Parser( new StringReader( content ) ).translation_unit();
+        final Node node = root.jjtGetChild( 0 ).jjtGetChild( 2 ).jjtGetChild( 0 );
+        final String actual = (String)node.jjtAccept( new FunctionNameExtractor(), null );
+        // final String actual = (String)new FunctionNameExtractor().visit( node, null );
+        assertEquals( "MyFunction::MyClass::MyMethod()", actual );
     }
 }

@@ -387,13 +387,12 @@ void using_declaration() :
 void namespace_definition() #NamespaceDefinition :
 {
    Token token;
-   String name = "anonymous";
+   String name = "`anonymous-namespace'";
 }
 {
     "namespace"
     (
-     LOOKAHEAD(2)
-      [token = <ID> { name = token.image; }]
+      LOOKAHEAD(2) [token = <ID> { name = token.image; }]
       "{" { openScope( name ); }
       ( declaration() )*
       "}" { closeScope(); }
