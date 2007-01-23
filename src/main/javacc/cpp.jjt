@@ -526,19 +526,22 @@ void class_specifier() :
 }
 {
    LOOKAHEAD(class_key() "{")
-    class_key() "{" [member_specification()] "}" #ClassDefinition // FIXME should probably open an empty scope
+   (
+    class_key()
+    "{" // FIXME should probably open an empty scope
+    [member_specification()]
+    "}"
+   ) #ClassDefinition
   |
+   LOOKAHEAD(class_head() "{")
    (
     name = class_head()
-    [
-     LOOKAHEAD("{")
-     (
-      "{" { openScope( name ); }
-      [member_specification()]
-      "}" { closeScope(); }
-     ) #ClassDefinition
-    ]
-   ) #ClassDeclaration( jjtree.nodeArity() == 0 )
+    "{" { openScope( name ); }
+    [member_specification()]
+    "}" { closeScope(); }
+   ) #ClassDefinition
+  |
+   class_head() #ClassDeclaration
 }
 
 void class_key() :
