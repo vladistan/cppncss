@@ -110,7 +110,7 @@ public final class Measure implements Comparable
         final Measure measure = (Measure)object;
         if( matches( measure.item, measure.filename, measure.line ) )
             return 0;
-        final int delta = (measure).counts.get( 0 ) - counts.get( 0 );
+        final int delta = measure.counts.get( 0 ) - counts.get( 0 );
         if( delta == 0 )
             return 1;
         return delta;

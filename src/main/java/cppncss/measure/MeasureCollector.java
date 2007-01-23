@@ -67,10 +67,10 @@ public final class MeasureCollector implements Collector
      */
     public void notify( final String label, final String item, final int line, final int count )
     {
-        if( index == null )
-            index = label;
         if( !labels.contains( label ) )
             labels.add( label );
+        if( index == null )
+            index = label;
         if( index.equals( label ) )
             insert( item, line, count );
         else
