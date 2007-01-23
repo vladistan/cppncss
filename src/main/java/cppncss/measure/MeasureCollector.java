@@ -71,18 +71,16 @@ public final class MeasureCollector implements Collector
             index = label;
         if( !labels.contains( label ) )
             labels.add( label );
-        if( this.index.equals( label ) )
+        if( index.equals( label ) )
             insert( item, line, count );
         else
             update( item, line, count );
     }
 
-    private boolean update( final String item, final int line, final int count )
+    private void update( final String item, final int line, final int count )
     {
         for( Measure measure : result )
-            if( measure.update( item, filename, line, count ) )
-                return true;
-        return false;
+            measure.update( item, filename, line, count );
     }
 
     private void insert( final String item, final int line, final int count )

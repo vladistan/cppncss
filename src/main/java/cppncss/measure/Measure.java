@@ -39,9 +39,9 @@ import java.util.List;
 public final class Measure implements Comparable
 {
     private final String item;
+    private final String filename;
     private final int line;
     private final List<Integer> counts = new ArrayList<Integer>();;
-    private final String filename;
 
     /**
      * Create a measure.
@@ -60,8 +60,8 @@ public final class Measure implements Comparable
         if( line < 0 )
             throw new IllegalArgumentException( "argument 'line' is < 0" );
         this.item = item;
-        this.line = line;
         this.filename = filename;
+        this.line = line;
         this.counts.add( count );
     }
 
@@ -74,14 +74,11 @@ public final class Measure implements Comparable
      * @param filename the file name of the item
      * @param line the location of the item
      * @param count the measure to record
-     * @return whether the measure has been added or not
      */
-    public boolean update( final String item, final String filename, final int line, final int count )
+    public void update( final String item, final String filename, final int line, final int count )
     {
-        if( !matches( item, filename, line ) )
-            return false;
-        counts.add( count );
-        return true;
+        if( matches( item, filename, line ) )
+            counts.add( count );
     }
 
     /**
@@ -121,6 +118,6 @@ public final class Measure implements Comparable
 
     private boolean matches( final String item, final String filename, final int line )
     {
-        return this.item.equals( item ) && this.line == line && this.filename.equals( filename );
+        return this.item.equals( item ) && this.filename.equals( filename ) && this.line == line;
     }
 }
