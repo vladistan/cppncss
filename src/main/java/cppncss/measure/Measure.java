@@ -38,10 +38,10 @@ import java.util.List;
  */
 public final class Measure implements Comparable
 {
+    private final List<Integer> counts = new ArrayList<Integer>();;
     private final String item;
     private final String filename;
     private final int line;
-    private final List<Integer> counts = new ArrayList<Integer>();;
 
     /**
      * Create a measure.
@@ -59,10 +59,10 @@ public final class Measure implements Comparable
             throw new IllegalArgumentException( "argument 'filename' is null" );
         if( line < 0 )
             throw new IllegalArgumentException( "argument 'line' is < 0" );
+        counts.add( count );
         this.item = item;
         this.filename = filename;
         this.line = line;
-        this.counts.add( count );
     }
 
     /**
