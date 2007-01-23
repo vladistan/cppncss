@@ -136,7 +136,7 @@ public class FunctionNameExtractorTest extends TestCase
         assertEquals( "MyClass::MyMethod()", extract( "void MyClass::MyMethod() const {}" ) );
     }
 
-    public void testMethodWithConstReferenceReturnTypeDefinition() throws ParseException
+    public void testMethodDefinitionWithConstReferenceReturnType() throws ParseException
     {
         assertEquals( "MyClass::MyMethod()", extract( "const MyType& MyClass::MyMethod() {}" ) );
     }
@@ -158,7 +158,7 @@ public class FunctionNameExtractorTest extends TestCase
         assertEquals( "MyClass::MyClass()", extract( "MyClass::MyClass() {}" ) );
     }
 
-    public void testConstructorWithParameterDefinition() throws ParseException
+    public void testConstructorDefinitionWithParameter() throws ParseException
     {
         assertEquals( "MyClass::MyClass( int )", extract( "MyClass::MyClass( int p ) {}" ) );
     }
