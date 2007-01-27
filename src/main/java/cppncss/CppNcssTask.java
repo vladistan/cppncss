@@ -156,7 +156,7 @@ public final class CppNcssTask extends AntlibDefinition
         if( prefix != null )
             args.add( "-p=" + prefix );
         for( Symbol symbol : symbols )
-            args.add( symbol.toArg() );
+            args.add( symbol.toArgument() );
         for( FileSet fileset : filesets )
         {
             final DirectoryScanner scanner = fileset.getDirectoryScanner( getProject() );
@@ -172,7 +172,7 @@ public final class CppNcssTask extends AntlibDefinition
      *
      * @author Mathieu Champlon
      */
-    private static class Symbol
+    public static class Symbol
     {
         private String name;
         private String value;
@@ -235,7 +235,7 @@ public final class CppNcssTask extends AntlibDefinition
         /**
          * Create the corresponding command line argument.
          */
-        public final String toArg()
+        public final String toArgument()
         {
             if( value == null )
                 return "-" + prefix + name;
