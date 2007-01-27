@@ -55,8 +55,8 @@ public final class AntLogger extends AbstractLogger
      */
     public void error( final String filename, final Throwable throwable, final String reason )
     {
-        project.log( throwable.getMessage(), Project.MSG_DEBUG );
-        project.log( "Skipping " + filename + " : " + reason, Project.MSG_VERBOSE );
+        project.log( throwable.getMessage(), Project.MSG_VERBOSE );
+        project.log( "Skipping " + filename + " : " + reason, Project.MSG_INFO );
     }
 
     /**
@@ -64,7 +64,7 @@ public final class AntLogger extends AbstractLogger
      */
     public void changed( final String filename )
     {
-        project.log( "Parsing " + filename, Project.MSG_DEBUG );
+        project.log( "Parsing " + filename, Project.MSG_VERBOSE );
     }
 
     /**
@@ -72,6 +72,6 @@ public final class AntLogger extends AbstractLogger
      */
     protected void log( final String message )
     {
-        project.log( message, Project.MSG_VERBOSE );
+        project.log( message, Project.MSG_INFO );
     }
 }
