@@ -6,9 +6,10 @@
 
 Tutorial
 
- The following tutorial describes step by step the procedure that usually takes only a few minutes of configuring CppNcss for a project.
+ The following tutorial describes step by step the procedure of configuring CppNcss for a project.\
+ Such a procedure usually takes only a few minutes.
 
- It is based on the analysis of the {{{http://xml.apache.org/xerces-c}Apache Xerces 2.7.0}} source code.\
+ This use case is based on the analysis of the {{{http://xml.apache.org/xerces-c}Apache Xerces 2.7.0}} source code.\
  The complete input and output can be found in the {{{examples.html}Example}} section.
 
 * Usage
@@ -103,7 +104,11 @@ MY_MACRO( "something", 12, false )
 +------------------------------------------------------------------------------+
 
  The only thing that matters is to replace it alltogether in order to obtain valid C++.\
- Usually simply removing a defined symbol or a macro is the easiest solution, for example in this case -MMY_MACRO= is enough.
+ Usually simply removing a defined symbol or a macro is the easiest solution, for example in this case the following is enough :
+
++------------------------------------------------------------------------------+
+-MMY_MACRO=
++------------------------------------------------------------------------------+
 
  Sometimes however the symbol must be replaced by a piece of code in order to form valid C++, for example :
 
