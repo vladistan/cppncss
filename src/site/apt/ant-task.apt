@@ -79,10 +79,3 @@ CppNcss
 </cppncss>
 +------------------------------------------------------------------------------+
  analyzes all files found recursively under the src directory, with one define and two macro symbols to suppress.
-
-+------------------------------------------------------------------------------+
-<xslt>
- ...
-</xslt>
-+------------------------------------------------------------------------------+
- TODO
