@@ -98,7 +98,7 @@ public class AsciiResultOutputTest extends EasyMockTestCase
         output.notify( "type", makeLabels() );
         stream.reset();
         output.notify( "type", "label", 12l );
-        assertEquals( "type label: 12" + LINE_SEPARATOR, stream.toString() );
+        assertEquals( LINE_SEPARATOR + "type label: 12" + LINE_SEPARATOR, stream.toString() );
     }
 
     public void testNotifyAverageOutputsCountsAndLabel()

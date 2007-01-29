@@ -73,16 +73,16 @@ public final class AverageCollector implements Collector
     /**
      * {@inheritDoc}
      */
-    public void flush()
+    public void changed( final String filename )
     {
-        for( Average average : result )
-            average.accept( observer );
     }
 
     /**
      * {@inheritDoc}
      */
-    public void changed( final String filename )
+    public void flush()
     {
+        for( Average average : result )
+            average.accept( observer );
     }
 }

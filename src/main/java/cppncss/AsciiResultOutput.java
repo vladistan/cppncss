@@ -40,6 +40,7 @@ import java.util.Locale;
 public final class AsciiResultOutput extends AbstractResultOutput
 {
     private final PrintStream stream;
+    private boolean isFirstSum = true;
 
     /**
      * Create an ascii result output to a given stream.
@@ -106,6 +107,11 @@ public final class AsciiResultOutput extends AbstractResultOutput
      */
     public void notify( final String type, final String label, final long sum )
     {
+        if( isFirstSum )
+        {
+            isFirstSum = false;
+            stream.println();
+        }
         stream.println( type + " " + label + ": " + sum );
     }
 
