@@ -11,9 +11,12 @@ Overview
  The results provided can be used to focus review and indicate opportunities for refactoring.\
  Such a proactive approach to development will increase quality through design improvements, easier testing, and reduction of defects.
 
+ Usual tools generally compute largely useless measurements (like the number of lines of code, the number of commented lines or even the number of whitespaces...).\
+ CppNcss however focusses on more advanced indicators to receive a valuable feedback on the quality of a given code base.
+
 * Available features
 
-  * Non Commenting Source Statement (NCSS)
+  * Non Commenting Source Statements (NCSS)
 
   * Cyclomatic Complexity Number (CCN)
 
