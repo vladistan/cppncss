@@ -234,6 +234,8 @@ public final class CppNcssTask extends AntlibDefinition
 
         /**
          * Create the corresponding command line argument.
+         *
+         * @return the formatted argument
          */
         public final String toArgument()
         {
