@@ -11,14 +11,14 @@ Overview
  The results provided can be used to focus review and indicate opportunities for refactoring.\
  Such a proactive approach to development will increase quality through design improvements, easier testing, and reduction of defects.
 
- Usual tools generally compute rather useless measurements because they largely depend on the coding convention used (like the number of lines of code, the number of commented lines or the number of whitespaces...).\
+ Usual tools generally compute rather useless measurements largely biased by the coding conventions (like the number of lines of code, the number of commented lines or the number of whitespaces...).\
  CppNcss however focusses on more advanced indicators to receive a valuable feedback on the quality of a given code base.
 
 * Available features
 
   * Non Commenting Source Statements (NCSS) and Cyclomatic Complexity Number (CCN) measurements
 
-  * measurements on file (declaration implementation files) and function/method level
+  * measurements on file (declaration/implementation files) and function/method level
 
   * command line or {{{http://ant.apache.org}Ant}} task driven
 
