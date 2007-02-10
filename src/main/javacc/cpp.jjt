@@ -80,31 +80,26 @@ PARSER_END(Parser)
 SKIP :
 {
   " "
-|
-  "\t"
-|
-  "\r" | "\\\r"
-|
-  "\n" | "\\\n"
-|
-  "/*" : COMMENT
-}
-
-<COMMENT> SKIP:
-{
-   "*/" : DEFAULT
-}
-
-<COMMENT> MORE:
-{
-  < ~[] >
+| "\t"
+| "\r" | "\\\r"
+| "\n" | "\\\n"
 }
 
 SPECIAL_TOKEN :
 {
-  < SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")? >
- |
-  < PREPROCESSOR: "#" (~["\n","\r"] | "\\"("\n"|"\r"|"\r\n"))* ("\n"|"\r"|"\r\n")? >
+ < SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")? >
+| < PREPROCESSOR: "#" (~["\n","\r"] | "\\"("\n"|"\r"|"\r\n"))* ("\n"|"\r"|"\r\n")? >
+| "/*" : COMMENT
+}
+
+<COMMENT> SPECIAL_TOKEN :
+{
+ "*/" : DEFAULT
+}
+
+<COMMENT> MORE :
+{
+ < ~[] >
 }
 
 TOKEN :
@@ -261,8 +256,7 @@ TOKEN :
 TOKEN :
 {
   < CHARACTER : ("L")? "'" ( (~["'","\\","\n","\r"]) | <_CHAR> ) "'" >
-|
-  < STRING : ("L")? "\"" ( (~["\"","\\","\n","\r"]) | <_CHAR> )* "\"" >
+| < STRING : ("L")? "\"" ( (~["\"","\\","\n","\r"]) | <_CHAR> )* "\"" >
 }
 
 TOKEN :
