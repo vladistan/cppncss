@@ -64,9 +64,9 @@ public class AstTest extends TestCase
 
         public void parse( final String content ) throws ParseException
         {
-            final StringWriter writer = new StringWriter();
             final Node root = new Parser( new StringReader( content ) ).translation_unit();
             position = 0;
+            final StringWriter writer = new StringWriter();
             dump( root, new PrintWriter( writer ), 0 );
             assertEquals( buffer.toString(), writer.toString() );
         }
@@ -958,5 +958,42 @@ public class AstTest extends TestCase
         expression.add( "  ParameterTypeQualifier", "&" );
         expression.add( "CatchBlock" );
         expression.parse( "try {} catch( exception& ) {} catch(...) {}" );
+    }
+
+    private String getComment( final SimpleNode node )
+    {
+        Token token = node.getFirstToken().specialToken;
+        if( token == null )
+            return null;
+        while( token.specialToken != null )
+            token = token.specialToken;
+        while( token != null )
+        {
+            if( token.kind == Parser.C_STYLE_COMMENT || token.kind == Parser.CPP_STYLE_COMMENT )
+                return token.image;
+            token = token.next;
+        }
+        return null;
+    }
+
+    public void testMultiLineCommentAtBeginningOfFile() throws ParseException
+    {
+        final String content = "/* this is the comment */";
+        final SimpleNode root = new Parser( new StringReader( content ) ).translation_unit();
+        assertEquals( content, getComment( root ) );
+    }
+
+    public void testSingleLineCommentAtBeginningOfFile() throws ParseException
+    {
+        final String content = "// this is the comment";
+        final SimpleNode root = new Parser( new StringReader( content ) ).translation_unit();
+        assertEquals( content, getComment( root ) );
+    }
+
+    public void testMultipleSingleLineCommentAtBeginningOfFile() throws ParseException
+    {
+        final String content = "// this is the comment" + '\n' + "// with another line";
+        final SimpleNode root = new Parser( new StringReader( content ) ).translation_unit();
+        assertEquals( content, getComment( root ) );
     }
 }

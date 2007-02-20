@@ -933,6 +933,11 @@ public class ParserTest extends TestCase
         parse( "void (*MyFunction())() {}" );
     }
 
+    public void testFunctionWithCommentedParameterName() throws ParseException
+    {
+        parse( "void MyFunction( int /*i*/ ) {}" );
+    }
+
     public void testTMP() throws IOException, ParseException
     {
         final Parser parser = new Parser( new StringReader( "" ) );

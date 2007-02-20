@@ -87,19 +87,9 @@ SKIP :
 
 SPECIAL_TOKEN :
 {
-  < SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")? >
-| < PREPROCESSOR: "#" (~["\n","\r"] | "\\"("\n"|"\r"|"\r\n"))* ("\n"|"\r"|"\r\n")? >
-| "/*" : COMMENT
-}
-
-<COMMENT> SPECIAL_TOKEN :
-{
- "*/" : DEFAULT
-}
-
-<COMMENT> MORE :
-{
- < ~[] >
+  < C_STYLE_COMMENT : "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")? ("//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")?)* >
+| < CPP_STYLE_COMMENT : "/*" (~["*"])* "*" (~["*","/"] (~["*"])* "*" | "*")* "/" >
+| < PREPROCESSOR : "#" (~["\n","\r"] | "\\"("\n"|"\r"|"\r\n"))* ("\n"|"\r"|"\r\n")? >
 }
 
 TOKEN :
