@@ -26,28 +26,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
+package cpptools;
 
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.ProjectComponent;
 
 /**
- * Implements an event handler for logging to Ant.
+ * Logs all events to System.err.
  *
  * @author Mathieu Champlon
  */
-public final class AntLogger extends AbstractLogger
+public final class ConsoleLogger extends AbstractLogger
 {
-    private final ProjectComponent project;
+    private final boolean debug;
+    private final boolean verbose;
 
     /**
      * Create an event output.
      *
-     * @param project the project instance
+     * @param options program options
      */
-    public AntLogger( final ProjectComponent project )
+    public ConsoleLogger( final Options options )
     {
-        this.project = project;
+        debug = options.hasOption( "d" );
+        verbose = debug || options.hasOption( "v" );
     }
 
     /**
@@ -55,8 +55,10 @@ public final class AntLogger extends AbstractLogger
      */
     public void error( final String filename, final Throwable throwable, final String reason )
     {
-        project.log( throwable.getMessage(), Project.MSG_VERBOSE );
-        project.log( "Skipping " + filename + " : " + reason, Project.MSG_INFO );
+        if( debug )
+            System.err.println( throwable.getMessage() );
+        if( verbose )
+            System.err.println( "Skipping " + filename + " : " + reason );
     }
 
     /**
@@ -64,7 +66,8 @@ public final class AntLogger extends AbstractLogger
      */
     public void changed( final String filename )
     {
-        project.log( "Parsing " + filename, Project.MSG_VERBOSE );
+        if( debug )
+            System.err.println( "Parsing " + filename );
     }
 
     /**
@@ -72,6 +75,7 @@ public final class AntLogger extends AbstractLogger
      */
     protected void log( final String message )
     {
-        project.log( message, Project.MSG_INFO );
+        if( verbose )
+            System.err.println( message );
     }
 }

@@ -26,40 +26,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss.analyzer.preprocessor;
+package cpptools.preprocessor;
 
-import java.util.Stack;
 import cppast.Token;
 
 /**
- * Manages define pre-proprecessing.
+ * Defines a token flow filter.
  *
  * @author Mathieu Champlon
  */
-public final class Define extends AbstractTokenFilter
+public interface TokenFilter
 {
     /**
-     * Create a define definition.
+     * Test if the filter name matches a given name.
      *
-     * @param buffer the token stack where to output filtered tokens
-     * @param name the define symbol
-     * @param value the define value
+     * @param name the name to test
+     * @return whether the filter name matches or not
      */
-    public Define( final Stack<Token> buffer, final String name, final String value )
-    {
-        super( buffer, name, value );
-    }
+    boolean matches( String name );
 
     /**
-     * {@inheritDoc}
+     * Trigger filtering based on a given token.
+     *
+     * @param token the head of the token flow
+     * @return whether the filter has been applied or not
      */
-    public boolean process( final Token token )
-    {
-        if( matches( token.image ) )
-        {
-            insert( token );
-            return true;
-        }
-        return false;
-    }
+    boolean process( Token token );
 }

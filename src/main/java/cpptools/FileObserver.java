@@ -26,46 +26,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss.analyzer;
+package cpptools;
 
 /**
- * Defines events associated to analyzis.
+ * Provides a means to be notified about a file being processed.
  *
  * @author Mathieu Champlon
  */
-public interface EventHandler
+public interface FileObserver
 {
-    /**
-     * Notify a start event.
-     */
-    void started();
-
-    /**
-     * Notify an end event.
-     *
-     * @param parsed number of files parsed
-     * @param total total number of files
-     */
-    void finished( int parsed, int total );
-
-    /**
-     * Notify an error.
-     *
-     * @param filename the location of the error
-     * @param throwable the error
-     * @param reason the description of the error
-     */
-    void error( String filename, Throwable throwable, String reason );
-
-    /**
-     * Display a diagnostic.
-     *
-     * @param filename the file name
-     * @param line the line number
-     * @param column the column offset
-     */
-    void display( String filename, int line, int column );
-
     /**
      * Specify the file being processed.
      *

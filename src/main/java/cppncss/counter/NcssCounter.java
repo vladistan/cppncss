@@ -30,6 +30,7 @@ package cppncss.counter;
 
 import cppast.AstBreakStatement;
 import cppast.AstCaseStatement;
+import cppast.AstCatchBlock;
 import cppast.AstConstructorDeclaration;
 import cppast.AstConstructorInitializer;
 import cppast.AstContinueStatement;
@@ -42,7 +43,6 @@ import cppast.AstExpressionStatement;
 import cppast.AstFunctionBody;
 import cppast.AstFunctionDeclaration;
 import cppast.AstGotoStatement;
-import cppast.AstCatchBlock;
 import cppast.AstIfStatement;
 import cppast.AstIterationStatement;
 import cppast.AstLabelStatement;

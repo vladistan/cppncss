@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss.analyzer;
+package cpptools;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,19 +38,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-import tools.Options;
 import cppast.ParseException;
 import cppast.Parser;
 import cppast.ParserVisitor;
 import cppast.Token;
-import cppncss.analyzer.preprocessor.PreProcessor;
+import cpptools.preprocessor.PreProcessor;
 
 /**
  * Builds and walks a forrest of abstract syntax trees from a set of given files.
  *
- * @author Mathieu Champlon
- */
-/**
  * @author Mathieu Champlon
  */
 public final class Analyzer

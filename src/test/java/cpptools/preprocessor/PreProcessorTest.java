@@ -26,12 +26,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss.analyzer.preprocessor;
+package cpptools.preprocessor;
 
 import java.io.StringReader;
 import junit.framework.TestCase;
 import cppast.Token;
-import cppncss.analyzer.preprocessor.PreProcessor;
 
 /**
  * @author Mathieu Champlon

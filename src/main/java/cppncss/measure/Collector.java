@@ -28,8 +28,8 @@
 
 package cppncss.measure;
 
-import cppncss.analyzer.FileObserver;
 import cppncss.counter.CounterObserver;
+import cpptools.FileObserver;
 
 /**
  * Adapts observers to a single interface.

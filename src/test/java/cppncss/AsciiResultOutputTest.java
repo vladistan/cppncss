@@ -34,7 +34,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
-import tools.EasyMockTestCase;
+import cpptools.EasyMockTestCase;
 
 /**
  * @author Mathieu Champlon

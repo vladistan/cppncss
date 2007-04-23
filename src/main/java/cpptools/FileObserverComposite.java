@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss.analyzer;
+package cpptools;
 
 import java.util.ArrayList;
 import java.util.List;

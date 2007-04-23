@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss.analyzer.preprocessor;
+package cpptools.preprocessor;
 
 import cppast.Token;
 

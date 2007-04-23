@@ -28,7 +28,7 @@
  * $Id: $
  */
 
-package tools;
+package cpptools;
 
 import java.util.List;
 import junit.framework.TestCase;

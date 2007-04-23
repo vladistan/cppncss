@@ -28,7 +28,6 @@
 
 package cppncss.measure;
 
-import cppncss.measure.Measure;
 import junit.framework.TestCase;
 
 /**

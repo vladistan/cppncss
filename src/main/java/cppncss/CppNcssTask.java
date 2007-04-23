@@ -36,7 +36,8 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.taskdefs.AntlibDefinition;
 import org.apache.tools.ant.types.FileSet;
-import tools.Options;
+import cpptools.AntLogger;
+import cpptools.Options;
 
 /**
  * Provides an Apache Ant task implementation for CppNcss.

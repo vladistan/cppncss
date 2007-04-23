@@ -29,9 +29,9 @@
 package cppncss.counter;
 
 import java.io.StringReader;
-import tools.EasyMockTestCase;
 import cppast.ParseException;
 import cppast.Parser;
+import cpptools.EasyMockTestCase;
 
 /**
  * @author Mathieu Champlon

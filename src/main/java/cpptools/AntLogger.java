@@ -26,30 +26,52 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss.analyzer.preprocessor;
+package cpptools;
 
-import cppast.Token;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.ProjectComponent;
 
 /**
- * Defines a token flow filter.
+ * Implements an event handler for logging to Ant.
  *
  * @author Mathieu Champlon
  */
-public interface TokenFilter
+public final class AntLogger extends AbstractLogger
 {
-    /**
-     * Test if the filter name matches a given name.
-     *
-     * @param name the name to test
-     * @return whether the filter name matches or not
-     */
-    boolean matches( String name );
+    private final ProjectComponent project;
 
     /**
-     * Trigger filtering based on a given token.
+     * Create an event output.
      *
-     * @param token the head of the token flow
-     * @return whether the filter has been applied or not
+     * @param project the project instance
      */
-    boolean process( Token token );
+    public AntLogger( final ProjectComponent project )
+    {
+        this.project = project;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void error( final String filename, final Throwable throwable, final String reason )
+    {
+        project.log( throwable.getMessage(), Project.MSG_VERBOSE );
+        project.log( "Skipping " + filename + " : " + reason, Project.MSG_INFO );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void changed( final String filename )
+    {
+        project.log( "Parsing " + filename, Project.MSG_VERBOSE );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected void log( final String message )
+    {
+        project.log( message, Project.MSG_INFO );
+    }
 }

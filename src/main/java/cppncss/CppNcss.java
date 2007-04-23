@@ -33,12 +33,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
-import tools.Options;
-import tools.Usage;
 import cppast.VisitorComposite;
-import cppncss.analyzer.Analyzer;
-import cppncss.analyzer.EventHandler;
-import cppncss.analyzer.FileObserverComposite;
 import cppncss.counter.CcnCounter;
 import cppncss.counter.Counter;
 import cppncss.counter.FileVisitor;
@@ -49,6 +44,12 @@ import cppncss.measure.AverageCollector;
 import cppncss.measure.Collector;
 import cppncss.measure.MeasureCollector;
 import cppncss.measure.SumCollector;
+import cpptools.Analyzer;
+import cpptools.ConsoleLogger;
+import cpptools.EventHandler;
+import cpptools.FileObserverComposite;
+import cpptools.Options;
+import cpptools.Usage;
 
 /**
  * Provides code measures for C++.
@@ -57,8 +58,8 @@ import cppncss.measure.SumCollector;
  */
 public final class CppNcss
 {
-    private final FileObserverComposite observers = new FileObserverComposite();
     private final VisitorComposite visitors = new VisitorComposite();
+    private final FileObserverComposite observers = new FileObserverComposite();
     private final List<Collector> collectors = new ArrayList<Collector>();
     private final ResultOutput output;
     private final Analyzer analyzer;

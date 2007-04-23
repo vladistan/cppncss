@@ -26,12 +26,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
+package cpptools;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import cppncss.analyzer.EventHandler;
 
 /**
  * Captures behaviours common to loggers.

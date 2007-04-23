@@ -26,57 +26,72 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
+package cpptools.preprocessor;
 
-import tools.Options;
+import java.util.Stack;
+import cppast.ParserTokenManager;
+import cppast.Token;
 
 /**
- * Logs all events to System.err.
+ * Manages macro pre-processing.
  *
  * @author Mathieu Champlon
  */
-public final class ConsoleLogger extends AbstractLogger
+public final class Macro extends AbstractTokenFilter
 {
-    private final boolean debug;
-    private final boolean verbose;
+    private final TokenProvider provider;
 
     /**
-     * Create an event output.
+     * Create a macro.
      *
-     * @param options program options
+     * @param provider the token provider to retrieve subsequent tokens
+     * @param buffer the token stack where to output filtered tokens
+     * @param name the define symbol
+     * @param value the define value
      */
-    public ConsoleLogger( final Options options )
+    public Macro( final TokenProvider provider, final Stack<Token> buffer, final String name, final String value )
     {
-        debug = options.hasOption( "d" );
-        verbose = debug || options.hasOption( "v" );
+        super( buffer, name, value );
+        if( provider == null )
+            throw new IllegalArgumentException( "parameter 'provider' is null" );
+        this.provider = provider;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void error( final String filename, final Throwable throwable, final String reason )
+    public boolean process( final Token token )
     {
-        if( debug )
-            System.err.println( throwable.getMessage() );
-        if( verbose )
-            System.err.println( "Skipping " + filename + " : " + reason );
+        if( matches( token.image ) )
+        {
+            final Token next = provider.next();
+            if( next.kind == ParserTokenManager.LPARENTHESIS )
+                replace( token );
+            else
+                undo( token, next );
+            return true;
+        }
+        return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void changed( final String filename )
+    private void replace( final Token token )
     {
-        if( debug )
-            System.err.println( "Parsing " + filename );
+        erase();
+        insert( token );
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected void log( final String message )
+    private void erase()
     {
-        if( verbose )
-            System.err.println( message );
+        Token token = null;
+        int level = 1;
+        do
+        {
+            token = provider.next();
+            if( token.kind == ParserTokenManager.LPARENTHESIS )
+                ++level;
+            if( token.kind == ParserTokenManager.RPARENTHESIS )
+                --level;
+        }
+        while( level != 0 || token.kind != ParserTokenManager.RPARENTHESIS );
     }
 }
