@@ -127,7 +127,7 @@ $ cppncss -d -r xerces-c-src_2_7_0/src -MREPORT_FACET_ERROR=; -MSTDMETHOD="void 
 $ cppncss -v -k -r xerces-c-src_2_7_0/src
 +------------------------------------------------------------------------------+
 
- Usually at this point it is better to turn debugging off because of the to much verbosity it provides.
+ Usually at this point it is better to turn debugging off because of the too much verbosity it provides.
 
 * Prefix
 
