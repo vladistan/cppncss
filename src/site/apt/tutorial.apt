@@ -132,7 +132,7 @@ $ cppncss -v -k -r xerces-c-src_2_7_0/src
 * Prefix
 
  Once almost all parse errors have been fixed it is time to take a look at the output.\
- One of the first think to note is that file names are displayed using the full path given on the command line :
+ One of the first thing to note is that file names are displayed using the full path given on the command line :
 
 +------------------------------------------------------------------------------+
 Nr. NCSS CCN File
