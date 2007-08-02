@@ -108,6 +108,8 @@ public final class CppNcssTask extends AntlibDefinition
      */
     public void setSamples( final int samples )
     {
+        if( samples < 0 )
+            throw new BuildException( "Parameter 'samples' must be positive" );
         this.samples = samples;
     }
 
