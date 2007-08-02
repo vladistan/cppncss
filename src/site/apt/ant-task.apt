@@ -70,6 +70,20 @@ CppNcss Task
 | value                              | the value of the replacement, default to empty | No           |
 *------------------------------------+------------------------------------------------+--------------+
 
+ * sort
+
+   Use sort criteria to control the order of the results in output.
+
+  * Parameters
+
+*------------------------------------+------------------------------------------------+--------------+
+| <<Attribute>>                      | <<Description>>                                | <<Required>> |
+*------------------------------------+------------------------------------------------+--------------+
+| criterion                          | the name of the sort criterion                 | Yes          |
+*------------------------------------+------------------------------------------------+--------------+
+
+ Accepted values are: NCSS, CCN and function.
+
 * Examples
 
 +------------------------------------------------------------------------------+
@@ -82,10 +96,18 @@ CppNcss Task
 +------------------------------------------------------------------------------+
  analyzes all files found recursively under the src directory, with one define and two macro symbols to suppress.
 
- 
 +------------------------------------------------------------------------------+
 <cppncss tofile="cppncss.xml" samples="30">
   <fileset dir="src"/>
 </cppncss>
 +------------------------------------------------------------------------------+
  analyzes all files found recursively under the src directory, reporting only the 30 top measurements.
+
++------------------------------------------------------------------------------+
+<cppncss tofile="cppncss.xml">
+  <fileset dir="src"/>
+  <sort criterion="function"/>
+  <sort criterion="CCN"/>
+</cppncss>
++------------------------------------------------------------------------------+
+ analyzes all files found recursively under the src directory, sorting the measurements starting with the number of functions, then the CCN value and finally the NCSS value.

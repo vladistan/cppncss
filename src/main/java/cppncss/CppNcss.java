@@ -102,20 +102,47 @@ public final class CppNcss
     {
         output = createOutput( options );
         analyzer = new Analyzer( options, visitors, observers, handler );
-        register( new MeasureCollector( options, new ResultOutputAdapter( "Function", output ) ), functionVisitorFactory );
-        register( new AverageCollector( new ResultOutputAdapter( "Function", output ) ), functionVisitorFactory );
-        register( new MeasureCollector( options, new ResultOutputAdapter( "File", output ) ), fileVisitorFactory );
-        register( new AverageCollector( new ResultOutputAdapter( "File", output ) ), fileVisitorFactory );
-        register( new SumCollector( new ResultOutputAdapter( "Project", output ) ), fileVisitorFactory );
+        register( options, new MeasureCollector( options, new ResultOutputAdapter( "Function", output ) ), functionVisitorFactory );
+        register( options, new AverageCollector( new ResultOutputAdapter( "Function", output ) ), functionVisitorFactory );
+        register( options, new MeasureCollector( options, new ResultOutputAdapter( "File", output ) ), fileVisitorFactory );
+        register( options, new AverageCollector( new ResultOutputAdapter( "File", output ) ), fileVisitorFactory );
+        register( options, new SumCollector( new ResultOutputAdapter( "Project", output ) ), fileVisitorFactory );
     }
 
-    private void register( final Collector collector, final VisitorFactory factory )
+    private void register( final Options options, final Collector collector, final VisitorFactory factory )
     {
         collectors.add( collector );
         observers.register( collector );
-        factory.register( new NcssCounter( collector ) );
-        factory.register( new CcnCounter( collector ) );
-        factory.register( new FunctionCounter( collector ) );
+        for( String counter : filter( options ) )
+            factory.register( create( collector, counter ) );
+    }
+
+    private List<String> filter( final Options options )
+    {
+        final List<String> counters = new ArrayList<String>();
+        for( String value : options.getOptionPropertyValues( "s" ) )
+            add( counters, value );
+        add( counters, "NCSS" );
+        add( counters, "CCN" );
+        add( counters, "function" );
+        return counters;
+    }
+
+    private void add( final List<String> counters, final String counter )
+    {
+        if( !counters.contains( counter ) )
+            counters.add( counter );
+    }
+
+    private Counter create( final Collector collector, final String counter )
+    {
+        if( counter.equals( "NCSS" ) )
+            return new NcssCounter( collector );
+        if( counter.equals( "CCN" ) )
+            return new CcnCounter( collector );
+        if( counter.equals( "function" ) )
+            return new FunctionCounter( collector );
+        throw new IllegalArgumentException( "invalid sort criterion '" + counter + "'" );
     }
 
     /**
@@ -175,6 +202,7 @@ public final class CppNcss
         usage.addOption( "k", "keep going on parsing errors" );
         usage.addOption( "r", "process directories recursively" );
         usage.addOption( "x", "output result as xml" );
+        usage.addOption( "s=<criterion>", "sort the results according to given criterion, either NCSS (the default), CCN or function" );
         usage.addOption( "n=<number>", "truncate output after this <number> of results" );
         usage.addOption( "f=<file>", "output result to the given <file>" );
         usage.addOption( "D<symbol>[=[<value>]]", "replace define <symbol> with <value>" );

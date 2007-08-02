@@ -47,7 +47,7 @@ import cpptools.Options;
 public final class CppNcssTask extends AntlibDefinition
 {
     private final List<FileSet> filesets = new ArrayList<FileSet>();
-    private final List<Symbol> symbols = new ArrayList<Symbol>();
+    private final List<Argument> arguments = new ArrayList<Argument>();
     private boolean keepGoing = false;
     private int samples = -1;
     private String filename;
@@ -130,7 +130,7 @@ public final class CppNcssTask extends AntlibDefinition
     {
         if( define.getName() == null )
             throw new BuildException( "Missing required 'name' for define" );
-        symbols.add( define );
+        arguments.add( define );
     }
 
     /**
@@ -142,7 +142,19 @@ public final class CppNcssTask extends AntlibDefinition
     {
         if( macro.getName() == null )
             throw new BuildException( "Missing required 'name' for macro" );
-        symbols.add( macro );
+        arguments.add( macro );
+    }
+
+    /**
+     * Add a sort criterion.
+     *
+     * @param criterion the criterion
+     */
+    public void addConfiguredSort( final Sort criterion )
+    {
+        if( criterion.getCriterion() == null )
+            throw new BuildException( "Missing required 'criterion' for sort" );
+        arguments.add( criterion );
     }
 
     /**
@@ -172,8 +184,8 @@ public final class CppNcssTask extends AntlibDefinition
         if( prefix != null )
             args.add( "-p=" + prefix );
         args.add( "-n=" + samples );
-        for( Symbol symbol : symbols )
-            args.add( symbol.toArgument() );
+        for( Argument argument : arguments )
+            args.add( argument.toArgument() );
         for( FileSet fileset : filesets )
         {
             final DirectoryScanner scanner = fileset.getDirectoryScanner( getProject() );
@@ -184,12 +196,17 @@ public final class CppNcssTask extends AntlibDefinition
         return args.toArray( new String[args.size()] );
     }
 
+    private static interface Argument
+    {
+        String toArgument();
+    }
+
     /**
      * Provides a symbol definition.
      *
      * @author Mathieu Champlon
      */
-    public static class Symbol
+    public static class Symbol implements Argument
     {
         private String name;
         private String value;
@@ -291,6 +308,48 @@ public final class CppNcssTask extends AntlibDefinition
         public Macro()
         {
             super( "M" );
+        }
+    }
+
+    /**
+     * Provides a sort definition.
+     *
+     * @author Mathieu Champlon
+     */
+    public static class Sort implements Argument
+    {
+        private String criterion;
+
+        /**
+         * Sets the name.
+         * <p>
+         * Required.
+         *
+         * @param name the name
+         */
+        public final void setCriterion( final String criterion )
+        {
+            this.criterion = criterion;
+        }
+
+        /**
+         * Retrieve the criterion.
+         *
+         * @return the criterion
+         */
+        public final String getCriterion()
+        {
+            return criterion;
+        }
+
+        /**
+         * Create the corresponding command line argument.
+         *
+         * @return the formatted argument
+         */
+        public final String toArgument()
+        {
+            return "-s=" + criterion;
         }
     }
 }
