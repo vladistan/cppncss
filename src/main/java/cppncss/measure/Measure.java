@@ -38,7 +38,7 @@ import java.util.List;
  */
 public final class Measure implements Comparable
 {
-    private final List<Integer> counts = new ArrayList<Integer>();;
+    private final List<Integer> counts = new ArrayList<Integer>();
     private final String item;
     private final String filename;
     private final int line;
