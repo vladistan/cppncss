@@ -31,6 +31,7 @@ package cppncss.measure;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
+import cpptools.Options;
 
 /**
  * Collects measures.
@@ -43,7 +44,7 @@ import java.util.TreeSet;
  */
 public final class MeasureCollector implements Collector
 {
-    private static final int THRESHOLD = 30;
+    private final int threshold;
     private final TreeSet<Measure> result = new TreeSet<Measure>();
     private final List<String> labels = new ArrayList<String>();
     private final MeasureObserver observer;
@@ -53,13 +54,28 @@ public final class MeasureCollector implements Collector
     /**
      * Create a measure collector.
      *
+     * @param options the options
      * @param observer an observer to be notified of the results
      */
-    public MeasureCollector( final MeasureObserver observer )
+    public MeasureCollector( final Options options, final MeasureObserver observer )
     {
         if( observer == null )
             throw new IllegalArgumentException( "argument 'observer' is null" );
+        this.threshold = getThreshold( options );
         this.observer = observer;
+    }
+
+    private int getThreshold( final Options options )
+    {
+        if( !options.hasOption( "n" ) )
+            return -1;
+        final List<String> thresholds = options.getOptionPropertyValues( "n" );
+        if( thresholds.size() > 1 )
+            throw new IllegalArgumentException( "invalid multiple -n arguments" );
+        final int value = Integer.parseInt( thresholds.get( 0 ) );
+        if( value < 0 )
+            throw new IllegalArgumentException( "invalid negative -n argument" );
+        return value;
     }
 
     /**
@@ -86,7 +102,7 @@ public final class MeasureCollector implements Collector
     private void insert( final String item, final int line, final int count )
     {
         result.add( new Measure( item, filename, line, count ) );
-        if( result.size() > THRESHOLD )
+        if( threshold >= 0 && result.size() > threshold )
             result.remove( result.last() );
     }
 

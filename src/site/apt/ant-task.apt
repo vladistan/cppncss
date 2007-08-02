@@ -33,6 +33,8 @@ CppNcss Task
 *------------------------------------+---------------------------------------------------------------------------------------------+--------------+
 | keepgoing                          | whether the parsing must keep going instead of stopping upon the first error, default to no | No           |
 *------------------------------------+---------------------------------------------------------------------------------------------+--------------+
+| samples                            | truncate the output after this given number of samples, default to no truncation            | No           |
+*------------------------------------+---------------------------------------------------------------------------------------------+--------------+
 
 * Parameters specified as nested elements
 
@@ -79,3 +81,11 @@ CppNcss Task
 </cppncss>
 +------------------------------------------------------------------------------+
  analyzes all files found recursively under the src directory, with one define and two macro symbols to suppress.
+
+ 
++------------------------------------------------------------------------------+
+<cppncss tofile="cppncss.xml" samples="30">
+  <fileset dir="src"/>
+</cppncss>
++------------------------------------------------------------------------------+
+ analyzes all files found recursively under the src directory, reporting only the 30 top measurements.

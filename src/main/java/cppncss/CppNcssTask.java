@@ -49,6 +49,7 @@ public final class CppNcssTask extends AntlibDefinition
     private final List<FileSet> filesets = new ArrayList<FileSet>();
     private final List<Symbol> symbols = new ArrayList<Symbol>();
     private boolean keepGoing = false;
+    private int samples = -1;
     private String filename;
     private String prefix;
 
@@ -63,7 +64,7 @@ public final class CppNcssTask extends AntlibDefinition
     }
 
     /**
-     * Defines a prefix.
+     * Define a prefix.
      * <p>
      * Not required.
      *
@@ -75,7 +76,7 @@ public final class CppNcssTask extends AntlibDefinition
     }
 
     /**
-     * Sets the name of the output file.
+     * Set the name of the output file.
      * <p>
      * Required.
      *
@@ -96,6 +97,18 @@ public final class CppNcssTask extends AntlibDefinition
     public void setKeepGoing( final boolean keepGoing )
     {
         this.keepGoing = keepGoing;
+    }
+
+    /**
+     * Set the number of samples to output.
+     * <p>
+     * Not required. Default is all.
+     *
+     * @param samples truncate the output after this given number of samples
+     */
+    public void setSamples( final int samples )
+    {
+        this.samples = samples;
     }
 
     private String format( final String path )
@@ -156,6 +169,7 @@ public final class CppNcssTask extends AntlibDefinition
             args.add( "-k" );
         if( prefix != null )
             args.add( "-p=" + prefix );
+        args.add( "-n=" + samples );
         for( Symbol symbol : symbols )
             args.add( symbol.toArgument() );
         for( FileSet fileset : filesets )

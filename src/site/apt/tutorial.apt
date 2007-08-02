@@ -20,7 +20,7 @@ Tutorial
 $ cppncss -h
 
 Usage: cppncss [options] [file [file2 [directory [directory2] ...]]]
-Version: 1.0.2
+Version: 1.0.3
 
 Options:
   -h                      print this message
@@ -29,7 +29,8 @@ Options:
   -k                      keep going on parsing errors
   -r                      process directories recursively
   -x                      output result as xml
-  -f=<file>               output result to the given file
+  -n=<number>             output only the top given <number> results
+  -f=<file>               output result to the given <file>
   -D<symbol>[=[<value>]]  replace define <symbol> with <value>
   -M<symbol>[=[<value>]]  replace macro <symbol> with <value>
   -p=<path>               remove <path> prefix when displaying file names
@@ -124,10 +125,11 @@ $ cppncss -d -r xerces-c-src_2_7_0/src -MREPORT_FACET_ERROR=; -MSTDMETHOD="void 
  Parsing can be forced to skip files containing errors and to continue the processing using the -k option.
 
 +------------------------------------------------------------------------------+
-$ cppncss -v -k -r xerces-c-src_2_7_0/src
+$ cppncss -v -k -r -n=30 xerces-c-src_2_7_0/src
 +------------------------------------------------------------------------------+
 
  Usually at this point it is better to turn debugging off because of the too much verbosity it provides.
+ Here the number of output lines are also limited to the 30 most significant results.
 
 * Prefix
 
@@ -142,7 +144,7 @@ Nr. NCSS CCN File
  Formatting it involves using the -p option, for example :
 
 +------------------------------------------------------------------------------+
-$ cppncss -v -k -r xerces-c-src_2_7_0/src -p=xerces-c-src_2_7_0/src\
+$ cppncss -v -k -r -n=30 xerces-c-src_2_7_0/src -p=xerces-c-src_2_7_0/src\
 +------------------------------------------------------------------------------+
 
  Will remove the given prefix from all file names, displaying instead :

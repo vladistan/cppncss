@@ -102,9 +102,9 @@ public final class CppNcss
     {
         output = createOutput( options );
         analyzer = new Analyzer( options, visitors, observers, handler );
-        register( new MeasureCollector( new ResultOutputAdapter( "Function", output ) ), functionVisitorFactory );
+        register( new MeasureCollector( options, new ResultOutputAdapter( "Function", output ) ), functionVisitorFactory );
         register( new AverageCollector( new ResultOutputAdapter( "Function", output ) ), functionVisitorFactory );
-        register( new MeasureCollector( new ResultOutputAdapter( "File", output ) ), fileVisitorFactory );
+        register( new MeasureCollector( options, new ResultOutputAdapter( "File", output ) ), fileVisitorFactory );
         register( new AverageCollector( new ResultOutputAdapter( "File", output ) ), fileVisitorFactory );
         register( new SumCollector( new ResultOutputAdapter( "Project", output ) ), fileVisitorFactory );
     }
@@ -168,14 +168,15 @@ public final class CppNcss
 
     private static void usage()
     {
-        final Usage usage = new Usage( "cppncss", "http://cppncss.sourceforge.net", "1.0.2" );
+        final Usage usage = new Usage( "cppncss", "http://cppncss.sourceforge.net", "1.0.3" );
         usage.addOption( "h", "print this message" );
         usage.addOption( "d", "print debugging information" );
         usage.addOption( "v", "be extra verbose" );
         usage.addOption( "k", "keep going on parsing errors" );
         usage.addOption( "r", "process directories recursively" );
         usage.addOption( "x", "output result as xml" );
-        usage.addOption( "f=<file>", "output result to the given file" );
+        usage.addOption( "n=<number>", "truncate output after this <number> of results" );
+        usage.addOption( "f=<file>", "output result to the given <file>" );
         usage.addOption( "D<symbol>[=[<value>]]", "replace define <symbol> with <value>" );
         usage.addOption( "M<symbol>[=[<value>]]", "replace macro <symbol> with <value>" );
         usage.addOption( "p=<path>", "remove <path> prefix when displaying file names" );
