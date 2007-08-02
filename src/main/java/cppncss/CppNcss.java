@@ -120,18 +120,18 @@ public final class CppNcss
     private List<String> filter( final Options options )
     {
         final List<String> counters = new ArrayList<String>();
-        for( String value : options.getOptionPropertyValues( "s" ) )
-            add( counters, value );
-        add( counters, "NCSS" );
-        add( counters, "CCN" );
-        add( counters, "function" );
+        for( String value : extract( options ).split( "," ) )
+            if( !counters.contains( value ) )
+                counters.add( value );
         return counters;
     }
 
-    private void add( final List<String> counters, final String counter )
+    private String extract( final Options options )
     {
-        if( !counters.contains( counter ) )
-            counters.add( counter );
+        final List<String> values = options.getOptionPropertyValues( "m" );
+        if( values.isEmpty() )
+            return "NCSS,CCN,function";
+        return values.get( 0 );
     }
 
     private Counter create( final Collector collector, final String counter )
@@ -142,7 +142,7 @@ public final class CppNcss
             return new CcnCounter( collector );
         if( counter.equals( "function" ) )
             return new FunctionCounter( collector );
-        throw new IllegalArgumentException( "invalid sort criterion '" + counter + "'" );
+        throw new IllegalArgumentException( "invalid measurement '" + counter + "'" );
     }
 
     /**
@@ -202,9 +202,9 @@ public final class CppNcss
         usage.addOption( "k", "keep going on parsing errors" );
         usage.addOption( "r", "process directories recursively" );
         usage.addOption( "x", "output result as xml" );
-        usage.addOption( "s=<criterion>", "sort the results according to given criterion, either NCSS (the default), CCN or function" );
-        usage.addOption( "n=<number>", "truncate output after this <number> of results" );
-        usage.addOption( "f=<file>", "output result to the given <file>" );
+        usage.addOption( "m=<measurements>", "restrict output to the <measurements> in this order, default is equivalent to -m=NCSS,CCN,function" );
+        usage.addOption( "n=<number>", "truncate output after a <number> of results" );
+        usage.addOption( "f=<file>", "output result to <file>" );
         usage.addOption( "D<symbol>[=[<value>]]", "replace define <symbol> with <value>" );
         usage.addOption( "M<symbol>[=[<value>]]", "replace macro <symbol> with <value>" );
         usage.addOption( "p=<path>", "remove <path> prefix when displaying file names" );

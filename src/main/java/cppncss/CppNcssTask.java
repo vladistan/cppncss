@@ -49,9 +49,10 @@ public final class CppNcssTask extends AntlibDefinition
     private final List<FileSet> filesets = new ArrayList<FileSet>();
     private final List<Argument> arguments = new ArrayList<Argument>();
     private boolean keepGoing = false;
-    private int samples = -1;
     private String filename;
     private String prefix;
+    private String measurements;
+    private int samples = -1;
 
     /**
      * Add a set of source files.
@@ -113,6 +114,18 @@ public final class CppNcssTask extends AntlibDefinition
         this.samples = samples;
     }
 
+    /**
+     * Set the measurements.
+     * <p>
+     * Not required. Default is "NCSS,CCN,function".
+     *
+     * @param measurements the ordered list of measurements to perform
+     */
+    public void setMeasurements( final String measurements )
+    {
+        this.measurements = measurements;
+    }
+
     private String format( final String path )
     {
         String result = path.replace( '/', File.separatorChar ).replace( '\\', File.separatorChar );
@@ -146,18 +159,6 @@ public final class CppNcssTask extends AntlibDefinition
     }
 
     /**
-     * Add a sort criterion.
-     *
-     * @param criterion the criterion
-     */
-    public void addConfiguredSort( final Sort criterion )
-    {
-        if( criterion.getCriterion() == null )
-            throw new BuildException( "Missing required 'criterion' for sort" );
-        arguments.add( criterion );
-    }
-
-    /**
      * {@inheritDoc}
      */
     public void execute()
@@ -184,6 +185,8 @@ public final class CppNcssTask extends AntlibDefinition
         if( prefix != null )
             args.add( "-p=" + prefix );
         args.add( "-n=" + samples );
+        if( measurements != null )
+            args.add( "-m=" + measurements );
         for( Argument argument : arguments )
             args.add( argument.toArgument() );
         for( FileSet fileset : filesets )
@@ -313,48 +316,6 @@ public final class CppNcssTask extends AntlibDefinition
         public Macro()
         {
             super( "M" );
-        }
-    }
-
-    /**
-     * Provides a sort definition.
-     *
-     * @author Mathieu Champlon
-     */
-    public static class Sort implements Argument
-    {
-        private String criterion;
-
-        /**
-         * Sets the criterion.
-         * <p>
-         * Required.
-         *
-         * @param criterion the name of the criterion
-         */
-        public final void setCriterion( final String criterion )
-        {
-            this.criterion = criterion;
-        }
-
-        /**
-         * Retrieve the criterion.
-         *
-         * @return the criterion
-         */
-        public final String getCriterion()
-        {
-            return criterion;
-        }
-
-        /**
-         * Create the corresponding command line argument.
-         *
-         * @return the formatted argument
-         */
-        public final String toArgument()
-        {
-            return "-s=" + criterion;
         }
     }
 }

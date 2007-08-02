@@ -24,17 +24,19 @@ CppNcss Task
 
 * Parameters
 
-*------------------------------------+---------------------------------------------------------------------------------------------+--------------+
-| <<Attribute>>                      | <<Description>>                                                                             | <<Required>> |
-*------------------------------------+---------------------------------------------------------------------------------------------+--------------+
-| tofile                             | the name of the output file                                                                 | Yes          |
-*------------------------------------+---------------------------------------------------------------------------------------------+--------------+
-| prefix                             | the prefix to remove from pathes                                                            | No           |
-*------------------------------------+---------------------------------------------------------------------------------------------+--------------+
-| keepgoing                          | whether the parsing must keep going instead of stopping upon the first error, default to no | No           |
-*------------------------------------+---------------------------------------------------------------------------------------------+--------------+
-| samples                            | truncate the output after this given number of samples, default to no truncation            | No           |
-*------------------------------------+---------------------------------------------------------------------------------------------+--------------+
+*------------------------------------+----------------------------------------------------------------------------------------------+--------------+
+| <<Attribute>>                      | <<Description>>                                                                              | <<Required>> |
+*------------------------------------+----------------------------------------------------------------------------------------------+--------------+
+| tofile                             | the name of the output file                                                                  | Yes          |
+*------------------------------------+----------------------------------------------------------------------------------------------+--------------+
+| prefix                             | the prefix to remove from paths                                                             | No           |
+*------------------------------------+----------------------------------------------------------------------------------------------+--------------+
+| keepgoing                          | whether the parsing must keep going instead of stopping upon the first error, defaults to no | No           |
+*------------------------------------+----------------------------------------------------------------------------------------------+--------------+
+| sorting                            | a list or ordered measurements to perform, defaults to "NCSS,CCN,function"                   | No           |
+*------------------------------------+----------------------------------------------------------------------------------------------+--------------+
+| samples                            | the number of samples to keep, defaults to keep them all                                     | No           |
+*------------------------------------+----------------------------------------------------------------------------------------------+--------------+
 
 * Parameters specified as nested elements
 
@@ -70,20 +72,6 @@ CppNcss Task
 | value                              | the value of the replacement, default to empty | No           |
 *------------------------------------+------------------------------------------------+--------------+
 
- * sort
-
-   Use sort criteria to control the order of the results in output.
-
-  * Parameters
-
-*------------------------------------+------------------------------------------------+--------------+
-| <<Attribute>>                      | <<Description>>                                | <<Required>> |
-*------------------------------------+------------------------------------------------+--------------+
-| criterion                          | the name of the sort criterion                 | Yes          |
-*------------------------------------+------------------------------------------------+--------------+
-
- Accepted values are: NCSS, CCN and function.
-
 * Examples
 
 +------------------------------------------------------------------------------+
@@ -105,9 +93,7 @@ CppNcss Task
 
 +------------------------------------------------------------------------------+
 <cppncss tofile="cppncss.xml">
-  <fileset dir="src"/>
-  <sort criterion="function"/>
-  <sort criterion="CCN"/>
+  <fileset dir="src" measurements="function,CCN"/>
 </cppncss>
 +------------------------------------------------------------------------------+
- analyzes all files found recursively under the src directory, sorting the measurements starting with the number of functions, then the CCN value and finally the NCSS value.
+ analyzes all files found recursively under the src directory, keeping only function and CCN measurements and sorting them in this order.
