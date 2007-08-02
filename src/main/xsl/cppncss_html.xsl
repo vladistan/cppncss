@@ -28,7 +28,7 @@
       <xsl:for-each select="measure">
 
         <h1><xsl:value-of select="@type"/>s</h1>
-        <h2>Top 30
+        <h2>Top
         <xsl:call-template name='to-lower'>
             <xsl:with-param name='string' select='@type'/>
         </xsl:call-template>s containing the most NCSS</h2>
