@@ -70,7 +70,7 @@ public class OptionsTest extends TestCase
 
     public void testRetrieveOptionValue()
     {
-        final List actual = new Options( new String[]
+        final List<String> actual = new Options( new String[]
         {
             "-optionvalue"
         } ).getOptionValues( "option" );
@@ -80,7 +80,7 @@ public class OptionsTest extends TestCase
 
     public void testRetrieveOptionProperty()
     {
-        final List actual = new Options( new String[]
+        final List<String> actual = new Options( new String[]
         {
             "-optionproperty=value"
         } ).getOptionProperties( "option" );
@@ -90,7 +90,7 @@ public class OptionsTest extends TestCase
 
     public void testRetrieveOptionPropertyValue()
     {
-        final List actual = new Options( new String[]
+        final List<String> actual = new Options( new String[]
         {
             "-optionproperty=value"
         } ).getOptionPropertyValues( "option" );
@@ -100,7 +100,7 @@ public class OptionsTest extends TestCase
 
     public void testRetrieveOptionPropertyValueWithoutProperty()
     {
-        final List actual = new Options( new String[]
+        final List<String> actual = new Options( new String[]
         {
             "-option=value"
         } ).getOptionPropertyValues( "option" );
@@ -110,7 +110,7 @@ public class OptionsTest extends TestCase
 
     public void testRetrieveSeveralOptionValues()
     {
-        final List actual = new Options( new String[]
+        final List<String> actual = new Options( new String[]
         {
                 "-optionvalue", "-optionanother_value"
         } ).getOptionValues( "option" );
