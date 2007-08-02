@@ -196,6 +196,11 @@ public final class CppNcssTask extends AntlibDefinition
         return args.toArray( new String[args.size()] );
     }
 
+    /**
+     * Defines an element convertible to a command line argument.
+     *
+     * @author Mathieu Champlon
+     */
     private static interface Argument
     {
         String toArgument();
@@ -321,11 +326,11 @@ public final class CppNcssTask extends AntlibDefinition
         private String criterion;
 
         /**
-         * Sets the name.
+         * Sets the criterion.
          * <p>
          * Required.
          *
-         * @param name the name
+         * @param criterion the name of the criterion
          */
         public final void setCriterion( final String criterion )
         {
