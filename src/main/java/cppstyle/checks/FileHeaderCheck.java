@@ -46,6 +46,7 @@ public final class FileHeaderCheck extends AbstractVisitor
 {
     private final CheckListener listener;
     private final String[] expected;
+    private final List<Integer> ignoredLines;
 
     /**
      * Create a file header check.
@@ -61,6 +62,7 @@ public final class FileHeaderCheck extends AbstractVisitor
             throw new IllegalArgumentException( "argument 'listener' is null" );
         this.listener = listener;
         this.expected = split( trim( getExpected( properties, folder ) ) );
+        this.ignoredLines = getIgnoredLines( properties );
     }
 
     private String[] split( final String string )
@@ -87,6 +89,16 @@ public final class FileHeaderCheck extends AbstractVisitor
         if( filename != null )
             return readFile( filename, folder );
         throw new IllegalArgumentException( "missing property 'headerFile' or 'header'" );
+    }
+
+    private List<Integer> getIgnoredLines( final Properties properties )
+    {
+        final List<Integer> lines = new ArrayList<Integer>();
+        final String values = properties.getProperty( "ignoreLines" );
+        if( values != null )
+            for( String value : values.split( "," ) )
+                lines.add( Integer.parseInt( value.trim() ) );
+        return lines;
     }
 
     public String readFile( final String filename, final File folder ) throws IOException
@@ -148,7 +160,7 @@ public final class FileHeaderCheck extends AbstractVisitor
 
     private boolean matches( final String[] actual, final int line )
     {
-        return line < Math.min( actual.length, expected.length ) && actual[line].equals( expected[line] );
+        return line < Math.min( actual.length, expected.length ) && (ignoredLines.contains( line + 1 ) || actual[line].equals( expected[line] ));
     }
 
     private boolean merge( final List<Interval> intervals, final int line )

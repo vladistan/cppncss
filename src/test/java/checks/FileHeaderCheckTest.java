@@ -60,24 +60,32 @@ public final class FileHeaderCheckTest extends EasyMockTestCase
         folder = createMock( File.class );
     }
 
-    private FileHeaderCheck create( final String header ) throws IOException
+    private FileHeaderCheck create( final String header, final String ignore ) throws IOException
     {
+        expect( properties.getProperty( "ignoreLines" ) ).andReturn( ignore );
         expect( properties.getProperty( "header" ) ).andReturn( header );
         replay();
         return new FileHeaderCheck( listener, properties, folder );
     }
 
+    private void check( final String actual, final String expected, final String ignore ) throws IOException, ParseException
+    {
+        create( expected, ignore ).visit( new Parser( new StringReader( actual ) ).translation_unit(), null );
+    }
+
     private void check( final String actual, final String expected ) throws IOException, ParseException
     {
-        create( expected ).visit( new Parser( new StringReader( actual ) ).translation_unit(), null );
+        check( actual, expected, null );
     }
 
     public void testCreationWithoutAnyOfThePropertyDefiningTheExpecteHeaderContentThrows()
     {
+        expect( properties.getProperty( "header" ) ).andReturn( null );
         expect( properties.getProperty( "headerFile" ) ).andReturn( null );
+        replay();
         try
         {
-            create( null );
+            new FileHeaderCheck( listener, properties, folder );
         }
         catch( Exception e )
         {
@@ -137,5 +145,19 @@ public final class FileHeaderCheckTest extends EasyMockTestCase
         final String expected = "// this is the header\r\n// we want to test";
         listener.fail( "file header mismatch line 2" );
         check( actual, expected );
+    }
+
+    public void testComparisonFailureOnSecondIgnoredLineIsNotLoggedToListener() throws ParseException, IOException
+    {
+        final String actual = "/* this is the header\n we want to test */";
+        final String expected = "/* this is the header\n we want to check for */";
+        check( actual, expected, "2" );
+    }
+
+    public void testComparisonFailureOnBothIgnoredLineIsNotLoggedToListener() throws ParseException, IOException
+    {
+        final String actual = "/* this is the wrong header\n we want to test */";
+        final String expected = "/* this is the header\n we want to check for */";
+        check( actual, expected, "1,2" );
     }
 }
