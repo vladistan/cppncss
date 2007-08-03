@@ -159,9 +159,9 @@ public final class CppNcss
     private ResultOutput createOutput( final Options options ) throws FileNotFoundException
     {
         final PrintStream stream = createStream( options );
-        if( !options.hasOption( "x" ) )
-            return new AsciiResultOutput( stream );
-        return new XmlResultOutput( stream );
+        if( options.hasOption( "x" ) )
+            return new XmlResultOutput( stream );
+        return new AsciiResultOutput( stream );
     }
 
     private PrintStream createStream( final Options options ) throws FileNotFoundException
