@@ -31,6 +31,8 @@ package cppstyle.checks;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import cppast.AbstractVisitor;
 import cppast.AstTranslationUnit;
@@ -55,7 +57,7 @@ public final class FileHeaderCheck extends AbstractVisitor
      */
     public FileHeaderCheck( final CheckListener listener, final Properties properties, final File folder ) throws IOException
     {
-        if( listener == null)
+        if( listener == null )
             throw new IllegalArgumentException( "argument 'listener' is null" );
         this.listener = listener;
         this.expected = split( trim( getExpected( properties, folder ) ) );
@@ -63,7 +65,7 @@ public final class FileHeaderCheck extends AbstractVisitor
 
     private String[] split( final String string )
     {
-        return string.split( "[\n\r]" );
+        return string.split( "\r\n|\n|\r" );
     }
 
     private String trim( final String string )
@@ -104,12 +106,59 @@ public final class FileHeaderCheck extends AbstractVisitor
 
     public Object visit( final AstTranslationUnit node, final Object data )
     {
-        final String[] actual = split( node.getComment() );
-        if( expected.length != actual.length )
-            listener.fail( "file header line count invalid" );
-        for( int line = 0; line < actual.length; ++line )
-            if( !actual[line].equals( expected[line] ) )
-                listener.fail( "file header mismatch line " + (line + 1) );
+        notify( compare( split( node.getComment() ) ) );
         return data;
+    }
+
+    private final class Interval
+    {
+        private final int start;
+        private int end;
+
+        public Interval( final int start )
+        {
+            this.start = start;
+            this.end = start;
+        }
+
+        public boolean merge( final int value )
+        {
+            if( value > end + 1 )
+                return false;
+            end = Math.max( end, value );
+            return true;
+        }
+
+        public String toString()
+        {
+            if( start == end )
+                return "file header mismatch line " + start;
+            return "file header mismatch line " + start + "-" + end;
+        }
+    }
+
+    private List<Interval> compare( final String[] actual )
+    {
+        final List<Interval> intervals = new ArrayList<Interval>();
+        for( int line = 0; line < Math.max( expected.length, actual.length ); ++line )
+            if( matches( actual, line ) || !merge( intervals, line + 1 ) )
+                intervals.add( new Interval( line + 1 ) );
+        return intervals;
+    }
+
+    private boolean matches( final String[] actual, final int line )
+    {
+        return line < Math.min( actual.length, expected.length ) && actual[line].equals( expected[line] );
+    }
+
+    private boolean merge( final List<Interval> intervals, final int line )
+    {
+        return !intervals.isEmpty() && intervals.get( intervals.size() - 1 ).merge( line );
+    }
+
+    private void notify( final List<Interval> intervals )
+    {
+        for( Interval interval : intervals )
+            listener.fail( interval.toString() );
     }
 }

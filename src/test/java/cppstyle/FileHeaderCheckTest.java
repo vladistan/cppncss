@@ -115,11 +115,26 @@ public final class FileHeaderCheckTest extends EasyMockTestCase
         check( actual, expected );
     }
 
-    public void testComparisonFailuresOnBothLinesAreLoggedToListener() throws ParseException, IOException
+    public void testComparisonFailuresOnBothLinesIsLoggedToListener() throws ParseException, IOException
     {
         final String actual = "/* this is the wrong header\n we want to test */";
         final String expected = "/* this is the header\n we want to check for */";
-        listener.fail( "file header mismatch line 1" );
+        listener.fail( "file header mismatch line 1-2" );
+        check( actual, expected );
+    }
+
+    public void testMissingSecondLineInExpectationIsLoggedAsFailureToListener() throws ParseException, IOException
+    {
+        final String actual = "// this is the header\r\n// we want to test";
+        final String expected = "// this is the header";
+        listener.fail( "file header mismatch line 2" );
+        check( actual, expected );
+    }
+
+    public void testMissingSecondLineInActualIsLoggedAsFailureToListener() throws ParseException, IOException
+    {
+        final String actual = "// this is the header";
+        final String expected = "// this is the header\r\n// we want to test";
         listener.fail( "file header mismatch line 2" );
         check( actual, expected );
     }
