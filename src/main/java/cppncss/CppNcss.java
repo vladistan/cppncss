@@ -202,8 +202,8 @@ public final class CppNcss
         usage.addOption( "k", "keep going on parsing errors" );
         usage.addOption( "r", "process directories recursively" );
         usage.addOption( "x", "output result as xml" );
-        usage.addOption( "m=<measurements>", "restrict output to the <measurements> in this order, default is equivalent to -m=NCSS,CCN,function" );
-        usage.addOption( "n=<number>", "truncate output after a <number> of results" );
+        usage.addOption( "m=<measurements>", "output the <measurements> sorted in given order, default is equivalent to -m=NCSS,CCN,function" );
+        usage.addOption( "n=<number>", "output only the top <number> results" );
         usage.addOption( "f=<file>", "output result to <file>" );
         usage.addOption( "D<symbol>[=[<value>]]", "replace define <symbol> with <value>" );
         usage.addOption( "M<symbol>[=[<value>]]", "replace macro <symbol> with <value>" );
