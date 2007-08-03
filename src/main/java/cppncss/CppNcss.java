@@ -36,6 +36,7 @@ import java.util.List;
 import cppast.VisitorComposite;
 import cppncss.counter.CcnCounter;
 import cppncss.counter.Counter;
+import cppncss.counter.CounterObserver;
 import cppncss.counter.FileVisitor;
 import cppncss.counter.FunctionCounter;
 import cppncss.counter.FunctionVisitor;
@@ -65,7 +66,7 @@ public final class CppNcss
     private final Analyzer analyzer;
 
     /**
-     * Implements a factory to create visitors from a given counter.
+     * Provides a factory to create visitor wrappers from counters.
      *
      * @author Mathieu Champlon
      */
@@ -134,14 +135,14 @@ public final class CppNcss
         return values.get( 0 );
     }
 
-    private Counter create( final Collector collector, final String counter )
+    private Counter create( final CounterObserver observer, final String counter )
     {
         if( counter.equals( "NCSS" ) )
-            return new NcssCounter( collector );
+            return new NcssCounter( observer );
         if( counter.equals( "CCN" ) )
-            return new CcnCounter( collector );
+            return new CcnCounter( observer );
         if( counter.equals( "function" ) )
-            return new FunctionCounter( collector );
+            return new FunctionCounter( observer );
         throw new IllegalArgumentException( "invalid measurement '" + counter + "'" );
     }
 
