@@ -141,7 +141,7 @@ public final class FileHeaderCheck extends AbstractVisitor
     {
         final List<Interval> intervals = new ArrayList<Interval>();
         for( int line = 0; line < Math.max( expected.length, actual.length ); ++line )
-            if( matches( actual, line ) || !merge( intervals, line + 1 ) )
+            if( !matches( actual, line ) && !merge( intervals, line + 1 ) )
                 intervals.add( new Interval( line + 1 ) );
         return intervals;
     }

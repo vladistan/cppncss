@@ -28,7 +28,7 @@
  * $Id: $
  */
 
-package cppstyle;
+package checks;
 
 import static org.easymock.EasyMock.expect;
 import java.io.File;
