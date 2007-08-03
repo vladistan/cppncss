@@ -23,17 +23,18 @@ Usage: cppncss [options] [file [file2 [directory [directory2] ...]]]
 Version: 1.0.3
 
 Options:
-  -h                      print this message
-  -d                      print debugging information
-  -v                      be extra verbose
-  -k                      keep going on parsing errors
-  -r                      process directories recursively
-  -x                      output result as xml
-  -n=<number>             output only the top given <number> results
-  -f=<file>               output result to the given <file>
-  -D<symbol>[=[<value>]]  replace define <symbol> with <value>
-  -M<symbol>[=[<value>]]  replace macro <symbol> with <value>
-  -p=<path>               remove <path> prefix when displaying file names
+  -h                     print this message
+  -d                     print debugging information
+  -v                     be extra verbose
+  -k                     keep going on parsing errors
+  -r                     process directories recursively
+  -x                     output result as xml
+  -m=<measurements>      output the <measurements> sorted in given order, default is equivalent to -m=NCSS,CCN,function
+  -n=<number>            output only the top <number> results
+  -f=<file>              output result to <file>
+  -D<symbol>[=[<value>]] replace define <symbol> with <value>
+  -M<symbol>[=[<value>]] replace macro <symbol> with <value>
+  -p=<path>              remove <path> prefix when displaying file names
 
 See http://cppncss.sourceforge.net for more information.
 +------------------------------------------------------------------------------+
@@ -57,7 +58,7 @@ class ATL_NO_VTABLE CBindStatCallback :
 +------------------------------------------------------------------------------+
 
  Most of the parsing errors are usually due to symbols related to defines and macros and handled by the preprocessor when compiling.\
- However sometimes actual code errors can be detected.
+ However sometimes actual coding errors can be detected.
 
 * Debugging
 
