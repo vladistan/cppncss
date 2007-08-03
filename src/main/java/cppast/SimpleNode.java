@@ -120,13 +120,34 @@ public abstract class SimpleNode implements Node
     }
 
     /**
-     * Retrive the node last token.
+     * Retrieve the node last token.
      *
      * @return a token
      */
     public final Token getLastToken()
     {
         return last;
+    }
+
+    /**
+     * Retrieve the comment attached to the node.
+     *
+     * @return the comment or null if none
+     */
+    public final String getComment()
+    {
+        Token token = first.specialToken;
+        if( token == null )
+            return null;
+        while( token.specialToken != null )
+            token = token.specialToken;
+        while( token != null )
+        {
+            if( token.kind == Parser.C_STYLE_COMMENT || token.kind == Parser.CPP_STYLE_COMMENT )
+                return token.image;
+            token = token.next;
+        }
+        return null;
     }
 
     /**

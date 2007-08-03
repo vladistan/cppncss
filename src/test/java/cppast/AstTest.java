@@ -960,40 +960,24 @@ public class AstTest extends TestCase
         expression.parse( "try {} catch( exception& ) {} catch(...) {}" );
     }
 
-    private String getComment( final SimpleNode node )
-    {
-        Token token = node.getFirstToken().specialToken;
-        if( token == null )
-            return null;
-        while( token.specialToken != null )
-            token = token.specialToken;
-        while( token != null )
-        {
-            if( token.kind == Parser.C_STYLE_COMMENT || token.kind == Parser.CPP_STYLE_COMMENT )
-                return token.image;
-            token = token.next;
-        }
-        return null;
-    }
-
     public void testMultiLineCommentAtBeginningOfFile() throws ParseException
     {
         final String content = "/* this is the comment */";
         final SimpleNode root = new Parser( new StringReader( content ) ).translation_unit();
-        assertEquals( content, getComment( root ) );
+        assertEquals( content, root.getComment() );
     }
 
     public void testSingleLineCommentAtBeginningOfFile() throws ParseException
     {
         final String content = "// this is the comment";
         final SimpleNode root = new Parser( new StringReader( content ) ).translation_unit();
-        assertEquals( content, getComment( root ) );
+        assertEquals( content, root.getComment() );
     }
 
     public void testMultipleSingleLineCommentAtBeginningOfFile() throws ParseException
     {
         final String content = "// this is the comment" + '\n' + "// with another line";
         final SimpleNode root = new Parser( new StringReader( content ) ).translation_unit();
-        assertEquals( content, getComment( root ) );
+        assertEquals( content, root.getComment() );
     }
 }
