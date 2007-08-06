@@ -82,7 +82,7 @@ public final class PreProcessor extends ParserTokenManager implements TokenProvi
             return buffer.pop();
         final Token token = next();
         if( filter( token ) )
-            return getNextToken();
+            return attach( getNextToken(), token.specialToken );
         return token;
     }
 
@@ -92,6 +92,24 @@ public final class PreProcessor extends ParserTokenManager implements TokenProvi
             if( filter.process( token ) )
                 return true;
         return false;
+    }
+
+    private Token attach( final Token token, final Token specialToken )
+    {
+        if( specialToken == null )
+            return token;
+        final Token end = findEnd( specialToken );
+        end.specialToken = token.specialToken;
+        token.specialToken = end;
+        return token;
+    }
+
+    private Token findEnd( final Token token )
+    {
+        Token end = token;
+        while( end.specialToken != null )
+            end = end.specialToken;
+        return end;
     }
 
     /**

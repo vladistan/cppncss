@@ -57,8 +57,7 @@ public class PreProcessorTest extends TestCase
         assertNull( token.next );
     }
 
-    private void assertLocation( final Token token, final int beginLine, final int beginColumn, final int endLine,
-            final int endColumn )
+    private void assertLocation( final Token token, final int beginLine, final int beginColumn, final int endLine, final int endColumn )
     {
         assertEquals( beginLine, token.beginLine );
         assertEquals( beginColumn, token.beginColumn );
@@ -306,5 +305,27 @@ public class PreProcessorTest extends TestCase
         assertLocation( processor.getNextToken(), 1, 9, 1, 10 );
         assertLocation( processor.getNextToken(), 1, 9, 1, 10 );
         assertLocation( processor.getNextToken(), 1, 9, 1, 10 );
+    }
+
+    public void testSpecialTokensAreKeptWhenReplacingToken()
+    {
+        processor.addDefine( "my", "this()" );
+        parse( "here is /*surely*/my text" );
+        processor.getNextToken();
+        processor.getNextToken();
+        final Token token = processor.getNextToken();
+        assertNotNull( token.specialToken );
+        assertEquals( "/*surely*/", token.specialToken.image );
+    }
+
+    public void testSpecialTokensAreKeptWhenRemovingToken()
+    {
+        processor.addDefine( "my", "" );
+        parse( "here is /*surely*/my text" );
+        processor.getNextToken();
+        processor.getNextToken();
+        final Token token = processor.getNextToken();
+        assertNotNull( token.specialToken );
+        assertEquals( "/*surely*/", token.specialToken.image );
     }
 }
