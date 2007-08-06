@@ -38,13 +38,13 @@ import java.util.Properties;
 import cppast.ParseException;
 import cppast.Parser;
 import cppstyle.checks.CheckListener;
-import cppstyle.checks.FileHeaderCheck;
+import cppstyle.checks.HeaderCheck;
 import cpptools.EasyMockTestCase;
 
 /**
  * @author Mathieu Champlon
  */
-public final class FileHeaderCheckTest extends EasyMockTestCase
+public final class HeaderCheckTest extends EasyMockTestCase
 {
     /**
      * Mock objects.
@@ -60,12 +60,12 @@ public final class FileHeaderCheckTest extends EasyMockTestCase
         folder = createMock( File.class );
     }
 
-    private FileHeaderCheck create( final String header, final String ignore ) throws IOException
+    private HeaderCheck create( final String header, final String ignore ) throws IOException
     {
         expect( properties.getProperty( "ignoreLines" ) ).andReturn( ignore );
         expect( properties.getProperty( "header" ) ).andReturn( header );
         replay();
-        return new FileHeaderCheck( listener, properties, folder );
+        return new HeaderCheck( listener, properties, folder );
     }
 
     private void check( final String actual, final String expected, final String ignore ) throws IOException, ParseException
@@ -85,7 +85,7 @@ public final class FileHeaderCheckTest extends EasyMockTestCase
         replay();
         try
         {
-            new FileHeaderCheck( listener, properties, folder );
+            new HeaderCheck( listener, properties, folder );
         }
         catch( Exception e )
         {

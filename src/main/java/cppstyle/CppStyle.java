@@ -41,7 +41,7 @@ import org.dom4j.io.SAXReader;
 import cppast.ParserVisitor;
 import cppast.VisitorComposite;
 import cppstyle.checks.CheckListener;
-import cppstyle.checks.FileHeaderCheck;
+import cppstyle.checks.HeaderCheck;
 import cpptools.Analyzer;
 import cpptools.ConsoleLogger;
 import cpptools.EventHandler;
@@ -123,7 +123,7 @@ public final class CppStyle
     private ParserVisitor create( final String name, final Properties properties, final File folder ) throws IOException
     {
         if( name.equals( "Header" ) )
-            return new FileHeaderCheck( output, properties, folder );
+            return new HeaderCheck( output, properties, folder );
         throw new IllegalArgumentException( "unknown module '" + name + "'" );
     }
 

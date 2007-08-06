@@ -42,7 +42,7 @@ import cppast.AstTranslationUnit;
  *
  * @author Mathieu Champlon
  */
-public final class FileHeaderCheck extends AbstractVisitor
+public final class HeaderCheck extends AbstractVisitor
 {
     private final CheckListener listener;
     private final String[] expected;
@@ -56,7 +56,7 @@ public final class FileHeaderCheck extends AbstractVisitor
      * @param folder
      * @throws IOException
      */
-    public FileHeaderCheck( final CheckListener listener, final Properties properties, final File folder ) throws IOException
+    public HeaderCheck( final CheckListener listener, final Properties properties, final File folder ) throws IOException
     {
         if( listener == null )
             throw new IllegalArgumentException( "argument 'listener' is null" );
