@@ -315,17 +315,21 @@ public class PreProcessorTest extends TestCase
         processor.getNextToken();
         final Token token = processor.getNextToken();
         assertNotNull( token.specialToken );
+        assertEquals( "this", token.image );
         assertEquals( "/*surely*/", token.specialToken.image );
     }
 
     public void testSpecialTokensAreKeptWhenRemovingToken()
     {
         processor.addDefine( "my", "" );
-        parse( "here is /*surely*/my text" );
+        parse( "here is /*surely*/my /*own*/ text" );
         processor.getNextToken();
         processor.getNextToken();
         final Token token = processor.getNextToken();
         assertNotNull( token.specialToken );
-        assertEquals( "/*surely*/", token.specialToken.image );
+        assertEquals( "text", token.image );
+        assertEquals( "/*own*/", token.specialToken.image );
+        assertNotNull( token.specialToken.specialToken );
+        assertEquals( "/*surely*/", token.specialToken.specialToken.image );
     }
 }

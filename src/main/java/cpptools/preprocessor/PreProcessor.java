@@ -96,11 +96,7 @@ public final class PreProcessor extends ParserTokenManager implements TokenProvi
 
     private Token attach( final Token token, final Token specialToken )
     {
-        if( specialToken == null )
-            return token;
-        final Token end = findEnd( specialToken );
-        end.specialToken = token.specialToken;
-        token.specialToken = end;
+        findEnd( token ).specialToken = specialToken;
         return token;
     }
 
