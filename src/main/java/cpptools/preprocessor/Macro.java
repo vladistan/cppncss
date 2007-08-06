@@ -60,18 +60,13 @@ public final class Macro extends AbstractTokenFilter
     /**
      * {@inheritDoc}
      */
-    public boolean process( final Token token )
+    protected void filter( final Token token )
     {
-        if( matches( token.image ) )
-        {
-            final Token next = provider.next();
-            if( next.kind == ParserTokenManager.LPARENTHESIS )
-                replace( token );
-            else
-                undo( token, next );
-            return true;
-        }
-        return false;
+        final Token next = provider.next();
+        if( next.kind == ParserTokenManager.LPARENTHESIS )
+            replace( token );
+        else
+            undo( token, next );
     }
 
     private void replace( final Token token )

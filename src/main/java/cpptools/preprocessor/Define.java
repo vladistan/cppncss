@@ -53,13 +53,8 @@ public final class Define extends AbstractTokenFilter
     /**
      * {@inheritDoc}
      */
-    public boolean process( final Token token )
+    protected void filter( final Token token )
     {
-        if( matches( token.image ) )
-        {
-            insert( token );
-            return true;
-        }
-        return false;
+        insert( token );
     }
 }

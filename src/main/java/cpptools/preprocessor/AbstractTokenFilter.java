@@ -125,7 +125,6 @@ public abstract class AbstractTokenFilter implements TokenFilter
         result.endLine = location.endLine;
         result.image = token.image;
         result.next = token.next;
-        result.specialToken = token.specialToken;
         return result;
     }
 
@@ -136,4 +135,24 @@ public abstract class AbstractTokenFilter implements TokenFilter
     {
         return this.name.equals( name );
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean process( final Token token )
+    {
+        if( matches( token.image ) )
+        {
+            filter( token );
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Perform the filter procedure.
+     *
+     * @param token the token to filter
+     */
+    protected abstract void filter( final Token token );
 }
