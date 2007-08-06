@@ -67,6 +67,8 @@ public final class FileHeaderCheck extends AbstractVisitor
 
     private String[] split( final String string )
     {
+        if( string == null )
+            return new String[0];
         return string.split( "\r\n|\n|\r" );
     }
 
@@ -118,7 +120,11 @@ public final class FileHeaderCheck extends AbstractVisitor
 
     public Object visit( final AstTranslationUnit node, final Object data )
     {
-        notify( compare( split( node.getComment() ) ) );
+        final String comment = node.getComment();
+        if( comment == null )
+            listener.fail( "missing file header" );
+        else
+            notify( compare( split( comment ) ) );
         return data;
     }
 

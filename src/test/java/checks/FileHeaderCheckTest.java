@@ -107,6 +107,14 @@ public final class FileHeaderCheckTest extends EasyMockTestCase
         check( actual, expected );
     }
 
+    public void testNoActualHeaderIsConsideredAsFailure() throws ParseException, IOException
+    {
+        final String actual = "";
+        final String expected = "/* this is the header\n we want to check for */";
+        listener.fail( "missing file header" );
+        check( actual, expected );
+    }
+
     public void testComparisonFailureOnFirstLineIsLoggedToListener() throws ParseException, IOException
     {
         final String actual = "/* this is the wrong header\n we want to check for */";
