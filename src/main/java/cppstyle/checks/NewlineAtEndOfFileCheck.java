@@ -28,7 +28,6 @@
 
 package cppstyle.checks;
 
-import java.util.Properties;
 import cppast.AbstractVisitor;
 import cppast.AstTranslationUnit;
 import cppast.ParserTokenManager;
@@ -47,9 +46,8 @@ public final class NewlineAtEndOfFileCheck extends AbstractVisitor
      * Create a new line at end of file check.
      *
      * @param listener
-     * @param properties
      */
-    public NewlineAtEndOfFileCheck( final CheckListener listener, final Properties properties )
+    public NewlineAtEndOfFileCheck( final CheckListener listener )
     {
         if( listener == null )
             throw new IllegalArgumentException( "argument 'listener' is null" );

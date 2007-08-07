@@ -31,7 +31,6 @@
 package checks;
 
 import java.io.StringReader;
-import java.util.Properties;
 import cppast.ParseException;
 import cppast.Parser;
 import cppstyle.checks.CheckListener;
@@ -51,14 +50,12 @@ public final class NewlineAtEndOfFileCheckTest extends EasyMockTestCase
      * Mock objects.
      */
     private CheckListener listener;
-    private Properties properties;
     private static final String SEPARATOR = System.getProperty( "line.separator" );
 
     protected void setUp() throws Exception
     {
         listener = createMock( CheckListener.class );
-        properties = createMock( Properties.class );
-        check = new NewlineAtEndOfFileCheck( listener, properties );
+        check = new NewlineAtEndOfFileCheck( listener );
     }
 
     public void testNewlineAtEndOfFileDoesNotGenerateFailure() throws ParseException

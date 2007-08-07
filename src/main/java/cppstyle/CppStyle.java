@@ -126,7 +126,7 @@ public final class CppStyle
         if( name.equals( "Header" ) )
             return new HeaderCheck( output, properties, folder );
         if( name.equals( "NewlineAtEndOfFile" ) )
-            return new NewlineAtEndOfFileCheck( output, properties );
+            return new NewlineAtEndOfFileCheck( output );
         throw new IllegalArgumentException( "unknown module '" + name + "'" );
     }
 
