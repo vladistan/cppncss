@@ -42,6 +42,7 @@ import cppast.ParserVisitor;
 import cppast.VisitorComposite;
 import cppstyle.checks.CheckListener;
 import cppstyle.checks.HeaderCheck;
+import cppstyle.checks.NewlineAtEndOfFileCheck;
 import cpptools.Analyzer;
 import cpptools.ConsoleLogger;
 import cpptools.EventHandler;
@@ -124,6 +125,8 @@ public final class CppStyle
     {
         if( name.equals( "Header" ) )
             return new HeaderCheck( output, properties, folder );
+        if( name.equals( "NewlineAtEndOfFile" ) )
+            return new NewlineAtEndOfFileCheck( output, properties );
         throw new IllegalArgumentException( "unknown module '" + name + "'" );
     }
 

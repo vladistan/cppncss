@@ -77,19 +77,19 @@ public final class Parser
 
 PARSER_END(Parser)
 
-SKIP :
+SPECIAL_TOKEN :
 {
   " "
 | "\t"
-| "\r" | "\\\r"
-| "\n" | "\\\n"
+| < NEW_LINE : "\r\n" | "\r" | "\n" >
+| < ESCAPED_NEW_LINE : "\\" ("\r\n" | "\r" | "\n") >
 }
 
 SPECIAL_TOKEN :
 {
-  < C_STYLE_COMMENT : "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")? ("//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")?)* >
-| < CPP_STYLE_COMMENT : "/*" (~["*"])* "*" (~["*","/"] (~["*"])* "*" | "*")* "/" >
-| < PREPROCESSOR : "#" (~["\n","\r"] | "\\"("\n"|"\r"|"\r\n"))* ("\n"|"\r"|"\r\n")? >
+  < C_STYLE_COMMENT : "//" (~["\n","\r"])* (<NEW_LINE> "//" (~["\n","\r"])*)* >
+| < CPP_STYLE_COMMENT : "/*" (~["*"])* "*" (~["*","/"] (~["*"])* "*" | "*")* "/" > // see http://www.engr.mun.ca/~theo/JavaCC-FAQ/javacc-faq-moz.htm#tthFrefAAE
+| < PREPROCESSOR : "#" (~["\n","\r","\\"])* ("\\"(<NEW_LINE>)? (~["\n","\r","\\"])*)* >
 }
 
 TOKEN :
