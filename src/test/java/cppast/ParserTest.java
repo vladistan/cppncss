@@ -468,7 +468,12 @@ public class ParserTest extends TestCase
 
     public void testPreProcessorOnSeveralLinesAtEndOfFile() throws ParseException
     {
-        parse( "#define DEF anything \\" + '\n' + "should be escaped" );
+        parse( "#define DEF anything \\" + '\r'+ '\n' + "should be escaped" );
+    }
+
+    public void testPreProcessorContainingEscapedCharacter() throws ParseException
+    {
+        parse( "#define DEF \"\\n\"" );
     }
 
     public void testCommentAtEndOfFile() throws ParseException

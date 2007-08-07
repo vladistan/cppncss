@@ -322,7 +322,7 @@ public class PreProcessorTest extends TestCase
     public void testSpecialTokensAreKeptWhenRemovingToken()
     {
         processor.addDefine( "my", "" );
-        parse( "here is /*surely*/my /*own*/ text" );
+        parse( "here is /*surely*/my/*own*/text" );
         processor.getNextToken();
         processor.getNextToken();
         final Token token = processor.getNextToken();
