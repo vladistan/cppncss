@@ -29,7 +29,8 @@
 package cpptools.preprocessor;
 
 import java.util.Stack;
-import cppast.ParserTokenManager;
+
+import cppast.ParserConstants;
 import cppast.Token;
 
 /**
@@ -63,7 +64,7 @@ public final class Macro extends AbstractTokenFilter
     protected void filter( final Token token )
     {
         final Token next = provider.next();
-        if( next.kind == ParserTokenManager.LPARENTHESIS )
+        if( next.kind == ParserConstants.LPARENTHESIS )
             replace( token );
         else
             undo( token, next );
@@ -82,11 +83,11 @@ public final class Macro extends AbstractTokenFilter
         do
         {
             token = provider.next();
-            if( token.kind == ParserTokenManager.LPARENTHESIS )
+            if( token.kind == ParserConstants.LPARENTHESIS )
                 ++level;
-            if( token.kind == ParserTokenManager.RPARENTHESIS )
+            if( token.kind == ParserConstants.RPARENTHESIS )
                 --level;
         }
-        while( level != 0 || token.kind != ParserTokenManager.RPARENTHESIS );
+        while( level != 0 || token.kind != ParserConstants.RPARENTHESIS );
     }
 }

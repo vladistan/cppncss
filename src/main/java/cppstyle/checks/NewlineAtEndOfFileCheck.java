@@ -30,7 +30,7 @@ package cppstyle.checks;
 
 import cppast.AbstractVisitor;
 import cppast.AstTranslationUnit;
-import cppast.ParserTokenManager;
+import cppast.ParserConstants;
 import cppast.Token;
 
 /**
@@ -57,7 +57,7 @@ public final class NewlineAtEndOfFileCheck extends AbstractVisitor
     public Object visit( final AstTranslationUnit node, final Object data )
     {
         final Token token = node.getLastToken().specialToken;
-        if( token == null || token.kind != ParserTokenManager.NEW_LINE )
+        if( token == null || token.kind != ParserConstants.NEW_LINE )
             listener.fail( "missing new line at end of file" );
         return data;
     }

@@ -32,7 +32,9 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+
 import cppast.JavaCharStream;
+import cppast.ParserConstants;
 import cppast.ParserTokenManager;
 import cppast.Token;
 
@@ -71,10 +73,10 @@ public abstract class AbstractTokenFilter implements TokenFilter
             throw new IllegalArgumentException( "Empty macro/define name specified" );
         final ParserTokenManager manager = new ParserTokenManager( new JavaCharStream( new StringReader( name ) ) );
         final Token token = manager.getNextToken();
-        if( token.kind != ParserTokenManager.ID )
+        if( token.kind != ParserConstants.ID )
             throw new IllegalArgumentException( "Illegal macro/define name : " + "'" + name + "'" );
         final Token next = manager.getNextToken();
-        if( next.kind != ParserTokenManager.EOF )
+        if( next.kind != ParserConstants.EOF )
             throw new IllegalArgumentException( "Illegal macro/define name : " + "'" + name + "'" );
         return name;
     }
@@ -84,7 +86,7 @@ public abstract class AbstractTokenFilter implements TokenFilter
         final List<Token> result = new ArrayList<Token>();
         final ParserTokenManager manager = new ParserTokenManager( new JavaCharStream( new StringReader( value ) ) );
         Token token = manager.getNextToken();
-        while( token.kind != ParserTokenManager.EOF )
+        while( token.kind != ParserConstants.EOF )
         {
             result.add( 0, token );
             token = manager.getNextToken();
