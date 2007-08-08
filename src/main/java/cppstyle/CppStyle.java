@@ -43,6 +43,7 @@ import cppast.VisitorComposite;
 import cppstyle.checks.CheckListener;
 import cppstyle.checks.HeaderCheck;
 import cppstyle.checks.NewlineAtEndOfFileCheck;
+import cppstyle.checks.TabCharacterCheck;
 import cpptools.Analyzer;
 import cpptools.ConsoleLogger;
 import cpptools.EventHandler;
@@ -127,6 +128,8 @@ public final class CppStyle
             return new HeaderCheck( output, properties, folder );
         if( name.equals( "NewlineAtEndOfFile" ) )
             return new NewlineAtEndOfFileCheck( output );
+        if( name.equals( "TabCharacter" ) )
+            return new TabCharacterCheck( output );
         throw new IllegalArgumentException( "unknown module '" + name + "'" );
     }
 
