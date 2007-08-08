@@ -92,20 +92,13 @@ public final class HeaderCheckTest extends EasyMockTestCase
         fail( "should have thrown" );
     }
 
-    public void testCheckingHeaderAgainstItselfDoesNotReportAnyFailure() throws ParseException, IOException
+    public void testExactHeaderMatchIsAllowed() throws ParseException, IOException
     {
         final String header = "/* this is the header\n we want to check for */";
         check( header, header );
     }
 
-    public void testExpectedHeaderIsStrippedFromLeadingCrLf() throws ParseException, IOException
-    {
-        final String actual = "/* this is the header\n we want to check for */";
-        final String expected = actual + '\r' + '\n' + '\r';
-        check( actual, expected );
-    }
-
-    public void testNoActualHeaderIsConsideredAsFailure() throws ParseException, IOException
+    public void testNoActualHeaderIsFailure() throws ParseException, IOException
     {
         final String actual = "";
         final String expected = "/* this is the header\n we want to check for */";
@@ -113,7 +106,7 @@ public final class HeaderCheckTest extends EasyMockTestCase
         check( actual, expected );
     }
 
-    public void testComparisonFailureOnFirstLineIsLogged() throws ParseException, IOException
+    public void testComparisonFailureOnFirstLineIsFailure() throws ParseException, IOException
     {
         final String actual = "/* this is the wrong header\n we want to check for */";
         final String expected = "/* this is the header\n we want to check for */";
@@ -121,7 +114,7 @@ public final class HeaderCheckTest extends EasyMockTestCase
         check( actual, expected );
     }
 
-    public void testComparisonFailureOnSecondLineIsLogged() throws ParseException, IOException
+    public void testComparisonFailureOnSecondLineIsFailure() throws ParseException, IOException
     {
         final String actual = "/* this is the header\n we want to test */";
         final String expected = "/* this is the header\n we want to check for */";
@@ -129,7 +122,7 @@ public final class HeaderCheckTest extends EasyMockTestCase
         check( actual, expected );
     }
 
-    public void testComparisonFailuresOnBothLinesIsLogged() throws ParseException, IOException
+    public void testComparisonFailuresOnBothLinesIsFailure() throws ParseException, IOException
     {
         final String actual = "/* this is the wrong header\n we want to test */";
         final String expected = "/* this is the header\n we want to check for */";
@@ -137,15 +130,14 @@ public final class HeaderCheckTest extends EasyMockTestCase
         check( actual, expected );
     }
 
-    public void testMissingSecondLineInExpectationIsLoggedAsFailure() throws ParseException, IOException
+    public void testTooManyLinesInExpectationIsAllowed() throws ParseException, IOException
     {
-        final String actual = "// this is the header\r\n// we want to test";
+        final String actual = "// this is the header\r\n// this is more";
         final String expected = "// this is the header";
-        listener.fail( "file header mismatch line 2" );
         check( actual, expected );
     }
 
-    public void testMissingSecondLineInActualIsLoggedAsFailure() throws ParseException, IOException
+    public void testMissingSecondLineInActualIsFailure() throws ParseException, IOException
     {
         final String actual = "// this is the header";
         final String expected = "// this is the header\r\n// we want to test";
@@ -153,21 +145,21 @@ public final class HeaderCheckTest extends EasyMockTestCase
         check( actual, expected );
     }
 
-    public void testComparisonFailureOnSecondIgnoredLineIsNotLogged() throws ParseException, IOException
+    public void testComparisonFailureOnSecondIgnoredLineIsAllowed() throws ParseException, IOException
     {
         final String actual = "/* this is the header\n we want to test */";
         final String expected = "/* this is the header\n we want to check for */";
         check( actual, expected, "2" );
     }
 
-    public void testComparisonFailureOnBothIgnoredLineIsNotLogged() throws ParseException, IOException
+    public void testComparisonFailureOnBothIgnoredLineIsAllowed() throws ParseException, IOException
     {
         final String actual = "/* this is the wrong header\n we want to test */";
         final String expected = "/* this is the header\n we want to check for */";
         check( actual, expected, "1,2" );
     }
 
-    public void testWhitespaceBeforeHeaderIsLoggedAsFailure() throws ParseException, IOException
+    public void testWhitespaceBeforeHeaderIsFailure() throws ParseException, IOException
     {
         final String expected = "/* this is the header\n we want to check for */";
         final String actual = ' ' + expected;

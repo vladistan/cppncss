@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Properties;
 import cppast.AbstractVisitor;
 import cppast.AstTranslationUnit;
+import cppast.Token;
 
 /**
  * Checks for the validity of file headers.
@@ -120,12 +121,27 @@ public final class HeaderCheck extends AbstractVisitor
 
     public Object visit( final AstTranslationUnit node, final Object data )
     {
-        final String comment = node.getComment();
-        if( comment == null )
+        final String actual = getActual( node );
+        if( actual == null )
             listener.fail( "missing file header" );
         else
-            notify( compare( split( comment ) ) );
+            notify( compare( split( actual ) ) );
         return data;
+    }
+
+    private String getActual( final AstTranslationUnit node )
+    {
+        final Token token = node.getFirstToken().specialToken;
+        if( token == null )
+            return null;
+        return format( token );
+    }
+
+    private String format( final Token token )
+    {
+        if( token == null )
+            return "";
+        return format( token.specialToken ) + token.image;
     }
 
     private final class Interval
@@ -158,7 +174,7 @@ public final class HeaderCheck extends AbstractVisitor
     private List<Interval> compare( final String[] actual )
     {
         final List<Interval> intervals = new ArrayList<Interval>();
-        for( int line = 0; line < Math.max( expected.length, actual.length ); ++line )
+        for( int line = 0; line < expected.length; ++line )
             if( !matches( actual, line ) && !merge( intervals, line + 1 ) )
                 intervals.add( new Interval( line + 1 ) );
         return intervals;
@@ -166,7 +182,7 @@ public final class HeaderCheck extends AbstractVisitor
 
     private boolean matches( final String[] actual, final int line )
     {
-        return line < Math.min( actual.length, expected.length ) && (ignoredLines.contains( line + 1 ) || actual[line].equals( expected[line] ));
+        return line < actual.length && (ignoredLines.contains( line + 1 ) || actual[line].equals( expected[line] ));
     }
 
     private boolean merge( final List<Interval> intervals, final int line )
