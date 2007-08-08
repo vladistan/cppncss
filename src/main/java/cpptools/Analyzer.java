@@ -48,7 +48,7 @@ import cppast.Token;
 import cpptools.preprocessor.PreProcessor;
 
 /**
- * Builds and walks a forrest of abstract syntax trees from a set of given files.
+ * Builds and walks a forest of abstract syntax trees from a set of given files.
  *
  * @author Mathieu Champlon
  */
