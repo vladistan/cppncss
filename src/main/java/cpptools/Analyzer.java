@@ -45,6 +45,7 @@ import cppast.ParserTokenManager;
 import cppast.ParserVisitor;
 import cppast.Token;
 import cpptools.preprocessor.PreProcessor;
+import cpptools.preprocessor.TokenProvider;
 
 /**
  * Builds and walks a forest of abstract syntax trees from a set of given files.
@@ -75,14 +76,14 @@ public final class Analyzer
             return true;
         }
     };
+    private final ParserVisitor visitor;
+    private final FileObserver observer;
+    private final EventHandler handler;
     private final boolean recursive;
     private final boolean force;
     private final String prefix;
     private final List<String> files;
     private final ParserTokenManager manager;
-    private final ParserVisitor visitor;
-    private final FileObserver observer;
-    private final EventHandler handler;
     private final Parser parser;
 
     /**
@@ -101,15 +102,15 @@ public final class Analyzer
             throw new IllegalArgumentException( "argument 'handler' is null" );
         if( visitor == null )
             throw new IllegalArgumentException( "argument 'visitor' is null" );
+        this.visitor = visitor;
+        this.observer = observer;
+        this.handler = handler;
         this.recursive = options.hasOption( "r" );
         this.force = options.hasOption( "k" );
         this.prefix = getPrefix( options );
+        this.files = sort( resolve( options.getArgList() ) );
         this.manager = createParserManager( options );
         this.parser = new Parser( manager );
-        this.observer = observer;
-        this.handler = handler;
-        this.visitor = visitor;
-        this.files = sort( resolve( options.getArgList() ) );
     }
 
     private String getPrefix( final Options options )
@@ -122,7 +123,14 @@ public final class Analyzer
 
     private ParserTokenManager createParserManager( final Options options )
     {
-        final PreProcessor processor = new PreProcessor( new TokenProviderAdapter( new ParserTokenManager( null ) ) );
+        final TokenProvider provider = new TokenProviderAdapter( new ParserTokenManager( null ) );
+        final PreProcessor processor = createPreProcessor( options, provider );
+        return new TokenManagerAdapter( processor );
+    }
+
+    private PreProcessor createPreProcessor( final Options options, final TokenProvider provider )
+    {
+        final PreProcessor processor = new PreProcessor( provider );
         final List<String> defineNames = options.getOptionProperties( "D" );
         final List<String> defineValues = options.getOptionPropertyValues( "D" );
         for( int i = 0; i < defineNames.size(); ++i )
@@ -131,7 +139,7 @@ public final class Analyzer
         final List<String> macroValues = options.getOptionPropertyValues( "M" );
         for( int i = 0; i < macroNames.size(); ++i )
             processor.addMacro( macroNames.get( i ), macroValues.get( i ) );
-        return new TokenManagerAdapter( processor );
+        return processor;
     }
 
     private List<String> resolve( final List<String> inputs )
