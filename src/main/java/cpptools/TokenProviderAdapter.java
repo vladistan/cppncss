@@ -26,29 +26,45 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cpptools.preprocessor;
+package cpptools;
 
 import cppast.JavaCharStream;
+import cppast.ParserTokenManager;
 import cppast.Token;
+import cpptools.preprocessor.TokenProvider;
 
 /**
- * Defines a token provider.
+ * Adapts a token manager to a token provider.
  *
  * @author Mathieu Champlon
  */
-public interface TokenProvider
+public final class TokenProviderAdapter implements TokenProvider
 {
-    /**
-     * Retrieve the next available token.
-     *
-     * @return the next token
-     */
-    Token next();
+    private final ParserTokenManager manager;
 
     /**
-     * Reset the stream.
-     *
-     * @param stream the new stream
+     * @param stream
      */
-    void reset( JavaCharStream stream );
+    public TokenProviderAdapter( final ParserTokenManager manager )
+    {
+        if( manager == null )
+            throw new IllegalArgumentException( "parameter 'manager' is null" );
+        this.manager = manager;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Token next()
+    {
+        return manager.getNextToken();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void reset( final JavaCharStream stream )
+    {
+        manager.ReInit( stream );
+    }
 }

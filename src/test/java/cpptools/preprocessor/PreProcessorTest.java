@@ -29,8 +29,13 @@
 package cpptools.preprocessor;
 
 import java.io.StringReader;
+
 import junit.framework.TestCase;
+import cppast.JavaCharStream;
+import cppast.ParserConstants;
+import cppast.ParserTokenManager;
 import cppast.Token;
+import cpptools.TokenProviderAdapter;
 
 /**
  * @author Mathieu Champlon
@@ -41,17 +46,17 @@ public class PreProcessorTest extends TestCase
 
     protected void setUp()
     {
-        processor = new PreProcessor();
+        processor = new PreProcessor( new TokenProviderAdapter( new ParserTokenManager( null ) ) );
     }
 
     private void parse( final String data )
     {
-        processor.reset( new StringReader( data ) );
+        processor.reset( new JavaCharStream( new StringReader( data ) ) );
     }
 
     private void assertToken( int kind, String image )
     {
-        final Token token = processor.getNextToken();
+        final Token token = processor.next();
         assertEquals( kind, token.kind );
         assertEquals( image, token.image );
         assertNull( token.next );
@@ -68,11 +73,11 @@ public class PreProcessorTest extends TestCase
     public void testNoMacroNoDefineDoesNotModifyTokens()
     {
         parse( "here is my text" );
-        assertToken( PreProcessor.ID, "here" );
-        assertToken( PreProcessor.ID, "is" );
-        assertToken( PreProcessor.ID, "my" );
-        assertToken( PreProcessor.ID, "text" );
-        assertToken( PreProcessor.EOF, "" );
+        assertToken( ParserConstants.ID, "here" );
+        assertToken( ParserConstants.ID, "is" );
+        assertToken( ParserConstants.ID, "my" );
+        assertToken( ParserConstants.ID, "text" );
+        assertToken( ParserConstants.EOF, "" );
     }
 
     public void testEmptyNameIsInvalid()
@@ -118,69 +123,69 @@ public class PreProcessorTest extends TestCase
     {
         processor.addDefine( "my", "your" );
         parse( "here is my text" );
-        assertToken( PreProcessor.ID, "here" );
-        assertToken( PreProcessor.ID, "is" );
-        assertToken( PreProcessor.ID, "your" );
-        assertToken( PreProcessor.ID, "text" );
-        assertToken( PreProcessor.EOF, "" );
+        assertToken( ParserConstants.ID, "here" );
+        assertToken( ParserConstants.ID, "is" );
+        assertToken( ParserConstants.ID, "your" );
+        assertToken( ParserConstants.ID, "text" );
+        assertToken( ParserConstants.EOF, "" );
     }
 
     public void testMacroWithoutContentReplacesOccurenceWithinInputTokens()
     {
         processor.addMacro( "my", "your" );
         parse( "here is my() text" );
-        assertToken( PreProcessor.ID, "here" );
-        assertToken( PreProcessor.ID, "is" );
-        assertToken( PreProcessor.ID, "your" );
-        assertToken( PreProcessor.ID, "text" );
-        assertToken( PreProcessor.EOF, "" );
+        assertToken( ParserConstants.ID, "here" );
+        assertToken( ParserConstants.ID, "is" );
+        assertToken( ParserConstants.ID, "your" );
+        assertToken( ParserConstants.ID, "text" );
+        assertToken( ParserConstants.EOF, "" );
     }
 
     public void testMacroWithContentReplacesOccurenceWithinInputTokens()
     {
         processor.addMacro( "my", "your" );
         parse( "here is my( anything ! ) text" );
-        assertToken( PreProcessor.ID, "here" );
-        assertToken( PreProcessor.ID, "is" );
-        assertToken( PreProcessor.ID, "your" );
-        assertToken( PreProcessor.ID, "text" );
-        assertToken( PreProcessor.EOF, "" );
+        assertToken( ParserConstants.ID, "here" );
+        assertToken( ParserConstants.ID, "is" );
+        assertToken( ParserConstants.ID, "your" );
+        assertToken( ParserConstants.ID, "text" );
+        assertToken( ParserConstants.EOF, "" );
     }
 
     public void testMacroWithExpressionContentReplacesOccurenceWithinInputTokens()
     {
         processor.addMacro( "my", "your" );
         parse( "here is my( ((anything ! (anything !)) anything !) ) text" );
-        assertToken( PreProcessor.ID, "here" );
-        assertToken( PreProcessor.ID, "is" );
-        assertToken( PreProcessor.ID, "your" );
-        assertToken( PreProcessor.ID, "text" );
-        assertToken( PreProcessor.EOF, "" );
+        assertToken( ParserConstants.ID, "here" );
+        assertToken( ParserConstants.ID, "is" );
+        assertToken( ParserConstants.ID, "your" );
+        assertToken( ParserConstants.ID, "text" );
+        assertToken( ParserConstants.EOF, "" );
     }
 
     public void testMacroReplacesSeveralOccurencesWithinInputTokens()
     {
         processor.addMacro( "my", "your" );
         parse( "here is my( something ) my( something else ) text" );
-        assertToken( PreProcessor.ID, "here" );
-        assertToken( PreProcessor.ID, "is" );
-        assertToken( PreProcessor.ID, "your" );
-        assertToken( PreProcessor.ID, "your" );
-        assertToken( PreProcessor.ID, "text" );
-        assertToken( PreProcessor.EOF, "" );
+        assertToken( ParserConstants.ID, "here" );
+        assertToken( ParserConstants.ID, "is" );
+        assertToken( ParserConstants.ID, "your" );
+        assertToken( ParserConstants.ID, "your" );
+        assertToken( ParserConstants.ID, "text" );
+        assertToken( ParserConstants.EOF, "" );
     }
 
     public void testMacroNameWithoutParenthesisIsNoOp()
     {
         processor.addMacro( "my", "your" );
         parse( "here is my text()" );
-        assertToken( PreProcessor.ID, "here" );
-        assertToken( PreProcessor.ID, "is" );
-        assertToken( PreProcessor.ID, "my" );
-        assertToken( PreProcessor.ID, "text" );
-        assertToken( PreProcessor.LPARENTHESIS, "(" );
-        assertToken( PreProcessor.RPARENTHESIS, ")" );
-        assertToken( PreProcessor.EOF, "" );
+        assertToken( ParserConstants.ID, "here" );
+        assertToken( ParserConstants.ID, "is" );
+        assertToken( ParserConstants.ID, "my" );
+        assertToken( ParserConstants.ID, "text" );
+        assertToken( ParserConstants.LPARENTHESIS, "(" );
+        assertToken( ParserConstants.RPARENTHESIS, ")" );
+        assertToken( ParserConstants.EOF, "" );
     }
 
     public void testRegisterSameMacroNameTwiceThrowsAnException()
@@ -201,119 +206,119 @@ public class PreProcessorTest extends TestCase
     {
         processor.addMacro( "my", ";" );
         parse( "here is my() text" );
-        assertToken( PreProcessor.ID, "here" );
-        assertToken( PreProcessor.ID, "is" );
-        assertToken( PreProcessor.SEMICOLON, ";" );
-        assertToken( PreProcessor.ID, "text" );
-        assertToken( PreProcessor.EOF, "" );
+        assertToken( ParserConstants.ID, "here" );
+        assertToken( ParserConstants.ID, "is" );
+        assertToken( ParserConstants.SEMICOLON, ";" );
+        assertToken( ParserConstants.ID, "text" );
+        assertToken( ParserConstants.EOF, "" );
     }
 
     public void testDefineWithNonIdTokenReplacesOccurenceWithinInputTokens()
     {
         processor.addDefine( "my", ";" );
         parse( "here is my text" );
-        assertToken( PreProcessor.ID, "here" );
-        assertToken( PreProcessor.ID, "is" );
-        assertToken( PreProcessor.SEMICOLON, ";" );
-        assertToken( PreProcessor.ID, "text" );
-        assertToken( PreProcessor.EOF, "" );
+        assertToken( ParserConstants.ID, "here" );
+        assertToken( ParserConstants.ID, "is" );
+        assertToken( ParserConstants.SEMICOLON, ";" );
+        assertToken( ParserConstants.ID, "text" );
+        assertToken( ParserConstants.EOF, "" );
     }
 
     public void testMacroWithSeveralNonIdTokensReplacesOccurenceWithinInputTokens()
     {
         processor.addMacro( "my", "this()" );
         parse( "here is my() text" );
-        assertToken( PreProcessor.ID, "here" );
-        assertToken( PreProcessor.ID, "is" );
-        assertToken( PreProcessor.THIS, "this" );
-        assertToken( PreProcessor.LPARENTHESIS, "(" );
-        assertToken( PreProcessor.RPARENTHESIS, ")" );
-        assertToken( PreProcessor.ID, "text" );
-        assertToken( PreProcessor.EOF, "" );
+        assertToken( ParserConstants.ID, "here" );
+        assertToken( ParserConstants.ID, "is" );
+        assertToken( ParserConstants.THIS, "this" );
+        assertToken( ParserConstants.LPARENTHESIS, "(" );
+        assertToken( ParserConstants.RPARENTHESIS, ")" );
+        assertToken( ParserConstants.ID, "text" );
+        assertToken( ParserConstants.EOF, "" );
     }
 
     public void testDefineWithSeveralNonIdTokensReplacesOccurenceWithinInputTokens()
     {
         processor.addDefine( "my", "this()" );
         parse( "here is my text" );
-        assertToken( PreProcessor.ID, "here" );
-        assertToken( PreProcessor.ID, "is" );
-        assertToken( PreProcessor.THIS, "this" );
-        assertToken( PreProcessor.LPARENTHESIS, "(" );
-        assertToken( PreProcessor.RPARENTHESIS, ")" );
-        assertToken( PreProcessor.ID, "text" );
-        assertToken( PreProcessor.EOF, "" );
+        assertToken( ParserConstants.ID, "here" );
+        assertToken( ParserConstants.ID, "is" );
+        assertToken( ParserConstants.THIS, "this" );
+        assertToken( ParserConstants.LPARENTHESIS, "(" );
+        assertToken( ParserConstants.RPARENTHESIS, ")" );
+        assertToken( ParserConstants.ID, "text" );
+        assertToken( ParserConstants.EOF, "" );
     }
 
     public void testMacroWithEmptyValueRemovesOccurenceWithinInputTokens()
     {
         processor.addMacro( "my", "" );
         parse( "here is my() text" );
-        assertToken( PreProcessor.ID, "here" );
-        assertToken( PreProcessor.ID, "is" );
-        assertToken( PreProcessor.ID, "text" );
-        assertToken( PreProcessor.EOF, "" );
+        assertToken( ParserConstants.ID, "here" );
+        assertToken( ParserConstants.ID, "is" );
+        assertToken( ParserConstants.ID, "text" );
+        assertToken( ParserConstants.EOF, "" );
     }
 
     public void testDefineWithEmptyValueRemovesOccurenceWithinInputTokens()
     {
         processor.addDefine( "my", "" );
         parse( "here is my text" );
-        assertToken( PreProcessor.ID, "here" );
-        assertToken( PreProcessor.ID, "is" );
-        assertToken( PreProcessor.ID, "text" );
-        assertToken( PreProcessor.EOF, "" );
+        assertToken( ParserConstants.ID, "here" );
+        assertToken( ParserConstants.ID, "is" );
+        assertToken( ParserConstants.ID, "text" );
+        assertToken( ParserConstants.EOF, "" );
     }
 
     public void testMacroWithEmptyValueRemovesTwoConsecutiveOccurencesWithinInputTokens()
     {
         processor.addMacro( "my", "" );
         parse( "here is my() my() text" );
-        assertToken( PreProcessor.ID, "here" );
-        assertToken( PreProcessor.ID, "is" );
-        assertToken( PreProcessor.ID, "text" );
-        assertToken( PreProcessor.EOF, "" );
+        assertToken( ParserConstants.ID, "here" );
+        assertToken( ParserConstants.ID, "is" );
+        assertToken( ParserConstants.ID, "text" );
+        assertToken( ParserConstants.EOF, "" );
     }
 
     public void testDefineWithEmptyValueRemovesTwoConsecutiveOccurencesWithinInputTokens()
     {
         processor.addDefine( "my", "" );
         parse( "here is my my text" );
-        assertToken( PreProcessor.ID, "here" );
-        assertToken( PreProcessor.ID, "is" );
-        assertToken( PreProcessor.ID, "text" );
-        assertToken( PreProcessor.EOF, "" );
+        assertToken( ParserConstants.ID, "here" );
+        assertToken( ParserConstants.ID, "is" );
+        assertToken( ParserConstants.ID, "text" );
+        assertToken( ParserConstants.EOF, "" );
     }
 
     public void testInsertedTokensLinesAndColumnsAreThoseOfTheDefineNameToken()
     {
         processor.addDefine( "my", "this()" );
         parse( "here is my text" );
-        processor.getNextToken();
-        processor.getNextToken();
-        assertLocation( processor.getNextToken(), 1, 9, 1, 10 );
-        assertLocation( processor.getNextToken(), 1, 9, 1, 10 );
-        assertLocation( processor.getNextToken(), 1, 9, 1, 10 );
+        processor.next();
+        processor.next();
+        assertLocation( processor.next(), 1, 9, 1, 10 );
+        assertLocation( processor.next(), 1, 9, 1, 10 );
+        assertLocation( processor.next(), 1, 9, 1, 10 );
     }
 
     public void testInsertedTokensLinesAndColumnsAreThoseOfTheMacroNameToken()
     {
         processor.addMacro( "my", "this()" );
         parse( "here is my() text" );
-        processor.getNextToken();
-        processor.getNextToken();
-        assertLocation( processor.getNextToken(), 1, 9, 1, 10 );
-        assertLocation( processor.getNextToken(), 1, 9, 1, 10 );
-        assertLocation( processor.getNextToken(), 1, 9, 1, 10 );
+        processor.next();
+        processor.next();
+        assertLocation( processor.next(), 1, 9, 1, 10 );
+        assertLocation( processor.next(), 1, 9, 1, 10 );
+        assertLocation( processor.next(), 1, 9, 1, 10 );
     }
 
     public void testSpecialTokensAreKeptWhenReplacingToken()
     {
         processor.addDefine( "my", "this()" );
         parse( "here is /*surely*/my text" );
-        processor.getNextToken();
-        processor.getNextToken();
-        final Token token = processor.getNextToken();
+        processor.next();
+        processor.next();
+        final Token token = processor.next();
         assertNotNull( token.specialToken );
         assertEquals( "this", token.image );
         assertEquals( "/*surely*/", token.specialToken.image );
@@ -323,9 +328,9 @@ public class PreProcessorTest extends TestCase
     {
         processor.addDefine( "my", "" );
         parse( "here is /*surely*/my/*own*/text" );
-        processor.getNextToken();
-        processor.getNextToken();
-        final Token token = processor.getNextToken();
+        processor.next();
+        processor.next();
+        final Token token = processor.next();
         assertNotNull( token.specialToken );
         assertEquals( "text", token.image );
         assertEquals( "/*own*/", token.specialToken.image );

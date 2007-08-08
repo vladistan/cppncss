@@ -28,12 +28,11 @@
 
 package cpptools.preprocessor;
 
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+
 import cppast.JavaCharStream;
-import cppast.ParserTokenManager;
 import cppast.Token;
 
 /**
@@ -41,28 +40,31 @@ import cppast.Token;
  *
  * @author Mathieu Champlon
  */
-public final class PreProcessor extends ParserTokenManager implements TokenProvider
+public final class PreProcessor implements TokenProvider
 {
     private final List<TokenFilter> filters = new ArrayList<TokenFilter>();
     private final Stack<Token> buffer = new Stack<Token>();
+    private final TokenProvider provider;
 
     /**
      * Create an adapter.
+     *
+     * @param provider
      */
-    public PreProcessor()
+    public PreProcessor( final TokenProvider provider )
     {
-        super( null );
+        if( provider == null )
+            throw new IllegalArgumentException( "parameter 'provider' is null" );
+        this.provider = provider;
     }
 
     /**
-     * Set a new input.
-     *
-     * @param reader the input reader
+     * Reset pre-processor.
      */
-    public void reset( final Reader reader )
+    public void reset( final JavaCharStream stream )
     {
         buffer.clear();
-        ReInit( new JavaCharStream( reader ) );
+        provider.reset( stream );
     }
 
     /**
@@ -70,19 +72,11 @@ public final class PreProcessor extends ParserTokenManager implements TokenProvi
      */
     public Token next()
     {
-        return super.getNextToken();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Token getNextToken()
-    {
         if( !buffer.empty() )
             return buffer.pop();
-        final Token token = next();
+        final Token token = provider.next();
         if( filter( token ) )
-            return attach( getNextToken(), token.specialToken );
+            return attach( next(), token.specialToken );
         return token;
     }
 
@@ -127,7 +121,7 @@ public final class PreProcessor extends ParserTokenManager implements TokenProvi
      */
     public void addMacro( final String name, final String value )
     {
-        register( name, new Macro( this, buffer, name, value ) );
+        register( name, new Macro( provider, buffer, name, value ) );
     }
 
     private void register( final String name, final TokenFilter macro )

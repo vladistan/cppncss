@@ -38,8 +38,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+
+import cppast.JavaCharStream;
 import cppast.ParseException;
 import cppast.Parser;
+import cppast.ParserTokenManager;
 import cppast.ParserVisitor;
 import cppast.Token;
 import cpptools.preprocessor.PreProcessor;
@@ -77,7 +80,7 @@ public final class Analyzer
     private final boolean force;
     private final String prefix;
     private final List<String> files;
-    private final PreProcessor processor;
+    private final ParserTokenManager manager;
     private final ParserVisitor visitor;
     private final FileObserver observer;
     private final EventHandler handler;
@@ -91,8 +94,7 @@ public final class Analyzer
      * @param observer a file observer
      * @param handler an event handler
      */
-    public Analyzer( final Options options, final ParserVisitor visitor, final FileObserver observer,
-            final EventHandler handler )
+    public Analyzer( final Options options, final ParserVisitor visitor, final FileObserver observer, final EventHandler handler )
     {
         if( observer == null )
             throw new IllegalArgumentException( "argument 'observer' is null" );
@@ -103,8 +105,8 @@ public final class Analyzer
         this.recursive = options.hasOption( "r" );
         this.force = options.hasOption( "k" );
         this.prefix = getPrefix( options );
-        this.processor = createProcessor( options );
-        this.parser = new Parser( processor );
+        this.manager = createParserManager( options );
+        this.parser = new Parser( manager );
         this.observer = observer;
         this.handler = handler;
         this.visitor = visitor;
@@ -119,18 +121,18 @@ public final class Analyzer
         return "";
     }
 
-    private PreProcessor createProcessor( final Options options )
+    private ParserTokenManager createParserManager( final Options options )
     {
-        final PreProcessor result = new PreProcessor();
+        final PreProcessor processor = new PreProcessor( new TokenProviderAdapter( new ParserTokenManager( null ) ) );
         final List<String> defineNames = options.getOptionProperties( "D" );
         final List<String> defineValues = options.getOptionPropertyValues( "D" );
         for( int i = 0; i < defineNames.size(); ++i )
-            result.addDefine( defineNames.get( i ), defineValues.get( i ) );
+            processor.addDefine( defineNames.get( i ), defineValues.get( i ) );
         final List<String> macroNames = options.getOptionProperties( "M" );
         final List<String> macroValues = options.getOptionPropertyValues( "M" );
         for( int i = 0; i < macroNames.size(); ++i )
-            result.addMacro( macroNames.get( i ), macroValues.get( i ) );
-        return result;
+            processor.addMacro( macroNames.get( i ), macroValues.get( i ) );
+        return new TokenManagerAdapter( processor );
     }
 
     private List<String> resolve( final List<String> inputs )
@@ -240,10 +242,16 @@ public final class Analyzer
     private void parse( final ParserVisitor visitor, final String filename ) throws ParseException, IOException
     {
         final BufferedReader reader = new BufferedReader( new FileReader( filename ) );
-        processor.reset( reader );
-        parser.ReInit( processor );
-        parser.translation_unit().jjtAccept( visitor, null );
-        reader.close();
+        try
+        {
+            manager.ReInit( new JavaCharStream( reader ) );
+            parser.ReInit( manager );
+            parser.translation_unit().jjtAccept( visitor, null );
+        }
+        finally
+        {
+            reader.close();
+        }
     }
 
     private Token getToken( final ParseException exception )
