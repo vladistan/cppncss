@@ -60,8 +60,8 @@ public final class TabCharacterCheck extends AbstractVisitor
             Token specialToken = token.specialToken;
             while( specialToken != null )
             {
-                if( (specialToken.image.contains( "\t" )) )
-                    listener.fail( "tab character detected line " + specialToken.beginLine );
+                if( specialToken.image.contains( "\t" ) )
+                    listener.fail( "tab character line " + specialToken.beginLine );
                 specialToken = specialToken.specialToken;
             }
         }
