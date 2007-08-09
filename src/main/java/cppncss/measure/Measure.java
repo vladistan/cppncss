@@ -36,7 +36,7 @@ import java.util.List;
  *
  * @author Mathieu Champlon
  */
-public final class Measure implements Comparable
+public final class Measure implements Comparable<Measure>
 {
     private final List<Integer> counts = new ArrayList<Integer>();
     private final String item;
@@ -105,9 +105,8 @@ public final class Measure implements Comparable
     /**
      * {@inheritDoc}
      */
-    public int compareTo( final Object object )
+    public int compareTo( final Measure measure )
     {
-        final Measure measure = (Measure)object;
         if( matches( measure.item, measure.filename, measure.line ) )
             return 0;
         final int delta = measure.counts.get( 0 ) - counts.get( 0 );
