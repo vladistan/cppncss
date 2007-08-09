@@ -79,16 +79,15 @@ PARSER_END(Parser)
 
 SPECIAL_TOKEN :
 {
-  " "
-| "\t"
+  < WHITESPACE : (" "|"\t")+ >
 | < NEW_LINE : "\r\n" | "\r" | "\n" >
-| < ESCAPED_NEW_LINE : "\\" ("\r\n" | "\r" | "\n") >
+| < ESCAPED_NEW_LINE : "\\" <NEW_LINE> >
 }
 
 SPECIAL_TOKEN :
 {
-  < C_STYLE_COMMENT : "//" (~["\n","\r"])* (<NEW_LINE> "//" (~["\n","\r"])*)* >
-| < CPP_STYLE_COMMENT : "/*" (~["*"])* "*" (~["*","/"] (~["*"])* "*" | "*")* "/" > // see http://www.engr.mun.ca/~theo/JavaCC-FAQ/javacc-faq-moz.htm#tthFrefAAE
+  < C_STYLE_COMMENT : "/*" (~["*"])* "*" (~["*","/"] (~["*"])* "*" | "*")* "/" > // see http://www.engr.mun.ca/~theo/JavaCC-FAQ/javacc-faq-moz.htm#tthFrefAAE
+| < CPP_STYLE_COMMENT : "//" (~["\n","\r"])* (<NEW_LINE> "//" (~["\n","\r"])*)* >
 | < PREPROCESSOR : "#" (~["\n","\r","\\"])* ("\\"(<NEW_LINE>)? (~["\n","\r","\\"])*)* >
 }
 

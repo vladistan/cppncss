@@ -44,6 +44,7 @@ import cppstyle.checks.CheckListener;
 import cppstyle.checks.HeaderCheck;
 import cppstyle.checks.NewlineAtEndOfFileCheck;
 import cppstyle.checks.TabCharacterCheck;
+import cppstyle.checks.WhitespaceAtEndOfLineCheck;
 import cpptools.Analyzer;
 import cpptools.ConsoleLogger;
 import cpptools.EventHandler;
@@ -130,6 +131,8 @@ public final class CppStyle
             return new NewlineAtEndOfFileCheck( output );
         if( name.equals( "TabCharacter" ) )
             return new TabCharacterCheck( output );
+        if( name.equals( "WhitespaceAtEndOfLine" ) )
+            return new WhitespaceAtEndOfLineCheck( output );
         throw new IllegalArgumentException( "unknown module '" + name + "'" );
     }
 
