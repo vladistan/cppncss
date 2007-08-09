@@ -147,7 +147,7 @@ public final class CppNcss
     }
 
     /**
-     * Run the analyzis.
+     * Run the analysis.
      */
     public void run()
     {

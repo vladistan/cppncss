@@ -137,7 +137,7 @@ public final class CppStyle
     }
 
     /**
-     * Run the analyzis.
+     * Run the analysis.
      */
     public void run()
     {
