@@ -45,7 +45,7 @@ public final class NewlineAtEndOfFileCheck extends AbstractVisitor
     /**
      * Create a new line at end of file check.
      *
-     * @param listener
+     * @param listener the check listener
      */
     public NewlineAtEndOfFileCheck( final CheckListener listener )
     {
@@ -54,6 +54,9 @@ public final class NewlineAtEndOfFileCheck extends AbstractVisitor
         this.listener = listener;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Object visit( final AstTranslationUnit node, final Object data )
     {
         final Token token = node.getLastToken().specialToken;

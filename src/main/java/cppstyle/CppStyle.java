@@ -36,10 +36,8 @@ import java.io.PrintStream;
 import java.util.Properties;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 import cppast.ParserVisitor;
 import cppast.VisitorComposite;
 import cppstyle.checks.CheckListener;
@@ -71,11 +69,9 @@ public final class CppStyle
      *
      * @param options the options
      * @param handler the log handler
-     * @throws IOException
-     * @throws SAXException
-     * @throws ParserConfigurationException
+     * @throws Exception if an error occurs
      */
-    public CppStyle( final Options options, final EventHandler handler ) throws IOException, ParserConfigurationException, SAXException
+    public CppStyle( final Options options, final EventHandler handler ) throws Exception
     {
         if( !options.hasOption( "c" ) )
             throw new IllegalArgumentException( "missing mandatory configuration file" );
@@ -99,7 +95,7 @@ public final class CppStyle
         return System.out;
     }
 
-    private void populate( final String filename ) throws IOException, ParserConfigurationException, SAXException
+    private void populate( final String filename ) throws Exception
     {
         final File folder = new File( filename ).getAbsoluteFile().getParentFile();
         final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -166,11 +162,9 @@ public final class CppStyle
      * Run the application.
      *
      * @param args the arguments
-     * @throws IOException
-     * @throws SAXException
-     * @throws ParserConfigurationException
+     * @throws Exception if an error occurs
      */
-    public static void main( final String[] args ) throws IOException, ParserConfigurationException, SAXException
+    public static void main( final String[] args ) throws Exception
     {
         if( !check( args ) )
             return;

@@ -43,7 +43,9 @@ public final class TokenProviderAdapter implements TokenProvider
     private final ParserTokenManager manager;
 
     /**
-     * @param stream
+     * Create a token provider adapter.
+     *
+     * @param manager the parsdr token manager to adapt
      */
     public TokenProviderAdapter( final ParserTokenManager manager )
     {

@@ -32,7 +32,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -59,9 +58,9 @@ public final class XmlResultOutput extends AbstractResultOutput
      * Create an XML result output.
      *
      * @param stream the stream to write to
-     * @throws ParserConfigurationException
+     * @throws Exception if an error occurs
      */
-    public XmlResultOutput( final PrintStream stream ) throws ParserConfigurationException
+    public XmlResultOutput( final PrintStream stream ) throws Exception
     {
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         document = factory.newDocumentBuilder().newDocument();

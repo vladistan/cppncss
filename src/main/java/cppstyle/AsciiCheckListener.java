@@ -45,7 +45,7 @@ public final class AsciiCheckListener implements CheckListener, FileObserver
     /**
      * Create an AsciiCheckListener.
      *
-     * @param stream
+     * @param stream the output stream
      */
     public AsciiCheckListener( final PrintStream stream )
     {

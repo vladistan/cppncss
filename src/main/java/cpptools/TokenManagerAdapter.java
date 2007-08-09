@@ -43,7 +43,9 @@ public final class TokenManagerAdapter extends ParserTokenManager
     private final TokenProvider provider;
 
     /**
-     * @param stream
+     * Create a token manager adapter.
+     *
+     * @param provider the token provider to adapt
      */
     public TokenManagerAdapter( final TokenProvider provider )
     {
@@ -53,6 +55,9 @@ public final class TokenManagerAdapter extends ParserTokenManager
         this.provider = provider;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void ReInit( final JavaCharStream stream )
     {
         provider.reset( stream );

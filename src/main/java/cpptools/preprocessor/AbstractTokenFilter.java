@@ -32,7 +32,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
 import cppast.JavaCharStream;
 import cppast.ParserConstants;
 import cppast.ParserTokenManager;
@@ -141,7 +140,7 @@ public abstract class AbstractTokenFilter implements TokenFilter
     /**
      * {@inheritDoc}
      */
-    public boolean process( final Token token )
+    public final boolean process( final Token token )
     {
         if( matches( token.image ) )
         {

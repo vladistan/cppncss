@@ -52,10 +52,10 @@ public final class HeaderCheck extends AbstractVisitor
     /**
      * Create a file header check.
      *
-     * @param listener
-     * @param properties
-     * @param folder
-     * @throws IOException
+     * @param listener the check listener
+     * @param properties the available properties
+     * @param folder the root folder of the path properties
+     * @throws IOException upon error
      */
     public HeaderCheck( final CheckListener listener, final Properties properties, final File folder ) throws IOException
     {
@@ -104,13 +104,14 @@ public final class HeaderCheck extends AbstractVisitor
         return lines;
     }
 
-    public String readFile( final String filename, final File folder ) throws IOException
+    private String readFile( final String filename, final File folder ) throws IOException
     {
         final FileInputStream stream = new FileInputStream( folder + File.separator + filename );
         try
         {
-            final byte buffer[] = new byte[stream.available()];
-            stream.read( buffer );
+            final byte[] buffer = new byte[stream.available()];
+            if( stream.read( buffer ) < buffer.length )
+                throw new IOException( "error reading file " + filename );
             return new String( buffer );
         }
         finally
@@ -119,6 +120,9 @@ public final class HeaderCheck extends AbstractVisitor
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Object visit( final AstTranslationUnit node, final Object data )
     {
         final String actual = getActual( node );
@@ -144,7 +148,12 @@ public final class HeaderCheck extends AbstractVisitor
         return format( token.specialToken ) + token.image;
     }
 
-    private final class Interval
+    /**
+     * Stands for an interval between two integers.
+     *
+     * @author Mathieu Champlon
+     */
+    private static final class Interval
     {
         private final int start;
         private int end;

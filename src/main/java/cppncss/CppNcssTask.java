@@ -29,10 +29,8 @@
 package cppncss;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.parsers.ParserConfigurationException;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.taskdefs.AntlibDefinition;
@@ -170,11 +168,7 @@ public final class CppNcssTask extends AntlibDefinition
         {
             new CppNcss( new Options( buildArguments() ), new AntLogger( this ) ).run();
         }
-        catch( FileNotFoundException e )
-        {
-            throw new BuildException( e );
-        }
-        catch( ParserConfigurationException e )
+        catch( Exception e )
         {
             throw new BuildException( e );
         }

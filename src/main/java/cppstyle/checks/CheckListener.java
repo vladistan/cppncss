@@ -35,5 +35,10 @@ package cppstyle.checks;
  */
 public interface CheckListener
 {
+    /**
+     * Notify a failure.
+     *
+     * @param reason a description of the reason for the failure
+     */
     void fail( final String reason );
 }

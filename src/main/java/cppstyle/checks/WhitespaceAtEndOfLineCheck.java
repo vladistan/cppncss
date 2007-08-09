@@ -45,7 +45,7 @@ public final class WhitespaceAtEndOfLineCheck extends AbstractVisitor
     /**
      * Create a tab character check.
      *
-     * @param listener
+     * @param listener the check listener
      */
     public WhitespaceAtEndOfLineCheck( final CheckListener listener )
     {
@@ -54,6 +54,9 @@ public final class WhitespaceAtEndOfLineCheck extends AbstractVisitor
         this.listener = listener;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Object visit( final AstTranslationUnit node, final Object data )
     {
         for( Token token = node.getFirstToken(); token != null; token = token.next )

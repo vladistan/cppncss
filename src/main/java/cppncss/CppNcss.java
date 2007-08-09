@@ -33,7 +33,6 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.parsers.ParserConfigurationException;
 import cppast.VisitorComposite;
 import cppncss.counter.CcnCounter;
 import cppncss.counter.Counter;
@@ -98,10 +97,9 @@ public final class CppNcss
      *
      * @param options the options
      * @param handler the log handler
-     * @throws FileNotFoundException when the log file fails
-     * @throws ParserConfigurationException
+     * @throws Exception if an error occurs
      */
-    public CppNcss( final Options options, final EventHandler handler ) throws FileNotFoundException, ParserConfigurationException
+    public CppNcss( final Options options, final EventHandler handler ) throws Exception
     {
         output = createOutput( options );
         analyzer = new Analyzer( options, visitors, observers, handler );
@@ -159,7 +157,7 @@ public final class CppNcss
         output.flush();
     }
 
-    private ResultOutput createOutput( final Options options ) throws FileNotFoundException, ParserConfigurationException
+    private ResultOutput createOutput( final Options options ) throws Exception
     {
         final PrintStream stream = createStream( options );
         if( options.hasOption( "x" ) )
@@ -178,10 +176,9 @@ public final class CppNcss
      * Run the application.
      *
      * @param args the arguments
-     * @throws FileNotFoundException when the log file fails
-     * @throws ParserConfigurationException
+     * @throws Exception if an error occurs
      */
-    public static void main( final String[] args ) throws FileNotFoundException, ParserConfigurationException
+    public static void main( final String[] args ) throws Exception
     {
         if( !check( args ) )
             return;

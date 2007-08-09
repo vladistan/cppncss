@@ -31,7 +31,6 @@ package cpptools.preprocessor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
 import cppast.JavaCharStream;
 import cppast.Token;
 
@@ -49,7 +48,7 @@ public final class PreProcessor implements TokenProvider
     /**
      * Create an adapter.
      *
-     * @param provider
+     * @param provider a token provider
      */
     public PreProcessor( final TokenProvider provider )
     {
@@ -59,7 +58,7 @@ public final class PreProcessor implements TokenProvider
     }
 
     /**
-     * Reset pre-processor.
+     * {@inheritDoc}
      */
     public void reset( final JavaCharStream stream )
     {
