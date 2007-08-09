@@ -33,11 +33,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Iterator;
 import java.util.Properties;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 import cppast.ParserVisitor;
 import cppast.VisitorComposite;
 import cppstyle.checks.CheckListener;
@@ -69,10 +71,11 @@ public final class CppStyle
      *
      * @param options the options
      * @param handler the log handler
-     * @throws DocumentException
      * @throws IOException
+     * @throws SAXException
+     * @throws ParserConfigurationException
      */
-    public CppStyle( final Options options, final EventHandler handler ) throws DocumentException, IOException
+    public CppStyle( final Options options, final EventHandler handler ) throws IOException, ParserConfigurationException, SAXException
     {
         if( !options.hasOption( "c" ) )
             throw new IllegalArgumentException( "missing mandatory configuration file" );
@@ -96,29 +99,44 @@ public final class CppStyle
         return System.out;
     }
 
-    private void populate( final String filename ) throws DocumentException, IOException
+    private void populate( final String filename ) throws IOException, ParserConfigurationException, SAXException
     {
-        final Element root = new SAXReader().read( filename ).getRootElement();
         final File folder = new File( filename ).getAbsoluteFile().getParentFile();
-        Iterator iterator = root.elementIterator( "module" );
-        while( iterator.hasNext() )
+        final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        final NodeList nodes = builder.parse( filename ).getChildNodes();
+        if( nodes.getLength() > 0 && nodes.item( 0 ).getNodeName().equals( "cppstyle" ) )
         {
-            final Element element = (Element)iterator.next();
-            final String name = element.attribute( "name" ).getValue();
-            visitors.register( create( name, makeProperties( element ), folder ) );
+            final Node root = nodes.item( 0 );
+            for( int index = 0; index < root.getChildNodes().getLength(); ++index )
+            {
+                final Node node = root.getChildNodes().item( index );
+                if( node.getNodeName().equals( "module" ) )
+                {
+                    final String name = extract( node, "name" );
+                    final Properties properties = transform( node.getChildNodes() );
+                    visitors.register( create( name, properties, folder ) );
+                }
+            }
         }
     }
 
-    private Properties makeProperties( final Element root )
+    private String extract( final Node node, final String s1 )
+    {
+        return node.getAttributes().getNamedItem( s1 ).getNodeValue();
+    }
+
+    private Properties transform( final NodeList nodes )
     {
         final Properties properties = new Properties();
-        Iterator iterator = root.elementIterator( "property" );
-        while( iterator.hasNext() )
+        for( int index = 0; index < nodes.getLength(); ++index )
         {
-            final Element element = (Element)iterator.next();
-            final String name = element.attribute( "name" ).getValue();
-            final String value = element.attribute( "value" ).getValue();
-            properties.setProperty( name, value );
+            final Node node = nodes.item( index );
+            if( node.getNodeName().equals( "property" ) )
+            {
+                final String name = extract( node, "name" );
+                final String value = extract( node, "value" );
+                properties.setProperty( name, value );
+            }
         }
         return properties;
     }
@@ -148,10 +166,11 @@ public final class CppStyle
      * Run the application.
      *
      * @param args the arguments
-     * @throws DocumentException
      * @throws IOException
+     * @throws SAXException
+     * @throws ParserConfigurationException
      */
-    public static void main( final String[] args ) throws DocumentException, IOException
+    public static void main( final String[] args ) throws IOException, ParserConfigurationException, SAXException
     {
         if( !check( args ) )
             return;

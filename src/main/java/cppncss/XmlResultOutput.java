@@ -28,36 +28,46 @@
 
 package cppncss;
 
-import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.XMLWriter;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Result;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
- * Implements an xml result output.
+ * Implements an XML result output.
  *
  * @author Mathieu Champlon
  */
 public final class XmlResultOutput extends AbstractResultOutput
 {
+    private final Document document;
     private final PrintStream stream;
     private final Element root;
-    private Element node;
+    private Element current;
 
     /**
-     * Create an xml result output.
+     * Create an XML result output.
      *
      * @param stream the stream to write to
+     * @throws ParserConfigurationException
      */
-    public XmlResultOutput( final PrintStream stream )
+    public XmlResultOutput( final PrintStream stream ) throws ParserConfigurationException
     {
+        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        document = factory.newDocumentBuilder().newDocument();
         this.stream = stream;
-        this.node = DocumentHelper.createDocument().addElement( "cppncss" );
-        this.root = node;
+        this.root = document.createElement( "cppncss" );
+        this.current = root;
     }
 
     /**
@@ -65,14 +75,21 @@ public final class XmlResultOutput extends AbstractResultOutput
      */
     protected void printHeaders( final String type, final List<String> labels )
     {
-        node = root.addElement( "measure" );
-        node.addAttribute( "type", type );
-        node = node.addElement( "labels" );
-        node.addElement( "label" ).addText( "Nr." );
+        current = addElement( root, "measure" );
+        current.setAttribute( "type", type );
+        current = addElement( current, "labels" );
+        addElement( current, "label" ).setTextContent( "Nr." );
         for( String label : labels )
             if( !label.startsWith( type ) )
-                node.addElement( "label" ).addText( label );
-        node = node.getParent();
+                addElement( current, "label" ).setTextContent( label );
+        current = (Element)current.getParentNode();
+    }
+
+    private Element addElement( final Element element, final String name )
+    {
+        final Element result = document.createElement( name );
+        element.appendChild( result );
+        return result;
     }
 
     /**
@@ -80,7 +97,7 @@ public final class XmlResultOutput extends AbstractResultOutput
      */
     protected void printItem( final String item )
     {
-        node = node.getParent();
+        current = (Element)current.getParentNode();
     }
 
     /**
@@ -88,7 +105,7 @@ public final class XmlResultOutput extends AbstractResultOutput
      */
     protected void printMeasurement( final String label, final int count )
     {
-        node.addElement( "value" ).addText( Integer.toString( count ) );
+        addElement( current, "value" ).setTextContent( Integer.toString( count ) );
     }
 
     /**
@@ -96,9 +113,9 @@ public final class XmlResultOutput extends AbstractResultOutput
      */
     protected void printIndex( final String item, final int index )
     {
-        node = node.addElement( "item" );
-        node.addAttribute( "name", item );
-        node.addElement( "value" ).addText( Integer.toString( index ) );
+        current = addElement( current, "item" );
+        current.setAttribute( "name", item );
+        addElement( current, "value" ).setTextContent( Integer.toString( index ) );
     }
 
     /**
@@ -107,9 +124,11 @@ public final class XmlResultOutput extends AbstractResultOutput
     public void notify( final String type, final String label, final float average )
     {
         if( !label.startsWith( type ) )
-            node.addElement( "average" ).addAttribute( "label", label )
-                    .addAttribute( "value", Float.toString( average ) ); // FIXME format 2 decimals
-        // stream.format( Locale.US, " <average label=\"%s\" value=\"%.2f\"/>", label, average );
+        {
+            final Element element = addElement( current, "average" );
+            element.setAttribute( "label", label );
+            element.setAttribute( "value", Float.toString( average ) );
+        }
     }
 
     /**
@@ -117,7 +136,9 @@ public final class XmlResultOutput extends AbstractResultOutput
      */
     public void notify( final String type, final String label, final long sum )
     {
-        node.addElement( "sum" ).addAttribute( "label", label ).addAttribute( "value", Long.toString( sum ) );
+        final Element element = addElement( current, "sum" );
+        element.setAttribute( "label", label );
+        element.setAttribute( "value", Long.toString( sum ) );
     }
 
     /**
@@ -127,13 +148,18 @@ public final class XmlResultOutput extends AbstractResultOutput
     {
         try
         {
-            new XMLWriter( stream, OutputFormat.createPrettyPrint() ).write( root );
+            final Result result = new StreamResult( new OutputStreamWriter( stream ) );
+            final TransformerFactory factory = TransformerFactory.newInstance();
+            factory.setAttribute( "indent-number", 2 );
+            final Transformer transformer = factory.newTransformer();
+            transformer.setOutputProperty( "indent", "yes" );
+            transformer.transform( new DOMSource( root ), result );
         }
-        catch( UnsupportedEncodingException e )
+        catch( TransformerConfigurationException e )
         {
             e.printStackTrace(); // FIXME stupid checked exception
         }
-        catch( IOException e )
+        catch( TransformerException e )
         {
             e.printStackTrace(); // FIXME stupid checked exception
         }

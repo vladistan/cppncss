@@ -30,15 +30,23 @@
 
 package cppncss;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Node;
-import org.dom4j.io.SAXReader;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 import cpptools.EasyMockTestCase;
 
 /**
@@ -55,9 +63,26 @@ public class XmlResultOutputTest extends EasyMockTestCase
         output = new XmlResultOutput( new PrintStream( stream ) );
     }
 
-    private Document parse( final String content ) throws DocumentException
+    private Document parse() throws ParserConfigurationException, SAXException, IOException
     {
-        return new SAXReader().read( new StringReader( content ) );
+        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        final DocumentBuilder builder = factory.newDocumentBuilder();
+        return builder.parse( new ByteArrayInputStream( stream.toString().getBytes() ) );
+    }
+
+    private NodeList selectNodes( final Document document, final String expression ) throws XPathExpressionException
+    {
+        final XPathFactory factory = XPathFactory.newInstance();
+        final XPathExpression expr = factory.newXPath().compile( expression );
+        return (NodeList)expr.evaluate( document, XPathConstants.NODESET );
+    }
+
+    private Node selectSingleNode( final Document document, final String expression ) throws XPathExpressionException
+    {
+        final NodeList nodes = selectNodes( document, expression );
+        if( nodes.getLength() > 0 )
+            return nodes.item( 0 );
+        return null;
     }
 
     private List<String> makeLabels()
@@ -68,95 +93,95 @@ public class XmlResultOutputTest extends EasyMockTestCase
         return labels;
     }
 
-    public void testNoNotificationGeneratesEmptyRootElement() throws DocumentException
+    public void testNoNotificationGeneratesEmptyRootElement() throws Exception
     {
         output.flush();
-        final Document document = parse( stream.toString() );
-        assertNotNull( document.selectSingleNode( "/cppncss" ) );
+        final Document document = parse();
+        assertNotNull( selectSingleNode( document, "/cppncss" ) );
     }
 
-    public void testLabelsNotificationGeneratesLabelsElement() throws DocumentException
+    public void testLabelsNotificationGeneratesLabelsElement() throws Exception
     {
         output.notify( "type", makeLabels() );
         output.flush();
-        final Document document = parse( stream.toString() );
-        assertNotNull( document.selectSingleNode( "/cppncss/measure/labels" ) );
-        final List labels = document.selectNodes( "/cppncss/measure/labels/label" );
-        assertEquals( 3, labels.size() );
-        assertEquals( "Nr.", ((Node)labels.get( 0 )).getText() );
-        assertEquals( "first label", ((Node)labels.get( 1 )).getText() );
-        assertEquals( "second label", ((Node)labels.get( 2 )).getText() );
+        final Document document = parse();
+        assertNotNull( selectSingleNode( document, "/cppncss/measure/labels" ) );
+        final NodeList labels = selectNodes( document, "/cppncss/measure/labels/label" );
+        assertEquals( 3, labels.getLength() );
+        assertEquals( "Nr.", labels.item( 0 ).getTextContent() );
+        assertEquals( "first label", labels.item( 1 ).getTextContent() );
+        assertEquals( "second label", labels.item( 2 ).getTextContent() );
     }
 
-    public void testTypeNameBeingTheBeginningOfLabelIsSkipped() throws DocumentException
+    public void testTypeNameBeingTheBeginningOfLabelIsSkipped() throws Exception
     {
         output.notify( "first", makeLabels() );
         output.flush();
-        final Document document = parse( stream.toString() );
-        assertNotNull( document.selectSingleNode( "/cppncss/measure/labels" ) );
-        final List labels = document.selectNodes( "/cppncss/measure/labels/label" );
-        assertEquals( 2, labels.size() );
-        assertEquals( "Nr.", ((Node)labels.get( 0 )).getText() );
-        assertEquals( "second label", ((Node)labels.get( 1 )).getText() );
+        final Document document = parse();
+        assertNotNull( selectSingleNode( document, "/cppncss/measure/labels" ) );
+        final NodeList labels = selectNodes( document, "/cppncss/measure/labels/label" );
+        assertEquals( 2, labels.getLength() );
+        assertEquals( "Nr.", labels.item( 0 ).getTextContent() );
+        assertEquals( "second label", labels.item( 1 ).getTextContent() );
     }
 
-    public void testItemNotificationsGenerateItemElement() throws DocumentException
+    public void testItemNotificationsGenerateItemElement() throws Exception
     {
         output.notify( "type", makeLabels() );
         output.notify( "type", "my item", 123 );
         output.notify( "type", "my item", 45 );
         output.flush();
-        final Document document = parse( stream.toString() );
-        assertEquals( "type", document.selectSingleNode( "/cppncss/measure/@type" ).getText() );
-        assertNotNull( document.selectSingleNode( "/cppncss/measure/item" ) );
-        final List values = document.selectNodes( "/cppncss/measure/item/value" );
-        assertEquals( 3, values.size() );
-        assertEquals( "1", ((Node)values.get( 0 )).getText() );
-        assertEquals( "123", ((Node)values.get( 1 )).getText() );
-        assertEquals( "45", ((Node)values.get( 2 )).getText() );
+        final Document document = parse();
+        assertEquals( "type", selectSingleNode( document, "/cppncss/measure/@type" ).getTextContent() );
+        assertNotNull( selectSingleNode( document, "/cppncss/measure/item" ) );
+        final NodeList values = selectNodes( document, "/cppncss/measure/item/value" );
+        assertEquals( 3, values.getLength() );
+        assertEquals( "1", values.item( 0 ).getTextContent() );
+        assertEquals( "123", values.item( 1 ).getTextContent() );
+        assertEquals( "45", values.item( 2 ).getTextContent() );
     }
 
-    public void testMeasurementTypeNameBeingTheBeginningOfLabelIsSkipped() throws DocumentException
+    public void testMeasurementTypeNameBeingTheBeginningOfLabelIsSkipped() throws Exception
     {
         output.notify( "type", makeLabels() );
         output.notify( "first", "item", 12 );
         output.notify( "type", "item", 42 );
         output.flush();
-        final Document document = parse( stream.toString() );
-        assertEquals( "type", document.selectSingleNode( "/cppncss/measure/@type" ).getText() );
-        assertNotNull( document.selectSingleNode( "/cppncss/measure/item" ) );
-        final List values = document.selectNodes( "/cppncss/measure/item/value" );
-        assertEquals( 2, values.size() );
-        assertEquals( "1", ((Node)values.get( 0 )).getText() );
-        assertEquals( "42", ((Node)values.get( 1 )).getText() );
+        final Document document = parse();
+        assertEquals( "type", selectSingleNode( document, "/cppncss/measure/@type" ).getTextContent() );
+        assertNotNull( selectSingleNode( document, "/cppncss/measure/item" ) );
+        final NodeList values = selectNodes( document, "/cppncss/measure/item/value" );
+        assertEquals( 2, values.getLength() );
+        assertEquals( "1", values.item( 0 ).getTextContent() );
+        assertEquals( "42", values.item( 1 ).getTextContent() );
     }
 
-    public void testAverageNotificationGeneratesAverageElement() throws DocumentException
+    public void testAverageNotificationGeneratesAverageElement() throws Exception
     {
         output.notify( "type", makeLabels() );
         output.notify( "type", "my label", 12.41782F );
         output.flush();
-        final Document document = parse( stream.toString() );
-        assertEquals( "my label", document.selectSingleNode( "/cppncss/measure/average/@label" ).getText() );
-        assertEquals( "12.41782", document.selectSingleNode( "/cppncss/measure/average/@value" ).getText() );
+        final Document document = parse();
+        assertEquals( "my label", selectSingleNode( document, "/cppncss/measure/average/@label" ).getTextContent() );
+        assertEquals( "12.41782", selectSingleNode( document, "/cppncss/measure/average/@value" ).getTextContent() );
     }
 
-    public void testAverageTypeNameBeingTheBeginningOfLabelIsSkipped() throws DocumentException
+    public void testAverageTypeNameBeingTheBeginningOfLabelIsSkipped() throws Exception
     {
         output.notify( "type", makeLabels() );
         output.notify( "lab", "label", 12f );
         output.flush();
-        final Document document = parse( stream.toString() );
-        assertNull( document.selectSingleNode( "/cppncss/measure/average" ) );
+        final Document document = parse();
+        assertNull( selectSingleNode( document, "/cppncss/measure/average" ) );
     }
 
-    public void testSumNotificationGeneratesSumElement() throws DocumentException
+    public void testSumNotificationGeneratesSumElement() throws Exception
     {
         output.notify( "type", makeLabels() );
         output.notify( "type", "my label", 1242L );
         output.flush();
-        final Document document = parse( stream.toString() );
-        assertEquals( "my label", document.selectSingleNode( "/cppncss/measure/sum/@label" ).getText() );
-        assertEquals( "1242", document.selectSingleNode( "/cppncss/measure/sum/@value" ).getText() );
+        final Document document = parse();
+        assertEquals( "my label", selectSingleNode( document, "/cppncss/measure/sum/@label" ).getTextContent() );
+        assertEquals( "1242", selectSingleNode( document, "/cppncss/measure/sum/@value" ).getTextContent() );
     }
 }
