@@ -99,7 +99,7 @@ public final class HeaderCheck extends AbstractVisitor
         final List<Integer> lines = new ArrayList<Integer>();
         final String values = properties.getProperty( "ignoreLines" );
         if( values != null )
-            for( String value : values.split( "," ) )
+            for( final String value : values.split( "," ) )
                 lines.add( Integer.parseInt( value.trim() ) );
         return lines;
     }
@@ -201,7 +201,7 @@ public final class HeaderCheck extends AbstractVisitor
 
     private void notify( final List<Interval> intervals )
     {
-        for( Interval interval : intervals )
+        for( final Interval interval : intervals )
             listener.fail( interval.toString() );
     }
 }
