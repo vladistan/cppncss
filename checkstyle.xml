@@ -28,11 +28,13 @@
         <!-- Checks for Javadoc comments.                     -->
         <!-- See http://checkstyle.sf.net/config_javadoc.html -->
         <module name="JavadocMethod">
-           <property name="scope" value="protected"/>
+           <property name="scope" value="package"/>
         </module>
-        <module name="JavadocType"/>
+        <module name="JavadocType">
+            <property name="scope" value="package"/>
+        </module>
         <module name="JavadocVariable">
-            <property name="scope" value="protected"/>
+            <property name="scope" value="package"/>
         </module>
         <module name="JavadocStyle"/>
 
@@ -134,6 +136,7 @@
         <module name="AvoidInlineConditionals"/>
         <module name="DoubleCheckedLocking"/>
         <module name="EmptyStatement"/>
+        <module name="FinalLocalVariable"/>
         <module name="EqualsHashCode"/>
         <module name="HiddenField">
             <property name="tokens" value="VARIABLE_DEF"/>
