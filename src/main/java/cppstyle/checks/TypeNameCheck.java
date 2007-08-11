@@ -35,7 +35,7 @@ import cppast.ParserConstants;
 import cppast.Token;
 
 /**
- * Checks for the validity of file headers.
+ * Checks for the validity of type (e.g. class) names.
  *
  * @author Mathieu Champlon
  */
@@ -45,7 +45,7 @@ public final class TypeNameCheck extends AbstractVisitor
     private final String format;
 
     /**
-     * Create a file header check.
+     * Create a type name check.
      *
      * @param listener the check listener
      * @param properties the available properties

@@ -40,6 +40,7 @@ import cpptools.EasyMockTestCase;
  */
 public final class TypeNameCheckTest extends EasyMockTestCase
 {
+    private static final String FORMAT = "^[A-Z][a-zA-Z]*$";
     /**
      * Mock objects.
      */
@@ -77,17 +78,17 @@ public final class TypeNameCheckTest extends EasyMockTestCase
 
     public void testMatchingFormatIsValid() throws ParseException
     {
-        check( "class ValidClassName {};", "^[A-Z][a-zA-Z]*$" );
+        check( "class ValidClassName {};", FORMAT );
     }
 
     public void testNonMachingFormatIsFailure() throws ParseException
     {
         listener.fail( "invalid type name", 1 );
-        check( "class invalidClassName {};", "^[A-Z][a-zA-Z]*$" );
+        check( "class invalidClassName {};", FORMAT );
     }
 
     public void testAnonymousClassIsSkipped() throws ParseException
     {
-        check( "class {} myClass;", "^[A-Z][a-zA-Z]*$" );
+        check( "class {} myClass;", FORMAT );
     }
 }
