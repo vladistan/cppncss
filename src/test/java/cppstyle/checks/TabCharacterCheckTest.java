@@ -50,7 +50,7 @@ public final class TabCharacterCheckTest extends EasyMockTestCase
     protected void setUp() throws Exception
     {
         listener = createMock( CheckListener.class );
-        check = new TabCharacterCheck( listener );
+        check = new TabCharacterCheck( listener, null );
     }
 
     private void check( final String data ) throws ParseException

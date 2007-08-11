@@ -28,6 +28,7 @@
 
 package cppstyle.checks;
 
+import java.util.Properties;
 import cppast.AbstractVisitor;
 import cppast.AstTranslationUnit;
 import cppast.Token;
@@ -45,8 +46,9 @@ public final class TabCharacterCheck extends AbstractVisitor
      * Create a tab character check.
      *
      * @param listener the check listener
+     * @param properties the available properties
      */
-    public TabCharacterCheck( final CheckListener listener )
+    public TabCharacterCheck( final CheckListener listener, final Properties properties )
     {
         if( listener == null )
             throw new IllegalArgumentException( "argument 'listener' is null" );

@@ -28,7 +28,6 @@
 
 package cppstyle.checks;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,15 +53,14 @@ public final class HeaderCheck extends AbstractVisitor
      *
      * @param listener the check listener
      * @param properties the available properties
-     * @param folder the root folder of the path properties
      * @throws IOException upon error
      */
-    public HeaderCheck( final CheckListener listener, final Properties properties, final File folder ) throws IOException
+    public HeaderCheck( final CheckListener listener, final Properties properties ) throws IOException
     {
         if( listener == null )
             throw new IllegalArgumentException( "argument 'listener' is null" );
         this.listener = listener;
-        this.expected = split( trim( getExpected( properties, folder ) ) );
+        this.expected = split( trim( getExpected( properties ) ) );
         this.ignoredLines = getIgnoredLines( properties );
     }
 
@@ -83,14 +81,14 @@ public final class HeaderCheck extends AbstractVisitor
         return string;
     }
 
-    private String getExpected( final Properties properties, final File folder ) throws IOException
+    private String getExpected( final Properties properties ) throws IOException
     {
         final String content = properties.getProperty( "header" );
         if( content != null )
             return content;
         final String filename = properties.getProperty( "headerFile" );
         if( filename != null )
-            return readFile( filename, folder );
+            return readFile( filename );
         throw new IllegalArgumentException( "missing property 'headerFile' or 'header'" );
     }
 
@@ -104,9 +102,9 @@ public final class HeaderCheck extends AbstractVisitor
         return lines;
     }
 
-    private String readFile( final String filename, final File folder ) throws IOException
+    private String readFile( final String filename ) throws IOException
     {
-        final FileInputStream stream = new FileInputStream( folder + File.separator + filename );
+        final FileInputStream stream = new FileInputStream( filename );
         try
         {
             final byte[] buffer = new byte[stream.available()];

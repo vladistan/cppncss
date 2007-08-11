@@ -29,7 +29,6 @@
 package cppstyle.checks;
 
 import static org.easymock.EasyMock.expect;
-import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Properties;
@@ -47,13 +46,11 @@ public final class HeaderCheckTest extends EasyMockTestCase
      */
     private CheckListener listener;
     private Properties properties;
-    private File folder;
 
     protected void setUp() throws Exception
     {
         listener = createMock( CheckListener.class );
         properties = createMock( Properties.class );
-        folder = createMock( File.class );
     }
 
     private HeaderCheck create( final String header, final String ignore ) throws IOException
@@ -61,7 +58,7 @@ public final class HeaderCheckTest extends EasyMockTestCase
         expect( properties.getProperty( "ignoreLines" ) ).andReturn( ignore );
         expect( properties.getProperty( "header" ) ).andReturn( header );
         replay();
-        return new HeaderCheck( listener, properties, folder );
+        return new HeaderCheck( listener, properties );
     }
 
     private void check( final String actual, final String expected, final String ignore ) throws IOException, ParseException
@@ -81,7 +78,7 @@ public final class HeaderCheckTest extends EasyMockTestCase
         replay();
         try
         {
-            new HeaderCheck( listener, properties, folder );
+            new HeaderCheck( listener, properties );
         }
         catch( final Exception e )
         {

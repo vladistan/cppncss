@@ -51,7 +51,7 @@ public final class WhitespaceAtEndOfLineCheckTest extends EasyMockTestCase
     protected void setUp() throws Exception
     {
         listener = createMock( CheckListener.class );
-        check = new WhitespaceAtEndOfLineCheck( listener );
+        check = new WhitespaceAtEndOfLineCheck( listener, null );
     }
 
     private void check( final String data ) throws ParseException

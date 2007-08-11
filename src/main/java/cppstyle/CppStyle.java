@@ -28,10 +28,8 @@
 
 package cppstyle;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Properties;
 import javax.xml.parsers.DocumentBuilder;
@@ -41,11 +39,6 @@ import org.w3c.dom.NodeList;
 import cppast.ParserVisitor;
 import cppast.VisitorComposite;
 import cppstyle.checks.CheckListener;
-import cppstyle.checks.HeaderCheck;
-import cppstyle.checks.NewlineAtEndOfFileCheck;
-import cppstyle.checks.TabCharacterCheck;
-import cppstyle.checks.TypeNameCheck;
-import cppstyle.checks.WhitespaceAtEndOfLineCheck;
 import cpptools.Analyzer;
 import cpptools.ConsoleLogger;
 import cpptools.EventHandler;
@@ -98,7 +91,6 @@ public final class CppStyle
 
     private void populate( final String filename ) throws Exception
     {
-        final File folder = new File( filename ).getAbsoluteFile().getParentFile();
         final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         final NodeList nodes = builder.parse( filename ).getChildNodes();
         if( nodes.getLength() > 0 && nodes.item( 0 ).getNodeName().equals( "cppstyle" ) )
@@ -111,7 +103,7 @@ public final class CppStyle
                 {
                     final String name = extract( node, "name" );
                     final Properties properties = transform( node.getChildNodes() );
-                    visitors.register( create( name, properties, folder ) );
+                    visitors.register( load( name, properties ) );
                 }
             }
         }
@@ -138,19 +130,15 @@ public final class CppStyle
         return properties;
     }
 
-    private ParserVisitor create( final String name, final Properties properties, final File folder ) throws IOException
+    private ParserVisitor load( final String module, final Properties properties ) throws Exception
     {
-        if( name.equals( "Header" ) )
-            return new HeaderCheck( output, properties, folder );
-        if( name.equals( "NewlineAtEndOfFile" ) )
-            return new NewlineAtEndOfFileCheck( output );
-        if( name.equals( "TabCharacter" ) )
-            return new TabCharacterCheck( output );
-        if( name.equals( "WhitespaceAtEndOfLine" ) )
-            return new WhitespaceAtEndOfLineCheck( output );
-        if( name.equals( "TypeName" ) )
-            return new TypeNameCheck( output, properties );
-        throw new IllegalArgumentException( "unknown module '" + name + "'" );
+        return (ParserVisitor)Class.forName( "cppstyle.checks." + module + "Check" ).getConstructor( new Class[]
+        {
+                CheckListener.class, Properties.class
+        } ).newInstance( new Object[]
+        {
+                output, properties
+        } );
     }
 
     /**

@@ -28,6 +28,7 @@
 
 package cppstyle.checks;
 
+import java.util.Properties;
 import cppast.AbstractVisitor;
 import cppast.AstTranslationUnit;
 import cppast.ParserConstants;
@@ -46,8 +47,9 @@ public final class WhitespaceAtEndOfLineCheck extends AbstractVisitor
      * Create a tab character check.
      *
      * @param listener the check listener
+     * @param properties the available properties
      */
-    public WhitespaceAtEndOfLineCheck( final CheckListener listener )
+    public WhitespaceAtEndOfLineCheck( final CheckListener listener, final Properties properties )
     {
         if( listener == null )
             throw new IllegalArgumentException( "argument 'listener' is null" );

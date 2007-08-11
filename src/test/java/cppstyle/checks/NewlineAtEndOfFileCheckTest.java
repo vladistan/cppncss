@@ -51,7 +51,7 @@ public final class NewlineAtEndOfFileCheckTest extends EasyMockTestCase
     protected void setUp() throws Exception
     {
         listener = createMock( CheckListener.class );
-        check = new NewlineAtEndOfFileCheck( listener );
+        check = new NewlineAtEndOfFileCheck( listener, null );
     }
 
     private void check( final String data ) throws ParseException
