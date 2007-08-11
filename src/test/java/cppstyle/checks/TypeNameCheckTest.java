@@ -76,12 +76,12 @@ public final class TypeNameCheckTest extends EasyMockTestCase
         fail( "should have thrown" );
     }
 
-    public void testMatchingFormatIsValid() throws ParseException
+    public void testClassNameMatchingFormatIsValid() throws ParseException
     {
         check( "class ValidClassName {};", FORMAT );
     }
 
-    public void testNonMachingFormatIsFailure() throws ParseException
+    public void testClassNameNonMachingFormatIsFailure() throws ParseException
     {
         listener.fail( "invalid type name", 1 );
         check( "class invalidClassName {};", FORMAT );
