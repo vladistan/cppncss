@@ -55,6 +55,25 @@ public final class AsciiCheckListener implements CheckListener, FileObserver
     /**
      * {@inheritDoc}
      */
+    public void fail( final String reason, final int start, final int end )
+    {
+        if( start == end )
+            fail( reason, start );
+        else
+            stream.println( filename + "(" + start + "-" + end + "): " + reason );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void fail( final String reason, final int line )
+    {
+        stream.println( filename + "(" + line + "): " + reason );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void fail( final String reason )
     {
         stream.println( filename + ": " + reason );

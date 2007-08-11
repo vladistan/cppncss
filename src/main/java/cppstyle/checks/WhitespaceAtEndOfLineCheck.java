@@ -76,13 +76,13 @@ public final class WhitespaceAtEndOfLineCheck extends AbstractVisitor
     private void check( final Token token )
     {
         if( token.kind == ParserConstants.NEW_LINE && whitespace( token.specialToken ) )
-            listener.fail( "whitespace at end of line " + token.specialToken.endLine );
+            listener.fail( "whitespace at end of line", token.specialToken.endLine );
         if( token.kind == ParserConstants.C_STYLE_COMMENT || token.kind == ParserConstants.CPP_STYLE_COMMENT )
         {
             final String[] lines = token.image.split( "\\r\\n|\\n|\\r" );
             for( int line = 0; line < lines.length - 1; ++line )
                 if( whitespace( lines[line] ) )
-                    listener.fail( "whitespace at end of line " + (token.beginLine + line) );
+                    listener.fail( "whitespace at end of line", token.beginLine + line );
         }
     }
 

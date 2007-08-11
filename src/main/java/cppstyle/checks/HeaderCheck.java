@@ -148,11 +148,6 @@ public final class HeaderCheck extends AbstractVisitor
         return format( token.specialToken ) + token.image;
     }
 
-    /**
-     * Stands for an interval between two integers.
-     *
-     * @author Mathieu Champlon
-     */
     private static final class Interval
     {
         private final int start;
@@ -172,11 +167,9 @@ public final class HeaderCheck extends AbstractVisitor
             return true;
         }
 
-        public String toString()
+        public void notify( final CheckListener listener )
         {
-            if( start == end )
-                return "file header mismatch line " + start;
-            return "file header mismatch line " + start + "-" + end;
+            listener.fail( "file header mismatch", start, end );
         }
     }
 
@@ -202,6 +195,6 @@ public final class HeaderCheck extends AbstractVisitor
     private void notify( final List<Interval> intervals )
     {
         for( final Interval interval : intervals )
-            listener.fail( interval.toString() );
+            interval.notify( listener );
     }
 }

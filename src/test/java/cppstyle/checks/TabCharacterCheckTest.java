@@ -31,8 +31,6 @@ package cppstyle.checks;
 import java.io.StringReader;
 import cppast.ParseException;
 import cppast.Parser;
-import cppstyle.checks.CheckListener;
-import cppstyle.checks.TabCharacterCheck;
 import cpptools.EasyMockTestCase;
 
 /**
@@ -68,25 +66,25 @@ public final class TabCharacterCheckTest extends EasyMockTestCase
 
     public void testTabCharacterGeneratesFailure() throws ParseException
     {
-        listener.fail( "tab character line 1" );
+        listener.fail( "tab character", 1 );
         check( "\t;" );
     }
 
     public void testTabCharacterInsideCStyleCommentGeneratesFailure() throws ParseException
     {
-        listener.fail( "tab character line 1" );
+        listener.fail( "tab character", 1 );
         check( "/* my\tcomment */" );
     }
 
     public void testTabCharacterInsideCppStyleCommentGeneratesFailure() throws ParseException
     {
-        listener.fail( "tab character line 1" );
+        listener.fail( "tab character", 1 );
         check( "// my\tcomment" );
     }
 
     public void testTabCharacterInsidePreprocessorDirectiveGeneratesFailure() throws ParseException
     {
-        listener.fail( "tab character line 1" );
+        listener.fail( "tab character", 1 );
         check( "#define symbol\tsomething" );
     }
 }

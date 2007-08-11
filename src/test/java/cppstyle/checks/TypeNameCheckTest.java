@@ -82,7 +82,7 @@ public final class TypeNameCheckTest extends EasyMockTestCase
 
     public void testNonMachingFormatIsFailure() throws ParseException
     {
-        listener.fail( "invalid type name line 1" );
+        listener.fail( "invalid type name", 1 );
         check( "class invalidClassName {};", "^[A-Z][a-zA-Z]*$" );
     }
 

@@ -39,6 +39,23 @@ public interface CheckListener
      * Notify a failure.
      *
      * @param reason a description of the reason for the failure
+     * @param start the start line of the problem
+     * @param end the end line of the problem
      */
-    void fail( final String reason );
+    void fail( String reason, int start, int end );
+
+    /**
+     * Notify a failure.
+     *
+     * @param reason a description of the reason for the failure
+     * @param line the location of the problem
+     */
+    void fail( String reason, int line );
+
+    /**
+     * Notify a failure.
+     *
+     * @param reason a description of the reason for the failure
+     */
+    void fail( String reason );
 }

@@ -67,7 +67,7 @@ public final class TypeNameCheck extends AbstractVisitor
     {
         final Token identifier = node.getFirstToken().next;
         if( identifier.kind != ParserConstants.LCURLYBRACE && !identifier.image.matches( format ) )
-            listener.fail( "invalid type name line " + identifier.beginLine );
+            listener.fail( "invalid type name", identifier.beginLine );
         return super.visit( node, data );
     }
 }

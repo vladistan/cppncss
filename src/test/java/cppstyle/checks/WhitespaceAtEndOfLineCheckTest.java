@@ -67,7 +67,7 @@ public final class WhitespaceAtEndOfLineCheckTest extends EasyMockTestCase
 
     public void testWhitespaceAtEndOfLineGeneratesFailure() throws ParseException
     {
-        listener.fail( "whitespace at end of line 1" );
+        listener.fail( "whitespace at end of line", 1 );
         check( "; " + SEPARATOR );
     }
 
@@ -79,31 +79,31 @@ public final class WhitespaceAtEndOfLineCheckTest extends EasyMockTestCase
 
     public void testWhitespaceAtEndOfLineInsideCStyleCommentGeneratesFailure() throws ParseException
     {
-        listener.fail( "whitespace at end of line 1" );
+        listener.fail( "whitespace at end of line", 1 );
         check( "/* my " + SEPARATOR + "comment */" );
     }
 
     public void testWhitespaceAtEndOfLineInsideCppStyleCommentGeneratesFailure() throws ParseException
     {
-        listener.fail( "whitespace at end of line 1" );
+        listener.fail( "whitespace at end of line", 1 );
         check( "// my " + SEPARATOR + "// comment" );
     }
 
     public void testWhitespaceAtEndOfLineAfterCStyleCommentGeneratesFailure() throws ParseException
     {
-        listener.fail( "whitespace at end of line 1" );
+        listener.fail( "whitespace at end of line", 1 );
         check( "/* my comment */ " + SEPARATOR + ";" );
     }
 
     public void testWhitespaceAtEndOfLineAfterCppStyleCommentGeneratesFailure() throws ParseException
     {
-        listener.fail( "whitespace at end of line 1" );
+        listener.fail( "whitespace at end of line", 1 );
         check( "// my " + SEPARATOR + ";" );
     }
 
     public void testWhitespaceAtEndOfLineInsidePreprocessorDirectiveGeneratesFailure() throws ParseException
     {
-        listener.fail( "whitespace at end of line 1" );
+        listener.fail( "whitespace at end of line", 1 );
         check( "#define symbol something " + SEPARATOR + ";" );
     }
 }

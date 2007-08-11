@@ -35,8 +35,6 @@ import java.io.StringReader;
 import java.util.Properties;
 import cppast.ParseException;
 import cppast.Parser;
-import cppstyle.checks.CheckListener;
-import cppstyle.checks.HeaderCheck;
 import cpptools.EasyMockTestCase;
 
 /**
@@ -85,7 +83,7 @@ public final class HeaderCheckTest extends EasyMockTestCase
         {
             new HeaderCheck( listener, properties, folder );
         }
-        catch( Exception e )
+        catch( final Exception e )
         {
             return;
         }
@@ -110,7 +108,7 @@ public final class HeaderCheckTest extends EasyMockTestCase
     {
         final String actual = "/* this is the wrong header\n we want to check for */";
         final String expected = "/* this is the header\n we want to check for */";
-        listener.fail( "file header mismatch line 1" );
+        listener.fail( "file header mismatch", 1, 1 );
         check( actual, expected );
     }
 
@@ -118,7 +116,7 @@ public final class HeaderCheckTest extends EasyMockTestCase
     {
         final String actual = "/* this is the header\n we want to test */";
         final String expected = "/* this is the header\n we want to check for */";
-        listener.fail( "file header mismatch line 2" );
+        listener.fail( "file header mismatch", 2, 2 );
         check( actual, expected );
     }
 
@@ -126,7 +124,7 @@ public final class HeaderCheckTest extends EasyMockTestCase
     {
         final String actual = "/* this is the wrong header\n we want to test */";
         final String expected = "/* this is the header\n we want to check for */";
-        listener.fail( "file header mismatch line 1-2" );
+        listener.fail( "file header mismatch", 1, 2 );
         check( actual, expected );
     }
 
@@ -141,7 +139,7 @@ public final class HeaderCheckTest extends EasyMockTestCase
     {
         final String actual = "// this is the header";
         final String expected = "// this is the header\r\n// we want to test";
-        listener.fail( "file header mismatch line 2" );
+        listener.fail( "file header mismatch", 2, 2 );
         check( actual, expected );
     }
 
@@ -163,7 +161,7 @@ public final class HeaderCheckTest extends EasyMockTestCase
     {
         final String expected = "/* this is the header\n we want to check for */";
         final String actual = ' ' + expected;
-        listener.fail( "file header mismatch line 1" );
+        listener.fail( "file header mismatch", 1, 1 );
         check( actual, expected );
     }
 }
