@@ -92,10 +92,10 @@ public final class FunctionNameCheck extends AbstractVisitor
     {
         node.accept( new AbstractVisitor()
         {
-            public Object visit( final AstFunctionName node, final Object data )
+            public Object visit( final AstFunctionName subnode, final Object data )
             {
-                final Token last = node.getLastToken();
-                if( !operator( node ) && !last.image.matches( format ) )
+                final Token last = subnode.getLastToken();
+                if( !operator( subnode ) && !last.image.matches( format ) )
                     listener.fail( "invalid function name", last.beginLine );
                 return data;
             }
