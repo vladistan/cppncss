@@ -36,7 +36,7 @@ import cppast.SimpleNode;
 import cppast.Token;
 
 /**
- * Checks for the validity of type (e.g. class) names.
+ * Checks for the validity of member (e.g. field) names.
  *
  * @author Mathieu Champlon
  */
@@ -46,7 +46,7 @@ public final class MemberNameCheck extends AbstractVisitor
     private final String format;
 
     /**
-     * Create a type name check.
+     * Create a member name check.
      *
      * @param listener the check listener
      * @param properties the available properties
