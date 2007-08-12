@@ -32,6 +32,7 @@ import java.util.Properties;
 import cppast.AbstractVisitor;
 import cppast.AstMemberDeclaration;
 import cppast.AstParameterName;
+import cppast.SimpleNode;
 import cppast.Token;
 
 /**
@@ -70,7 +71,7 @@ public final class MemberNameCheck extends AbstractVisitor
         return super.visit( node, data );
     }
 
-    private void check( final AstMemberDeclaration node )
+    private void check( final SimpleNode node )
     {
         node.accept( new AbstractVisitor()
         {
