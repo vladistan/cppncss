@@ -55,7 +55,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final SimpleNode node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -65,7 +65,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstTranslationUnit node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -75,7 +75,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstFunctionDefinition node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -85,7 +85,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstFunctionName node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -95,7 +95,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstDestructorDefinition node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -105,7 +105,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstConstructorDefinition node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -115,7 +115,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstCaseStatement node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -125,7 +125,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstIfStatement node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -135,7 +135,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstIterationStatement node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -145,7 +145,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstCatchBlock node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -155,7 +155,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstFunctionParameters node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -165,7 +165,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstParameter node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -175,7 +175,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstParameterType node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -185,7 +185,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstParameterTypeQualifier node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -195,7 +195,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstFunctionBody node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -205,7 +205,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstConstructorInitializer node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -215,7 +215,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstExpressionStatement node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -225,7 +225,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstElseStatement node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -235,7 +235,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstDeclarationStatement node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -245,7 +245,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstSwitchStatement node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -255,7 +255,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstGotoStatement node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -265,7 +265,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstBreakStatement node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -275,7 +275,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstReturnStatement node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -285,7 +285,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstContinueStatement node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -295,7 +295,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstLabelStatement node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -305,7 +305,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstDefaultStatement node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -315,7 +315,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstConditionalExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -325,7 +325,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstLogicalOrExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -335,7 +335,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstLogicalAndExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -345,7 +345,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstPrimaryExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -355,7 +355,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstAssignmentExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -365,7 +365,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstInclusiveOrExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -375,7 +375,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstExclusiveOrExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -385,7 +385,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstAndExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -395,7 +395,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstEqualityExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -405,7 +405,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstRelationalExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -415,7 +415,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstShiftExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -425,7 +425,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstAdditiveExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -435,7 +435,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstMultiplicativeExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -445,7 +445,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstPointerToMemberExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -455,7 +455,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstCastExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -465,7 +465,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstUnaryExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -475,7 +475,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstPostfixExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -485,7 +485,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstIdExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -495,7 +495,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstNewExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -505,7 +505,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstDeleteExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -515,7 +515,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstFunctionCallExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -525,7 +525,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstConstantExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -535,7 +535,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstTypeIdExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -545,7 +545,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstThrowExpression node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -555,7 +555,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstClassDefinition node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -565,7 +565,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstNamespaceDefinition node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -575,7 +575,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstNamespaceAliasDefinition node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -585,7 +585,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstClassDeclaration node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -595,7 +595,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstEnumSpecifier node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -605,7 +605,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstDeclaration node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -615,7 +615,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstMemberDeclaration node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -625,7 +625,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstFunctionDeclaration node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -635,7 +635,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstConstructorDeclaration node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -645,7 +645,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstDestructorDeclaration node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -655,7 +655,7 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstTryBlock node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }
@@ -665,7 +665,17 @@ public final class VisitorComposite implements ParserVisitor
      */
     public Object visit( final AstFunctionPointerPostfix node, final Object data )
     {
-        for( ParserVisitor visitor : visitors )
+        for( final ParserVisitor visitor : visitors )
+            visitor.visit( node, data );
+        return data;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object visit( final AstParameterName node, final Object data )
+    {
+        for( final ParserVisitor visitor : visitors )
             visitor.visit( node, data );
         return data;
     }

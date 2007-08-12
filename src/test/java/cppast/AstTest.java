@@ -152,6 +152,7 @@ public class AstTest extends TestCase
         tree.add( "  FunctionParameters" );
         tree.add( "   Parameter" );
         tree.add( "    ParameterType", "int" );
+        tree.add( "    ParameterName", "i" );
         tree.add( "  FunctionBody" );
         tree.parse( "void MyFunction( int i ) {}" );
     }
@@ -164,9 +165,11 @@ public class AstTest extends TestCase
         tree.add( "  FunctionParameters" );
         tree.add( "   Parameter" );
         tree.add( "    ParameterType", "int" );
+        tree.add( "    ParameterName", "i" );
         tree.add( "   Parameter" );
         tree.add( "    ParameterType", "const float" );
         tree.add( "    ParameterTypeQualifier", "&" );
+        tree.add( "    ParameterName", "p" );
         tree.add( "  FunctionBody" );
         tree.parse( "void MyFunction( int i, const float& p ) {}" );
     }
@@ -201,6 +204,7 @@ public class AstTest extends TestCase
         tree.add( "   Parameter" );
         tree.add( "    ParameterType", "float" );
         tree.add( "    ParameterTypeQualifier", "*" );
+        tree.add( "    ParameterName", "i" );
         tree.parse( "void MyFunction( float* i );" );
     }
 
@@ -213,6 +217,7 @@ public class AstTest extends TestCase
         tree.add( "   Parameter" );
         tree.add( "    ParameterType", "float" );
         tree.add( "    ParameterTypeQualifier", "* *" );
+        tree.add( "    ParameterName", "i" );
         tree.parse( "void MyFunction( float** i );" );
     }
 
@@ -224,6 +229,7 @@ public class AstTest extends TestCase
         tree.add( "  FunctionParameters" );
         tree.add( "   Parameter" );
         tree.add( "    ParameterType", "float" );
+        tree.add( "    ParameterName", "i" );
         tree.add( "    ParameterTypeQualifier", "[ 12 ]" ); // FIXME ParameterTypeQualifier
         tree.add( "     ConstantExpression", "12" );
         tree.parse( "void MyFunction( float i[12] );" );
@@ -239,6 +245,7 @@ public class AstTest extends TestCase
         tree.add( "    ParameterType", "void" );
         tree.add( "    ParameterTypeQualifier", "(" ); // FIXME ParameterTypeQualifier
         tree.add( "    ParameterTypeQualifier", "*" ); // FIXME ParameterTypeQualifier
+        tree.add( "    ParameterName", "pFunction" );
         tree.add( "    ParameterTypeQualifier", ")" ); // FIXME ParameterTypeQualifier
         tree.add( "    FunctionParameters" );
         tree.add( "     Parameter" );
@@ -753,6 +760,7 @@ public class AstTest extends TestCase
         tree.add( "TranslationUnit" );
         tree.add( " Declaration" );
         tree.add( "  ClassDefinition" );
+        tree.add( "  ParameterName", "c" );
         tree.parse( "class MyClass {} c;" );
     }
 
@@ -761,6 +769,7 @@ public class AstTest extends TestCase
         tree.add( "TranslationUnit" );
         tree.add( " Declaration" );
         tree.add( "  ClassDefinition" );
+        tree.add( "  ParameterName", "c" );
         tree.parse( "class {} c;" );
     }
 
@@ -769,6 +778,7 @@ public class AstTest extends TestCase
         tree.add( "TranslationUnit" );
         tree.add( " Declaration" );
         tree.add( "  EnumSpecifier" );
+        tree.add( "  ParameterName", "e" );
         tree.parse( "enum MyEnum {} e;" );
     }
 
@@ -777,6 +787,7 @@ public class AstTest extends TestCase
         tree.add( "TranslationUnit" );
         tree.add( " Declaration" );
         tree.add( "  EnumSpecifier" );
+        tree.add( "  ParameterName", "e" );
         tree.parse( "enum {} e;" );
     }
 
@@ -784,6 +795,7 @@ public class AstTest extends TestCase
     {
         tree.add( "TranslationUnit" );
         tree.add( " Declaration" );
+        tree.add( "  ParameterName", "i" );
         tree.parse( "int i;" );
     }
 
@@ -791,6 +803,7 @@ public class AstTest extends TestCase
     {
         tree.add( "TranslationUnit" );
         tree.add( " Declaration" );
+        tree.add( "  ParameterName", "i" );
         tree.add( "  ConstantExpression", "0" );
         tree.parse( "int i = 0;" );
     }
@@ -801,6 +814,7 @@ public class AstTest extends TestCase
         tree.add( " Declaration" );
         tree.add( "  ClassDefinition" );
         tree.add( "   MemberDeclaration", "int i ;" );
+        tree.add( "    ParameterName", "i" );
         tree.parse( "class MyClass { int i; };" );
     }
 
@@ -880,6 +894,7 @@ public class AstTest extends TestCase
     {
         expression.add( "IterationStatement" );
         // expression.add( " InitializationStatement" ); // FIXME ?!
+        expression.add( " ParameterName", "i" );
         expression.add( " ConstantExpression", "0" );
         expression.add( " RelationalExpression", "i < 2" );
         expression.add( "  IdExpression", "i" );

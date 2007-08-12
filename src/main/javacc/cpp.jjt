@@ -801,7 +801,7 @@ void direct_declarator() :
 {}
 {
    (
-     qualified_id()
+     qualified_id() #ParameterName
     |
      "(" #ParameterTypeQualifier declarator() ")" #ParameterTypeQualifier
    )
