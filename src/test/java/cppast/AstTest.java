@@ -144,6 +144,47 @@ public class AstTest extends TestCase
         tree.parse( "void MyFunction() {}" );
     }
 
+    public void testFunctionDeclarationInsideFunctionDefinition() throws ParseException
+    {
+        tree.add( "TranslationUnit" );
+        tree.add( " FunctionDefinition" );
+        tree.add( "  FunctionName" );
+        tree.add( "  FunctionParameters" );
+        tree.add( "  FunctionBody" );
+        tree.add( "   DeclarationStatement" ); // FIXME : FunctionDeclaration
+        tree.add( "    ParameterName", "f" ); // FIXME : FunctionName
+        tree.add( "    FunctionParameters", "( )" );
+        tree.parse( "void MyFunction() { int f(); }" );
+    }
+
+    public void testVariableInitializationWithConstantInsideFunctionDefinition() throws ParseException
+    {
+        tree.add( "TranslationUnit" );
+        tree.add( " FunctionDefinition" );
+        tree.add( "  FunctionName" );
+        tree.add( "  FunctionParameters" );
+        tree.add( "  FunctionBody" );
+        tree.add( "   DeclarationStatement" );
+        tree.add( "    ParameterName", "i" );
+        tree.add( "    ConstantExpression", "0" );
+        tree.parse( "void MyFunction() { int i( 0 ); }" );
+    }
+
+    public void testVariableInitializationWithAnotherVariableInsideFunctionDefinition() throws ParseException
+    {
+        tree.add( "TranslationUnit" );
+        tree.add( " FunctionDefinition" );
+        tree.add( "  FunctionName" );
+        tree.add( "  FunctionParameters" );
+        tree.add( "  FunctionBody" );
+        tree.add( "   DeclarationStatement" );
+        tree.add( "    ParameterName", "i" );
+        tree.add( "    FunctionParameters" ); // FIXME hmm...
+        tree.add( "     Parameter", "j" ); // FIXME hmm...
+        tree.add( "      ParameterType" ); // FIXME hmm...
+        tree.parse( "void MyFunction() { int i( j ); }" );
+    }
+
     public void testFunctionWithOneParameterDefinition() throws ParseException
     {
         tree.add( "TranslationUnit" );
@@ -193,6 +234,17 @@ public class AstTest extends TestCase
         tree.add( "  FunctionName" );
         tree.add( "  FunctionParameters", "( )" );
         tree.parse( "void MyFunction();" );
+    }
+
+    public void testFunctionWithParameterTypeDeclaration() throws ParseException
+    {
+        tree.add( "TranslationUnit" );
+        tree.add( " FunctionDeclaration" );
+        tree.add( "  FunctionName" );
+        tree.add( "  FunctionParameters" );
+        tree.add( "   Parameter" );
+        tree.add( "    ParameterType", "int" );
+        tree.parse( "void MyFunction( int );" );
     }
 
     public void testFunctionWithPointerParameterDeclaration() throws ParseException
@@ -648,8 +700,19 @@ public class AstTest extends TestCase
     public void testFunctionCallExpression() throws ParseException // TODO
     {
         expression.add( "ExpressionStatement" );
-        expression.add( " IdExpression", "i" ); // FIXME FunctionCallExpression ?
-        expression.parse( "i()" );
+        expression.add( " IdExpression", "f" ); // FIXME FunctionCallExpression ?
+        expression.parse( "f()" );
+    }
+
+    public void testSuccessiveFunctionCallsExpression() throws ParseException // TODO
+    {
+        expression.add( "ExpressionStatement" );
+        expression.add( " PostfixExpression", "f ( g ( h ( ) ) )" );
+        expression.add( "  IdExpression", "f" ); // FIXME FunctionCallExpression ?
+        expression.add( "  PostfixExpression", "g ( h ( ) )" );
+        expression.add( "   IdExpression", "g" ); // FIXME FunctionCallExpression ?
+        expression.add( "   IdExpression", "h" ); // FIXME FunctionCallExpression ?
+        expression.parse( "f( g( h() ) )" );
     }
 
     public void testIncrementPostfixExpression() throws ParseException // TODO
@@ -808,6 +871,15 @@ public class AstTest extends TestCase
         tree.parse( "int i = 0;" );
     }
 
+    public void testVariableExternalInitializationWithConstant() throws ParseException
+    {
+        tree.add( "TranslationUnit" );
+        tree.add( " Declaration" );
+        tree.add( "  ParameterName", "i" );
+        tree.add( "  ConstantExpression", "0" );
+        tree.parse( "int i( 0 );" );
+    }
+
     public void testClassMemberVariableDeclaration() throws ParseException
     {
         tree.add( "TranslationUnit" );
@@ -831,6 +903,24 @@ public class AstTest extends TestCase
         tree.add( "      FunctionName", "MyMethod" );
         tree.add( "      FunctionParameters", "( )" );
         tree.parse( "void MyFunction() { class MyClass { void MyMethod(); }; }" );
+    }
+
+    public void testFunctionDefinitionWithLocalVariableInitializedByFunctionCall() throws ParseException
+    {
+        tree.add( "TranslationUnit" );
+        tree.add( " FunctionDefinition" );
+        tree.add( "  FunctionName", "MyFunction" );
+        tree.add( "  FunctionParameters", "( )" );
+        tree.add( "  FunctionBody" );
+        tree.add( "   DeclarationStatement" );
+        tree.add( "    ParameterName", "i" );
+        tree.add( "    FunctionParameters" ); // FIXME ?
+        tree.add( "     Parameter" );
+        tree.add( "      ParameterType" );
+        tree.add( "      ParameterTypeQualifier" );
+        tree.add( "      ParameterName" );
+        tree.add( "      ParameterTypeQualifier" );
+        tree.parse( "void MyFunction() { int i( f( j ) ); }" );
     }
 
     public void testNamespaceDefinition() throws ParseException
