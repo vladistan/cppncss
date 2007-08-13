@@ -319,7 +319,7 @@ void conversion_function() :
 void function_parameters() #FunctionParameters :
 {}
 {
-  "(" [parameter_list()] ")"
+   "(" [parameter_list()] ")"
 }
 
 void parameter_list() :
@@ -395,11 +395,9 @@ void declaration_specifiers() : // TODO clean this
    )
    (LOOKAHEAD(type_modifiers()) type_modifiers())*
   |
-   (LOOKAHEAD(builtin_type_specifier()) builtin_type_specifier())+
-   (LOOKAHEAD(type_modifiers()) type_modifiers())*
+   (LOOKAHEAD(builtin_type_specifier()) builtin_type_specifier())+ (LOOKAHEAD(type_modifiers()) type_modifiers())*
   |
-   (class_specifier() | enum_specifier() | qualified_type())
-   (LOOKAHEAD(type_modifiers()) type_modifiers())*
+   (class_specifier() | enum_specifier() | qualified_type()) (LOOKAHEAD(type_modifiers()) type_modifiers())*
 }
 
 void type_modifiers() :
@@ -788,13 +786,13 @@ void type_id() :
 void declarator() :
 {}
 {
-    [LOOKAHEAD(ptr_operator()) ptr_operator_seq() #ParameterTypeQualifier] direct_declarator()
+   [LOOKAHEAD(ptr_operator()) ptr_operator_seq() #ParameterTypeQualifier] direct_declarator()
 }
 
 void ptr_operator_seq() :
 {}
 {
-  (LOOKAHEAD(ptr_operator()) ptr_operator())+
+   (LOOKAHEAD(ptr_operator()) ptr_operator())+
 }
 
 void direct_declarator() :
@@ -819,11 +817,11 @@ void declarator_suffixes() :
 void abstract_declarator() :
 {}
 {
-     ptr_operator() [abstract_declarator()]
-    |
-     LOOKAHEAD(abstract_declarator_suffix()) (abstract_declarator_suffix())+
-    |
-     "(" abstract_declarator() ")" (abstract_declarator_suffix())*
+    ptr_operator() [abstract_declarator()]
+   |
+    LOOKAHEAD(abstract_declarator_suffix()) (abstract_declarator_suffix())+
+   |
+    "(" abstract_declarator() ")" (abstract_declarator_suffix())*
 }
 
 void abstract_declarator_suffix() :
@@ -900,9 +898,9 @@ void block_declaration() :
 {}
 {
     simple_declaration()
-//   |
-//    asm_definition()
    |
+//    asm_definition()
+//   |
     namespace_alias_definition()
    |
     LOOKAHEAD("using" "namespace") using_directive()
