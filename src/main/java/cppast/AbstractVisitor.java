@@ -182,14 +182,6 @@ public class AbstractVisitor implements ParserVisitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstDeclarationStatement node, final Object data )
-    {
-        return node.accept( this, data );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public Object visit( final AstSwitchStatement node, final Object data )
     {
         return node.accept( this, data );

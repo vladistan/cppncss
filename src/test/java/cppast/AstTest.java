@@ -151,7 +151,7 @@ public class AstTest extends TestCase
         tree.add( "  FunctionName" );
         tree.add( "  FunctionParameters" );
         tree.add( "  FunctionBody" );
-        tree.add( "   DeclarationStatement" ); // FIXME : FunctionDeclaration
+        tree.add( "   Declaration" );
         tree.add( "    ParameterName", "f" ); // FIXME : FunctionName
         tree.add( "    FunctionParameters", "( )" );
         tree.parse( "void MyFunction() { int f(); }" );
@@ -164,7 +164,7 @@ public class AstTest extends TestCase
         tree.add( "  FunctionName" );
         tree.add( "  FunctionParameters" );
         tree.add( "  FunctionBody" );
-        tree.add( "   DeclarationStatement" );
+        tree.add( "   Declaration" );
         tree.add( "    ParameterName", "i" );
         tree.add( "    ConstantExpression", "0" );
         tree.parse( "void MyFunction() { int i( 0 ); }" );
@@ -177,7 +177,7 @@ public class AstTest extends TestCase
         tree.add( "  FunctionName" );
         tree.add( "  FunctionParameters" );
         tree.add( "  FunctionBody" );
-        tree.add( "   DeclarationStatement" );
+        tree.add( "   Declaration" );
         tree.add( "    ParameterName", "i" );
         tree.add( "    FunctionParameters" ); // FIXME hmm...
         tree.add( "     Parameter", "j" ); // FIXME hmm...
@@ -222,7 +222,7 @@ public class AstTest extends TestCase
         tree.add( "  FunctionName" );
         tree.add( "  FunctionParameters" );
         tree.add( "  FunctionBody" );
-        tree.add( "   DeclarationStatement" );
+        tree.add( "   Declaration" );
         tree.add( "    ClassDefinition" );
         tree.parse( "void MyFunction() { class MyClass {}; }" );
     }
@@ -897,7 +897,7 @@ public class AstTest extends TestCase
         tree.add( "  FunctionName", "MyFunction" );
         tree.add( "  FunctionParameters", "( )" );
         tree.add( "  FunctionBody" );
-        tree.add( "   DeclarationStatement" );
+        tree.add( "   Declaration" );
         tree.add( "    ClassDefinition" );
         tree.add( "     FunctionDeclaration" );
         tree.add( "      FunctionName", "MyMethod" );
@@ -912,7 +912,7 @@ public class AstTest extends TestCase
         tree.add( "  FunctionName", "MyFunction" );
         tree.add( "  FunctionParameters", "( )" );
         tree.add( "  FunctionBody" );
-        tree.add( "   DeclarationStatement" );
+        tree.add( "   Declaration" );
         tree.add( "    ParameterName", "i" );
         tree.add( "    FunctionParameters" ); // FIXME ?
         tree.add( "     Parameter" );

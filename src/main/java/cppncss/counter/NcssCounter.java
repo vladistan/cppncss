@@ -35,7 +35,6 @@ import cppast.AstConstructorDeclaration;
 import cppast.AstConstructorInitializer;
 import cppast.AstContinueStatement;
 import cppast.AstDeclaration;
-import cppast.AstDeclarationStatement;
 import cppast.AstDefaultStatement;
 import cppast.AstDestructorDeclaration;
 import cppast.AstElseStatement;
@@ -89,7 +88,7 @@ public final class NcssCounter extends AbstractCounter
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstDeclarationStatement node, final Object data )
+    public Object visit( final AstDeclaration node, final Object data )
     {
         increment();
         return node.accept( this, data );
@@ -216,15 +215,6 @@ public final class NcssCounter extends AbstractCounter
      * {@inheritDoc}
      */
     public Object visit( final AstNamespaceDefinition node, final Object data )
-    {
-        increment();
-        return node.accept( this, data );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object visit( final AstDeclaration node, final Object data )
     {
         increment();
         return node.accept( this, data );

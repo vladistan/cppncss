@@ -272,7 +272,7 @@ void declaration() :
    |
     LOOKAHEAD(function()) function_decl_or_def()
    |
-    LOOKAHEAD(block_declaration()) block_declaration() #Declaration
+    LOOKAHEAD(block_declaration()) block_declaration()
    |
     LOOKAHEAD("namespace") namespace_definition()
    |
@@ -887,14 +887,14 @@ void statement() : // TODO #Statement ?
    |
     jump_statement() ";"
    |
-    block_declaration() #DeclarationStatement
+    block_declaration()
    |
     try_block() (handler())+
    |
     ";"
 }
 
-void block_declaration() :
+void block_declaration() #Declaration :
 {}
 {
     simple_declaration()

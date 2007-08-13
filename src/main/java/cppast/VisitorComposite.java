@@ -233,16 +233,6 @@ public final class VisitorComposite implements ParserVisitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstDeclarationStatement node, final Object data )
-    {
-        for( final ParserVisitor visitor : visitors )
-            visitor.visit( node, data );
-        return data;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public Object visit( final AstSwitchStatement node, final Object data )
     {
         for( final ParserVisitor visitor : visitors )
