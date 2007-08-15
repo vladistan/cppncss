@@ -32,6 +32,7 @@ import java.util.Properties;
 import cppast.AbstractVisitor;
 import cppast.AstDeclaration;
 import cppast.AstFunctionBody;
+import cppast.AstFunctionDeclaration;
 import cppast.AstParameterName;
 import cppast.ParserConstants;
 import cppast.SimpleNode;
@@ -82,6 +83,11 @@ public final class VariableNameCheck extends AbstractVisitor
                         && contains( subnode, ParserConstants.STATIC ) )
                     return data;
                 return super.visit( subnode, data );
+            }
+
+            public Object visit( final AstFunctionDeclaration subnode, final Object data )
+            {
+                return data;
             }
 
             private boolean contains( final AstDeclaration subnode, final int kind )

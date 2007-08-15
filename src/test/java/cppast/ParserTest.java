@@ -237,6 +237,11 @@ public class ParserTest extends TestCase
         parse( "class MyClass< void (MyOtherClass::*)() > {};" );
     }
 
+    public void testFunctionWithMemberPointerParameter() throws ParseException
+    {
+        parse( "void f( void (MyOtherClass::*)() );" );
+    }
+
     public void testTemplateMethodOfTemplateClassSeparateDefinition() throws ParseException
     {
         parse( "template< typename T1 > class MyClass { template< typename T2 > void MyMethod(); };" + '\n'
@@ -279,7 +284,7 @@ public class ParserTest extends TestCase
         {
             parse( "void MyFunction() { process< 1 < 2 >(); }" );
         }
-        catch( ParseException e )
+        catch( final ParseException e )
         {
             return;
         }
@@ -292,7 +297,7 @@ public class ParserTest extends TestCase
         {
             parse( "void MyFunction() { process< 1 ? 2 : 3 >(); }" );
         }
-        catch( ParseException e )
+        catch( final ParseException e )
         {
             return;
         }
@@ -348,15 +353,13 @@ public class ParserTest extends TestCase
     {
         final Parser parser = new Parser( new StringReader( "namespace my_namespace { class MyClass{}; }" ) );
         parser.translation_unit();
-        parser.ReInit( new StringReader( "using namespace my_namespace; using namespace another_namespace;"
-                + "MyClass::~MyClass() {}" ) );
+        parser.ReInit( new StringReader( "using namespace my_namespace; using namespace another_namespace;" + "MyClass::~MyClass() {}" ) );
         parser.translation_unit();
     }
 
     public void testUsingNestedNamespacesFullPath() throws ParseException
     {
-        final Parser parser = new Parser( new StringReader(
-                "namespace my_namespace { namespace inner { class MyClass{}; } }" ) );
+        final Parser parser = new Parser( new StringReader( "namespace my_namespace { namespace inner { class MyClass{}; } }" ) );
         parser.translation_unit();
         parser.ReInit( new StringReader( "using namespace my_namespace::inner; MyClass::~MyClass() {}" ) );
         parser.translation_unit();
@@ -364,8 +367,7 @@ public class ParserTest extends TestCase
 
     public void testUsingNestedNamespacesHalfPath() throws ParseException
     {
-        final Parser parser = new Parser( new StringReader(
-                "namespace my_namespace { namespace inner { class MyClass{}; } }" ) );
+        final Parser parser = new Parser( new StringReader( "namespace my_namespace { namespace inner { class MyClass{}; } }" ) );
         parser.translation_unit();
         parser.ReInit( new StringReader( "using namespace my_namespace; inner::MyClass::~MyClass() {}" ) );
         parser.translation_unit();
@@ -374,6 +376,16 @@ public class ParserTest extends TestCase
     public void testUsingNamespaceInFunction() throws ParseException
     {
         parse( "void MyFunction() { using namespace my_namespace; }" );
+    }
+
+    public void testFunctionDeclarationInNamespace() throws ParseException
+    {
+        parse( "namespace my_namespace { void MyFunction(); }" );
+    }
+
+    public void testFunctionDefinitionInNamespace() throws ParseException
+    {
+        parse( "namespace my_namespace { void MyFunction() {} }" );
     }
 
     public void testUsingClass() throws ParseException
@@ -468,7 +480,7 @@ public class ParserTest extends TestCase
 
     public void testPreProcessorOnSeveralLinesAtEndOfFile() throws ParseException
     {
-        parse( "#define DEF anything \\" + '\r'+ '\n' + "should be escaped" );
+        parse( "#define DEF anything \\" + '\r' + '\n' + "should be escaped" );
     }
 
     public void testPreProcessorContainingEscapedCharacter() throws ParseException
@@ -908,6 +920,18 @@ public class ParserTest extends TestCase
         parse( "/* ’ € Œ */" );
     }
 
+    public void testBackSlashUnicodeLookingCharacterInCommentIsValid()
+    {
+        try
+        {
+            parse( "// this is not a \\unicode character" );
+        }
+        catch( final ParseException e )
+        {
+            // FIXME : should not throw
+        }
+    }
+
     public void testExternFunctionDefinitionIsValid() throws ParseException
     {
         parse( "extern \"C\" void MyFunction() {}" );
@@ -928,19 +952,49 @@ public class ParserTest extends TestCase
         parse( "void MyFunction() { data.~MyClass< MyType >(); }" );
     }
 
-    public void testFunctionReturningPointerOnFunctionDeclaration() throws ParseException
+    public void testPointerOnFunctionDeclaration() throws ParseException
     {
-        parse( "void (*MyFunction());" );
+        parse( "void (*pF)();" );
     }
 
-    public void testFunctionReturningPointerOnFunctionDefinition() throws ParseException
+    public void testPointerOnFunctionDeclarationWithInitialization() throws ParseException
     {
-        parse( "void (*MyFunction())() {}" );
+        parse( "void (*pF)() = 0;" );
+    }
+
+    public void testPointerOnMethodDeclaration() throws ParseException
+    {
+        parse( "void (MyClass::*pM)();" );
+    }
+
+    public void testPointerOnMethodeclarationWithInitialization() throws ParseException
+    {
+        parse( "void (MyClass::*pM)() = &MyClass::MyMethod;" );
     }
 
     public void testFunctionWithCommentedParameterName() throws ParseException
     {
         parse( "void MyFunction( int /*i*/ ) {}" );
+    }
+
+    public void testParenthesesAroundDeclaration() throws ParseException
+    {
+        parse( "int ((((( i ))))) = 0;" );
+    }
+
+    public void testParenthesesAroundDeclarationInFunction() throws ParseException
+    {
+        parse( "void f() { int ((((( i ))))) = 0; }" );
+    }
+
+    public void testFunctionDeclarationWithPointerOnFunctionNamedParameter() throws ParseException
+    {
+        parse( "void f( void (*g)( int ) );" );
+    }
+
+    public void testFunctionDeclarationWithPointerOnFunctionParameter() throws ParseException
+    {
+        parse( "void f( void (*)( int ) );" );
     }
 
     public void testTMP() throws IOException, ParseException

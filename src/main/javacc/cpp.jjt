@@ -481,12 +481,6 @@ void qualified_type() :
     ["template"] <ID> [LOOKAHEAD(template_argument_list()) template_argument_list()]
 }
 
-void init_declarator_list() :
-{}
-{
-   init_declarator() ("," init_declarator())*
-}
-
 void init_declarator() :
 {}
 {
@@ -786,7 +780,12 @@ void type_id() :
 void declarator() :
 {}
 {
-   [LOOKAHEAD(ptr_operator()) ptr_operator_seq() #ParameterTypeQualifier] direct_declarator()
+   [LOOKAHEAD(ptr_operator()) ptr_operator_seq() #ParameterTypeQualifier]
+   (
+     qualified_id() #ParameterName [("[" [constant_expression()] "]")+ #ParameterTypeQualifier]
+    |
+     "(" #ParameterTypeQualifier declarator() ")" #ParameterTypeQualifier [LOOKAHEAD(function_declarator_suffixes()) function_declarator_suffixes()]
+   )
 }
 
 void ptr_operator_seq() :
@@ -795,23 +794,10 @@ void ptr_operator_seq() :
    (LOOKAHEAD(ptr_operator()) ptr_operator())+
 }
 
-void direct_declarator() :
-{}
-{
-   (
-     qualified_id() #ParameterName
-    |
-     "(" #ParameterTypeQualifier declarator() ")" #ParameterTypeQualifier
-   )
-   [LOOKAHEAD(declarator_suffixes()) declarator_suffixes()]
-}
-
-void declarator_suffixes() :
+void function_declarator_suffixes() :
 {}
 {
     function_parameters() cv_qualifier_seq() [exception_spec()]
-   |
-    ("[" [constant_expression()] "]")+ #ParameterTypeQualifier
 }
 
 void abstract_declarator() :
@@ -819,17 +805,9 @@ void abstract_declarator() :
 {
     ptr_operator() [abstract_declarator()]
    |
-    LOOKAHEAD(abstract_declarator_suffix()) (abstract_declarator_suffix())+
+    ("[" [constant_expression()] "]")+
    |
-    "(" abstract_declarator() ")" (abstract_declarator_suffix())*
-}
-
-void abstract_declarator_suffix() :
-{}
-{
-    function_parameters() cv_qualifier_seq() [exception_spec()]
-   |
-    "[" [constant_expression()] "]"
+    "(" abstract_declarator() ")" [LOOKAHEAD(function_declarator_suffixes()) function_declarator_suffixes()]
 }
 
 void template_head() :
@@ -887,7 +865,9 @@ void statement() : // TODO #Statement ?
    |
     jump_statement() ";"
    |
-    block_declaration()
+    LOOKAHEAD(block_declaration()) block_declaration()
+   |
+    (function() ";") #FunctionDeclaration
    |
     try_block() (handler())+
    |
@@ -911,7 +891,7 @@ void block_declaration() #Declaration :
 void simple_declaration() :
 {}
 {
-    declaration_specifiers() [init_declarator_list()] ";"
+    declaration_specifiers() [init_declarator() ("," init_declarator())*] ";"
 }
 
 void namespace_alias_definition() #NamespaceAliasDefinition :

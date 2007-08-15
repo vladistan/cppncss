@@ -151,8 +151,8 @@ public class AstTest extends TestCase
         tree.add( "  FunctionName" );
         tree.add( "  FunctionParameters" );
         tree.add( "  FunctionBody" );
-        tree.add( "   Declaration" );
-        tree.add( "    ParameterName", "f" ); // FIXME : FunctionName
+        tree.add( "   FunctionDeclaration" );
+        tree.add( "    FunctionName", "f" );
         tree.add( "    FunctionParameters", "( )" );
         tree.parse( "void MyFunction() { int f(); }" );
     }
@@ -165,7 +165,7 @@ public class AstTest extends TestCase
         tree.add( "  FunctionParameters" );
         tree.add( "  FunctionBody" );
         tree.add( "   Declaration" );
-        tree.add( "    ParameterName", "i" );
+        tree.add( "    ParameterName", "i" ); // FIXME change ParameterName
         tree.add( "    ConstantExpression", "0" );
         tree.parse( "void MyFunction() { int i( 0 ); }" );
     }
@@ -178,10 +178,8 @@ public class AstTest extends TestCase
         tree.add( "  FunctionParameters" );
         tree.add( "  FunctionBody" );
         tree.add( "   Declaration" );
-        tree.add( "    ParameterName", "i" );
-        tree.add( "    FunctionParameters" ); // FIXME hmm...
-        tree.add( "     Parameter", "j" ); // FIXME hmm...
-        tree.add( "      ParameterType" ); // FIXME hmm...
+        tree.add( "    ParameterName", "i" ); // FIXME change ParameterName
+        tree.add( "    IdExpression", "j" );
         tree.parse( "void MyFunction() { int i( j ); }" );
     }
 
@@ -303,6 +301,21 @@ public class AstTest extends TestCase
         tree.add( "     Parameter" );
         tree.add( "      ParameterType", "int" );
         tree.parse( "void MyMethod( void (*pFunction)( int ) );" );
+    }
+
+    public void testFunctionWithPointerOnFunctionUnnamedParameterDeclaration() throws ParseException
+    {
+        tree.add( "TranslationUnit" );
+        tree.add( " FunctionDeclaration" );
+        tree.add( "  FunctionName" );
+        tree.add( "  FunctionParameters" );
+        tree.add( "   Parameter" );
+        tree.add( "    ParameterType", "void" );
+        tree.add( "    ParameterTypeQualifier" ); // FIXME ParameterTypeQualifier
+        tree.add( "     FunctionParameters" ); // FIXME
+        tree.add( "      Parameter" );
+        tree.add( "       ParameterType", "int" );
+        tree.parse( "void MyMethod( void (*)( int ) );" );
     }
 
     public void testMethodDefinition() throws ParseException
@@ -914,13 +927,24 @@ public class AstTest extends TestCase
         tree.add( "  FunctionBody" );
         tree.add( "   Declaration" );
         tree.add( "    ParameterName", "i" );
-        tree.add( "    FunctionParameters" ); // FIXME ?
-        tree.add( "     Parameter" );
-        tree.add( "      ParameterType" );
-        tree.add( "      ParameterTypeQualifier" );
-        tree.add( "      ParameterName" );
-        tree.add( "      ParameterTypeQualifier" );
+        tree.add( "    PostfixExpression", "f ( j )" ); // FIXME FunctionCallExpression
+        tree.add( "     IdExpression", "f" );
+        tree.add( "     IdExpression", "j" );
         tree.parse( "void MyFunction() { int i( f( j ) ); }" );
+    }
+
+    public void testGlobalVariableInitializedByFunctionCallIsMissInterpretedAsFunctionDeclaration() throws ParseException
+    {
+        tree.add( "TranslationUnit" );
+        tree.add( " FunctionDeclaration" );
+        tree.add( "  FunctionName", "i" );
+        tree.add( "  FunctionParameters" );
+        tree.add( "   Parameter" );
+        tree.add( "    ParameterType", "f" );
+        tree.add( "    ParameterTypeQualifier", "(" );
+        tree.add( "    ParameterName", "j" );
+        tree.add( "    ParameterTypeQualifier", ")" );
+        tree.parse( "int i( f( j ) );" );
     }
 
     public void testNamespaceDefinition() throws ParseException
