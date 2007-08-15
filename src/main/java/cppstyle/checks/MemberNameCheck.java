@@ -67,7 +67,7 @@ public final class MemberNameCheck extends AbstractVisitor
      */
     public Object visit( final AstMemberDeclaration node, final Object data )
     {
-        if( !node.contains( ParserConstants.TYPEDEF ) )
+        if( !node.contains( ParserConstants.TYPEDEF ) && !node.contains( ParserConstants.STATIC ) )
             check( node );
         return super.visit( node, data );
     }

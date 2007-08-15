@@ -118,4 +118,9 @@ public final class MemberNameCheckTest extends EasyMockTestCase
     {
         check( "class C { class Inner{}; };", "^UNUSED$" );
     }
+
+    public void testStaticMemberIsSkipped() throws ParseException
+    {
+        check( "class C { static int valid_; };", "^UNUSED$" );
+    }
 }
