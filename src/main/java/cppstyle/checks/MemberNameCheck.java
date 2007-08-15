@@ -78,7 +78,7 @@ public final class MemberNameCheck extends AbstractVisitor
         {
             public Object visit( final AstParameterName subnode, final Object data )
             {
-                if( subnode.jjtGetParent() == node )
+                if( subnode.getParent() == node )
                 {
                     final Token token = subnode.getFirstToken();
                     if( !token.image.matches( format ) )

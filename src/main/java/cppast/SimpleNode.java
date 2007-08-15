@@ -232,4 +232,14 @@ public abstract class SimpleNode implements Node
                 return true;
         return false;
     }
+
+    /**
+     * Retrieve the parent.
+     *
+     * @return the node parent
+     */
+    public final SimpleNode getParent()
+    {
+        return (SimpleNode)parent;
+    }
 }

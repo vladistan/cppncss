@@ -30,7 +30,6 @@ package cppstyle.checks;
 
 import java.util.Properties;
 import cppast.AbstractVisitor;
-import cppast.AstDeclaration;
 import cppast.AstFunctionBody;
 import cppast.AstFunctionDeclaration;
 import cppast.AstParameterName;
@@ -77,14 +76,6 @@ public final class VariableNameCheck extends AbstractVisitor
     {
         node.accept( new AbstractVisitor()
         {
-            public Object visit( final AstDeclaration subnode, final Object data )
-            {
-                if( subnode.contains( ParserConstants.TYPEDEF ) || subnode.contains( ParserConstants.CONST )
-                        && subnode.contains( ParserConstants.STATIC ) )
-                    return data;
-                return super.visit( subnode, data );
-            }
-
             public Object visit( final AstFunctionDeclaration subnode, final Object data )
             {
                 return data;
@@ -93,9 +84,15 @@ public final class VariableNameCheck extends AbstractVisitor
             public Object visit( final AstParameterName subnode, final Object data )
             {
                 final Token token = subnode.getFirstToken();
-                if( !token.image.matches( format ) )
+                if( filter( subnode.getParent() ) && !token.image.matches( format ) )
                     listener.fail( "invalid variable name", token.beginLine );
                 return data;
+            }
+
+            private boolean filter( final SimpleNode node )
+            {
+                return !node.contains( ParserConstants.TYPEDEF )
+                        && (!node.contains( ParserConstants.CONST ) || !node.contains( ParserConstants.STATIC ));
             }
         }, null );
     }
