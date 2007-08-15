@@ -79,8 +79,8 @@ public final class VariableNameCheck extends AbstractVisitor
         {
             public Object visit( final AstDeclaration subnode, final Object data )
             {
-                if( contains( subnode, ParserConstants.TYPEDEF ) || contains( subnode, ParserConstants.CONST )
-                        && contains( subnode, ParserConstants.STATIC ) )
+                if( subnode.contains( ParserConstants.TYPEDEF ) || subnode.contains( ParserConstants.CONST )
+                        && subnode.contains( ParserConstants.STATIC ) )
                     return data;
                 return super.visit( subnode, data );
             }
@@ -88,14 +88,6 @@ public final class VariableNameCheck extends AbstractVisitor
             public Object visit( final AstFunctionDeclaration subnode, final Object data )
             {
                 return data;
-            }
-
-            private boolean contains( final AstDeclaration subnode, final int kind )
-            {
-                for( Token token = subnode.getFirstToken(); token != subnode.getLastToken().next; token = token.next )
-                    if( token.kind == kind )
-                        return true;
-                return false;
             }
 
             public Object visit( final AstParameterName subnode, final Object data )

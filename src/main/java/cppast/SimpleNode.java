@@ -218,4 +218,18 @@ public abstract class SimpleNode implements Node
     {
         return name;
     }
+
+    /**
+     * Check whether a token is part of the node or not.
+     *
+     * @param kind the token kind
+     * @return true if a token of the given kind is found in the node, false otherwise
+     */
+    public final boolean contains( final int kind )
+    {
+        for( Token token = first; token != last.next; token = token.next )
+            if( token.kind == kind )
+                return true;
+        return false;
+    }
 }

@@ -32,6 +32,7 @@ import java.util.Properties;
 import cppast.AbstractVisitor;
 import cppast.AstMemberDeclaration;
 import cppast.AstParameterName;
+import cppast.ParserConstants;
 import cppast.SimpleNode;
 import cppast.Token;
 
@@ -66,7 +67,7 @@ public final class MemberNameCheck extends AbstractVisitor
      */
     public Object visit( final AstMemberDeclaration node, final Object data )
     {
-        if( node.getFirstToken().image != "typedef" )
+        if( !node.contains( ParserConstants.TYPEDEF ) )
             check( node );
         return super.visit( node, data );
     }
