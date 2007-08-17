@@ -81,7 +81,6 @@ public final class Analyzer
     private final EventHandler handler;
     private final boolean recursive;
     private final boolean force;
-    private final String prefix;
     private final List<String> files;
     private final ParserTokenManager manager;
     private final Parser parser;
@@ -107,18 +106,9 @@ public final class Analyzer
         this.handler = handler;
         this.recursive = options.hasOption( "r" );
         this.force = options.hasOption( "k" );
-        this.prefix = getPrefix( options );
         this.files = sort( resolve( options.getArgList() ) );
         this.manager = createParserManager( options );
         this.parser = new Parser( manager );
-    }
-
-    private String getPrefix( final Options options )
-    {
-        final List<String> prefixes = options.getOptionPropertyValues( "p" );
-        if( prefixes.size() > 0 )
-            return prefixes.get( 0 );
-        return "";
     }
 
     private ParserTokenManager createParserManager( final Options options )
@@ -208,20 +198,13 @@ public final class Analyzer
         int parsed = 0;
         for( final String filename : files )
         {
-            observer.changed( filter( filename ) );
+            observer.changed( filename );
             if( process( visitor, filename ) )
                 ++parsed;
             else if( !force )
                 return parsed;
         }
         return parsed;
-    }
-
-    private String filter( final String filename )
-    {
-        if( filename.startsWith( prefix ) )
-            return filename.substring( prefix.length() );
-        return filename;
     }
 
     private boolean process( final ParserVisitor visitor, final String filename )

@@ -41,6 +41,7 @@ import cppast.VisitorComposite;
 import cppstyle.checks.CheckListener;
 import cpptools.Analyzer;
 import cpptools.ConsoleLogger;
+import cpptools.FileObserverBeautifier;
 import cpptools.FileObserverComposite;
 import cpptools.Logger;
 import cpptools.Options;
@@ -71,7 +72,7 @@ public final class CppStyle
             throw new IllegalArgumentException( "missing mandatory configuration file" );
         output = createOutput( options );
         observers.register( logger );
-        analyzer = new Analyzer( options, visitors, observers, logger );
+        analyzer = new Analyzer( options, visitors, new FileObserverBeautifier( options, observers ), logger );
         populate( options.getOptionPropertyValues( "c" ).get( 0 ) );
     }
 

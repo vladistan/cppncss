@@ -47,6 +47,7 @@ import cppncss.measure.MeasureCollector;
 import cppncss.measure.SumCollector;
 import cpptools.Analyzer;
 import cpptools.ConsoleLogger;
+import cpptools.FileObserverBeautifier;
 import cpptools.FileObserverComposite;
 import cpptools.Logger;
 import cpptools.Options;
@@ -103,7 +104,7 @@ public final class CppNcss
     {
         output = createOutput( options );
         observers.register( logger );
-        analyzer = new Analyzer( options, visitors, observers, logger );
+        analyzer = new Analyzer( options, visitors, new FileObserverBeautifier( options, observers ), logger );
         register( options, new MeasureCollector( options, new ResultOutputAdapter( "Function", output ) ), functionVisitorFactory );
         register( options, new AverageCollector( new ResultOutputAdapter( "Function", output ) ), functionVisitorFactory );
         register( options, new MeasureCollector( options, new ResultOutputAdapter( "File", output ) ), fileVisitorFactory );
