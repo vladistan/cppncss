@@ -83,15 +83,10 @@ public final class VariableNameCheck extends AbstractVisitor
 
             public Object visit( final AstDeclaration subnode, final Object data )
             {
-                if( !filter( subnode ) )
+                if( subnode.contains( ParserConstants.TYPEDEF )
+                        || (subnode.contains( ParserConstants.CONST ) && subnode.contains( ParserConstants.STATIC )) )
                     return data;
                 return super.visit( subnode, data );
-            }
-
-            private boolean filter( final SimpleNode node )
-            {
-                return !node.contains( ParserConstants.TYPEDEF )
-                        && (!node.contains( ParserConstants.CONST ) || !node.contains( ParserConstants.STATIC ));
             }
 
             public Object visit( final AstParameterName subnode, final Object data )
