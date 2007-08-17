@@ -31,12 +31,24 @@ package cppstyle.checks;
 import java.util.Properties;
 import cppast.Token;
 
+/**
+ * Provides a means to check the name of a given token against a regular expression.
+ *
+ * @author Mathieu Champlon
+ */
 class NameCheck
 {
     private final CheckListener listener;
     private final String format;
     private final String type;
 
+    /**
+     * Create a name check.
+     *
+     * @param listener the check listener
+     * @param properties the properties
+     * @param type the name of the check
+     */
     public NameCheck( final CheckListener listener, final Properties properties, final String type )
     {
         if( listener == null )
@@ -50,6 +62,11 @@ class NameCheck
         this.type = type;
     }
 
+    /**
+     * Verify a given token.
+     *
+     * @param token the token to verify
+     */
     public void verify( final Token token )
     {
         if( !token.image.matches( format ) )

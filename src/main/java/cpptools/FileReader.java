@@ -38,6 +38,10 @@ import java.io.IOException;
  */
 public final class FileReader
 {
+    private FileReader()
+    {
+    }
+
     /**
      * Read the content of the file.
      *
@@ -45,7 +49,7 @@ public final class FileReader
      * @return the file content
      * @throws IOException if an error occurs
      */
-    static public String read( final String filename ) throws IOException
+    public static String read( final String filename ) throws IOException
     {
         final FileInputStream stream = new FileInputStream( filename );
         try

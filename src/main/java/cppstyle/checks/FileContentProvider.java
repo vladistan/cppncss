@@ -33,12 +33,19 @@ import cpptools.FileObserver;
 import cpptools.FileReader;
 
 /**
+ * Provides a file content observer with the content of files.
+ *
  * @author Mathieu Champlon
  */
 public final class FileContentProvider implements FileObserver
 {
     private final FileContentObserver observer;
 
+    /**
+     * Create a file content provider.
+     *
+     * @param observer the file content observer
+     */
     public FileContentProvider( final FileContentObserver observer )
     {
         if( observer == null )
