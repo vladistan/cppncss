@@ -37,7 +37,6 @@ import cppast.AstFunctionDefinition;
 import cppast.AstParameterName;
 import cppast.ParserConstants;
 import cppast.SimpleNode;
-import cppast.Token;
 
 /**
  * Checks for the validity of variable names.
@@ -46,8 +45,7 @@ import cppast.Token;
  */
 public final class VariableNameCheck extends AbstractVisitor
 {
-    private final CheckListener listener;
-    private final String format;
+    private final NameCheck check;
 
     /**
      * Create a variable name check.
@@ -57,12 +55,7 @@ public final class VariableNameCheck extends AbstractVisitor
      */
     public VariableNameCheck( final CheckListener listener, final Properties properties )
     {
-        if( listener == null )
-            throw new IllegalArgumentException( "argument 'listener' is null" );
-        this.listener = listener;
-        this.format = properties.getProperty( "format" );
-        if( format == null )
-            throw new IllegalArgumentException( "missing property 'format'" );
+        check = new NameCheck( listener, properties, "variable" );
     }
 
     /**
@@ -103,9 +96,7 @@ public final class VariableNameCheck extends AbstractVisitor
 
             public Object visit( final AstParameterName subnode, final Object data )
             {
-                final Token token = subnode.getFirstToken();
-                if( !token.image.matches( format ) )
-                    listener.fail( "invalid variable name", token.beginLine );
+                check.verify( subnode.getFirstToken() );
                 return data;
             }
         }, null );

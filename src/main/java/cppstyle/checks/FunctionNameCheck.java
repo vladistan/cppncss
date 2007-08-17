@@ -36,7 +36,6 @@ import cppast.AstFunctionDefinition;
 import cppast.AstFunctionName;
 import cppast.ParserConstants;
 import cppast.SimpleNode;
-import cppast.Token;
 
 /**
  * Checks for the validity of function names.
@@ -45,8 +44,7 @@ import cppast.Token;
  */
 public final class FunctionNameCheck extends AbstractVisitor
 {
-    private final CheckListener listener;
-    private final String format;
+    private final NameCheck check;
 
     /**
      * Create a function name check.
@@ -56,12 +54,7 @@ public final class FunctionNameCheck extends AbstractVisitor
      */
     public FunctionNameCheck( final CheckListener listener, final Properties properties )
     {
-        if( listener == null )
-            throw new IllegalArgumentException( "argument 'listener' is null" );
-        this.listener = listener;
-        this.format = properties.getProperty( "format" );
-        if( format == null )
-            throw new IllegalArgumentException( "missing property 'format'" );
+        check = new NameCheck( listener, properties, "function" );
     }
 
     /**
@@ -93,9 +86,8 @@ public final class FunctionNameCheck extends AbstractVisitor
 
             public Object visit( final AstFunctionName subnode, final Object data )
             {
-                final Token last = subnode.getLastToken();
-                if( !subnode.contains( ParserConstants.OPERATOR ) && !last.image.matches( format ) )
-                    listener.fail( "invalid function name", last.beginLine );
+                if( !subnode.contains( ParserConstants.OPERATOR ) )
+                    check.verify( subnode.getLastToken() );
                 return data;
             }
         }, null );

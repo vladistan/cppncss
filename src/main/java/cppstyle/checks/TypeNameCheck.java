@@ -41,8 +41,7 @@ import cppast.Token;
  */
 public final class TypeNameCheck extends AbstractVisitor
 {
-    private final CheckListener listener;
-    private final String format;
+    private final NameCheck check;
 
     /**
      * Create a type name check.
@@ -52,12 +51,7 @@ public final class TypeNameCheck extends AbstractVisitor
      */
     public TypeNameCheck( final CheckListener listener, final Properties properties )
     {
-        if( listener == null )
-            throw new IllegalArgumentException( "argument 'listener' is null" );
-        this.listener = listener;
-        this.format = properties.getProperty( "format" );
-        if( format == null )
-            throw new IllegalArgumentException( "missing property 'format'" );
+        check = new NameCheck( listener, properties, "type" );
     }
 
     /**
@@ -66,8 +60,8 @@ public final class TypeNameCheck extends AbstractVisitor
     public Object visit( final AstClassDefinition node, final Object data )
     {
         final Token identifier = node.getFirstToken().next;
-        if( identifier.kind != ParserConstants.LCURLYBRACE && !identifier.image.matches( format ) )
-            listener.fail( "invalid type name", identifier.beginLine );
+        if( identifier.kind != ParserConstants.LCURLYBRACE )
+            check.verify( identifier );
         return super.visit( node, data );
     }
 }

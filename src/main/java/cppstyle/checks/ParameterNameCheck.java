@@ -35,7 +35,6 @@ import cppast.AstFunctionDeclaration;
 import cppast.AstFunctionDefinition;
 import cppast.AstParameterName;
 import cppast.SimpleNode;
-import cppast.Token;
 
 /**
  * Checks for the validity of parameter names.
@@ -44,8 +43,7 @@ import cppast.Token;
  */
 public final class ParameterNameCheck extends AbstractVisitor
 {
-    private final CheckListener listener;
-    private final String format;
+    private final NameCheck check;
 
     /**
      * Create a parameter name check.
@@ -55,12 +53,7 @@ public final class ParameterNameCheck extends AbstractVisitor
      */
     public ParameterNameCheck( final CheckListener listener, final Properties properties )
     {
-        if( listener == null )
-            throw new IllegalArgumentException( "argument 'listener' is null" );
-        this.listener = listener;
-        this.format = properties.getProperty( "format" );
-        if( format == null )
-            throw new IllegalArgumentException( "missing property 'format'" );
+        check = new NameCheck( listener, properties, "parameter" );
     }
 
     /**
@@ -92,9 +85,7 @@ public final class ParameterNameCheck extends AbstractVisitor
 
             public Object visit( final AstParameterName subnode, final Object data )
             {
-                final Token token = subnode.getFirstToken();
-                if( !token.image.matches( format ) )
-                    listener.fail( "invalid parameter name", token.beginLine );
+                check.verify( subnode.getFirstToken() );
                 return data;
             }
         }, null );
