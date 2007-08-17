@@ -29,7 +29,7 @@
 package cpptools;
 
 /**
- * Combines events from different sources occuring during analysis.
+ * Combines events from different sources occurring during analysis.
  *
  * @author Mathieu Champlon
  */
