@@ -28,9 +28,6 @@
 
 package cppstyle.checks;
 
-import java.io.StringReader;
-import cppast.ParseException;
-import cppast.Parser;
 import cpptools.EasyMockTestCase;
 
 /**
@@ -54,56 +51,32 @@ public final class WhitespaceAtEndOfLineCheckTest extends EasyMockTestCase
         check = new WhitespaceAtEndOfLineCheck( listener, null );
     }
 
-    private void check( final String data ) throws ParseException
+    private void check( final String data )
     {
         replay();
-        check.visit( new Parser( new StringReader( data ) ).translation_unit(), null );
+        check.notify( data );
     }
 
-    public void testNoWhitespaceIsValid() throws ParseException
+    public void testNoWhitespaceIsValid()
     {
         check( ";" );
     }
 
-    public void testWhitespaceAtEndOfLineGeneratesFailure() throws ParseException
+    public void testWhitespaceAtEndOfLineGeneratesFailure()
     {
         listener.fail( "whitespace at end of line", 1 );
         check( "; " + SEPARATOR );
     }
 
-    public void testWhitespaceAtEndOfFileGeneratesFailure() throws ParseException
+    public void testTabAtEndOfLineGeneratesFailure()
     {
-        listener.fail( "whitespace at end of file" );
+        listener.fail( "whitespace at end of line", 1 );
+        check( ";\t" + SEPARATOR );
+    }
+
+    public void testWhitespaceAtEndOfFileGeneratesFailure()
+    {
+        listener.fail( "whitespace at end of line", 1 );
         check( "; " );
-    }
-
-    public void testWhitespaceAtEndOfLineInsideCStyleCommentGeneratesFailure() throws ParseException
-    {
-        listener.fail( "whitespace at end of line", 1 );
-        check( "/* my " + SEPARATOR + "comment */" );
-    }
-
-    public void testWhitespaceAtEndOfLineInsideCppStyleCommentGeneratesFailure() throws ParseException
-    {
-        listener.fail( "whitespace at end of line", 1 );
-        check( "// my " + SEPARATOR + "// comment" );
-    }
-
-    public void testWhitespaceAtEndOfLineAfterCStyleCommentGeneratesFailure() throws ParseException
-    {
-        listener.fail( "whitespace at end of line", 1 );
-        check( "/* my comment */ " + SEPARATOR + ";" );
-    }
-
-    public void testWhitespaceAtEndOfLineAfterCppStyleCommentGeneratesFailure() throws ParseException
-    {
-        listener.fail( "whitespace at end of line", 1 );
-        check( "// my " + SEPARATOR + ";" );
-    }
-
-    public void testWhitespaceAtEndOfLineInsidePreprocessorDirectiveGeneratesFailure() throws ParseException
-    {
-        listener.fail( "whitespace at end of line", 1 );
-        check( "#define symbol something " + SEPARATOR + ";" );
     }
 }

@@ -28,36 +28,17 @@
 
 package cppstyle.checks;
 
-import java.util.Properties;
-
 /**
- * Checks that files end with a new line.
+ * Defines an observer for file contents.
  *
  * @author Mathieu Champlon
  */
-public final class NewlineAtEndOfFileCheck implements FileContentObserver
+public interface FileContentObserver
 {
-    private final CheckListener listener;
-
     /**
-     * Create a new line at end of file check.
+     * Receive the content of a file.
      *
-     * @param listener the check listener
-     * @param properties the available properties
+     * @param content the file content
      */
-    public NewlineAtEndOfFileCheck( final CheckListener listener, final Properties properties )
-    {
-        if( listener == null )
-            throw new IllegalArgumentException( "argument 'listener' is null" );
-        this.listener = listener;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void notify( final String content )
-    {
-        if( !content.endsWith( "\r\n" ) && !content.endsWith( "\r" ) && !content.endsWith( "\n" ) )
-            listener.fail( "missing new line at end of file" );
-    }
+    void notify( final String content );
 }

@@ -29,16 +29,13 @@
 package cppstyle.checks;
 
 import java.util.Properties;
-import cppast.AbstractVisitor;
-import cppast.AstTranslationUnit;
-import cppast.Token;
 
 /**
  * Checks whether files contain tab characters or not.
  *
  * @author Mathieu Champlon
  */
-public final class TabCharacterCheck extends AbstractVisitor
+public final class TabCharacterCheck extends AbstractLineCheck
 {
     private final CheckListener listener;
 
@@ -58,18 +55,9 @@ public final class TabCharacterCheck extends AbstractVisitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstTranslationUnit node, final Object data )
+    protected void check( final String content, final int line )
     {
-        for( Token token = node.getFirstToken(); token != null; token = token.next )
-        {
-            Token specialToken = token.specialToken;
-            while( specialToken != null )
-            {
-                if( specialToken.image.contains( "\t" ) )
-                    listener.fail( "tab character", specialToken.beginLine );
-                specialToken = specialToken.specialToken;
-            }
-        }
-        return data;
+        if( content.contains( "\t" ) )
+            listener.fail( "tab character", line );
     }
 }

@@ -28,21 +28,18 @@
 
 package cppstyle.checks;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import cppast.AbstractVisitor;
-import cppast.AstTranslationUnit;
-import cppast.Token;
+import cpptools.FileReader;
 
 /**
  * Checks for the validity of file headers.
  *
  * @author Mathieu Champlon
  */
-public final class HeaderCheck extends AbstractVisitor
+public final class HeaderCheck implements FileContentObserver
 {
     private final CheckListener listener;
     private final String[] expected;
@@ -60,7 +57,7 @@ public final class HeaderCheck extends AbstractVisitor
         if( listener == null )
             throw new IllegalArgumentException( "argument 'listener' is null" );
         this.listener = listener;
-        this.expected = split( trim( getExpected( properties ) ) );
+        this.expected = split( getExpected( properties ) );
         this.ignoredLines = getIgnoredLines( properties );
     }
 
@@ -71,16 +68,6 @@ public final class HeaderCheck extends AbstractVisitor
         return string.split( "\r\n|\n|\r" );
     }
 
-    private String trim( final String string )
-    {
-        if( string.length() == 0 )
-            return string;
-        final char last = string.charAt( string.length() - 1 );
-        if( last == '\n' || last == '\r' )
-            return trim( string.substring( 0, string.length() - 1 ) );
-        return string;
-    }
-
     private String getExpected( final Properties properties ) throws IOException
     {
         final String content = properties.getProperty( "header" );
@@ -88,7 +75,7 @@ public final class HeaderCheck extends AbstractVisitor
             return content;
         final String filename = properties.getProperty( "headerFile" );
         if( filename != null )
-            return readFile( filename );
+            return FileReader.read( filename );
         throw new IllegalArgumentException( "missing property 'headerFile' or 'header'" );
     }
 
@@ -100,50 +87,6 @@ public final class HeaderCheck extends AbstractVisitor
             for( final String value : values.split( "," ) )
                 lines.add( Integer.parseInt( value.trim() ) );
         return lines;
-    }
-
-    private String readFile( final String filename ) throws IOException
-    {
-        final FileInputStream stream = new FileInputStream( filename );
-        try
-        {
-            final byte[] buffer = new byte[stream.available()];
-            if( stream.read( buffer ) < buffer.length )
-                throw new IOException( "error reading file " + filename );
-            return new String( buffer );
-        }
-        finally
-        {
-            stream.close();
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object visit( final AstTranslationUnit node, final Object data )
-    {
-        final String actual = getActual( node );
-        if( actual == null )
-            listener.fail( "missing file header" );
-        else
-            notify( compare( split( actual ) ) );
-        return data;
-    }
-
-    private String getActual( final AstTranslationUnit node )
-    {
-        final Token token = node.getFirstToken().specialToken;
-        if( token == null )
-            return null;
-        return format( token );
-    }
-
-    private String format( final Token token )
-    {
-        if( token == null )
-            return "";
-        return format( token.specialToken ) + token.image;
     }
 
     private static final class Interval
@@ -171,6 +114,20 @@ public final class HeaderCheck extends AbstractVisitor
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void notify( final String content )
+    {
+        notify( compare( split( content ) ) );
+    }
+
+    private void notify( final List<Interval> intervals )
+    {
+        for( final Interval interval : intervals )
+            interval.notify( listener );
+    }
+
     private List<Interval> compare( final String[] actual )
     {
         final List<Interval> intervals = new ArrayList<Interval>();
@@ -188,11 +145,5 @@ public final class HeaderCheck extends AbstractVisitor
     private boolean merge( final List<Interval> intervals, final int line )
     {
         return !intervals.isEmpty() && intervals.get( intervals.size() - 1 ).merge( line );
-    }
-
-    private void notify( final List<Interval> intervals )
-    {
-        for( final Interval interval : intervals )
-            interval.notify( listener );
     }
 }

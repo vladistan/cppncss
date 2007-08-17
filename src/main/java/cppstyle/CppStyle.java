@@ -39,6 +39,8 @@ import org.w3c.dom.NodeList;
 import cppast.ParserVisitor;
 import cppast.VisitorComposite;
 import cppstyle.checks.CheckListener;
+import cppstyle.checks.FileContentProvider;
+import cppstyle.checks.FileContentObserver;
 import cpptools.Analyzer;
 import cpptools.ConsoleLogger;
 import cpptools.FileObserverBeautifier;
@@ -72,7 +74,7 @@ public final class CppStyle
             throw new IllegalArgumentException( "missing mandatory configuration file" );
         output = createOutput( options );
         observers.register( logger );
-        analyzer = new Analyzer( options, visitors, new FileObserverBeautifier( options, observers ), logger );
+        analyzer = new Analyzer( options, visitors, observers, logger );
         populate( options.getOptionPropertyValues( "c" ).get( 0 ) );
     }
 
@@ -80,7 +82,7 @@ public final class CppStyle
     {
         final PrintStream stream = createStream( options );
         final AsciiCheckListener listener = new AsciiCheckListener( stream );
-        observers.register( listener );
+        observers.register( new FileObserverBeautifier( options, listener ) );
         return listener;
     }
 
@@ -105,7 +107,7 @@ public final class CppStyle
                 {
                     final String name = extract( node, "name" );
                     final Properties properties = transform( node.getChildNodes() );
-                    visitors.register( load( name, properties ) );
+                    register( name, properties );
                 }
             }
         }
@@ -132,9 +134,18 @@ public final class CppStyle
         return properties;
     }
 
-    private ParserVisitor load( final String module, final Properties properties ) throws Exception
+    private void register( final String name, final Properties properties ) throws Exception
     {
-        return (ParserVisitor)Class.forName( "cppstyle.checks." + module + "Check" ).getConstructor( new Class[]
+        final Object module = load( name, properties );
+        if( module instanceof ParserVisitor )
+            visitors.register( (ParserVisitor)module );
+        if( module instanceof FileContentObserver )
+            observers.register( new FileContentProvider( (FileContentObserver)module ) );
+    }
+
+    private Object load( final String module, final Properties properties ) throws Exception
+    {
+        return Class.forName( "cppstyle.checks." + module + "Check" ).getConstructor( new Class[]
         {
                 CheckListener.class, Properties.class
         } ).newInstance( new Object[]

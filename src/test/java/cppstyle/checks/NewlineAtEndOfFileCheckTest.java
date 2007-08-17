@@ -28,9 +28,6 @@
 
 package cppstyle.checks;
 
-import java.io.StringReader;
-import cppast.ParseException;
-import cppast.Parser;
 import cpptools.EasyMockTestCase;
 
 /**
@@ -38,6 +35,7 @@ import cpptools.EasyMockTestCase;
  */
 public final class NewlineAtEndOfFileCheckTest extends EasyMockTestCase
 {
+    private static final String SEPARATOR = System.getProperty( "line.separator" );
     /**
      * Tested object.
      */
@@ -46,7 +44,6 @@ public final class NewlineAtEndOfFileCheckTest extends EasyMockTestCase
      * Mock objects.
      */
     private CheckListener listener;
-    private static final String SEPARATOR = System.getProperty( "line.separator" );
 
     protected void setUp() throws Exception
     {
@@ -54,35 +51,20 @@ public final class NewlineAtEndOfFileCheckTest extends EasyMockTestCase
         check = new NewlineAtEndOfFileCheck( listener, null );
     }
 
-    private void check( final String data ) throws ParseException
+    private void check( final String data )
     {
         replay();
-        check.visit( new Parser( new StringReader( data ) ).translation_unit(), null );
+        check.notify( data );
     }
 
-    public void testNewlineAtEndOfFileDoesNotGenerateFailure() throws ParseException
+    public void testNewlineAtEndOfFileDoesNotGenerateFailure()
     {
         check( ";" + SEPARATOR );
     }
 
-    public void testMissingNewlineAtEndOfFileGeneratesFailure() throws ParseException
+    public void testMissingNewlineAtEndOfFileGeneratesFailure()
     {
         listener.fail( "missing new line at end of file" );
         check( ";" );
-    }
-
-    public void testCppStyleCommentAtEndOfFileDoesNotHideNewLine() throws ParseException
-    {
-        check( "// the comment" + SEPARATOR );
-    }
-
-    public void testPreprocessorDirectiveAtEndOfFileDoesNotHideNewLine() throws ParseException
-    {
-        check( "# the directive" + SEPARATOR );
-    }
-
-    public void testCStyleCommentAtEndOfFileDoesNotHideNewLine() throws ParseException
-    {
-        check( "/* the comment */" + SEPARATOR );
     }
 }

@@ -30,10 +30,7 @@ package cppstyle.checks;
 
 import static org.easymock.EasyMock.expect;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.Properties;
-import cppast.ParseException;
-import cppast.Parser;
 import cpptools.EasyMockTestCase;
 
 /**
@@ -41,6 +38,7 @@ import cpptools.EasyMockTestCase;
  */
 public final class HeaderCheckTest extends EasyMockTestCase
 {
+    private static final String SEPARATOR = System.getProperty( "line.separator" );
     /**
      * Mock objects.
      */
@@ -61,12 +59,12 @@ public final class HeaderCheckTest extends EasyMockTestCase
         return new HeaderCheck( listener, properties );
     }
 
-    private void check( final String actual, final String expected, final String ignore ) throws IOException, ParseException
+    private void check( final String actual, final String expected, final String ignore ) throws IOException
     {
-        create( expected, ignore ).visit( new Parser( new StringReader( actual ) ).translation_unit(), null );
+        create( expected, ignore ).notify( actual );
     }
 
-    private void check( final String actual, final String expected ) throws IOException, ParseException
+    private void check( final String actual, final String expected ) throws IOException
     {
         check( actual, expected, null );
     }
@@ -87,78 +85,70 @@ public final class HeaderCheckTest extends EasyMockTestCase
         fail( "should have thrown" );
     }
 
-    public void testExactHeaderMatchIsAllowed() throws ParseException, IOException
+    public void testExactHeaderMatchIsAllowed() throws IOException
     {
-        final String header = "/* this is the header\n we want to check for */";
+        final String header = "/* this is the header" + SEPARATOR + " we want to check for */";
         check( header, header );
     }
 
-    public void testNoActualHeaderIsFailure() throws ParseException, IOException
+    public void testEmptyActualHeaderIsFailure() throws IOException
     {
         final String actual = "";
-        final String expected = "/* this is the header\n we want to check for */";
-        listener.fail( "missing file header" );
-        check( actual, expected );
-    }
-
-    public void testComparisonFailureOnFirstLineIsFailure() throws ParseException, IOException
-    {
-        final String actual = "/* this is the wrong header\n we want to check for */";
-        final String expected = "/* this is the header\n we want to check for */";
-        listener.fail( "file header mismatch", 1, 1 );
-        check( actual, expected );
-    }
-
-    public void testComparisonFailureOnSecondLineIsFailure() throws ParseException, IOException
-    {
-        final String actual = "/* this is the header\n we want to test */";
-        final String expected = "/* this is the header\n we want to check for */";
-        listener.fail( "file header mismatch", 2, 2 );
-        check( actual, expected );
-    }
-
-    public void testComparisonFailuresOnBothLinesIsFailure() throws ParseException, IOException
-    {
-        final String actual = "/* this is the wrong header\n we want to test */";
-        final String expected = "/* this is the header\n we want to check for */";
+        final String expected = "/* this is the header" + SEPARATOR + " we want to check for */";
         listener.fail( "file header mismatch", 1, 2 );
         check( actual, expected );
     }
 
-    public void testTooManyLinesInExpectationIsAllowed() throws ParseException, IOException
+    public void testComparisonFailureOnFirstLineIsFailure() throws IOException
     {
-        final String actual = "// this is the header\r\n// this is more";
-        final String expected = "// this is the header";
+        final String actual = "/* this is the wrong header" + SEPARATOR + " we want to check for */";
+        final String expected = "/* this is the header" + SEPARATOR + " we want to check for */";
+        listener.fail( "file header mismatch", 1, 1 );
         check( actual, expected );
     }
 
-    public void testMissingSecondLineInActualIsFailure() throws ParseException, IOException
+    public void testComparisonFailureOnSecondLineIsFailure() throws IOException
     {
-        final String actual = "// this is the header";
-        final String expected = "// this is the header\r\n// we want to test";
+        final String actual = "/* this is the header" + SEPARATOR + " we want to test */";
+        final String expected = "/* this is the header" + SEPARATOR + " we want to check for */";
         listener.fail( "file header mismatch", 2, 2 );
         check( actual, expected );
     }
 
-    public void testComparisonFailureOnSecondIgnoredLineIsAllowed() throws ParseException, IOException
+    public void testComparisonFailuresOnBothLinesIsFailure() throws IOException
     {
-        final String actual = "/* this is the header\n we want to test */";
-        final String expected = "/* this is the header\n we want to check for */";
+        final String actual = "/* this is the wrong header" + SEPARATOR + " we want to test */";
+        final String expected = "/* this is the header" + SEPARATOR + " we want to check for */";
+        listener.fail( "file header mismatch", 1, 2 );
+        check( actual, expected );
+    }
+
+    public void testTooManyLinesInExpectationIsAllowed() throws IOException
+    {
+        final String actual = "// this is the header" + SEPARATOR + "// this is more";
+        final String expected = "// this is the header";
+        check( actual, expected );
+    }
+
+    public void testMissingSecondLineInActualIsFailure() throws IOException
+    {
+        final String actual = "// this is the header";
+        final String expected = "// this is the header" + SEPARATOR + "// we want to test";
+        listener.fail( "file header mismatch", 2, 2 );
+        check( actual, expected );
+    }
+
+    public void testComparisonFailureOnSecondIgnoredLineIsAllowed() throws IOException
+    {
+        final String actual = "/* this is the header" + SEPARATOR + " we want to test */";
+        final String expected = "/* this is the header" + SEPARATOR + " we want to check for */";
         check( actual, expected, "2" );
     }
 
-    public void testComparisonFailureOnBothIgnoredLineIsAllowed() throws ParseException, IOException
+    public void testComparisonFailureOnBothIgnoredLinesIsAllowed() throws IOException
     {
-        final String actual = "/* this is the wrong header\n we want to test */";
-        final String expected = "/* this is the header\n we want to check for */";
+        final String actual = "/* this is the wrong header" + SEPARATOR + " we want to test */";
+        final String expected = "/* this is the header" + SEPARATOR + " we want to check for */";
         check( actual, expected, "1,2" );
-    }
-
-    public void testWhitespaceBeforeHeaderIsFailure() throws ParseException, IOException
-    {
-        final String expected = "/* this is the header\n we want to check for */";
-        final String actual = ' ' + expected;
-        listener.fail( "file header mismatch", 1, 1 );
-        check( actual, expected );
     }
 }

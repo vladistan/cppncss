@@ -29,17 +29,13 @@
 package cppstyle.checks;
 
 import java.util.Properties;
-import cppast.AbstractVisitor;
-import cppast.AstTranslationUnit;
-import cppast.ParserConstants;
-import cppast.Token;
 
 /**
  * Checks whether files contain whitespace characters at end of line or not.
  *
  * @author Mathieu Champlon
  */
-public final class WhitespaceAtEndOfLineCheck extends AbstractVisitor
+public final class WhitespaceAtEndOfLineCheck extends AbstractLineCheck
 {
     private final CheckListener listener;
 
@@ -59,42 +55,9 @@ public final class WhitespaceAtEndOfLineCheck extends AbstractVisitor
     /**
      * {@inheritDoc}
      */
-    public Object visit( final AstTranslationUnit node, final Object data )
+    protected void check( final String content, final int line )
     {
-        for( Token token = node.getFirstToken(); token != null; token = token.next )
-        {
-            Token specialToken = token.specialToken;
-            while( specialToken != null )
-            {
-                check( specialToken );
-                specialToken = specialToken.specialToken;
-            }
-        }
-        if( whitespace( node.getLastToken().specialToken ) )
-            listener.fail( "whitespace at end of file" );
-        return data;
-    }
-
-    private void check( final Token token )
-    {
-        if( token.kind == ParserConstants.NEW_LINE && whitespace( token.specialToken ) )
-            listener.fail( "whitespace at end of line", token.specialToken.endLine );
-        if( token.kind == ParserConstants.C_STYLE_COMMENT || token.kind == ParserConstants.CPP_STYLE_COMMENT )
-        {
-            final String[] lines = token.image.split( "\\r\\n|\\n|\\r" );
-            for( int line = 0; line < lines.length - 1; ++line )
-                if( whitespace( lines[line] ) )
-                    listener.fail( "whitespace at end of line", token.beginLine + line );
-        }
-    }
-
-    private boolean whitespace( final Token token )
-    {
-        return token != null && whitespace( token.image );
-    }
-
-    private boolean whitespace( final String string )
-    {
-        return string.endsWith( " " ) || string.endsWith( "\t" );
+        if( content.endsWith( " " ) || content.endsWith( "\t" ) )
+            listener.fail( "whitespace at end of line", line );
     }
 }

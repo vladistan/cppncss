@@ -26,38 +26,38 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppstyle.checks;
+package cpptools;
 
-import java.util.Properties;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 /**
- * Checks that files end with a new line.
+ * Provides a helper to read the whole content of a file into a string.
  *
  * @author Mathieu Champlon
  */
-public final class NewlineAtEndOfFileCheck implements FileContentObserver
+public final class FileReader
 {
-    private final CheckListener listener;
-
     /**
-     * Create a new line at end of file check.
+     * Read the content of the file.
      *
-     * @param listener the check listener
-     * @param properties the available properties
+     * @param filename the file name
+     * @return the file content
+     * @throws IOException if an error occurs
      */
-    public NewlineAtEndOfFileCheck( final CheckListener listener, final Properties properties )
+    static public String read( final String filename ) throws IOException
     {
-        if( listener == null )
-            throw new IllegalArgumentException( "argument 'listener' is null" );
-        this.listener = listener;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void notify( final String content )
-    {
-        if( !content.endsWith( "\r\n" ) && !content.endsWith( "\r" ) && !content.endsWith( "\n" ) )
-            listener.fail( "missing new line at end of file" );
+        final FileInputStream stream = new FileInputStream( filename );
+        try
+        {
+            final byte[] buffer = new byte[stream.available()];
+            if( stream.read( buffer ) < buffer.length )
+                throw new IOException( "error reading file " + filename );
+            return new String( buffer );
+        }
+        finally
+        {
+            stream.close();
+        }
     }
 }
