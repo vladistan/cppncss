@@ -145,7 +145,7 @@ public final class Analyzer
     private List<String> resolve( final List<String> inputs )
     {
         final List<String> result = new ArrayList<String>();
-        for( String input : inputs )
+        for( final String input : inputs )
             resolve( result, input, true );
         return result;
     }
@@ -194,7 +194,7 @@ public final class Analyzer
     }
 
     /**
-     * Run the analyzis.
+     * Run the analysis.
      */
     public void run()
     {
@@ -206,10 +206,9 @@ public final class Analyzer
     private int process( final ParserVisitor visitor )
     {
         int parsed = 0;
-        for( String filename : files )
+        for( final String filename : files )
         {
             observer.changed( filter( filename ) );
-            handler.changed( filter( filename ) );
             if( process( visitor, filename ) )
                 ++parsed;
             else if( !force )
@@ -232,14 +231,14 @@ public final class Analyzer
             parse( visitor, filename );
             return true;
         }
-        catch( ParseException exception )
+        catch( final ParseException exception )
         {
             final Token token = getToken( exception );
             final String message = "Parse error (line " + token.endLine + ", column " + token.endColumn + ")";
             handler.error( filename, exception, message );
             handler.display( filename, token.beginLine, token.beginColumn );
         }
-        catch( Throwable throwable )
+        catch( final Throwable throwable )
         {
             handler.error( filename, throwable, throwable.getMessage() );
         }

@@ -41,8 +41,8 @@ import cppast.VisitorComposite;
 import cppstyle.checks.CheckListener;
 import cpptools.Analyzer;
 import cpptools.ConsoleLogger;
-import cpptools.EventHandler;
 import cpptools.FileObserverComposite;
+import cpptools.Logger;
 import cpptools.Options;
 import cpptools.Usage;
 
@@ -62,15 +62,16 @@ public final class CppStyle
      * Create a CppStyle instance.
      *
      * @param options the options
-     * @param handler the log handler
+     * @param logger the logger
      * @throws Exception if an error occurs
      */
-    public CppStyle( final Options options, final EventHandler handler ) throws Exception
+    public CppStyle( final Options options, final Logger logger ) throws Exception
     {
         if( !options.hasOption( "c" ) )
             throw new IllegalArgumentException( "missing mandatory configuration file" );
         output = createOutput( options );
-        analyzer = new Analyzer( options, visitors, observers, handler );
+        observers.register( logger );
+        analyzer = new Analyzer( options, visitors, observers, logger );
         populate( options.getOptionPropertyValues( "c" ).get( 0 ) );
     }
 

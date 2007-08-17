@@ -47,8 +47,8 @@ import cppncss.measure.MeasureCollector;
 import cppncss.measure.SumCollector;
 import cpptools.Analyzer;
 import cpptools.ConsoleLogger;
-import cpptools.EventHandler;
 import cpptools.FileObserverComposite;
+import cpptools.Logger;
 import cpptools.Options;
 import cpptools.Usage;
 
@@ -96,13 +96,14 @@ public final class CppNcss
      * Create a CppNcss instance.
      *
      * @param options the options
-     * @param handler the log handler
+     * @param logger the logger
      * @throws Exception if an error occurs
      */
-    public CppNcss( final Options options, final EventHandler handler ) throws Exception
+    public CppNcss( final Options options, final Logger logger ) throws Exception
     {
         output = createOutput( options );
-        analyzer = new Analyzer( options, visitors, observers, handler );
+        observers.register( logger );
+        analyzer = new Analyzer( options, visitors, observers, logger );
         register( options, new MeasureCollector( options, new ResultOutputAdapter( "Function", output ) ), functionVisitorFactory );
         register( options, new AverageCollector( new ResultOutputAdapter( "Function", output ) ), functionVisitorFactory );
         register( options, new MeasureCollector( options, new ResultOutputAdapter( "File", output ) ), fileVisitorFactory );
@@ -114,14 +115,14 @@ public final class CppNcss
     {
         collectors.add( collector );
         observers.register( collector );
-        for( String counter : filter( options ) )
+        for( final String counter : filter( options ) )
             factory.register( create( collector, counter ) );
     }
 
     private List<String> filter( final Options options )
     {
         final List<String> counters = new ArrayList<String>();
-        for( String value : extract( options ).split( "," ) )
+        for( final String value : extract( options ).split( "," ) )
             if( !counters.contains( value ) )
                 counters.add( value );
         return counters;
@@ -152,7 +153,7 @@ public final class CppNcss
     public void run()
     {
         analyzer.run();
-        for( Collector collector : collectors )
+        for( final Collector collector : collectors )
             collector.flush();
         output.flush();
     }

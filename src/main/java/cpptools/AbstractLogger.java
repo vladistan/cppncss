@@ -33,11 +33,11 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
- * Captures behaviours common to loggers.
+ * Captures behaviors common to loggers.
  *
  * @author Mathieu Champlon
  */
-public abstract class AbstractLogger implements EventHandler
+public abstract class AbstractLogger implements Logger
 {
     private static final double MS_PER_S = 1000.0;
     private static final int ERROR_LINES_DISPLAYED = 3;
@@ -78,7 +78,7 @@ public abstract class AbstractLogger implements EventHandler
             displayLocation( line, ERROR_LINES_DISPLAYED, filename );
             displayCursor( column );
         }
-        catch( IOException e )
+        catch( final IOException e )
         {
             error( "internal", e, "while trying to display error location" );
         }
