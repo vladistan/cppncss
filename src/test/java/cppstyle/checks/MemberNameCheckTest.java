@@ -123,4 +123,10 @@ public final class MemberNameCheckTest extends EasyMockTestCase
     {
         check( "class C { static int valid_; };", "^UNUSED$" );
     }
+
+    public void testMemberOfInnerClassIsTestedOnlyOnce() throws ParseException
+    {
+        listener.fail( "invalid member name", 1 );
+        check( "class C { class I { int invalid; }; };", "FORMAT" );
+    }
 }

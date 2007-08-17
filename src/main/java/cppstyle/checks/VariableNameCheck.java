@@ -30,8 +30,10 @@ package cppstyle.checks;
 
 import java.util.Properties;
 import cppast.AbstractVisitor;
+import cppast.AstDeclaration;
 import cppast.AstFunctionBody;
 import cppast.AstFunctionDeclaration;
+import cppast.AstFunctionDefinition;
 import cppast.AstParameterName;
 import cppast.ParserConstants;
 import cppast.SimpleNode;
@@ -69,7 +71,7 @@ public final class VariableNameCheck extends AbstractVisitor
     public Object visit( final AstFunctionBody node, final Object data )
     {
         check( node );
-        return data;
+        return super.visit( node, data );
     }
 
     private void check( final SimpleNode node )
@@ -81,18 +83,30 @@ public final class VariableNameCheck extends AbstractVisitor
                 return data;
             }
 
-            public Object visit( final AstParameterName subnode, final Object data )
+            public Object visit( final AstFunctionDefinition subnode, final Object data )
             {
-                final Token token = subnode.getFirstToken();
-                if( filter( subnode.getParent() ) && !token.image.matches( format ) )
-                    listener.fail( "invalid variable name", token.beginLine );
                 return data;
+            }
+
+            public Object visit( final AstDeclaration subnode, final Object data )
+            {
+                if( !filter( subnode ) )
+                    return data;
+                return super.visit( subnode, data );
             }
 
             private boolean filter( final SimpleNode node )
             {
                 return !node.contains( ParserConstants.TYPEDEF )
                         && (!node.contains( ParserConstants.CONST ) || !node.contains( ParserConstants.STATIC ));
+            }
+
+            public Object visit( final AstParameterName subnode, final Object data )
+            {
+                final Token token = subnode.getFirstToken();
+                if( !token.image.matches( format ) )
+                    listener.fail( "invalid variable name", token.beginLine );
+                return data;
             }
         }, null );
     }

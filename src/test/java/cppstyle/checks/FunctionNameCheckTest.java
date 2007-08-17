@@ -116,4 +116,10 @@ public final class FunctionNameCheckTest extends EasyMockTestCase
     {
         check( "MyClass::~MyClass() {}", "^UNUSED$" );
     }
+
+    public void testFunctionDeclaredInsideAnotherFunctionDefinitionIsChecked() throws ParseException
+    {
+        listener.fail( "invalid function name", 1 );
+        check( "void f() { void Invalid( int i ); }", FORMAT );
+    }
 }

@@ -30,6 +30,7 @@ package cppstyle.checks;
 
 import java.util.Properties;
 import cppast.AbstractVisitor;
+import cppast.AstClassDefinition;
 import cppast.AstMemberDeclaration;
 import cppast.AstParameterName;
 import cppast.ParserConstants;
@@ -76,14 +77,16 @@ public final class MemberNameCheck extends AbstractVisitor
     {
         node.accept( new AbstractVisitor()
         {
+            public Object visit( final AstClassDefinition subnode, final Object data )
+            {
+                return data;
+            }
+
             public Object visit( final AstParameterName subnode, final Object data )
             {
-                if( subnode.getParent() == node )
-                {
-                    final Token token = subnode.getFirstToken();
-                    if( !token.image.matches( format ) )
-                        listener.fail( "invalid member name", token.beginLine );
-                }
+                final Token token = subnode.getFirstToken();
+                if( !token.image.matches( format ) )
+                    listener.fail( "invalid member name", token.beginLine );
                 return data;
             }
         }, null );

@@ -87,6 +87,12 @@ public final class VariableNameCheckTest extends EasyMockTestCase
         check( "void f() { int Invalid; }", FORMAT );
     }
 
+    public void testVariableNameInMethodOfInnerClassNonMachingFormatIsFailure() throws ParseException
+    {
+        listener.fail( "invalid variable name", 1 );
+        check( "void f() { class C { void m() { int Invalid; } }; }", FORMAT );
+    }
+
     public void testTypedefIsSkipped() throws ParseException
     {
         check( "void f() { typedef int INT; }", "^UNUSED$" );
@@ -99,7 +105,7 @@ public final class VariableNameCheckTest extends EasyMockTestCase
 
     public void testFunctionDeclarationIsSkipped() throws ParseException
     {
-        check( "void f() { void g( int i ); }", "^UNUSED$" ); // FIXME not so easy...
+        check( "void f() { void g( int i ); }", "^UNUSED$" );
     }
 
     public void testGlobalIsSkipped() throws ParseException
@@ -110,5 +116,10 @@ public final class VariableNameCheckTest extends EasyMockTestCase
     public void testStaticMemberInitializationIsSkipped() throws ParseException
     {
         check( "int MyClass::i = 0;", "^UNUSED$" );
+    }
+
+    public void testFunctionDefinitionInInnerClassIsSkipped() throws ParseException
+    {
+        check( "void f() { class C { void m( int i ) {} }; }", "^UNUSED$" );
     }
 }

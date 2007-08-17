@@ -30,6 +30,7 @@ package cppstyle.checks;
 
 import java.util.Properties;
 import cppast.AbstractVisitor;
+import cppast.AstFunctionBody;
 import cppast.AstFunctionDeclaration;
 import cppast.AstFunctionDefinition;
 import cppast.AstFunctionName;
@@ -85,6 +86,11 @@ public final class FunctionNameCheck extends AbstractVisitor
     {
         node.accept( new AbstractVisitor()
         {
+            public Object visit( final AstFunctionBody subnode, final Object data )
+            {
+                return data;
+            }
+
             public Object visit( final AstFunctionName subnode, final Object data )
             {
                 final Token last = subnode.getLastToken();
