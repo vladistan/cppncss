@@ -79,9 +79,14 @@ PARSER_END(Parser)
 
 SPECIAL_TOKEN :
 {
-  < WHITESPACE : (" "|"\t")+ >
-| < NEW_LINE : "\r\n" | "\r" | "\n" >
-| < ESCAPED_NEW_LINE : "\\" <NEW_LINE> >
+  < NEW_LINE : "\r\n" | "\r" | "\n" >
+}
+
+SKIP :
+{
+  " "
+| "\t"
+| < "\\" <NEW_LINE> >
 }
 
 SPECIAL_TOKEN :
@@ -224,7 +229,7 @@ TOKEN [IGNORE_CASE] :
 | < FLOATTWO : (["0"-"9"])+ "e" (["-","+"])? (["0"-"9"])+ (["f","l"])? >
 }
 
-TOKEN :
+SPECIAL_TOKEN :
 {
   < _CHAR :
    ("\\" (
