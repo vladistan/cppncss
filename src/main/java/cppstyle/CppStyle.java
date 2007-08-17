@@ -111,9 +111,9 @@ public final class CppStyle
         }
     }
 
-    private String extract( final Node node, final String s1 )
+    private String extract( final Node node, final String attribute )
     {
-        return node.getAttributes().getNamedItem( s1 ).getNodeValue();
+        return node.getAttributes().getNamedItem( attribute ).getNodeValue();
     }
 
     private Properties transform( final NodeList nodes )
