@@ -69,7 +69,7 @@ public interface EventHandler
     /**
      * Specify the file being processed.
      *
-     * @param filename the name of the fle
+     * @param filename the name of the file
      */
     void changed( String filename );
 }
