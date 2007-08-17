@@ -33,6 +33,7 @@ import cppast.AbstractVisitor;
 import cppast.AstFunctionDeclaration;
 import cppast.AstFunctionDefinition;
 import cppast.AstFunctionName;
+import cppast.ParserConstants;
 import cppast.SimpleNode;
 import cppast.Token;
 
@@ -80,14 +81,6 @@ public final class FunctionNameCheck extends AbstractVisitor
         return super.visit( node, data );
     }
 
-    private boolean operator( final SimpleNode node )
-    {
-        for( Token token = node.getFirstToken(); token != node.getLastToken().next; token = token.next )
-            if( token.image.equals( "operator" ) )
-                return true;
-        return false;
-    }
-
     private void check( final SimpleNode node )
     {
         node.accept( new AbstractVisitor()
@@ -95,7 +88,7 @@ public final class FunctionNameCheck extends AbstractVisitor
             public Object visit( final AstFunctionName subnode, final Object data )
             {
                 final Token last = subnode.getLastToken();
-                if( !operator( subnode ) && !last.image.matches( format ) )
+                if( !subnode.contains( ParserConstants.OPERATOR ) && !last.image.matches( format ) )
                     listener.fail( "invalid function name", last.beginLine );
                 return data;
             }
