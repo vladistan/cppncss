@@ -29,15 +29,13 @@
 package cppstyle;
 
 import java.io.PrintStream;
-import cppstyle.checks.CheckListener;
-import cpptools.FileObserver;
 
 /**
  * Implements a text logger.
  *
  * @author Mathieu Champlon
  */
-public final class AsciiCheckListener implements CheckListener, FileObserver
+public final class AsciiResultOutput implements ResultOutput
 {
     private final PrintStream stream;
     private String filename;
@@ -47,7 +45,7 @@ public final class AsciiCheckListener implements CheckListener, FileObserver
      *
      * @param stream the output stream
      */
-    public AsciiCheckListener( final PrintStream stream )
+    public AsciiResultOutput( final PrintStream stream )
     {
         this.stream = stream;
     }
@@ -85,5 +83,12 @@ public final class AsciiCheckListener implements CheckListener, FileObserver
     public void changed( final String filename )
     {
         this.filename = filename;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void flush()
+    {
     }
 }

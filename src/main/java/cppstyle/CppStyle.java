@@ -34,13 +34,14 @@ import java.io.PrintStream;
 import java.util.Properties;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import cppast.ParserVisitor;
 import cppast.VisitorComposite;
 import cppstyle.checks.CheckListener;
-import cppstyle.checks.FileContentProvider;
 import cppstyle.checks.FileContentObserver;
+import cppstyle.checks.FileContentProvider;
 import cpptools.Analyzer;
 import cpptools.ConsoleLogger;
 import cpptools.FileObserverBeautifier;
@@ -58,7 +59,7 @@ public final class CppStyle
 {
     private final VisitorComposite visitors = new VisitorComposite();
     private final FileObserverComposite observers = new FileObserverComposite();
-    private final CheckListener output;
+    private final ResultOutput output;
     private final Analyzer analyzer;
 
     /**
@@ -72,18 +73,18 @@ public final class CppStyle
     {
         if( !options.hasOption( "c" ) )
             throw new IllegalArgumentException( "missing mandatory configuration file" );
-        output = createOutput( options );
+        output = createOutput( options, createStream( options ) );
+        observers.register( new FileObserverBeautifier( options, output ) );
         observers.register( logger );
         analyzer = new Analyzer( options, visitors, observers, logger );
         populate( options.getOptionPropertyValues( "c" ).get( 0 ) );
     }
 
-    private CheckListener createOutput( final Options options ) throws FileNotFoundException
+    private ResultOutput createOutput( final Options options, final PrintStream stream ) throws ParserConfigurationException
     {
-        final PrintStream stream = createStream( options );
-        final AsciiCheckListener listener = new AsciiCheckListener( stream );
-        observers.register( new FileObserverBeautifier( options, listener ) );
-        return listener;
+        if( options.hasOption( "x" ) )
+            return new XmlResultOutput( stream );
+        return new AsciiResultOutput( stream );
     }
 
     private PrintStream createStream( final Options options ) throws FileNotFoundException
@@ -160,6 +161,7 @@ public final class CppStyle
     public void run()
     {
         analyzer.run();
+        output.flush();
     }
 
     /**

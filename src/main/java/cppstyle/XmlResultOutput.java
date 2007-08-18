@@ -26,11 +26,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cppncss;
+package cppstyle;
 
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
-import java.util.List;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Result;
@@ -44,11 +43,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * Implements an XML result output.
+ * Implements an XML logger.
  *
  * @author Mathieu Champlon
  */
-public final class XmlResultOutput extends AbstractResultOutput
+public final class XmlResultOutput implements ResultOutput
 {
     private final PrintStream stream;
     private final Document document;
@@ -56,9 +55,9 @@ public final class XmlResultOutput extends AbstractResultOutput
     private Element current;
 
     /**
-     * Create an XML result output.
+     * Create an AsciiCheckListener.
      *
-     * @param stream the stream to write to
+     * @param stream the output stream
      * @throws ParserConfigurationException if an error occurs
      */
     public XmlResultOutput( final PrintStream stream ) throws ParserConfigurationException
@@ -67,23 +66,51 @@ public final class XmlResultOutput extends AbstractResultOutput
             throw new IllegalArgumentException( "parameter 'stream' is null" );
         this.stream = stream;
         this.document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-        this.root = document.createElement( "cppncss" );
+        this.root = document.createElement( "cppstyle" );
         this.current = root;
     }
 
     /**
      * {@inheritDoc}
      */
-    protected void printHeaders( final String type, final List<String> labels )
+    public void fail( final String reason, final int start, final int end )
     {
-        current = addElement( root, "measure" );
-        current.setAttribute( "type", type );
-        current = addElement( current, "labels" );
-        addElement( current, "label" ).setTextContent( "Nr." );
-        for( final String label : labels )
-            if( !label.startsWith( type ) )
-                addElement( current, "label" ).setTextContent( label );
-        current = (Element)current.getParentNode();
+        if( start == end )
+            fail( reason, start );
+        else
+        {
+            final Element error = addElement( current, "error" );
+            error.setAttribute( "line", start + "-" + end );
+            error.setAttribute( "message", reason );
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void fail( final String reason, final int line )
+    {
+        final Element error = addElement( current, "error" );
+        error.setAttribute( "line", Integer.toString( line ) );
+        error.setAttribute( "message", reason );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void fail( final String reason )
+    {
+        final Element error = addElement( current, "error" );
+        error.setAttribute( "message", reason );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void changed( final String filename )
+    {
+        current = addElement( root, "file" );
+        current.setAttribute( "name", filename );
     }
 
     private Element addElement( final Element element, final String name )
@@ -91,55 +118,6 @@ public final class XmlResultOutput extends AbstractResultOutput
         final Element result = document.createElement( name );
         element.appendChild( result );
         return result;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected void printItem( final String item )
-    {
-        current = (Element)current.getParentNode();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected void printMeasurement( final String label, final int count )
-    {
-        addElement( current, "value" ).setTextContent( Integer.toString( count ) );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected void printIndex( final String item, final int index )
-    {
-        current = addElement( current, "item" );
-        current.setAttribute( "name", item );
-        addElement( current, "value" ).setTextContent( Integer.toString( index ) );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void notify( final String type, final String label, final float average )
-    {
-        if( !label.startsWith( type ) )
-        {
-            final Element element = addElement( current, "average" );
-            element.setAttribute( "label", label );
-            element.setAttribute( "value", Float.toString( average ) );
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void notify( final String type, final String label, final long sum )
-    {
-        final Element element = addElement( current, "sum" );
-        element.setAttribute( "label", label );
-        element.setAttribute( "value", Long.toString( sum ) );
     }
 
     /**
