@@ -151,7 +151,6 @@ public final class XmlResultOutput extends AbstractResultOutput
         {
             final Result result = new StreamResult( new OutputStreamWriter( stream ) );
             final TransformerFactory factory = TransformerFactory.newInstance();
-            factory.setAttribute( "indent-number", 2 );
             final Transformer transformer = factory.newTransformer();
             transformer.setOutputProperty( "indent", "yes" );
             transformer.transform( new DOMSource( root ), result );
