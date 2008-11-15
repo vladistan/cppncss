@@ -1020,55 +1020,55 @@ void assignment_expression() #AssignmentExpression(>1) :
 void constant_expression() :
 {}
 {
-   conditional_expression()
+    conditional_expression()
 }
 
 void conditional_expression() #ConditionalExpression(>1) :
 {}
 {
-   logical_or_expression() ["?" assignment_expression() ":" assignment_expression()]
+    logical_or_expression() ["?" assignment_expression() ":" assignment_expression()]
 }
 
 void logical_or_expression() #LogicalOrExpression(>1) :
 {}
 {
-   logical_and_expression() ["||" logical_or_expression()]
+    logical_and_expression() ["||" logical_or_expression()]
 }
 
 void logical_and_expression() #LogicalAndExpression(>1) :
 {}
 {
-   inclusive_or_expression() ["&&" logical_and_expression()]
+    inclusive_or_expression() ["&&" logical_and_expression()]
 }
 
 void inclusive_or_expression() #InclusiveOrExpression(>1) :
 {}
 {
-   exclusive_or_expression() ["|" inclusive_or_expression()]
+    exclusive_or_expression() ["|" inclusive_or_expression()]
 }
 
 void exclusive_or_expression() #ExclusiveOrExpression(>1) :
 {}
 {
-   and_expression() ["^" exclusive_or_expression()]
+    and_expression() ["^" exclusive_or_expression()]
 }
 
 void and_expression() #AndExpression(>1) :
 {}
 {
-   equality_expression() [LOOKAHEAD(2) "&" and_expression()]
+    equality_expression() [LOOKAHEAD(2) "&" and_expression()]
 }
 
 void equality_expression() #EqualityExpression(>1) :
 {}
 {
-   relational_expression() [("!=" | "==") equality_expression()]
+    relational_expression() [("!=" | "==") equality_expression()]
 }
 
 void relational_expression() #RelationalExpression(>1) :
 {}
 {
-   shift_expression() [LOOKAHEAD(2) ("<" | ">" | "<=" | ">=") relational_expression()]
+    shift_expression() [LOOKAHEAD(2) ("<" | ">" | "<=" | ">=") relational_expression()]
 }
 
 void shift_expression() #ShiftExpression(>1) :
@@ -1080,13 +1080,13 @@ void shift_expression() #ShiftExpression(>1) :
 void additive_expression() #AdditiveExpression(>1) :
 {}
 {
-   multiplicative_expression() [LOOKAHEAD(2) ("+" | "-") additive_expression()]
+    multiplicative_expression() [LOOKAHEAD(2) ("+" | "-") additive_expression()]
 }
 
 void multiplicative_expression() #MultiplicativeExpression(>1) :
 {}
 {
-   pm_expression() [LOOKAHEAD(2) ("*" | "/" | "%") multiplicative_expression()]
+    pm_expression() [LOOKAHEAD(2) ("*" | "/" | "%") multiplicative_expression()]
 }
 
 void pm_expression() #PointerToMemberExpression(>1) :
