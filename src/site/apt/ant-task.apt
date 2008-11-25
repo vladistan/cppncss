@@ -16,7 +16,7 @@ CppNcss Task
 +------------------------------------------------------------------------------+
 <taskdef name="cppncss" classname="cppncss.CppNcssTask">
   <classpath>
-    <pathelement location="cppncss-1.0.2.jar"/>
+    <pathelement location="cppncss-1.0.3.jar"/>
     <pathelement location="dom4j-1.6.1.jar"/>
   </classpath>
 </taskdef>
@@ -29,11 +29,11 @@ CppNcss Task
 *------------------------------------+----------------------------------------------------------------------------------------------+--------------+
 | tofile                             | the name of the output file                                                                  | Yes          |
 *------------------------------------+----------------------------------------------------------------------------------------------+--------------+
-| prefix                             | the prefix to remove from paths                                                             | No           |
+| prefix                             | the prefix to remove from paths                                                              | No           |
 *------------------------------------+----------------------------------------------------------------------------------------------+--------------+
 | keepgoing                          | whether the parsing must keep going instead of stopping upon the first error, defaults to no | No           |
 *------------------------------------+----------------------------------------------------------------------------------------------+--------------+
-| sorting                            | a list or ordered measurements to perform, defaults to "NCSS,CCN,function"                   | No           |
+| measurements                       | a list or ordered measurements to perform, defaults to "NCSS,CCN,function"                   | No           |
 *------------------------------------+----------------------------------------------------------------------------------------------+--------------+
 | samples                            | the number of samples to keep, defaults to keep them all                                     | No           |
 *------------------------------------+----------------------------------------------------------------------------------------------+--------------+
