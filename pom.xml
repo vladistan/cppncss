@@ -34,15 +34,6 @@
     <system>sourceforge</system>
     <url>http://sourceforge.net/tracker/?group_id=175984</url>
   </issueManagement>
-  <mailingLists>
-    <mailingList>
-      <name>cppncss-user</name>
-      <subscribe>https://lists.sourceforge.net/lists/listinfo/cppncss-user</subscribe>
-      <unsubscribe>https://lists.sourceforge.net/lists/listinfo/cppncss-user</unsubscribe>
-      <post>cppncss-user@lists.sourceforge.net</post>
-      <archive>http://sourceforge.net/mailarchive/forum.php?forum=cppncss-user</archive>
-    </mailingList>
-  </mailingLists>
   <developers>
     <developer>
       <id>mat007</id>
@@ -52,7 +43,7 @@
         <role>admin</role>
         <role>developer</role>
       </roles>
-      <timezone>9</timezone>
+      <timezone>0</timezone>
     </developer>
   </developers>
   <dependencies>
@@ -150,6 +141,10 @@
               <mainClass>cppncss.CppNcss</mainClass>
               <name>cppncss</name>
             </program>
+            <program>
+              <mainClass>cppstyle.CppStyle</mainClass>
+              <name>cppstyle</name>
+            </program>
           </programs>
         </configuration>
         <executions>
@@ -195,7 +190,6 @@
             <reports>
               <report>summary</report>
               <report>license</report>
-              <report>mailing-list</report>
               <report>issue-tracking</report>
               <report>scm</report>
               <report>dependencies</report>
