@@ -92,8 +92,8 @@ CppNcss Task
  analyzes all files found recursively under the src directory, reporting only the 30 top measurements.
 
 +------------------------------------------------------------------------------+
-<cppncss tofile="cppncss.xml">
-  <fileset dir="src" measurements="function,CCN"/>
+<cppncss tofile="cppncss.xml" measurements="function,CCN">
+  <fileset dir="src"/>
 </cppncss>
 +------------------------------------------------------------------------------+
  analyzes all files found recursively under the src directory, keeping only function and CCN measurements and sorting them in this order.
