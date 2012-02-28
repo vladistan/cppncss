@@ -8,7 +8,7 @@
   <version>1.0.4-SNAPSHOT</version>
   <name>CppNcss</name>
   <inceptionYear>2006</inceptionYear>
-  <url>http://${pom.artifactId}.sourceforge.net</url>
+  <url>http://${project.artifactId}.sourceforge.net</url>
   <description>
     C++ source code measurements tool.
   </description>
@@ -20,14 +20,14 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:https://svn.sourceforge.net/svnroot/${pom.artifactId}</connection>
-    <developerConnection>scm:svn:https://svn.sourceforge.net/svnroot/${pom.artifactId}</developerConnection>
+    <connection>scm:svn:https://svn.sourceforge.net/svnroot/${project.artifactId}</connection>
+    <developerConnection>scm:svn:https://svn.sourceforge.net/svnroot/${project.artifactId}</developerConnection>
     <url>http://svn.sourceforge.net/cppncss</url>
   </scm>
   <distributionManagement>
     <site>
       <id>sourceforge</id>
-      <url>scp://shell.sourceforge.net/home/groups/c/cp/${pom.artifactId}/htdocs/</url> <!-- substring ?! -->
+      <url>scp://shell.sourceforge.net/home/groups/c/cp/${project.artifactId}/htdocs/</url> <!-- substring ?! -->
     </site>
   </distributionManagement>
   <issueManagement>
@@ -131,7 +131,6 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>appassembler-maven-plugin</artifactId>
-        <version>1.0-SNAPSHOT</version>
         <configuration>
           <repositoryLayout>flat</repositoryLayout>
           <repoPath>lib</repoPath>
