@@ -134,6 +134,7 @@
         <configuration>
           <repositoryLayout>flat</repositoryLayout>
           <repoPath>lib</repoPath>
+          <repositoryName>lib</repositoryName>
           <extraJvmArguments>-Xms256m -Xmx512m</extraJvmArguments>
           <programs>
             <program>
