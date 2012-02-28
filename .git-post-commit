@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+#
+# Post-Commit GIT Hook.
+#
+# This ensures an appropriate build event is generated on Bamboo (Continous Integration server).  If the repository is
+# remote and/or push based triggers are required this script would need to be modified to a post-receive style script.
+#
+# Install as follows:
+# $ ln -s `pwd`/.git-post-commit .git/hooks/post-commit
+import sys
+import urllib
+import subprocess
+import string
+
+base_url = "http://bamboo"
+build_key = "SNR-CN"
+build_branch = "refs/heads/master"
+
+branch = string.strip(subprocess.check_output(["git", "symbolic-ref", "HEAD"]))
+remote_call = base_url + "/api/rest/updateAndBuild.action?buildKey=" + build_key
+
+if (branch == build_branch):
+    print "Starting Bamboo build at " + base_url + " with build key " + build_key
+    f = urllib.urlopen(remote_call)
+    f.close()
+
+exit(0)
