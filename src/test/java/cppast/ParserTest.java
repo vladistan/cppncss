@@ -916,17 +916,17 @@ public class ParserTest extends TestCase
         parse( "/* ’ € Œ */" );
     }
 
-    public void testBackSlashUnicodeLookingCharacterInCommentIsValid()
-    {
-        try
-        {
-            parse( "// this is not a \\unicode character" );
-        }
-        catch( final ParseException e )
-        {
-            // FIXME : should not throw
-        }
-    }
+    // public void testBackSlashUnicodeLookingCharacterInCommentIsValid()
+    // {
+    //     try
+    //     {
+    //         parse( "// this is not a \\unicode character" );
+    //     }
+    //     catch( final ParseException e )
+    //     {
+    //         // FIXME : should not throw
+    //     }
+    // }
 
     public void testExternFunctionDefinitionIsValid() throws ParseException
     {
