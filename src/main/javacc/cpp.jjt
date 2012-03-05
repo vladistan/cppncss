@@ -205,6 +205,8 @@ TOKEN :
 | < TRUETOK: "true" >
 | < FALSETOK: "false" >
 | < THROW: "throw" >
+| < OVERRIDE: "override" >	// This should be a valid ID everywhere but in derive_spec().  Not sure how to do this properly.
+| < FINAL: "final" >		// This should be a valid ID everywhere but in derive_spec().  Not sure how to do this properly.
 }
 
 TOKEN [IGNORE_CASE] :
@@ -318,7 +320,7 @@ void conversion_function_decl_or_def() :
 void conversion_function() :
 {}
 {
-    (type_modifiers())* operator_id() function_parameters() cv_qualifier_seq() [exception_spec()] [pure_specifier()]
+    (type_modifiers())* operator_id() function_parameters() cv_qualifier_seq() [exception_spec()] [derive_spec() | pure_specifier()]
 }
 
 void function_parameters() #FunctionParameters :
@@ -584,11 +586,11 @@ void member_declaration() :
     LOOKAHEAD((type_modifiers())* "operator")
        conversion_function_decl_or_def()
    |
-    LOOKAHEAD(dtor_ctor_decl_spec() dtor_declarator() [pure_specifier()] "{")
+    LOOKAHEAD(dtor_ctor_decl_spec() dtor_declarator() [derive_spec() | pure_specifier()] "{")
        [LOOKAHEAD(template_head()) template_head()] dtor_definition()
    |
     LOOKAHEAD(dtor_ctor_decl_spec() "~")
-       (dtor_ctor_decl_spec() simple_dtor_declarator() [pure_specifier()] ";") #DestructorDeclaration
+       (dtor_ctor_decl_spec() simple_dtor_declarator() [derive_spec() | pure_specifier()] ";") #DestructorDeclaration
    |
     LOOKAHEAD([template_head()] dtor_ctor_decl_spec() ctor_declarator() ";")
        [LOOKAHEAD(template_head()) template_head()] (dtor_ctor_decl_spec() ctor_declarator() ";") #ConstructorDeclaration
@@ -687,7 +689,7 @@ void function_declarator() :
     |
      function_direct_declarator()
    )
-   cv_qualifier_seq() [exception_spec()] [pure_specifier()]
+   cv_qualifier_seq() [exception_spec()] [derive_spec() | pure_specifier()]
 }
 
 void function_direct_declarator() :
@@ -705,7 +707,7 @@ void dtor_ctor_decl_spec() :
 void dtor_definition() #DestructorDefinition :
 {}
 {
-   dtor_ctor_decl_spec() dtor_declarator() [pure_specifier()] compound_statement() #FunctionBody
+   dtor_ctor_decl_spec() dtor_declarator() [derive_spec() | pure_specifier()] compound_statement() #FunctionBody
 }
 
 void ctor_definition() #ConstructorDefinition :
@@ -1350,6 +1352,12 @@ void exception_spec() :
 {}
 {
    "throw" "(" [type_id_list()] ")"
+}
+
+void derive_spec() :
+{}
+{
+   "override" | "final"
 }
 
 void type_id_list() :
