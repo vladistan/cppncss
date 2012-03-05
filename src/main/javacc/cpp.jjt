@@ -940,7 +940,13 @@ void iteration_statement() #IterationStatement :
    |
     "do" statement() "while" "(" condition() ")" ";"
    |
-    "for" "(" (LOOKAHEAD(simple_declaration()) simple_declaration() | [expression()] ";") [condition()] ";" [expression()] ")" statement()
+    "for" "("
+      (
+	LOOKAHEAD(declaration_specifiers() declarator() ":") declaration_specifiers() declarator() ":" expression()
+       |
+	(LOOKAHEAD(simple_declaration()) simple_declaration() | [expression()] ";") [condition()] ";" [expression()]
+      )
+    ")" statement()      
 }
 
 void condition() :
