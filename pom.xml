@@ -24,6 +24,9 @@
     <developerConnection>scm:svn:https://svn.sourceforge.net/svnroot/${pom.artifactId}</developerConnection>
     <url>http://svn.sourceforge.net/cppncss</url>
   </scm>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
   <distributionManagement>
     <site>
       <id>sourceforge</id>
@@ -115,6 +118,23 @@
         <configuration>
           <source>1.5</source>
           <target>1.5</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>3.1</version>
+        <configuration>
+          <linkXref>false</linkXref>
+          <sourceEncoding>utf-8</sourceEncoding>
+          <minimumTokens>100</minimumTokens>
+          <targetJdk>1.5</targetJdk>
+          <excludes>
+            <exclude>**/cppast/*.java</exclude>
+          </excludes>
+          <excludeRoots>
+            <excludeRoot>src/main/java/cppast/</excludeRoot>
+          </excludeRoots>
         </configuration>
       </plugin>
       <plugin>
