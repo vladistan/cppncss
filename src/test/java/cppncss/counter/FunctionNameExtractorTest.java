@@ -232,7 +232,7 @@ public class FunctionNameExtractorTest extends TestCase
         final Node node = root.jjtGetChild( 0 ).jjtGetChild( 2 ).jjtGetChild( 0 );
         final String actual = (String)node.jjtAccept( new FunctionNameExtractor(), null );
         // final String actual = (String)new FunctionNameExtractor().visit( node, null );
-        assertEquals( "MyFunction::MyClass::MyMethod()", actual );
+        assertEquals( "MyClass::MyMethod()", actual );
     }
 
     public void testMethodOfClassDefinedLocally() throws ParseException
@@ -242,6 +242,6 @@ public class FunctionNameExtractorTest extends TestCase
         final Node node = root.jjtGetChild( 0 ).jjtGetChild( 2 ).jjtGetChild( 0 );
         final String actual = (String)node.jjtAccept( new FunctionNameExtractor(), null );
         // final String actual = (String)new FunctionNameExtractor().visit( node, null );
-        assertEquals( "MyFunction::MyClass::MyMethod()", actual );
+        assertEquals( "MyClass::MyMethod()", actual );
     }
 }
