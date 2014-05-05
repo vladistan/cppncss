@@ -183,6 +183,7 @@ TOKEN :
 | < SHORT: "short" >
 | < SIGNED: "signed" >
 | < SIZEOF: "sizeof" >
+| < OFFSETOF: "offsetof" >
 | < STATIC: "static" >
 | < STRUCT: "struct" >
 | < CLASS : "class" >
@@ -1113,6 +1114,13 @@ void unary_expression() :
      ("--" cast_expression()) #UnaryExpression
    |
      LOOKAHEAD(3) (unary_operator() cast_expression()) #UnaryExpression
+   |
+
+      "offsetof"
+
+       ( "(" "struct" type_id() "," cast_expression() ")"  )
+
+       #UnaryExpression
    |
      (
       "sizeof"

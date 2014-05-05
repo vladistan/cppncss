@@ -908,25 +908,14 @@ public class ParserTest extends TestCase
 
     public void testCp1252NotAsciiCharacterInCommentIsValid() throws ParseException
     {
-        parse( "// ’ € Œ" );
+        parse( "// ï¿½ ï¿½ ï¿½" );
     }
 
     public void testCp1252NotAsciiCharacterInMultiCommentIsValid() throws ParseException
     {
-        parse( "/* ’ € Œ */" );
+        parse( "/* ï¿½ ï¿½ ï¿½ */" );
     }
 
-    public void testBackSlashUnicodeLookingCharacterInCommentIsValid()
-    {
-        try
-        {
-            parse( "// this is not a \\unicode character" );
-        }
-        catch( final ParseException e )
-        {
-            // FIXME : should not throw
-        }
-    }
 
     public void testExternFunctionDefinitionIsValid() throws ParseException
     {
@@ -992,4 +981,16 @@ public class ParserTest extends TestCase
     {
         parse( "void f( void (*)( int ) );" );
     }
+
+
+    public void testRefInOffsetOff() throws ParseException
+    {
+        parse( "void f() { offsetof (struct old_app_header, 5); }" );
+    }
+
+    public void testStructRefInOffsetOff() throws ParseException
+    {
+        parse( "void f() { offsetof(struct old_app_header, dcd_ptr); }" );
+    }
+
 }
